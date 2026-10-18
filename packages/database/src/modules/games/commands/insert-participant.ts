@@ -1,9 +1,9 @@
 import {
   PARTICIPANT_STATUS,
   type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+} from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 // 이미 행이 있으면 넣지 않고 false를 돌려준다. 대기로 넣을 때만 waitlistedAt을 남긴다.
 export async function insertParticipant({

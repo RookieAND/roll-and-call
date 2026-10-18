@@ -6,9 +6,10 @@ import {
 } from "@roll-and-call/database/certifications";
 import { redirect } from "next/navigation";
 
+import { removeUnusedCertPhotos } from "@/entities/rulebook/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 const ALREADY_PROCESSED = "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.";
 

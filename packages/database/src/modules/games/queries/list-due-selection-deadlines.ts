@@ -1,10 +1,10 @@
 import { and, asc, eq, isNull, lte, or, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
-import { SCHEDULE_MODE } from "#/modules/games/model/schedule-mode";
-import { selectionDeadline } from "#/modules/games/model/selection-deadline";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { SCHEDULE_MODE } from "#db/modules/games/model/schedule-mode";
+import { selectionDeadline } from "#db/modules/games/model/selection-deadline";
+import { games } from "#db/schema";
 
 // 선발 기한 크론이 집는 글: 선발을 마치지 않은 선발 글 가운데 기한이 지난 것(games_selection_due_idx).
 // 기한은 selectionDeadline이 정한다. SQL은 같은 규칙으로 후보를 좁히고, 정확한 판정은 함수로 다시 한다(한 번에 limit건).

@@ -25,3 +25,4 @@ export { getQuizQuestion } from "./queries/get-quiz-question";
 export { hasPendingRulebookRequest } from "./queries/has-pending-rulebook-request";
 export { rejectRulebookRequest } from "./commands/reject-rulebook-request";
 export * from "./model";
+export { findAssignedQuizQuestion } from "./queries/find-assigned-quiz-question";

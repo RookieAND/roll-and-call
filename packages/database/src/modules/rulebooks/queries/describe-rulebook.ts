@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import type { RulebookDescription } from "#/modules/rulebooks/model/rulebook-description";
-import type { Executor } from "#/modules/transaction/executor";
-import { rulebookCategories, rulebooks } from "#/schema";
+import type { RulebookDescription } from "#db/modules/rulebooks/model/rulebook-description";
+import type { Executor } from "#db/modules/transaction";
+import { rulebookCategories, rulebooks } from "#db/schema";
 
 import { rulebookLabel } from "../model/rulebook-label";
 

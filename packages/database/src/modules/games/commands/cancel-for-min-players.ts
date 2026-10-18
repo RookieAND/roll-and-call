@@ -1,7 +1,7 @@
-import { cancelGame } from "#/modules/games/commands/cancel-game";
-import { markMinPlayersJudged } from "#/modules/games/commands/mark-min-players-judged";
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
+import { cancelGame } from "#db/modules/games/commands/cancel-game";
+import { markMinPlayersJudged } from "#db/modules/games/commands/mark-min-players-judged";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
 
 // 최소 인원 미달로 취소한다. 판정 표시와 취소를 같은 트랜잭션에서 하므로 둘 다 되거나 둘 다 안 된다.
 export async function cancelForMinPlayers({

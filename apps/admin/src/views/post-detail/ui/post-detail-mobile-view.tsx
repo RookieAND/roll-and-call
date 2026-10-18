@@ -3,7 +3,7 @@ import { Button, Callout, VStack } from "@roll-and-call/ui";
 import { auditLogHref } from "@/entities/audit";
 import type { PostDetail } from "@/entities/post/server";
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
-import { formatDateTime, sessionTimeLabel, withQuery } from "@/shared/lib";
+import { formatFullDateTime, sessionTimeLabel, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
   KeyValueList,
@@ -119,7 +119,7 @@ export function PostDetailMobileView({
             <Callout.Icon />
             <Callout.Title>숨김 중인 구인입니다</Callout.Title>
             <Callout.Description>
-              {formatDateTime(post.hidden.at)}에 {post.hidden.by}님이 숨겼습니다. 사유:{" "}
+              {formatFullDateTime(post.hidden.at)}에 {post.hidden.by}님이 숨겼습니다. 사유:{" "}
               {post.hidden.reason}
             </Callout.Description>
           </Callout.Root>

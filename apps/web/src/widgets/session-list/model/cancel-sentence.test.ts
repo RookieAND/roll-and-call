@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import type { SessionGame } from "@/entities/game";
+
 import { cancelSentence } from "./cancel-sentence";
-import type { SessionGame } from "./session-card-model";
 
 const game = (cancelKind: string, cancelReason: string | null = null) =>
   ({ cancelKind, cancelReason }) as SessionGame;

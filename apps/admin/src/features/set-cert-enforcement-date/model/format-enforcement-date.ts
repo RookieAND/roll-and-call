@@ -1,4 +1,4 @@
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 
 import { remainingLabel } from "./remaining-label";
 import { toSeoulDateKey } from "./to-seoul-date-key";
@@ -10,7 +10,7 @@ const DAY = 86_400_000;
 export function formatEnforcementDate(date: Date, now: Date = new Date()) {
   const daysLeft = (Date.parse(toSeoulDateKey(date)) - Date.parse(toSeoulDateKey(now))) / DAY;
   return {
-    label: `${formatDate(date)} (${weekday.format(date)})`,
+    label: `${formatFullDate(date)} (${weekday.format(date)})`,
     remaining: remainingLabel(daysLeft),
   };
 }

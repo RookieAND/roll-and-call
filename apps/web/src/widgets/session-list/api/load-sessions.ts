@@ -3,8 +3,8 @@ import {
   getJoinedGames,
   getRespondedGameIds,
   getResponseCountsByGm,
-  getReviewedGames,
-} from "@/shared/server";
+} from "@roll-and-call/database/games";
+import { getReviewedGames } from "@roll-and-call/database/reviews";
 
 import { buildSessions } from "../model/build-sessions";
 

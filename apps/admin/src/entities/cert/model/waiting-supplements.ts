@@ -1,12 +1,12 @@
 import type { WaitingSupplements } from "@roll-and-call/database/certifications";
+import { supplementCores } from "@roll-and-call/database/certifications/model";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 
-import { supplementCores } from "@/shared/lib";
 import type { Snapshot } from "@/shared/server";
 
 // 이 기본 룰북 결정을 기다리던 같은 사람의 서플리먼트 신청. 기본 룰북을 반려하면 함께 반려한다.
 export function waitingSupplements(
-  snapshot: Snapshot,
+  snapshot: Pick<Snapshot, "users" | "rulebooks" | "certApplications">,
   core: { userId: string; rulebookId: string },
 ): WaitingSupplements | null {
   const coreBook = snapshot.rulebooks.find((rulebook) => rulebook.id === core.rulebookId);

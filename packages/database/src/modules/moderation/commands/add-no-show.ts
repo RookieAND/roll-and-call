@@ -1,22 +1,22 @@
 import { and, eq, isNotNull, or, sql } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
 import {
   ABSENCE_ADDED_TAG,
   ABSENCE_ADDED_TAG_LABEL,
   type AbsenceAddedTag,
-} from "#/modules/games/model/absence-added-tag";
-import { isAbsenceActive } from "#/modules/games/model/absence-window";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Actor } from "#/modules/moderation/model/types";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games, participants, profiles } from "#/schema";
+} from "#db/modules/games/model";
+import { isAbsenceActive } from "#db/modules/games/model";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { games, participants, profiles } from "#db/schema";
 
 import { loadNoShowParties } from "./load-no-show-parties";
 import { NO_SHOW_NOTIFIED, notifyNoShowParties } from "./notify-no-show-parties";
-import { recordAudit } from "./record-audit";
 
 const REASON_MAX = 200;
 

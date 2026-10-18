@@ -1,8 +1,9 @@
+import { markBadgesNotified } from "@roll-and-call/database/badges";
 import { isNull } from "es-toolkit";
 import { after } from "next/server";
 
 import { heldBadges } from "@/entities/badge";
-import { getCurrentServer, getUserBadges, markBadgesNotified } from "@/shared/server";
+import { getCurrentServer, getUserBadges } from "@/shared/server";
 
 import { buildAwardSheet } from "../model/build-award-sheet";
 import { BadgeAwardSheet } from "./badge-award-sheet";

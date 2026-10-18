@@ -1,10 +1,11 @@
+import { getGameParticipants } from "@roll-and-call/database/games";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { countConfirmed, isSessionEnded, RECRUIT_METHOD, splitRoster } from "@/entities/game";
 import { QUERY_NOTICE, QUERY_NOTICE_PARAM, serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
 
 import { toDrawOutcome } from "../model/to-draw-outcome";

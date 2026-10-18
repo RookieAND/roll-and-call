@@ -1,8 +1,8 @@
 import { asc, desc, sql, type SQL } from "drizzle-orm";
 
-import { GAME_SORT, GAME_TAB, type GamesFilter } from "#/modules/games/model/games-filter";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
-import { games } from "#/schema";
+import { GAME_SORT, GAME_TAB, type GamesFilter } from "#db/modules/games/model/games-filter";
+import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { games } from "#db/schema";
 
 import { confirmedCountSql } from "./confirmed-count-sql";
 import { gameBucketSql } from "./game-bucket-sql";

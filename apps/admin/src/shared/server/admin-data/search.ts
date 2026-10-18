@@ -1,11 +1,14 @@
 import "server-only";
-import { isUndefined, sortBy } from "es-toolkit";
+import {
+  playedCountsByUser,
+  recentNoShowCountsByUser,
+} from "@roll-and-call/database/moderation/model";
+import { groupBy, isUndefined, sortBy } from "es-toolkit";
 
-import { countPlayedSessions } from "../../lib/count-played-sessions";
-import { countRecentNoShows } from "../../lib/count-recent-no-shows";
-import { waitedDays } from "../../lib/waited-days";
+import { waitedDays } from "@/shared/lib";
+
+import { loadAdminData } from "./load-admin-data";
 import { nicknameMatchRank } from "./nickname-match-rank";
-import { loadSnapshot, type Snapshot } from "./snapshot";
 
 export interface UserSearchResult {
   id: string;
@@ -24,58 +27,68 @@ export interface UserSearchResult {
   }[];
 }
 
-const nicknameOf = (db: Snapshot, userId: string) =>
-  db.users.find((user) => user.id === userId)?.nickname ?? "";
-
 export async function searchUsers(query: string): Promise<UserSearchResult[]> {
-  const db = await loadSnapshot();
-  const now = new Date();
   const keyword = query.trim();
   if (!keyword) return [];
-  const ranked = db.users
+  const db = await loadAdminData(["memberNicknames", "sessions", "noShows", "certApplications"]);
+  const now = new Date();
+  const ranked = db.memberNicknames
     .map((user) => ({ user, rank: nicknameMatchRank({ nickname: user.nickname, keyword }) }))
     .filter((entry) => !isUndefined(entry.rank));
-  return sortBy(ranked, [(entry) => entry.rank!])
-    .map(({ user }) => user)
-    .map((user) => {
-      const validNoShows = db.noShows
-        .filter((noShow) => noShow.userId === user.id && !noShow.cancelled)
-        .map((noShow) => ({
-          id: noShow.id,
-          session: db.sessions.find((session) => session.id === noShow.sessionId)!,
-        }))
-        .toSorted((a, b) => b.session.startsAt.getTime() - a.session.startsAt.getTime());
-      return {
-        id: user.id,
-        nickname: user.nickname,
-        playedCount: countPlayedSessions({ db, userId: user.id, now }),
-        recentNoShowCount: countRecentNoShows(db, user.id),
-        noShows: validNoShows.map(({ id, session }) => ({
-          id,
-          sessionTitle: session.title,
-          startsAt: session.startsAt,
-        })),
-        certApplications: db.certApplications
-          .filter(
-            (application) => application.userId === user.id && application.status === "pending",
-          )
-          .map((application) => ({
-            id: application.id,
-            rulebook: application.rulebook,
-            waitedDays: waitedDays(application.appliedAt),
-            reapplied: application.previousRejections.length > 0,
-          })),
-        sessions: db.sessions
-          .filter((session) => session.gmId === user.id || session.memberIds.includes(user.id))
-          .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime())
-          .map((session) => ({
-            id: session.id,
-            title: session.title,
-            rulebook: session.rulebook,
-            startsAt: session.startsAt,
-            gmNickname: nicknameOf(db, session.gmId),
-            hosted: session.gmId === user.id,
-          })),
-      };
-    });
+  const users = sortBy(ranked, [(entry) => entry.rank!]).map(({ user }) => user);
+  const countOptions = {
+    sessions: db.sessions,
+    noShows: db.noShows,
+    now,
+    userIds: users.map((user) => user.id),
+  };
+  const playedCounts = playedCountsByUser(countOptions);
+  const recentNoShowCounts = recentNoShowCountsByUser(countOptions);
+  const nicknames = new Map(db.memberNicknames.map((user) => [user.id, user.nickname]));
+  const sessionOf = new Map(db.sessions.map((session) => [session.id, session]));
+  const noShowsOf = groupBy(
+    db.noShows.filter((noShow) => !noShow.cancelled),
+    (noShow) => noShow.userId,
+  );
+  const applicationsOf = groupBy(
+    db.certApplications.filter((application) => application.status === "pending"),
+    (application) => application.userId,
+  );
+  const sessionsOf = groupBy(
+    db.sessions.flatMap((session) =>
+      [...new Set([session.gmId, ...session.memberIds])].map((userId) => ({ userId, session })),
+    ),
+    (entry) => entry.userId,
+  );
+  return users.map((user) => ({
+    id: user.id,
+    nickname: user.nickname,
+    playedCount: playedCounts.get(user.id) ?? 0,
+    recentNoShowCount: recentNoShowCounts.get(user.id) ?? 0,
+    noShows: (noShowsOf[user.id] ?? [])
+      .map((noShow) => ({ id: noShow.id, session: sessionOf.get(noShow.sessionId)! }))
+      .toSorted((a, b) => b.session.startsAt.getTime() - a.session.startsAt.getTime())
+      .map(({ id, session }) => ({
+        id,
+        sessionTitle: session.title,
+        startsAt: session.startsAt,
+      })),
+    certApplications: (applicationsOf[user.id] ?? []).map((application) => ({
+      id: application.id,
+      rulebook: application.rulebook,
+      waitedDays: waitedDays(application.appliedAt),
+      reapplied: application.previousRejections.length > 0,
+    })),
+    sessions: (sessionsOf[user.id] ?? [])
+      .map(({ session }) => session)
+      .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime())
+      .map((session) => ({
+        id: session.id,
+        title: session.title,
+        rulebook: session.rulebook,
+        startsAt: session.startsAt,
+        gmNickname: nicknames.get(session.gmId) ?? "",
+        hosted: session.gmId === user.id,
+      })),
+  }));
 }

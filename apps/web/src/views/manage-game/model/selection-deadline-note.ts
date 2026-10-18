@@ -1,7 +1,7 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { selectionDeadline } from "@roll-and-call/database/games/model";
 
 import { toKst } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import type { ManageDeadlineNote } from "./manage-summary";
 

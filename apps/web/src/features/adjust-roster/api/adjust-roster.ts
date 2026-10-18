@@ -1,10 +1,11 @@
 import "server-only";
+import type { Game, Server } from "@roll-and-call/database";
 import { lockGame } from "@roll-and-call/database/games";
 import { isSelectionDraft } from "@roll-and-call/database/games/model";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import { isSessionEnded, isSessionStarted } from "@/entities/game";
+import { isSessionEnded, isSessionStarted, isRosterRequest } from "@/entities/game";
 import {
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
@@ -13,14 +14,7 @@ import {
   ROSTER_SESSION_ENDED_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { isRosterRequest } from "@/shared/lib";
-import {
-  type Game,
-  getActingMember,
-  refreshRecruitPost,
-  type Server,
-  notMemberError,
-} from "@/shared/server";
+import { getActingMember, refreshRecruitPost, notMemberError } from "@/shared/server";
 
 import type { RosterTiming } from "../model/roster-timing";
 import { revalidateRoster } from "./revalidate-roster";

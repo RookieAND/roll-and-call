@@ -19,3 +19,5 @@ export { isNicknameTaken } from "./queries/is-nickname-taken";
 export { memberBioSql } from "./queries/member-bio-sql";
 export { memberNicknameSql } from "./queries/member-nickname-sql";
 export { searchMembers } from "./queries/search-members";
+export { activeSanctionWhere } from "./queries/active-sanction-where";
+export { memberSearchWhere } from "./queries/member-search-where";

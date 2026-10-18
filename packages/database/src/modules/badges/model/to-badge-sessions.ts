@@ -1,4 +1,4 @@
-import { sessionEndAt } from "#/modules/games/model/session-timing";
+import { sessionEndAt } from "#db/modules/games/model";
 
 import { type BadgeSession } from "./badge-facts";
 import { isRecognizedSession } from "./is-recognized-session";

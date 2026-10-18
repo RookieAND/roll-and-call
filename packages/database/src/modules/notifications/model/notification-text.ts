@@ -1,24 +1,24 @@
+import { formatDate, formatDateClock, formatDateTime } from "@roll-and-call/app-kit/date";
+import {
+  directionalParticle,
+  objectParticle,
+  subjectParticle,
+  topicParticle,
+} from "@roll-and-call/app-kit/lib";
 import { isNull } from "es-toolkit";
 
 import {
   GAME_CANCEL_KIND,
   MIN_PLAYERS_UNMET_CANCEL_TEXT,
   SELECTION_EXPIRED_CANCEL_TEXT,
-} from "#/modules/games/model/game-cancel-kind";
+} from "#db/modules/notifications/model/game-cancel-kind";
 
 import { bookNames } from "./book-names";
-import { directionalParticle } from "./directional-particle";
-import { formatMonthDay } from "./format-month-day";
-import { formatMonthDayTime } from "./format-month-day-time";
-import { formatSessionDateTime } from "./format-session-date-time";
 import {
   MONTHLY_AWARD_ROLE,
   NOTIFICATION_KIND,
   type NotificationPayload,
 } from "./notification-kind";
-import { objectParticle } from "./object-particle";
-import { subjectParticle } from "./subject-particle";
-import { topicParticle } from "./topic-particle";
 
 export interface NotificationText {
   pre: string;
@@ -93,7 +93,7 @@ export function notificationText(payload: NotificationPayload): NotificationText
       return bold(
         payload.params.gameTitle,
         " 일정이 확정되었습니다.",
-        `세션 일시는 ${formatSessionDateTime(payload.params.startsAt)}입니다.`,
+        `세션 일시는 ${formatDateTime(payload.params.startsAt)}입니다.`,
       );
     case NOTIFICATION_KIND.selectionParticipationConfirmed:
       return bold(
@@ -117,13 +117,13 @@ export function notificationText(payload: NotificationPayload): NotificationText
       return bold(
         payload.params.gameTitle,
         " 세션 시간이 정해졌습니다.",
-        `${formatSessionDateTime(payload.params.startsAt)}에 진행됩니다.`,
+        `${formatDateTime(payload.params.startsAt)}에 진행됩니다.`,
       );
     case NOTIFICATION_KIND.sessionTimeChanged:
       return bold(
         payload.params.gameTitle,
         " 세션 시간이 바뀌었습니다.",
-        `${formatMonthDayTime(payload.params.previousStartsAt)} → ${formatMonthDayTime(payload.params.startsAt)}`,
+        `${formatDateClock(payload.params.previousStartsAt)} → ${formatDateClock(payload.params.startsAt)}`,
       );
     case NOTIFICATION_KIND.gameCancelled:
       return bold(
@@ -305,6 +305,6 @@ export function notificationText(payload: NotificationPayload): NotificationText
   }
 
   function sanctionPeriod(until: string | null) {
-    return isNull(until) ? "해제될 때까지" : `${formatMonthDay(until)}까지`;
+    return isNull(until) ? "해제될 때까지" : `${formatDate(until)}까지`;
   }
 }

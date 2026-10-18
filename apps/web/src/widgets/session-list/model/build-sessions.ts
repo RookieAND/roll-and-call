@@ -1,13 +1,13 @@
 import { isNull } from "es-toolkit";
 
-import { PARTICIPANT_STATUS, SESSION_ROLE, type SessionRole } from "@/entities/game";
-
 import {
-  SESSION_CHIP,
-  type MySessions,
-  type SessionContext,
+  PARTICIPANT_STATUS,
+  SESSION_ROLE,
+  type SessionRole,
   type SessionGame,
-} from "./session-card-model";
+} from "@/entities/game";
+
+import { SESSION_CHIP, type MySessions, type SessionContext } from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
 
 // 종료 카드의 sortKey는 부호가 뒤집혀 있다.

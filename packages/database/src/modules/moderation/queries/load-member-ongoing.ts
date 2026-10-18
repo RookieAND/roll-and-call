@@ -1,10 +1,10 @@
 import { and, eq, inArray, isNull, or } from "drizzle-orm";
 
-import { db } from "#/client";
-import { pickMemberOngoing, type MemberOngoing } from "#/modules/moderation/model/member-ongoing";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants, profiles } from "#/schema";
+import { db } from "#db/client";
+import { pickMemberOngoing, type MemberOngoing } from "#db/modules/moderation/model/member-ongoing";
+import { memberNicknameSql } from "#db/modules/profiles";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants, profiles } from "#db/schema";
 
 // 제재 페이지·제재 확정·추방 영향이 함께 쓰는 정리 범위. 판단은 pickMemberOngoing이 한다.
 export async function loadMemberOngoing({

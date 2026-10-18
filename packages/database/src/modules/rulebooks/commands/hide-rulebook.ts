@@ -1,15 +1,14 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { rejectionSummary } from "#/modules/certifications/model/rejection-summary";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { auditLog, certApplications, profiles, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { auditLog, certApplications, profiles, rulebooks } from "#db/schema";
 
 const HIDDEN_TAG = "룰북 숨김";
 const HIDDEN_REASON = "운영진이 이 룰북을 목록에서 숨겨 신청이 반려되었습니다.";
@@ -96,7 +95,7 @@ export async function hideRulebook({
         params: {
           rulebookId: id,
           rulebookName: label,
-          rejectionSummary: rejectionSummary({ rejectTag: HIDDEN_TAG }),
+          rejectionSummary: HIDDEN_TAG,
         },
       })),
     });

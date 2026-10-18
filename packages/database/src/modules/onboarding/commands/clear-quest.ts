@@ -1,14 +1,14 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { grantApprenticeBadge } from "#/modules/badges/commands/grant-apprentice-badge";
+import { db } from "#db/client";
+import { grantApprenticeBadge } from "#db/modules/badges";
 import {
   isAllQuestsCleared,
   ONBOARDING_QUEST,
   type OnboardingQuest,
-} from "#/modules/onboarding/model/quests";
-import { getQuestClears } from "#/modules/onboarding/queries/get-quest-clears";
-import { onboardingQuestClears, serverMembers } from "#/schema";
+} from "#db/modules/onboarding/model/quests";
+import { getQuestClears } from "#db/modules/onboarding/queries/get-quest-clears";
+import { onboardingQuestClears, serverMembers } from "#db/schema";
 
 export type ClearQuestResult = { recorded: boolean; allCleared: boolean; badgeGranted: boolean };
 

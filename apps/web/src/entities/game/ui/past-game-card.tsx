@@ -1,6 +1,5 @@
+import type { Game } from "@roll-and-call/database";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
-
-import type { Game } from "@/shared/server";
 
 import type { ParticipantStatus } from "../model/participant";
 import { pastGameCardView } from "../model/past-game-card-view";

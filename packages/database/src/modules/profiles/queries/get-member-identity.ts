@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { profiles } from "#/schema";
+import { db } from "#db/client";
+import { profiles } from "#db/schema";
 
 import { memberNicknameSql } from "./member-nickname-sql";
 

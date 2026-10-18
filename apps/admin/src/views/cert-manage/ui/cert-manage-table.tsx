@@ -7,7 +7,7 @@ import {
   type CertManageSortColumn,
   type OrderedCertManageRow,
 } from "@/entities/cert";
-import { formatDate, type TableSort } from "@/shared/lib";
+import { formatFullDate, type TableSort } from "@/shared/lib";
 import {
   EMPTY_IMAGE,
   ServerLink,
@@ -108,7 +108,7 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatDate(row.changedAt)}
+                  {formatFullDate(row.changedAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="end">

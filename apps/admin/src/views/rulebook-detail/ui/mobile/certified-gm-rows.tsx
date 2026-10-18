@@ -3,7 +3,7 @@ import { RULEBOOK_KIND } from "@roll-and-call/database/rulebooks/model";
 import { Button, Text, VStack } from "@roll-and-call/ui";
 
 import type { CertifiedGm } from "@/entities/rulebook/server";
-import { formatDate, sortRows, withQuery, type TableSort } from "@/shared/lib";
+import { formatFullDate, sortRows, withQuery, type TableSort } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow, ServerLink } from "@/shared/ui";
 
 import type { CertifiedGmSortColumn } from "../../model/certified-gm-sort";
@@ -70,7 +70,7 @@ export function CertifiedGmRows({
               path={`/users/${gm.userId}`}
               title={gm.nickname}
               trailing={`최근 90일 ${gm.recentSessionCount}회`}
-              description={`${formatDate(gm.approvedAt)} 인증`}
+              description={`${formatFullDate(gm.approvedAt)} 인증`}
             />
           ))}
         </InfiniteList>

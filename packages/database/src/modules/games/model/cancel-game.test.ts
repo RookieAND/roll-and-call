@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+
 import { cancelBlockReason } from "./cancel-block-reason";
-import { GAME_CANCEL_KIND } from "./game-cancel-kind";
 import { storedCancelReason } from "./stored-cancel-reason";
 
 const HOUR = 3_600_000;

@@ -1,3 +1,4 @@
+import type { ReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { isNull } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
@@ -7,7 +8,6 @@ import {
   REVIEW_STATE,
   reviewWriteDeadline,
 } from "@/entities/review";
-import type { ReviewDraftTarget } from "@/shared/server";
 
 import { REVIEW_BLOCK, type ReviewBlock } from "./review-block";
 

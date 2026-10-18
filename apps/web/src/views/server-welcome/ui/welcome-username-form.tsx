@@ -4,10 +4,12 @@ import { Button, Field, HStack, TextInput } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { USERNAME_MAX_LENGTH } from "@/entities/profile";
+import {
+  saveWelcomeUsername,
+  WELCOME_SAVE_MODE,
+  type WelcomeSaveMode,
+} from "@/features/edit-profile";
 import { LineBreaks, useAction } from "@/shared/ui";
-
-import { saveWelcomeUsername } from "../api/save-welcome-username";
-import { WELCOME_SAVE_MODE, type WelcomeSaveMode } from "../model/welcome-save-mode";
 
 interface WelcomeUsernameFormProps {
   defaultUsername: string;

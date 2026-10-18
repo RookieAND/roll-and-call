@@ -1,12 +1,12 @@
 "use client";
 
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { IconButton } from "@roll-and-call/ui";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { navigationHistory } from "./navigation-history";
-import { ServerLink } from "./server-link";
 
 interface BackButtonProps {
   // 서버 화면이면 서버 안 경로("/games")다. slug는 ServerLink가 붙인다.

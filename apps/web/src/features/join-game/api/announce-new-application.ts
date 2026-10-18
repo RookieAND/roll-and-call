@@ -1,9 +1,10 @@
 import "server-only";
+import type { Game, Server } from "@roll-and-call/database";
 import { countParticipants } from "@roll-and-call/database/games";
 import { getMemberNickname } from "@roll-and-call/database/profiles";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { notifyGameJoined, type Game, type Server } from "@/shared/server";
+import { notifyGameJoined } from "@/shared/server";
 
 import { UNKNOWN_USERNAME } from "../model/unknown-username";
 

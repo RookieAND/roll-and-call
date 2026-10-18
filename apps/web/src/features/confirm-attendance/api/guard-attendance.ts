@@ -1,9 +1,16 @@
 import "server-only";
+import type { Game } from "@roll-and-call/database";
+import { evaluateGameBadges } from "@roll-and-call/database/badges";
 import { listParticipantUserIds, lockGame } from "@roll-and-call/database/games";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import { isAttendanceDue, isAttendancePastDeadline, PARTICIPANT_STATUS } from "@/entities/game";
+import {
+  isAttendanceDue,
+  isAttendancePastDeadline,
+  PARTICIPANT_STATUS,
+  isRosterRequest,
+} from "@/entities/game";
 import {
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
@@ -11,14 +18,7 @@ import {
   INVALID_REQUEST_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { isRosterRequest } from "@/shared/lib";
-import {
-  type Game,
-  evaluateGameBadges,
-  getActingMember,
-  notMemberError,
-  revalidateGamePaths,
-} from "@/shared/server";
+import { getActingMember, notMemberError, revalidateGamePaths } from "@/shared/server";
 
 import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
 import type { AttendanceRoster } from "../model/attendance-roster";

@@ -1,9 +1,9 @@
 import { and, eq } from "drizzle-orm";
 
-import type { Actor } from "#/modules/moderation/model/types";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { profiles, staffMemos } from "#/schema";
+import type { Actor } from "#db/modules/audit";
+import { memberNicknameSql } from "#db/modules/profiles";
+import type { Transaction } from "#db/modules/transaction";
+import { profiles, staffMemos } from "#db/schema";
 
 import { canManageStaffMemo } from "../model/can-manage-staff-memo";
 

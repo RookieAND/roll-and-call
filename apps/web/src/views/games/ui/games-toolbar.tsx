@@ -1,14 +1,14 @@
+import type { GamesCounts } from "@roll-and-call/database/games";
 import { HStack, Skeleton, VStack, cn } from "@roll-and-call/ui";
+
+import { FRAME_INNER_PX } from "@/shared/ui";
 
 import {
   GAME_STATUS_FILTER_DEFAULT,
   GAME_TAB,
   GAME_TAB_DEFAULT,
   type GamesFilter,
-} from "@/shared/api";
-import type { GamesCounts } from "@/shared/server";
-import { FRAME_INNER_PX } from "@/shared/ui";
-
+} from "../model/game-sort";
 import type { RuleOption } from "../model/rule-option";
 import { statusCounts } from "../model/status-counts";
 import { GameFilterButton } from "./game-filter-button";

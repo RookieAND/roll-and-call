@@ -1,4 +1,4 @@
-import { compactChanges, scalarChange } from "@roll-and-call/database/moderation/model";
+import { compactChanges, scalarChange } from "@roll-and-call/database/audit/model";
 
 import { withDirectionParticle } from "@/shared/lib";
 

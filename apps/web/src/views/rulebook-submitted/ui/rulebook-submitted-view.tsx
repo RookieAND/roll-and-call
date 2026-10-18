@@ -1,3 +1,4 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { Badge, Button, Card, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -5,7 +6,7 @@ import { notFound } from "next/navigation";
 
 import { CERT_FORMAT_LABEL, CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface RulebookSubmittedViewProps {

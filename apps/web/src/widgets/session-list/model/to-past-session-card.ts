@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { SESSION_ROLE, SESSION_STATE, splitRoster } from "@/entities/game";
+import { SESSION_ROLE, SESSION_STATE, splitRoster, type SessionGame } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import { confirmAttendanceTodo } from "./confirm-attendance-todo";
@@ -18,7 +18,6 @@ import {
   type SessionTodo,
   type SessionCardBase,
   type SessionContext,
-  type SessionGame,
 } from "./session-card-model";
 
 export function toPastSessionCard({

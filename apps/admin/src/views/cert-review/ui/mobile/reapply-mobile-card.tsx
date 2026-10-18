@@ -1,7 +1,7 @@
 import { CERT_SHOT_LABEL } from "@roll-and-call/database/certifications/model";
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
 import { KeyValueList, Tag } from "@/shared/ui";
 
@@ -21,7 +21,7 @@ export function ReapplyMobileCard({ latest, attempt }: ReapplyMobileCardProps) {
           {attempt}번째 신청
         </Text>
         <Text typography="body4" foreground="hint">
-          이전 신청은 {formatDate(latest.rejectedAt)}에 반려되었습니다
+          이전 신청은 {formatFullDate(latest.rejectedAt)}에 반려되었습니다
         </Text>
       </VStack>
       <div className="px-175">

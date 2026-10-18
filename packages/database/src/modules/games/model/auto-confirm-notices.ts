@@ -1,7 +1,4 @@
-import {
-  NOTIFICATION_KIND,
-  type NotificationInput,
-} from "#/modules/notifications/model/notification-kind";
+import { NOTIFICATION_KIND, type NotificationInput } from "#db/modules/notifications/model";
 
 import { isAttendingRow } from "./is-attending-row";
 import { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";

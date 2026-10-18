@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { OutcomePanel } from "@/shared/ui";
 
 interface SanctionSummaryProps {
@@ -28,7 +28,7 @@ export function SanctionSummary({
         {
           label: "제재 기간",
           value: isNull(days) ? "무기한" : `${days}일`,
-          sub: end ? `${formatDateTime(end)}까지` : "해제하기 전까지",
+          sub: end ? `${formatFullDateTime(end)}까지` : "해제하기 전까지",
           danger: true,
         },
         { label: "취소하는 구인", value: `${cancelCount}건`, sub: cancelSub },

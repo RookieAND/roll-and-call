@@ -1,7 +1,7 @@
-import { RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
+import { isRecognizedPost, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
 import { isNull, sumBy, uniq } from "es-toolkit";
 
-import { POST_STATUS, isRecognizedPost } from "@/shared/lib";
+import { POST_STATUS } from "@/shared/lib";
 import type { AdminUser, NoShow, Session } from "@/shared/server";
 
 import { percent } from "./percent";

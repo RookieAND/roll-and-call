@@ -4,7 +4,7 @@ import {
   GAME_TAB_DEFAULT,
   GAME_TIME_SLOTS,
   type GamesFilter,
-} from "@/shared/api";
+} from "../model/game-sort";
 
 // 필터 목록은 parseGameFilters와 같은 순서로 적어, 같은 조건이 같은 주소가 되게 한다.
 export function filterParams({

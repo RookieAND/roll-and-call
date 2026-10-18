@@ -1,11 +1,11 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
+import type { ReviewCardRow } from "@roll-and-call/database/reviews";
 import { VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { ReviewCard, ReviewEmpty, reviewEditDeadline } from "@/entities/review";
 import { MemberTitle } from "@/features/view-badge";
 import { formatDate } from "@/shared/lib";
-import type { ReviewCardRow } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
 import { reviewCardText } from "../model/review-card-text";

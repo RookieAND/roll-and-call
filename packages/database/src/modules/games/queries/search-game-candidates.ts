@@ -1,9 +1,9 @@
 import { and, eq, notInArray } from "drizzle-orm";
 
-import { db } from "#/client";
-import { activeSanctionWhere } from "#/modules/moderation/queries/active-sanction-where";
-import { memberSearchWhere } from "#/modules/profiles/queries/member-search-where";
-import { participants, profiles, sanctions, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { activeSanctionWhere } from "#db/modules/profiles";
+import { memberSearchWhere } from "#db/modules/profiles";
+import { participants, profiles, sanctions, serverMembers } from "#db/schema";
 
 // 이 서버 멤버만 찾고, 이 게임에 이미 있는 사람은 상태를 함께 돌려준다. 활동 정지 중인 사람은 빼고 찾는다.
 export async function searchGameCandidates({

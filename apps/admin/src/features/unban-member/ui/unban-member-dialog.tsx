@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { ManualNoticePreview } from "@/entities/notification";
-import { conflictToastText, draftReason, formatDate, useActionSubmit } from "@/shared/lib";
+import { conflictToastText, draftReason, formatFullDate, useActionSubmit } from "@/shared/lib";
 import {
   ActionNetworkError,
   FactRows,
@@ -79,7 +79,7 @@ export function UnbanMemberDialog({
               <FactRows
                 labelWidth={88}
                 items={[
-                  { label: "추방한 날", value: formatDate(ban.at) },
+                  { label: "추방한 날", value: formatFullDate(ban.at) },
                   { label: "추방한 운영진", value: ban.by },
                   { label: "추방 사유", value: ban.reason },
                 ]}

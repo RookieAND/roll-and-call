@@ -1,7 +1,7 @@
 import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { kindImpactLosers } from "../model/kind-impact-losers";
 
@@ -19,7 +19,7 @@ export async function getKindImpact({
   query?: string;
   cursor?: string | null;
 }) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "rulebooks", "certifications", "sessions"]);
   const losers = kindImpactLosers({ records: db, rulebookId, nextKind });
   const keyword = query?.trim().toLowerCase();
   const matched = keyword

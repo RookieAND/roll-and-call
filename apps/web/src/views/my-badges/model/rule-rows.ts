@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDERS,
   badgeKey,
@@ -8,7 +9,6 @@ import {
 
 import { lookTone, stepLook, type RuleCount } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";
-import type { BadgeRecord } from "@/shared/server";
 
 import { heldRecord } from "./held-record";
 import { ladderNext } from "./ladder-next";

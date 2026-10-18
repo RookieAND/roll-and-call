@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { profiles, servers, staff } from "#/schema";
+import { db } from "#db/client";
+import { profiles, servers, staff } from "#db/schema";
 
 import { MEMBER_ROLE, type MemberRole } from "../model/member-role";
 

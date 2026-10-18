@@ -1,4 +1,4 @@
-import type { Game } from "#/schema/games";
+import type { Game } from "#db/schema/games";
 
 // game_kind pgEnum과 같다. 어긋나면 satisfies가 컴파일을 막는다.
 export const GAME_KINDS = ["session", "briefing"] as const satisfies readonly Game["kind"][];

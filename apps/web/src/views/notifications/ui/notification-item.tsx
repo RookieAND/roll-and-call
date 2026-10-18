@@ -1,9 +1,9 @@
+import type { NotificationRow } from "@roll-and-call/database/notifications";
 import { notificationText } from "@roll-and-call/database/notifications/model";
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { isNull } from "es-toolkit";
 
-import type { NotificationRow } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
 import { notificationHref } from "../model/notification-href";

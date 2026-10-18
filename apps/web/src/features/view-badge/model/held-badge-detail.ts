@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_ROLE,
   kstMonthKey,
@@ -7,7 +8,6 @@ import {
 } from "@roll-and-call/database/badges/model";
 
 import { monthsOfLadder, type BadgeView } from "@/entities/badge";
-import type { BadgeRecord } from "@/shared/server";
 
 import type { BadgeDetail } from "./badge-detail";
 import { buildLadderDetail } from "./build-ladder-detail";

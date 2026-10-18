@@ -1,7 +1,7 @@
-import { db } from "#/client";
-import { GAME_TAB, type GamesFilter } from "#/modules/games/model/games-filter";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import { GAME_TAB, type GamesFilter } from "#db/modules/games/model/games-filter";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { games } from "#db/schema";
 
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
 import { recruitingGamesWhere } from "./recruiting-games-where";

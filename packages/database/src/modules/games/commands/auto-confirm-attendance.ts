@@ -1,18 +1,18 @@
 import { and, eq, exists, inArray, isNotNull, isNull, lte, sql } from "drizzle-orm";
 
-import { db } from "#/client";
+import { db } from "#db/client";
 import {
   ATTENDANCE_EDIT_HOURS,
   attendanceDeadline,
-} from "#/modules/games/model/attendance-deadline";
-import { autoConfirmNotices } from "#/modules/games/model/auto-confirm-notices";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { shouldAutoConfirmAttendance } from "#/modules/games/model/should-auto-confirm-attendance";
-import { listParticipantUserIds } from "#/modules/games/queries/list-participant-user-ids";
-import { sessionEndAtSql } from "#/modules/games/queries/session-end-at-sql";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants } from "#/schema";
+} from "#db/modules/games/model/attendance-deadline";
+import { autoConfirmNotices } from "#db/modules/games/model/auto-confirm-notices";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { shouldAutoConfirmAttendance } from "#db/modules/games/model/should-auto-confirm-attendance";
+import { listParticipantUserIds } from "#db/modules/games/queries/list-participant-user-ids";
+import { sessionEndAtSql } from "#db/modules/games/queries/session-end-at-sql";
+import { createNotifications } from "#db/modules/notifications";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants } from "#db/schema";
 
 import { markAttendanceConfirmed } from "./mark-attendance-confirmed";
 

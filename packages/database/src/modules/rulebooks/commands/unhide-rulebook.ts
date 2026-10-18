@@ -1,12 +1,12 @@
 import { and, desc, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { auditLog, profiles, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { memberNicknameSql } from "#db/modules/profiles";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { auditLog, profiles, rulebooks } from "#db/schema";
 
 // 숨긴 책을 다시 보이게 한다. 숨길 때 함께 반려한 신청은 되돌리지 않는다.
 export async function unhideRulebook({

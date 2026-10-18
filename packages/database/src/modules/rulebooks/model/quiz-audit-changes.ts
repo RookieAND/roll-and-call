@@ -1,9 +1,4 @@
-import {
-  addedChanges,
-  compactChanges,
-  listChange,
-  scalarChange,
-} from "#/modules/moderation/model/audit-changes";
+import { addedChanges, compactChanges, listChange, scalarChange } from "#db/modules/audit";
 
 interface QuizQuestionValues {
   question: string;

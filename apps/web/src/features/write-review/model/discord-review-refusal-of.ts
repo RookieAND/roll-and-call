@@ -1,5 +1,6 @@
+import type { ReviewDraftTarget } from "@roll-and-call/database/reviews";
+
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { ReviewDraftTarget } from "@/shared/server";
 
 import { DISCORD_REVIEW_REFUSAL, type DiscordReviewRefusal } from "./discord-review-refusal";
 import { REVIEW_BLOCK } from "./review-block";

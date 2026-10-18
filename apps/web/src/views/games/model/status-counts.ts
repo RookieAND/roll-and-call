@@ -1,5 +1,6 @@
-import { GAME_TAB, type GameStatusFilter, type GameTab } from "@/shared/api";
-import type { GamesCounts } from "@/shared/server";
+import type { GamesCounts } from "@roll-and-call/database/games";
+
+import { GAME_TAB, type GameStatusFilter, type GameTab } from "./game-sort";
 
 export function statusCounts({
   counts,

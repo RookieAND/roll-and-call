@@ -3,7 +3,7 @@ import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 import { uniq } from "es-toolkit";
 
 import type { TableSort } from "@/shared/lib";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import type { CertManageFilter } from "../model/cert-manage-filter";
 import { certManageRows } from "../model/cert-manage-rows";
@@ -18,7 +18,7 @@ export async function listCertManage({
   filter: CertManageFilter;
   sort: TableSort<CertManageSortColumn>;
 }) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "rulebooks", "certifications", "certApplications"]);
   const all = certManageRows({ records: db, now: Date.now() });
   const filteredUser = db.users.find((user) => user.id === filter.userId);
   const filteredBook = db.rulebooks.find((rulebook) => rulebook.id === filter.rulebookId);

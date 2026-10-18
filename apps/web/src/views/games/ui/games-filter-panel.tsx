@@ -6,13 +6,13 @@ import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { GAME_TIME_SLOTS, GAME_WEEKDAYS, type GamesFilter } from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 
 import { CHIP_HIT_AREA } from "../lib/chip-hit-area";
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
 import type { FilterDraft } from "../model/filter-draft";
+import { GAME_TIME_SLOTS, GAME_WEEKDAYS, type GamesFilter } from "../model/game-sort";
 import type { RuleOption } from "../model/rule-option";
 import { ruleSummary } from "../model/rule-summary";
 import { FilterSection } from "./filter-section";

@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { profiles } from "#/schema";
+import { db } from "#db/client";
+import type { Transaction } from "#db/modules/transaction";
+import { profiles } from "#db/schema";
 
 import { memberNicknameSql } from "./member-nickname-sql";
 

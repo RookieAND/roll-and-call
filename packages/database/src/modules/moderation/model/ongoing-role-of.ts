@@ -1,7 +1,4 @@
-import {
-  PARTICIPANT_STATUS,
-  type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
+import { PARTICIPANT_STATUS, type ParticipantStatus } from "#db/modules/games/model";
 
 import { ONGOING_ROLE, type OngoingRole } from "./ongoing-role";
 

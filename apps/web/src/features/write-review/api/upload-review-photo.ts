@@ -1,10 +1,10 @@
+import { REVIEW_PHOTO_BUCKET } from "@/entities/review";
 import {
   AUTH_REQUIRED_MESSAGE,
   createSupabaseBrowserClient,
   putWithProgress,
   shrinkImage,
 } from "@/shared/api";
-import { REVIEW_PHOTO_BUCKET } from "@/shared/lib";
 
 import { PHOTO_MAX_SIDE } from "../model/photo-rules";
 

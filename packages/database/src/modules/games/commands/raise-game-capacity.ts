@@ -1,7 +1,7 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games } from "#/schema";
+import type { Transaction } from "#db/modules/transaction";
+import { games } from "#db/schema";
 
 // 세션 시작 뒤 정원 +1은 구인당 한 번이다. 이미 늘렸으면 바꾸지 않고 false.
 export async function raiseGameCapacity({

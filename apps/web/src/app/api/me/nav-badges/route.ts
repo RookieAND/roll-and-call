@@ -1,4 +1,6 @@
-import { countUnreadNotifications, getCurrentServer, getCurrentSessionUser } from "@/shared/server";
+import { countUnreadNotifications } from "@roll-and-call/database/notifications";
+
+import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { loadTodos } from "@/widgets/session-list/server";
 
 // 서버 액션은 한 번에 하나씩 줄 서서 사용자의 변경 요청을 막으므로 GET으로 읽는다.

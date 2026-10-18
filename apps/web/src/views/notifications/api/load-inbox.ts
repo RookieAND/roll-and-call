@@ -1,5 +1,5 @@
 import "server-only";
-import { countUnreadNotifications, listNotifications } from "@/shared/server";
+import { countUnreadNotifications, listNotifications } from "@roll-and-call/database/notifications";
 
 import type { InboxPage } from "../model/inbox-page";
 

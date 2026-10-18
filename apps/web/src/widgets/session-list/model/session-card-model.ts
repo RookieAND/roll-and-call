@@ -1,5 +1,6 @@
-import type { ParticipantStatus, SessionRole } from "@/entities/game";
-import type { Game, ReviewedGames } from "@/shared/server";
+import type { ReviewedGames } from "@roll-and-call/database/reviews";
+
+import type { SessionRole } from "@/entities/game";
 
 export const SESSION_CHIP = {
   scheduling: "scheduling",
@@ -93,18 +94,6 @@ export type SessionCardModel = {
   startsAt: string | null;
   deadlinePassed: boolean;
   sortKey: number;
-};
-
-type SessionParticipant = {
-  userId: string;
-  status: ParticipantStatus;
-  joinedAt: Date | string;
-  absent: boolean;
-};
-
-export type SessionGame = Game & {
-  gm: { username: string; avatarUrl: string | null } | null;
-  participants: SessionParticipant[];
 };
 
 export type SessionContext = {

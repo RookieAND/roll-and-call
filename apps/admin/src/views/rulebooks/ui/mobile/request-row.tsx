@@ -3,7 +3,7 @@ import { Text } from "@roll-and-call/ui";
 
 import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import type { RulebookRequestRow } from "@/entities/rulebook/server";
-import { formatDate, withQuery } from "@/shared/lib";
+import { formatFullDate, withQuery } from "@/shared/lib";
 import { ListRow, Tag } from "@/shared/ui";
 
 import { RULEBOOKS_TAB } from "../../model/rulebooks-tab";
@@ -48,7 +48,7 @@ export function RequestRow({ request }: RequestRowProps) {
           {request.waitedDays}일째
         </Text>
       }
-      description={`${requester} · ${formatDate(request.requestedAt)}`}
+      description={`${requester} · ${formatFullDate(request.requestedAt)}`}
       meta={meta}
     />
   );

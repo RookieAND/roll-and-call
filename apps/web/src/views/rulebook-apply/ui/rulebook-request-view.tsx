@@ -1,12 +1,13 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { Container } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { RulebookRequestScreen } from "@/features/certify-rulebook";
+import { RulebookRequestScreen } from "@/features/request-rulebook";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface RulebookRequestViewProps {

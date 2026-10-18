@@ -1,7 +1,7 @@
 "use client";
 
+import { directionalParticle, objectParticle } from "@roll-and-call/app-kit/lib";
 import type { RulebookKind } from "@roll-and-call/database";
-import { directionalParticle, objectParticle } from "@roll-and-call/database/notifications/model";
 import { Button, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { Search } from "lucide-react";

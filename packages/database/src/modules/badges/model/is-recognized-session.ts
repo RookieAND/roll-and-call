@@ -1,4 +1,4 @@
-import { isSessionEnded } from "#/modules/games/model/session-timing";
+import { isSessionEnded } from "#db/modules/games/model";
 
 // 출석 확인 전에는 누가 불참인지 정해지지 않아 넣지 않는다.
 export function isRecognizedSession({

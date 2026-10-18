@@ -1,3 +1,4 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isNil } from "es-toolkit";
 
 import {
@@ -11,7 +12,6 @@ import {
   type ManageStage,
 } from "@/entities/game";
 import { formatDate, toKst } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import { attendanceRoster } from "./attendance-roster";
 import { cancelNoteOf } from "./cancel-note-of";

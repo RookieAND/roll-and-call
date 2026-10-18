@@ -1,4 +1,4 @@
-import { RULEBOOK_KIND } from "#/modules/rulebooks/model/rulebook-kind";
+import { RULEBOOK_KIND } from "#db/modules/rulebooks/model";
 
 interface OpenableBook {
   id: string;

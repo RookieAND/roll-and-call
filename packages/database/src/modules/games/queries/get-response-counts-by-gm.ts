@@ -1,8 +1,8 @@
 import { and, count, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { games, participants } from "#/schema";
+import { db } from "#db/client";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { games, participants } from "#db/schema";
 
 // GM 구인마다 확정 참여자 중 본인이 저장한 사람(자동 저장 제외, R15) 수.
 export async function getResponseCountsByGm({

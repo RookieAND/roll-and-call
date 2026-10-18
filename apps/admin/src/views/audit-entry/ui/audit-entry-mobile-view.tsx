@@ -1,11 +1,11 @@
+import { STAFF_CHANNEL_RELATED } from "@roll-and-call/database/audit/model";
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { compact, isNull } from "es-toolkit";
 import { ArrowDown } from "lucide-react";
 
 import { actionTone, auditLogHref, retentionDaysLeft } from "@/entities/audit";
 import { type AuditEntryDetail } from "@/entities/audit/server";
-import { formatDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
-import { STAFF_CHANNEL_RELATED } from "@/shared/server";
+import { formatFullDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
 import { AdminHeader, KeyValueList, MobileActionBar, ServerLink, Tag } from "@/shared/ui";
 
 import { SUBJECT_OPEN_ITEM } from "../model/subject-open-item";
@@ -35,7 +35,7 @@ export function AuditEntryMobileView({ entry, listHref }: AuditEntryMobileViewPr
     entry.staffChannelLine === STAFF_CHANNEL_RELATED.posted ? "글 올림" : "올리지 않음";
   const facts = compact([
     { label: "처리한 운영진", value: `${entry.actor}${actorRole}` },
-    { label: "처리 시각", value: formatDateTime(entry.at) },
+    { label: "처리 시각", value: formatFullDateTime(entry.at) },
     { label: "대상", value: entry.targetName },
     entry.targetDetail ? { label: "세부", value: entry.targetDetail } : null,
     isNull(daysLeft) ? null : { label: "보관", value: `${daysLeft}일 남음` },

@@ -1,9 +1,10 @@
 "use server";
 
+import { markBadgesNotified } from "@roll-and-call/database/badges";
 import { z } from "zod";
 
 import { parseActionInput, type ActionResult } from "@/shared/api";
-import { getActingMember, markBadgesNotified, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 const BADGE_KEYS_MAX = 200;
 

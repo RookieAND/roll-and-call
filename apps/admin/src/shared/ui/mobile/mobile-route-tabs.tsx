@@ -1,10 +1,9 @@
 "use client";
 
+import { useServerPath } from "@roll-and-call/app-kit/navigation";
 import { Tabs } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
-
-import { useServerPath } from "../use-server-path";
 
 interface MobileRouteTabsProps {
   label: string;

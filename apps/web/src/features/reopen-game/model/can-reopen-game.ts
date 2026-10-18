@@ -1,7 +1,7 @@
+import type { Game } from "@roll-and-call/database";
 import { isNil } from "es-toolkit";
 
 import { isSessionEnded } from "@/entities/game";
-import type { Game } from "@/shared/server";
 
 type ReopenSource = Pick<
   Game,

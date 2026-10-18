@@ -1,7 +1,7 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isNil } from "es-toolkit";
 
 import { isSessionEnded } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { CANCELLED_ROW_DETAIL } from "./manage-rows";
 

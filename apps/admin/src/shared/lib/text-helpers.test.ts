@@ -1,7 +1,7 @@
+import { withSubjectParticle, withTopicParticle } from "@roll-and-call/app-kit/lib";
 import { describe, expect, it } from "vitest";
 
 import { formatRelativeTime } from "./format-relative-time";
-import { withSubjectParticle } from "./with-subject-particle";
 
 describe("withSubjectParticle", () => {
   it("받침 유무로 이·가를 고른다", () => {
@@ -21,8 +21,7 @@ describe("formatRelativeTime", () => {
 });
 
 describe("withTopicParticle", () => {
-  it("받침 유무로 은·는을 고른다", async () => {
-    const { withTopicParticle } = await import("./with-topic-particle");
+  it("받침 유무로 은·는을 고른다", () => {
     expect(withTopicParticle("김코코")).toBe("김코코는");
     expect(withTopicParticle("탐정놀이중")).toBe("탐정놀이중은");
   });

@@ -8,9 +8,9 @@ import { use, useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
 import type { GameFormValues } from "@/features/write-game";
-import { useBeforeUnloadWarning, useServerPath } from "@/shared/lib";
+import { useServerPath } from "@/shared/lib";
 import { TrialContext, useTrialPush } from "@/shared/trial";
-import { ConfirmDialog, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
+import { ConfirmDialog, DESKTOP_CARD_CLASS, PageShell, useBeforeUnloadWarning } from "@/shared/ui";
 
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";

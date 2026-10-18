@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { servers } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { servers } from "#db/schema";
 
 import { RANKING_MODE_LABEL, type RankingMode } from "../model/ranking-mode";
 

@@ -1,7 +1,7 @@
 import { Button, Table, Text } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/entities/post/server";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
@@ -82,7 +82,7 @@ export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelP
               </Table.Cell>
               <Table.Cell numeric>
                 <Text typography="body3" foreground="muted">
-                  {member.joinedAt ? formatDateTime(member.joinedAt) : "없음"}
+                  {member.joinedAt ? formatFullDateTime(member.joinedAt) : "없음"}
                 </Text>
               </Table.Cell>
               {"listOrder" in member ? (

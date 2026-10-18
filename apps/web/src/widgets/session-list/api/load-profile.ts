@@ -1,9 +1,10 @@
+import { getGamesByGm, getJoinedGames } from "@roll-and-call/database/games";
+
+import { countRecordSessions, recentAbsences } from "@/entities/game";
 import { isUuid } from "@/shared/lib";
-import { getCurrentServer, getGamesByGm, getJoinedGames, getProfile } from "@/shared/server";
+import { getCurrentServer, getProfile } from "@/shared/server";
 
 import { buildProfileSessions } from "../model/build-profile-sessions";
-import { countRecordSessions } from "../model/count-record-sessions";
-import { recentAbsences } from "../model/recent-absences";
 
 export async function loadProfile({
   userId,

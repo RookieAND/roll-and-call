@@ -1,17 +1,17 @@
+import { AUDIT_ACTION_GROUPS } from "@roll-and-call/database/audit/model";
 import { Button, Chip, HStack, Text, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
 import { ALL_AUDIT_PERIOD, AUDIT_PERIODS, defaultAuditPeriod } from "@/entities/audit";
 import { type listAuditLog } from "@/entities/audit/server";
 import {
-  formatDateTime,
+  formatFullDateTime,
   PAGE_SIZE,
   paginate,
   parsePageSize,
   withQuery,
   type TableSort,
 } from "@/shared/lib";
-import { AUDIT_ACTION_GROUPS } from "@/shared/server";
 import {
   AdminHeader,
   CsvExportButton,
@@ -123,7 +123,7 @@ export function AuditLogView({ log, query, sort }: AuditLogViewProps) {
                 fileName="활동 기록.csv"
                 header={["일시", "조치", "대상", "사유", "운영진"]}
                 rows={log.rows.map((row) => [
-                  formatDateTime(row.at),
+                  formatFullDateTime(row.at),
                   row.action,
                   row.target,
                   row.reason,

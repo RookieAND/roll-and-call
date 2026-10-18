@@ -1,5 +1,6 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
+
 import { SCHEDULE_MODE } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { buildTrialGame, TRIAL_VIEWER_ID } from "./build-trial-game";
 import { TRIAL_KIND } from "./trial-kind";

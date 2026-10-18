@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model/game-cancel-kind";
 
 import { NOTIFICATION_KINDS } from "./is-notification-kind";
 import {

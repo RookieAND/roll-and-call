@@ -1,9 +1,9 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isNil } from "es-toolkit";
 
 import { countConfirmed, isSessionEnded, isSessionStarted } from "@/entities/game";
 import { reviewWriteDeadline } from "@/entities/review";
 import { formatDate } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import { attendanceRow } from "./attendance-row";
 import { gmReviewButton } from "./gm-review-button";

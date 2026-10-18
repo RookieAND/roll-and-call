@@ -16,20 +16,20 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@base-ui-components/react": "1.0.0-rc.0",
-    "class-variance-authority": "^0.7.1",
+    "@base-ui-components/react": "catalog:",
+    "class-variance-authority": "catalog:",
     "clsx": "^2.1.1",
-    "es-toolkit": "^1.52.0",
-    "lucide-react": "^1.32.0",
+    "es-toolkit": "catalog:",
+    "lucide-react": "catalog:",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",
-    "@types/node": "^26.2.0",
-    "@types/react": "^19.2.18",
-    "typescript": "^5.9.3",
-    "vitest": "^5.0.1"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.0.0"

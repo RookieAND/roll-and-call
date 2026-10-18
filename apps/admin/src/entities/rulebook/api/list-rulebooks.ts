@@ -3,7 +3,7 @@ import type { RulebookKind } from "@roll-and-call/database";
 import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { uniq } from "es-toolkit";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 export interface RulebookRow {
   id: string;
@@ -26,7 +26,7 @@ export interface RulebookCategory {
 }
 
 export async function listRulebooks({ query }: { query?: string } = {}) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["rulebooks", "certifications"]);
   const rows: RulebookRow[] = db.rulebooks
     .map((rulebook) => {
       const label = rulebookLabel(rulebook);

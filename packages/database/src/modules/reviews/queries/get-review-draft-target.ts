@@ -1,11 +1,11 @@
 import { and, count, eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games, participants, profiles, sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { findActiveSanction } from "#db/modules/moderation";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { games, participants, profiles, sessionReviews } from "#db/schema";
 
 export async function getReviewDraftTarget({
   serverId,

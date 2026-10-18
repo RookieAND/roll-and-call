@@ -1,3 +1,4 @@
+import { getApplicationNotes, getGameParticipants } from "@roll-and-call/database/games";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -6,12 +7,7 @@ import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/
 import { GmOnlyNotice } from "@/features/auth";
 import { nextRoundBaseDate } from "@/features/open-next-round";
 import { serverPath } from "@/shared/lib";
-import {
-  getApplicationNotes,
-  getCurrentSessionUser,
-  getGameParticipants,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, PageShell } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";

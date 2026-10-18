@@ -1,8 +1,9 @@
+import { loadBadgeFacts } from "@roll-and-call/database/badges";
 import { cache } from "react";
 
-import { getBadgeFacts, getCurrentServer } from "@/shared/server";
+import { getCurrentServer } from "@/shared/server";
 
 export const loadMyBadgeFacts = cache(async (userId: string) => {
   const server = await getCurrentServer();
-  return getBadgeFacts({ serverId: server.id, userId });
+  return loadBadgeFacts({ serverId: server.id, userId });
 });

@@ -1,6 +1,6 @@
 import { and, ilike, or, type SQL } from "drizzle-orm";
 
-import { games } from "#/schema";
+import { games } from "#db/schema";
 
 import { publicGamesWhere } from "./public-games-where";
 

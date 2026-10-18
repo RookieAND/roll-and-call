@@ -1,7 +1,7 @@
 import { and, eq, isNotNull, isNull, lte, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import { games } from "#db/schema";
 
 import { sessionEndAtSql } from "../queries/session-end-at-sql";
 

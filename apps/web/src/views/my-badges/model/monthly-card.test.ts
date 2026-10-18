@@ -1,6 +1,5 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import { describe, expect, it } from "vitest";
-
-import type { BadgeRecord } from "@/shared/server";
 
 import { monthlyCard } from "./monthly-card";
 

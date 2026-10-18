@@ -1,6 +1,6 @@
-import type { GamesFilter } from "@/shared/api";
 import { PageShell } from "@/shared/ui";
 
+import { type GamesFilter } from "../model/game-sort";
 import { GameBoard } from "./game-board";
 import { GamesAppBar } from "./games-app-bar";
 

@@ -23,14 +23,18 @@ export {
 export { releaseSanction, type ReleaseResult } from "./commands/release-sanction";
 export { removeStaff } from "./commands/remove-staff";
 export { kickMember, type KickResult } from "./commands/kick-member";
-export { type ModerationConflict } from "./model/moderation-conflict";
 export { unbanMember, type UnbanResult } from "./commands/unban-member";
 export { editNickname, type EditNicknameResult } from "./commands/edit-nickname";
 export { getKickImpact } from "./queries/get-kick-impact";
 export { loadMemberOngoing } from "./queries/load-member-ongoing";
 export { findActiveSanction } from "./queries/find-active-sanction";
 export { listSanctionedUserIds } from "./queries/list-sanctioned-user-ids";
-export { loadAdminTables, type AdminTables } from "./queries/load-admin-tables";
+export {
+  ADMIN_TABLE_KEYS,
+  loadAdminTable,
+  type AdminTableKey,
+  type AdminTables,
+} from "./queries/load-admin-tables";
 export { loadPendingQueue } from "./queries/load-pending-queue";
 export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

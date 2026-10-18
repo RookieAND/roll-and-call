@@ -1,7 +1,6 @@
+import type { NotificationRow } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { describe, expect, it } from "vitest";
-
-import type { NotificationRow } from "@/shared/server";
 
 import { groupNotificationsByDay } from "./group-notifications-by-day";
 

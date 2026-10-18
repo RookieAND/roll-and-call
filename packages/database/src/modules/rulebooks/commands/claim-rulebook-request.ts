@@ -1,13 +1,13 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import type { Executor } from "#/modules/transaction/executor";
-import { profiles, rulebookRequests } from "#/schema";
+import type { Actor } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import type { Executor } from "#db/modules/transaction";
+import { profiles, rulebookRequests } from "#db/schema";
 
 const OUTCOME_ACTION = {
   added: "룰북 추가",

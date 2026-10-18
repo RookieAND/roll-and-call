@@ -1,6 +1,6 @@
 import { and, eq, ilike, ne, or } from "drizzle-orm";
 
-import { profiles, serverMembers } from "#/schema";
+import { profiles, serverMembers } from "#db/schema";
 
 // 이 서버 닉네임 일부나 디스코드 ID 전체로 찾는다. 찾는 사람 자신은 뺀다. 부르는 쪽이 server_members를 join한다.
 export function memberSearchWhere({

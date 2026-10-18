@@ -1,4 +1,4 @@
-import { KST_OFFSET_MS } from "#/modules/games/model/kst-offset";
+import { KST_OFFSET_MS } from "#db/modules/games/model";
 
 // "2026-09" → 2026-09-01 00:00 KST.
 export function monthStart(monthKey: string): Date {

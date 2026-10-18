@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { serverMessageHeads } from "#/schema";
+import { db } from "#db/client";
+import { serverMessageHeads } from "#db/schema";
 
 import { defaultMessageHead, MESSAGE_CASES, type MessageCaseKey } from "../model/message-heads";
 

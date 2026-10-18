@@ -1,6 +1,5 @@
+import type { Profile } from "@roll-and-call/database";
 import { z } from "zod";
-
-import type { Profile } from "@/shared/server";
 
 const text = z.string().optional().catch(undefined);
 const metadataSchema = z.object({

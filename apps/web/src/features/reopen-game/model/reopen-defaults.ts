@@ -1,3 +1,4 @@
+import type { Game } from "@roll-and-call/database";
 import { pick } from "es-toolkit";
 
 import {
@@ -7,7 +8,6 @@ import {
   ruleSetOf,
   type MyRulebooks,
 } from "@/entities/rulebook";
-import type { Game } from "@/shared/server";
 
 import { openSupplements } from "./open-supplements";
 

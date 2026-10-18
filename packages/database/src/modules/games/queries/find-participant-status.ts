@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 export async function findParticipantStatus({
   transaction,

@@ -1,10 +1,10 @@
+import { AUDIT_ACTION_GROUPS } from "@roll-and-call/database/audit/model";
 import { Button, Chip, Grid, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
 import { ALL_AUDIT_PERIOD, defaultAuditPeriod } from "@/entities/audit";
 import { type listAuditLog } from "@/entities/audit/server";
 import { SORT_DIR, withQuery, type TableSort } from "@/shared/lib";
-import { AUDIT_ACTION_GROUPS } from "@/shared/server";
 import {
   AdminHeader,
   EMPTY_IMAGE,

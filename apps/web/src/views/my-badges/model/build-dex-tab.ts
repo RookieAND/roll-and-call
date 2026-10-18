@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDER,
   BADGE_LADDERS,
@@ -11,7 +12,6 @@ import {
 import type { RankingMode } from "@roll-and-call/database/servers/model";
 
 import { badgeCounts } from "@/entities/badge";
-import type { BadgeRecord } from "@/shared/server";
 
 import { ladderFill } from "./ladder-fill";
 import { ladderMedals } from "./ladder-medals";

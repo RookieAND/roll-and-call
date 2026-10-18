@@ -1,9 +1,9 @@
 import { and, eq, or } from "drizzle-orm";
 
-import { db } from "#/client";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { availabilities, games, participants, profiles } from "#/schema";
+import { db } from "#db/client";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { availabilities, games, participants, profiles } from "#db/schema";
 
 // 겹침·이름·추천 후보·제출 수는 확정자와 GM만 센다(R2). 행은 지우지 않는다.
 export async function getGameAvailabilities({

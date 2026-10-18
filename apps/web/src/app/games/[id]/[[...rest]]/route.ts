@@ -1,5 +1,6 @@
+import { findGameServerSlug } from "@roll-and-call/database/games";
+
 import { isUuid, serverPath } from "@/shared/lib";
-import { findGameServerSlug } from "@/shared/server";
 
 // 서버 주소가 생기기 전의 구인 링크(/games/{id}…)를 그 구인의 서버로 보낸다. 못 찾으면 기본 서버의 같은 주소(404)로 보낸다.
 export async function GET(request: Request, context: RouteContext<"/games/[id]/[[...rest]]">) {

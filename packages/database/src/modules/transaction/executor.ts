@@ -1,4 +1,4 @@
-import type { db } from "#/client";
+import type { db } from "#db/client";
 
 import type { Transaction } from "./transaction";
 

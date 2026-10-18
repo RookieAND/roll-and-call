@@ -1,7 +1,7 @@
 import { Callout } from "@roll-and-call/ui";
 
 import type { ReviewDetail } from "@/entities/review";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 
 interface ReviewHiddenBannerProps {
   hidden: NonNullable<ReviewDetail["hidden"]>;
@@ -16,7 +16,7 @@ export function ReviewHiddenBanner({ hidden, held }: ReviewHiddenBannerProps) {
     <Callout.Root colorPalette="warning">
       <Callout.Icon />
       <Callout.Title>
-        {formatDateTime(hidden.at)}에 {hidden.by}님이 숨겼습니다
+        {formatFullDateTime(hidden.at)}에 {hidden.by}님이 숨겼습니다
       </Callout.Title>
       <Callout.Description>
         사유: {hidden.reason} · {editedLine}

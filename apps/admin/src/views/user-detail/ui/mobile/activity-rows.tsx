@@ -1,5 +1,5 @@
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime, withoutYear } from "@/shared/lib";
+import { formatFullSessionTime, withoutYear } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow, Tag } from "@/shared/ui";
 
 interface ActivityRowsProps {
@@ -33,7 +33,7 @@ export function ActivityRows({ activities }: ActivityRowsProps) {
           }
           trailing={<Tag>{activity.hosted ? "GM" : "참여"}</Tag>}
           description={activity.rulebook}
-          meta={withoutYear(formatSessionTime(activity.startsAt))}
+          meta={withoutYear(formatFullSessionTime(activity.startsAt))}
           muted={activity.noShow?.cancelled}
         />
       ))}

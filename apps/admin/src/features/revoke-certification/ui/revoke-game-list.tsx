@@ -1,7 +1,7 @@
 import { Text, VStack } from "@roll-and-call/ui";
 
 import type { RevokeTarget } from "@/entities/cert/server";
-import { formatSessionTime } from "@/shared/lib";
+import { formatFullSessionTime } from "@/shared/lib";
 
 interface RevokeGameListProps {
   games: RevokeTarget["games"];
@@ -36,7 +36,7 @@ export function RevokeGameList({ games }: RevokeGameListProps) {
             <Text typography="body4" foreground="hint">
               {[
                 `${game.statusLabel} ${game.confirmedCount}/${game.capacity}`,
-                game.startsAt ? formatSessionTime(game.startsAt) : "일정 미정",
+                game.startsAt ? formatFullSessionTime(game.startsAt) : "일정 미정",
                 `확정자 ${game.confirmedCount}명`,
               ].join(" · ")}
             </Text>

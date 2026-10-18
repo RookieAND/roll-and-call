@@ -1,4 +1,4 @@
-import { GAME_CANCEL_KIND } from "@roll-and-call/database/games/model";
+import { GAME_CANCEL_KIND } from "@roll-and-call/database/notifications/model";
 import {
   MONTHLY_AWARD_ROLE,
   NOTIFICATION_KIND,

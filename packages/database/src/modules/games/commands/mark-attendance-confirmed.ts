@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games } from "#/schema";
+import type { Transaction } from "#db/modules/transaction";
+import { games } from "#db/schema";
 
 // 확정 시각은 마지막 확정으로 덮고, 처음 확정 시각은 한 번 적으면 그대로 둔다.
 export async function markAttendanceConfirmed({

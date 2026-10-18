@@ -1,5 +1,7 @@
+import { getScheduleAvailabilityRows } from "@roll-and-call/database/games";
+
 import { aggregateAvailability, type ScheduleAvailability } from "@/entities/availability";
-import { getCurrentServer, getScheduleAvailabilityRows } from "@/shared/server";
+import { getCurrentServer } from "@/shared/server";
 
 export async function getScheduleAvailability({
   gameId,

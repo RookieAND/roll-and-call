@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDER,
   BADGE_LADDERS,
@@ -8,7 +9,6 @@ import {
 import { BADGE_TAB, badgeRequirement, type BadgeTab, type BadgeView } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
-import type { BadgeRecord } from "@/shared/server";
 
 import type { BadgeRowGroup } from "./badge-row";
 import { monthlyRow } from "./monthly-row";

@@ -1,22 +1,22 @@
-import { closeGameRecruitment } from "#/modules/games/commands/close-game-recruitment";
-import { markSelectionFinished } from "#/modules/games/commands/mark-selection-finished";
-import { finishSelectionBlock } from "#/modules/games/model/can-finish-selection";
-import { compareWaitlistOrder } from "#/modules/games/model/compare-waitlist-order";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
-import { SCHEDULE_MODE } from "#/modules/games/model/schedule-mode";
+import { closeGameRecruitment } from "#db/modules/games/commands/close-game-recruitment";
+import { markSelectionFinished } from "#db/modules/games/commands/mark-selection-finished";
+import { finishSelectionBlock } from "#db/modules/games/model/can-finish-selection";
+import { compareWaitlistOrder } from "#db/modules/games/model/compare-waitlist-order";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { SCHEDULE_MODE } from "#db/modules/games/model/schedule-mode";
 import {
   SELECTION_REJECTION,
   type SelectionRejection,
-} from "#/modules/games/model/selection-rejection";
-import { isApplicationClosed } from "#/modules/games/model/session-timing";
-import { listParticipantUserIds } from "#/modules/games/queries/list-participant-user-ids";
-import { listWaitingParticipants } from "#/modules/games/queries/list-waiting-participants";
-import { lockGame } from "#/modules/games/queries/lock-game";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
-import type { Game } from "#/schema";
+} from "#db/modules/games/model/selection-rejection";
+import { isApplicationClosed } from "#db/modules/games/model/session-timing";
+import { listParticipantUserIds } from "#db/modules/games/queries/list-participant-user-ids";
+import { listWaitingParticipants } from "#db/modules/games/queries/list-waiting-participants";
+import { lockGame } from "#db/modules/games/queries/lock-game";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
+import type { Game } from "#db/schema";
 
 export type FinishSelectionResult =
   | {

@@ -1,5 +1,5 @@
-import { db } from "#/client";
-import { profileMemos } from "#/schema";
+import { db } from "#db/client";
+import { profileMemos } from "#db/schema";
 
 export async function saveProfileMemo({
   serverId,

@@ -1,16 +1,16 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { cancelGame } from "#/modules/games/commands/cancel-game";
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { STAFF_CHANNEL_RELATED } from "#/modules/moderation/model/audit-actions";
-import type { ModerationConflict } from "#/modules/moderation/model/moderation-conflict";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import { STAFF_CHANNEL_RELATED } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { cancelGame } from "#db/modules/games";
+import type { ModerationConflict } from "#db/modules/moderation/model";
+import { createNotifications } from "#db/modules/notifications";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { rulebookLabel } from "#db/modules/rulebooks/model";
 import {
   certApplications,
   certifications,
@@ -18,7 +18,7 @@ import {
   rulebooks,
   servers,
   type Game,
-} from "#/schema";
+} from "#db/schema";
 
 import { loadRevokeCancelTargets } from "../queries/load-revoke-cancel-targets";
 

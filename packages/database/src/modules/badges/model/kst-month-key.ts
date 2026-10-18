@@ -1,4 +1,4 @@
-import { KST_OFFSET_MS } from "#/modules/games/model/kst-offset";
+import { KST_OFFSET_MS } from "#db/modules/games/model";
 
 // 한국 시각 기준 "2026-09". 이 달의 기록과 같은 달 경계를 쓴다.
 export function kstMonthKey(date: Date): string {

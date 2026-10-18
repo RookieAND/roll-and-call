@@ -1,7 +1,7 @@
 import { and, count, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { notifications } from "#/schema";
+import { db } from "#db/client";
+import { notifications } from "#db/schema";
 
 import { visibleNotificationsWhere } from "./visible-notifications-where";
 

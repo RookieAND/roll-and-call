@@ -1,7 +1,7 @@
 import { Button, Callout, Text, VStack } from "@roll-and-call/ui";
 
 import type { NoShowDetail } from "@/entities/no-show/server";
-import { formatDateTime, formatSessionTime, withQuery } from "@/shared/lib";
+import { formatFullDateTime, formatFullSessionTime, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
   KeyValueList,
@@ -43,7 +43,7 @@ export function NoShowMobileDetail({ record, query }: NoShowMobileDetailProps) {
         { label: "취소 사유", value: record.cancellation.reason },
         {
           label: "취소한 운영진",
-          value: `${record.cancellation.by} · ${formatDateTime(record.cancellation.at)}`,
+          value: `${record.cancellation.by} · ${formatFullDateTime(record.cancellation.at)}`,
         },
       ]
     : [];
@@ -85,7 +85,7 @@ export function NoShowMobileDetail({ record, query }: NoShowMobileDetailProps) {
               { label: "불참 당사자", value: record.nickname },
               { label: "세션", value: record.sessionTitle },
               { label: "룰북", value: record.rulebook },
-              { label: "일시", value: formatSessionTime(record.startsAt) },
+              { label: "일시", value: formatFullSessionTime(record.startsAt) },
               { label: "처리한 사람", value: record.handler },
               reasonItem,
               ...cancellationItems,

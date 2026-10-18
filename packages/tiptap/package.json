@@ -25,17 +25,17 @@
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
-    "es-toolkit": "^1.52.0",
-    "lucide-react": "^1.32.0"
+    "es-toolkit": "catalog:",
+    "lucide-react": "catalog:"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",
-    "@types/node": "^26.2.0",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "react-dom": "^19.2.0",
-    "typescript": "^5.9.3",
-    "vitest": "^5.0.1"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
     "react": "^19.0.0"

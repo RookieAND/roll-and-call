@@ -7,7 +7,7 @@ import {
   type NoShowSortColumn,
   NoShowStatusTag,
 } from "@/entities/no-show";
-import { formatSessionTime, type TableSort } from "@/shared/lib";
+import { formatFullSessionTime, type TableSort } from "@/shared/lib";
 import {
   TableEmptyRow,
   TableColumns,
@@ -88,7 +88,7 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="hint" numeric>
-                {formatSessionTime(row.startsAt)}
+                {formatFullSessionTime(row.startsAt)}
               </Text>
             </Table.Cell>
             <Table.Cell>

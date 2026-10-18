@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games, rulebookCategories, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { games, rulebookCategories, rulebooks } from "#db/schema";
 
 // 구인의 룰 분류를 제목에 붙일 이름. 약어가 있으면 약어, 없으면 이름이다. 룰북이 없으면 null.
 export async function findGameCategoryLabel({

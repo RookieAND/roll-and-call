@@ -1,7 +1,7 @@
+import type { Game } from "@roll-and-call/database";
 import { isNull } from "es-toolkit";
 
 import { SUPPLEMENT_OPTION_STATE, supplementOptions, type EditionSet } from "@/entities/rulebook";
-import type { Game } from "@/shared/server";
 
 export function openSupplements({
   supplements,

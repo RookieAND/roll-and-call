@@ -3,7 +3,7 @@
 import { toast } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { formatDate, useActionSubmit } from "@/shared/lib";
+import { formatFullDate, useActionSubmit } from "@/shared/lib";
 
 import { changeEnforcementDate } from "../api/change-enforcement-date";
 import { formatEnforcementDate } from "../model/format-enforcement-date";
@@ -32,7 +32,7 @@ export function useEnforcementDate(enforcementDate: Date | null) {
       toast.danger("적용일을 바꾸지 못했습니다.", { description: "다시 시도해 주세요." });
       return;
     }
-    toast.success(`적용일을 ${formatDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
+    toast.success(`적용일을 ${formatFullDate(picked)}로 ${isPostpone ? "연기" : "지정"}했습니다`);
     setPicked(null);
   };
 

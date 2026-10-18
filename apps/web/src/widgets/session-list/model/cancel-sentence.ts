@@ -1,6 +1,4 @@
-import { GAME_CANCEL_KIND } from "@/entities/game";
-
-import type { SessionGame } from "./session-card-model";
+import { GAME_CANCEL_KIND, type SessionGame } from "@/entities/game";
 
 export function cancelSentence(game: SessionGame): string | null {
   if (game.cancelKind === GAME_CANCEL_KIND.staff) return "운영진이 취소한 구인입니다";

@@ -78,12 +78,6 @@ export {
 } from "./coordination-window";
 export { isStartInCoordinationRange } from "./coordination-range";
 export { cancelBlockReason } from "./cancel-block-reason";
-export {
-  GAME_CANCEL_KIND,
-  MIN_PLAYERS_UNMET_CANCEL_TEXT,
-  SELECTION_EXPIRED_CANCEL_TEXT,
-  type GameCancelKind,
-} from "./game-cancel-kind";
 export { storedCancelReason } from "./stored-cancel-reason";
 export { ABSENCE_WINDOW_DAYS, absenceExpiresAt, isAbsenceActive } from "./absence-window";
 export {
@@ -118,3 +112,6 @@ export { autoConfirmNotices } from "./auto-confirm-notices";
 export { REVIEW_WRITE_DAYS } from "./review-write-days";
 export { REVIEW_AUTHOR_ROLE, type ReviewAuthorRole } from "./review-author-role";
 export { KST_OFFSET_MS } from "./kst-offset";
+export { replaceManualSupplement } from "./replace-manual-supplement";
+export { GAME_POST_PHASE, gamePostPhase, type GamePostPhase } from "./game-post-phase";
+export { isRecognizedPost } from "./is-recognized-post";

@@ -1,4 +1,4 @@
-import type { Game } from "@/shared/server";
+import type { Game } from "@roll-and-call/database";
 
 export type GameTagKey = "genres" | "triggers" | "platforms";
 

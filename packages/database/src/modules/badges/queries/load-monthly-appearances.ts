@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { miniRuleOf } from "#/modules/badges/model/mini-rule-of";
-import { type MonthlyAppearance } from "#/modules/badges/model/monthly-winners";
-import { recordAppearances } from "#/modules/badges/model/record-appearances";
-import { RANKING_MODE, type RankingMode } from "#/modules/servers/model/ranking-mode";
-import { servers } from "#/schema";
+import { db } from "#db/client";
+import { miniRuleOf } from "#db/modules/badges/model/mini-rule-of";
+import { type MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
+import { recordAppearances } from "#db/modules/badges/model/record-appearances";
+import { RANKING_MODE, type RankingMode } from "#db/modules/servers/model";
+import { servers } from "#db/schema";
 
 import { loadReviewAppearances } from "./load-review-appearances";
 

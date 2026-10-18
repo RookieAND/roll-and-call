@@ -1,3 +1,4 @@
+import type { SessionGame } from "@/entities/game";
 import { reviewEditDeadline, reviewWriteDeadline } from "@/entities/review";
 import { ddayKst, formatDday } from "@/shared/lib";
 
@@ -5,7 +6,6 @@ import {
   SESSION_ACTION_KIND,
   type SessionCardModel,
   type SessionContext,
-  type SessionGame,
 } from "./session-card-model";
 
 type ReviewNote = Pick<SessionCardModel, "caption" | "action">;

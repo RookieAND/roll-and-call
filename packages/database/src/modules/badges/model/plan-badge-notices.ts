@@ -2,7 +2,7 @@ import {
   MONTHLY_AWARD_ROLE,
   NOTIFICATION_KIND,
   type NotificationPayload,
-} from "#/modules/notifications/model/notification-kind";
+} from "#db/modules/notifications/model";
 
 import type { EarnedBadge } from "./badge-facts";
 import { BADGE_LADDER, BADGE_ROLE } from "./badge-ladder";

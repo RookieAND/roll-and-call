@@ -1,11 +1,11 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { quizChanges } from "#/modules/rulebooks/model/quiz-audit-changes";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { rulebookQuizQuestions, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { quizChanges } from "#db/modules/rulebooks/model/quiz-audit-changes";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { rulebookQuizQuestions, rulebooks } from "#db/schema";
 
 export interface QuizQuestionInput {
   question: string;

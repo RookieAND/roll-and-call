@@ -2,7 +2,7 @@ import { Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
+import { formatFullSessionTime, paginate, parsePageSize } from "@/shared/lib";
 import {
   EMPTY_IMAGE,
   ListPager,
@@ -98,7 +98,7 @@ export function ActivityPanel({
             >
               <Table.Cell>
                 <Text typography="body3" foreground="hint" numeric>
-                  {formatSessionTime(activity.startsAt)}
+                  {formatFullSessionTime(activity.startsAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="center">

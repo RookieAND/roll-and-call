@@ -1,6 +1,7 @@
+import { getMyReviews } from "@roll-and-call/database/reviews";
 import { Container, VStack } from "@roll-and-call/ui";
 
-import { getCurrentSessionUser, getMyReviews, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 import { toMyReviewCard } from "../model/my-review-card";

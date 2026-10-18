@@ -1,4 +1,4 @@
-import type { Availability } from "@/shared/server";
+import type { Availability } from "@roll-and-call/database";
 export type AvailabilityRow = Pick<Availability, "slotStart" | "userId"> & {
   user: { username: string } | null;
 };

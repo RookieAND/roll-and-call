@@ -1,8 +1,8 @@
 import "server-only";
+import { certWaitingOn } from "@roll-and-call/database/certifications/model";
 import { loadPendingQueue } from "@roll-and-call/database/moderation";
 import { cache } from "react";
 
-import { certWaitingOn } from "../../lib/cert-waiting-on";
 import { getCurrentServer } from "../auth/get-current-server";
 import { requireStaff } from "../auth/require-staff";
 import { buildPendingItems, type PendingItem } from "./build-pending-items";

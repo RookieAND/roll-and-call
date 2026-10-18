@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { PARTICIPANT_STATUS, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import {
+  PARTICIPANT_STATUS,
+  RECRUIT_METHOD,
+  SCHEDULE_MODE,
+  type SessionGame,
+} from "@/entities/game";
 import { CERT_STATE, type MyRulebook } from "@/entities/rulebook";
 
 import { buildSessions } from "./build-sessions";
 import { listTodos } from "./list-todos";
-import type { SessionGame } from "./session-card-model";
 import { TODO_KIND } from "./todo-kind";
 
 const NOW = new Date("2026-09-15T12:00:00+09:00");

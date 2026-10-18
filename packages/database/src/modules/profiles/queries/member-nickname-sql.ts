@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 
-import { profiles, serverMembers } from "#/schema";
+import { profiles, serverMembers } from "#db/schema";
 
 // 그 서버에서 보이는 닉네임(server_members.nickname, 나간 멤버 포함). 멤버십이 없으면 계정 이름으로 대신한다.
 // RQB의 user·gm 관계에 extras로 붙이거나 select에 쓴다. 별칭 profiles(alias(profiles, "gm"))면 그 별칭을 넘긴다.

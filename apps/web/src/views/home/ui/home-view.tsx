@@ -1,3 +1,5 @@
+import { loadReviewAppearances, listRankingHiddenUserIds } from "@roll-and-call/database/badges";
+import { getMonthSessions, hasSessionsBetween } from "@roll-and-call/database/games";
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 import { HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
@@ -7,15 +9,7 @@ import { LoginButton } from "@/features/auth";
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentServer,
-  getCurrentSessionUser,
-  getMonthSessions,
-  getProfile,
-  getReviewAppearances,
-  hasSessionsBetween,
-  listRankingHiddenUserIds,
-} from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
 import {
   AppBar,
   DESKTOP_CARD_CLASS,
@@ -60,7 +54,7 @@ export async function HomeView({ date }: HomeViewProps) {
       to: nextMonthStart.add(1, "month").toDate(),
     }),
     mode === RANKING_MODE.points
-      ? getReviewAppearances({
+      ? loadReviewAppearances({
           serverId: server.id,
           from: monthStart.toDate(),
           to: nextMonthStart.toDate(),

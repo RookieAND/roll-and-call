@@ -1,9 +1,9 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
 import { isDeadlinePassed, isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { CLOCK_PARTICLE_KIND, clockParticle, formatDateTime, toKst } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
 

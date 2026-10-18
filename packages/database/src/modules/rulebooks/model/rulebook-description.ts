@@ -1,4 +1,4 @@
-import type { RulebookKind } from "#/schema";
+import type { RulebookKind } from "#db/schema";
 
 export interface RulebookDescription {
   name: string;

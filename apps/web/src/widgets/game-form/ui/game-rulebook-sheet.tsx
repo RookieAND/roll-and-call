@@ -5,7 +5,7 @@ import { uniq } from "es-toolkit";
 import { type KeyboardEvent, useState } from "react";
 
 import { RULE_GATE, type EditionSet, type MyRulebooks } from "@/entities/rulebook";
-import { RulebookRequestSheet } from "@/features/certify-rulebook";
+import { RulebookRequestSheet } from "@/features/request-rulebook";
 import { useIsTrial } from "@/shared/trial";
 import { EmptyState } from "@/shared/ui";
 

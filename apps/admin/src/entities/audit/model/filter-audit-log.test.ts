@@ -1,4 +1,4 @@
-import { auditActionLabel } from "@roll-and-call/database/moderation/model";
+import { auditActionLabel } from "@roll-and-call/database/audit/model";
 import { describe, expect, it } from "vitest";
 
 import type { AuditEntry } from "@/shared/server";

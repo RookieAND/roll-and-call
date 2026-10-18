@@ -1,0 +1,23 @@
+import { ABSENCE_WINDOW_DAYS } from "@roll-and-call/database/games/model";
+import { Callout } from "@roll-and-call/ui";
+import { AlertCircle } from "lucide-react";
+
+import type { Absence } from "../model/recent-absences";
+
+interface AbsenceNoticeProps {
+  absences: Absence[];
+}
+
+// 불참이 없으면 아무것도 보이지 않는다. 있을 때도 횟수·목록은 펼치지 않는다 — 낙인이 된다.
+export function AbsenceNotice({ absences }: AbsenceNoticeProps) {
+  if (absences.length === 0) return null;
+
+  return (
+    <Callout.Root colorPalette="danger">
+      <Callout.Icon>
+        <AlertCircle size={15} strokeWidth={2.2} aria-hidden />
+      </Callout.Icon>
+      <Callout.Title>{`최근 ${ABSENCE_WINDOW_DAYS}일 안에 세션 불참 기록이 있습니다`}</Callout.Title>
+    </Callout.Root>
+  );
+}

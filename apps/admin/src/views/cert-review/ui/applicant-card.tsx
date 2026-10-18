@@ -2,7 +2,7 @@ import { Grid, HStack, Text } from "@roll-and-call/ui";
 
 import type { CertReview } from "@/entities/cert/server";
 import { appliedRulebookLabel } from "@/entities/rulebook";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { FactRows, Tag, UserInitial } from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
@@ -41,7 +41,7 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
         <FactRows
           labelWidth={72}
           items={[
-            { label: "신청 일자", value: formatDate(review.appliedAt) },
+            { label: "신청 일자", value: formatFullDate(review.appliedAt) },
             {
               label: "대기",
               value: (

@@ -1,5 +1,6 @@
+import type { MonthSessionRow } from "@roll-and-call/database/games";
+
 import { isDeadlinePassed, PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
-import type { MonthSessionRow } from "@/shared/server";
 
 export type CalendarSession = ReturnType<typeof toCalendarSessions>[number];
 

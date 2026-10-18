@@ -9,9 +9,10 @@
       "cache": false,
       "persistent": true
     },
-    "typecheck": {},
+    "transit": { "dependsOn": ["^transit"] },
+    "typecheck": { "dependsOn": ["transit"] },
     "lint:fsd": { "cache": false },
     "lint:tokens": { "cache": false },
-    "test": {}
+    "test": { "dependsOn": ["transit"] }
   }
 }

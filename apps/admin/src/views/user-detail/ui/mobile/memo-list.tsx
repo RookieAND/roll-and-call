@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, ServerLink } from "@/shared/ui";
 
 import { USER_ACTION } from "../../model/user-action";
@@ -55,7 +55,7 @@ export function MemoList({ userId, nickname, memos, viewer }: MemoListProps) {
             >
               <VStack gap="050" className="min-w-0 flex-1">
                 <Text typography="body4" foreground="hint">
-                  {`${formatDateTime(memo.at)} · ${memo.author}${memo.tag ? ` · ${memo.tag}` : ""}`}
+                  {`${formatFullDateTime(memo.at)} · ${memo.author}${memo.tag ? ` · ${memo.tag}` : ""}`}
                 </Text>
                 <Text
                   typography="body3"

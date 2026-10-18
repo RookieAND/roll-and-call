@@ -1,5 +1,4 @@
-import type { AuditAction } from "@/shared/server";
-
+import type { AuditAction } from "@roll-and-call/database/audit/model";
 export const USER_VISIBLE_REASON_ACTIONS: readonly AuditAction[] = [
   "인증 반려",
   "반려로 돌림",

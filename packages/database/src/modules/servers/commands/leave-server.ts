@@ -1,12 +1,9 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import {
-  releaseMemberGames,
-  type ReleasedMemberGames,
-} from "#/modules/games/commands/release-member-games";
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import { serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { releaseMemberGames, type ReleasedMemberGames } from "#db/modules/games";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import { serverMembers } from "#db/schema";
 
 export type LeaveServerResult = ({ ok: true } & ReleasedMemberGames) | { ok: false };
 

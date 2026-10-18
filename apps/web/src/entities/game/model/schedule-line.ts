@@ -1,7 +1,7 @@
+import type { Game } from "@roll-and-call/database";
 import { isNull } from "es-toolkit";
 
 import { ddayKst, formatDate, formatDateTime, formatDday } from "@/shared/lib";
-import type { Game } from "@/shared/server";
 
 import { isDeadlinePassed } from "./is-deadline-passed";
 import { SCHEDULE_MODE } from "./schedule-mode";

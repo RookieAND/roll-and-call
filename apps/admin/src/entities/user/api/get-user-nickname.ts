@@ -1,7 +1,7 @@
 import "server-only";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 export async function getUserNickname(id: string) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users"]);
   return db.users.find((user) => user.id === id)?.nickname;
 }

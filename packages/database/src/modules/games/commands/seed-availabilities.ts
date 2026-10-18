@@ -1,5 +1,5 @@
-import { db } from "#/client";
-import { availabilities } from "#/schema";
+import { db } from "#db/client";
+import { availabilities } from "#db/schema";
 
 // 자동 저장은 제출이 아니다(R15). availability_submitted_at을 건드리지 않는다.
 export async function seedAvailabilities({

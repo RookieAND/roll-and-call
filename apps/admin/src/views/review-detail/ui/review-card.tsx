@@ -2,7 +2,7 @@ import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { ReviewDetail } from "@/entities/review";
 import { GmBadge } from "@/entities/user";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { FactRows, Tag } from "@/shared/ui";
 
 import { ReviewMoreMenu } from "./review-more-menu";
@@ -20,7 +20,7 @@ export function ReviewCard({ review, logHref }: ReviewCardProps) {
     ? `받은 조치 ${author.receivedActionCount}회`
     : "받은 조치 없음";
   const editedValue = review.editedAt ? (
-    formatDateTime(review.editedAt)
+    formatFullDateTime(review.editedAt)
   ) : (
     <Text typography="body3" foreground="hint" render={<span />}>
       수정하지 않음
@@ -47,7 +47,7 @@ export function ReviewCard({ review, logHref }: ReviewCardProps) {
           labelWidth={72}
           items={[
             { label: "구인", value: review.game.title },
-            { label: "작성 시각", value: formatDateTime(review.createdAt) },
+            { label: "작성 시각", value: formatFullDateTime(review.createdAt) },
           ]}
         />
         <FactRows

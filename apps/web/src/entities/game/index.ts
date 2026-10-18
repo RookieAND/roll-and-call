@@ -18,7 +18,6 @@ export { PastGameCard } from "./ui/past-game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameStatusBadge } from "./ui/game-status-badge";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
-export { GameGmLabel } from "./ui/game-gm-label";
 export { GameScheduleRow } from "./ui/game-schedule-row";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export {
@@ -45,16 +44,7 @@ export {
   isAttendancePastDeadline,
   isAutoConfirmedAttendance,
 } from "@roll-and-call/database/games/model";
-export {
-  canEndSession,
-  countOpenLotterySeats,
-  shouldSkipLottery,
-} from "@roll-and-call/database/games/model";
-export {
-  ABSENCE_WINDOW_DAYS,
-  absenceExpiresAt,
-  isAbsenceActive,
-} from "@roll-and-call/database/games/model";
+export { countOpenLotterySeats, shouldSkipLottery } from "@roll-and-call/database/games/model";
 export { GAME_KIND, GAME_KINDS, type GameKind } from "./model/game-kind";
 export { gameKindLabel } from "./model/game-kind-label";
 export { PLAY_TYPE, PLAY_TYPES, type PlayType } from "./model/play-type";
@@ -73,11 +63,7 @@ export {
   waitingLeaveBlock,
   type WaitingLeaveBlock,
 } from "./model/waiting-leave-block";
-export {
-  CALENDAR_VIEWER_ROLE,
-  canAddToCalendar,
-  type CalendarViewerRole,
-} from "./model/can-add-to-calendar";
+export { CALENDAR_VIEWER_ROLE, canAddToCalendar } from "./model/can-add-to-calendar";
 export { calendarViewerRole } from "./model/calendar-viewer-role";
 export { canViewHiddenGame } from "./model/can-view-hidden-game";
 export {
@@ -88,12 +74,17 @@ export {
 } from "./model/manage-stage";
 export {
   GAME_CANCEL_KIND,
-  gameCancelledRecipients,
   SELECTION_EXPIRED_CANCEL_TEXT,
   type GameCancelKind,
-} from "@roll-and-call/database/games/model";
+} from "@roll-and-call/database/notifications/model";
+export { gameCancelledRecipients } from "@roll-and-call/database/games/model";
 export { isRecruitMethod } from "./model/is-recruit-method";
 export { isScheduleMode } from "./model/is-schedule-mode";
 export { isGameKind } from "./model/is-game-kind";
 export { isPlayType } from "./model/is-play-type";
 export { foldSupplements } from "./model/fold-supplements";
+export type { SessionGame } from "./model/session-game";
+export { recentAbsences, type Absence } from "./model/recent-absences";
+export { countRecordSessions } from "./model/count-record-sessions";
+export { AbsenceNotice } from "./ui/absence-notice";
+export { isRosterRequest } from "./model/is-roster-request";

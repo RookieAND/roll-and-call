@@ -1,21 +1,21 @@
 import { and, eq, isNull, lte, sql } from "drizzle-orm";
 import { isNil } from "es-toolkit";
 
-import { db } from "#/client";
-import { STAFF_CHANNEL_RELATED } from "#/modules/moderation/model/audit-actions";
-import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
-import { reasonLabel } from "#/modules/moderation/model/reason-label";
-import type { Actor } from "#/modules/moderation/model/types";
-import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, sanctions, servers, type Game } from "#/schema";
+import { db } from "#db/client";
+import { STAFF_CHANNEL_RELATED } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import type { ChosenReason } from "#db/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#db/modules/moderation/model/reason-label";
+import { USER_ACTION_REASON } from "#db/modules/moderation/model/user-action-reason";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { profiles, sanctions, servers, type Game } from "#db/schema";
 
 import { type ModerationConflict } from "../model/moderation-conflict";
 import { sanctionStateSub } from "../model/sanction-state-label";
 import { applyOngoingChoices, type OngoingChoice } from "./apply-ongoing-choices";
-import { recordAudit } from "./record-audit";
 
 const DAY = 86_400_000;
 

@@ -1,5 +1,5 @@
 import "server-only";
-import { isTestDiscordId } from "@roll-and-call/database/servers/model";
+import { isTestDiscordId } from "@roll-and-call/database/profiles/model";
 import { getGuildMember, guildMemberDisplayName } from "@roll-and-call/discord";
 
 // 가입 때 서버 닉네임 기본값으로 쓸 디스코드 표시 이름. 캐시하지 않는다(가입 직전에 바꾼 닉네임도 받는다).

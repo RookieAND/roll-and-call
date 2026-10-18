@@ -1,5 +1,6 @@
 "use server";
 
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import {
   createGameWithRoster,
   listWaitingParticipants,
@@ -24,12 +25,7 @@ import {
   type ActionResult,
 } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import {
-  announceGameOpened,
-  getActingMember,
-  getRulebookRecords,
-  notMemberError,
-} from "@/shared/server";
+import { announceGameOpened, getActingMember, notMemberError } from "@/shared/server";
 
 import { isNextRoundRangeValid } from "../model/is-next-round-range-valid";
 import { isNextRoundStartValid } from "../model/is-next-round-start-valid";

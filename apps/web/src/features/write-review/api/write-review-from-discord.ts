@@ -1,20 +1,15 @@
 import "server-only";
+import { evaluateBadges } from "@roll-and-call/database/badges";
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { getUserIdByDiscordId } from "@roll-and-call/database/profiles";
-import { insertReview } from "@roll-and-call/database/reviews";
+import { insertReview, getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { getActiveMembership, getServerByGuildId } from "@roll-and-call/database/servers";
 import { after } from "next/server";
 
 import { REVIEW_PHOTO_MAX_COUNT, reviewBodyError } from "@/entities/review";
+import { uploadReviewPhotos } from "@/entities/review/server";
 import { serverPath } from "@/shared/lib";
-import {
-  evaluateBadges,
-  getReviewDraftTarget,
-  revalidateReviews,
-  siteOrigin,
-  syncReviewForumPost,
-  uploadReviewPhotos,
-} from "@/shared/server";
+import { revalidateReviews, siteOrigin, syncReviewForumPost } from "@/shared/server";
 
 import {
   DISCORD_REVIEW_REFUSAL,

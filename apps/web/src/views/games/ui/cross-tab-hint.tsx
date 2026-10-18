@@ -1,10 +1,10 @@
 import { Button, Text, VStack } from "@roll-and-call/ui";
 
-import { GAME_TAB, type GamesFilter } from "@/shared/api";
 import { ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { GAME_TAB, type GamesFilter } from "../model/game-sort";
 
 interface CrossTabHintProps {
   filter: GamesFilter;

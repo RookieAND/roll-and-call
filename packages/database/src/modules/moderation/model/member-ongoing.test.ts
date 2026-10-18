@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { Game } from "#/schema";
+import type { Game } from "#db/schema";
 
 import { kickImpactOf } from "./kick-impact-of";
 import { pickMemberOngoing } from "./member-ongoing";

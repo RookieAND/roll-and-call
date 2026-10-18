@@ -1,3 +1,4 @@
+import { getGameParticipants } from "@roll-and-call/database/games";
 import { Container } from "@roll-and-call/ui";
 import { CircleCheck, Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
@@ -11,7 +12,7 @@ import {
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
 import { AttendancePanel, attendancePhaseOf, type Attendee } from "@/features/confirm-attendance";
 import { formatDateTime, serverPath, toKst } from "@/shared/lib";
-import { getCurrentSessionUser, getGameParticipants, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, PageShell, SummaryLine } from "@/shared/ui";
 
 import { toAttendee } from "../model/to-attendee";

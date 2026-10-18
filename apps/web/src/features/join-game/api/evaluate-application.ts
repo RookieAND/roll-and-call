@@ -1,10 +1,12 @@
 import "server-only";
+import type { Game } from "@roll-and-call/database";
 import {
   countParticipants,
   listUserSessionTimings,
   lockGame,
   lockUserApplications,
 } from "@roll-and-call/database/games";
+import { findActiveSanction } from "@roll-and-call/database/moderation";
 import type { Transaction } from "@roll-and-call/database/transaction";
 
 import {
@@ -26,7 +28,6 @@ import {
   SANCTIONED_APPLY_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { findActiveSanction, type Game } from "@/shared/server";
 
 import { OVERLAP_MESSAGE, OVERLAP_REASON, type OverlapRejection } from "../model/overlap-rejection";
 

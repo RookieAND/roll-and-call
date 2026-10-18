@@ -1,8 +1,7 @@
 import "server-only";
 import { getUserIdByDiscordId } from "@roll-and-call/database/profiles";
+import { getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { getActiveMembership, getServerByGuildId } from "@roll-and-call/database/servers";
-
-import { getReviewDraftTarget } from "@/shared/server";
 
 import {
   DISCORD_REVIEW_REFUSAL,

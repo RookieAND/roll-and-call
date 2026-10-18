@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { sessionReviews } from "#db/schema";
 
 export async function listGameReviewIds({
   serverId,

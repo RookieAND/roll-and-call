@@ -3,9 +3,9 @@ import { and, eq } from "drizzle-orm";
 import {
   PARTICIPANT_STATUS,
   type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+} from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 // 대기로 남는 사람은 추첨 시각(at, 모두 같다)에 줄을 서고, 그 안에서 drawRank 순서다.
 export async function setDrawRank({

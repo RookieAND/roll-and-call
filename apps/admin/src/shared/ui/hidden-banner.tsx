@@ -1,7 +1,7 @@
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 
 import { Tag } from "./tag";
 
@@ -18,7 +18,7 @@ export function HiddenBanner({ hidden, children }: HiddenBannerProps) {
       <HStack align="center" gap="100">
         <Tag>숨김</Tag>
         <Text typography="body3">
-          {formatDateTime(hidden.at)}에 {hidden.by}님이 숨겼습니다.
+          {formatFullDateTime(hidden.at)}에 {hidden.by}님이 숨겼습니다.
         </Text>
       </HStack>
       <Text typography="body4" foreground="muted">

@@ -1,6 +1,6 @@
 import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import type { RulebookRequestRow } from "@/entities/rulebook/server";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { FactRows, Panel } from "@/shared/ui";
 
 interface RequestSummaryProps {
@@ -14,7 +14,7 @@ export function RequestSummary({ request }: RequestSummaryProps) {
         labelWidth={120}
         items={[
           { label: "요청자", value: request.requesterNickname },
-          { label: "요청일", value: formatDate(request.requestedAt) },
+          { label: "요청일", value: formatFullDate(request.requestedAt) },
           { label: "요청한 룰북", value: request.name },
           {
             label: "요청 종류",

@@ -1,14 +1,10 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { Container, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { GmOnlyNotice } from "@/features/auth";
-import {
-  getGameById,
-  getCurrentSessionUser,
-  getCurrentServer,
-  getRulebookRecords,
-} from "@/shared/server";
+import { getGameById, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 

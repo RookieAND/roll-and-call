@@ -1,15 +1,15 @@
 import { and, eq, inArray, isNull, or } from "drizzle-orm";
 
-import { departedGmGameAction } from "#/modules/games/model/departed-gm-game-action";
-import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { isSessionInProgress } from "#/modules/games/model/session-timing";
-import { listSeatOpenedRecipients } from "#/modules/games/queries/list-seat-opened-recipients";
-import { notStartedGamesWhere } from "#/modules/games/queries/not-started-games-where";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants, staff, type Game } from "#/schema";
+import { departedGmGameAction } from "#db/modules/games/model/departed-gm-game-action";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { isSessionInProgress } from "#db/modules/games/model/session-timing";
+import { listSeatOpenedRecipients } from "#db/modules/games/queries/list-seat-opened-recipients";
+import { notStartedGamesWhere } from "#db/modules/games/queries/not-started-games-where";
+import { createNotifications } from "#db/modules/notifications";
+import type { GameCancelKind } from "#db/modules/notifications/model";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants, staff, type Game } from "#db/schema";
 
 import { autoConfirmAttendanceForGame } from "./auto-confirm-attendance";
 import { cancelGame } from "./cancel-game";

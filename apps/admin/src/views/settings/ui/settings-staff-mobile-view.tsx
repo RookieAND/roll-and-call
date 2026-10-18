@@ -1,6 +1,6 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
 
-import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
+import { formatFullDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 import { ListRow, MobileActionBar, ServerLink, StatusBadges, Tag } from "@/shared/ui";
 
@@ -33,7 +33,7 @@ export function SettingsStaffMobileView({ staff, viewerId }: SettingsStaffMobile
           </HStack>
         );
         const trailing = <StatusBadges status={STAFF_ROLE_LABEL[row.role]} />;
-        const description = row.since ? `추가한 날 ${formatDate(row.since)}` : "";
+        const description = row.since ? `추가한 날 ${formatFullDate(row.since)}` : "";
         const meta = row.lastActiveAt ? `최근 활동 ${formatLastActive(row.lastActiveAt)}` : null;
         if (row.role === "owner") {
           return (

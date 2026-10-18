@@ -9,7 +9,7 @@ import {
   type ReviewSortColumn,
 } from "@/entities/review";
 import { type ReviewList } from "@/entities/review/server";
-import { formatDateTime, SORT_DIR, withoutYear, withQuery, type TableSort } from "@/shared/lib";
+import { formatFullDateTime, SORT_DIR, withoutYear, withQuery, type TableSort } from "@/shared/lib";
 import {
   AdminHeader,
   EmptyState,
@@ -77,7 +77,7 @@ export function ReviewListMobileView({ list, tab, sort, query }: ReviewListMobil
                     ? row.badges.map((badge) => <Tag key={badge}>{badge}</Tag>)
                     : undefined
                 }
-                trailing={withoutYear(formatDateTime(row.createdAt))}
+                trailing={withoutYear(formatFullDateTime(row.createdAt))}
                 description={row.firstLine}
                 meta={
                   row.photoCount ? `${row.gameTitle} · 사진 ${row.photoCount}장` : row.gameTitle

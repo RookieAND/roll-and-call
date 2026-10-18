@@ -2,7 +2,7 @@ import "server-only";
 import { loadRevokeCancelTargets } from "@roll-and-call/database/certifications";
 import { deriveGameStatus, gameStatusLabel } from "@roll-and-call/database/games/model";
 
-import { getCurrentServer, loadSnapshot } from "@/shared/server";
+import { getCurrentServer, loadAdminData } from "@/shared/server";
 
 // 반려로 돌리기 창(?action=revoke&user=&rulebook=)이 보여 줄 대상과 취소되는 구인. 인증이 없으면 창을 열지 않는다.
 export async function getRevokeTarget({
@@ -12,7 +12,10 @@ export async function getRevokeTarget({
   userId: string;
   rulebookId: string;
 }) {
-  const [server, db] = await Promise.all([getCurrentServer(), loadSnapshot()]);
+  const [server, db] = await Promise.all([
+    getCurrentServer(),
+    loadAdminData(["users", "certifications", "certApplications"]),
+  ]);
   const certification = db.certifications.find(
     (item) => item.userId === userId && item.rulebookId === rulebookId,
   );

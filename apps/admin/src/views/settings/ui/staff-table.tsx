@@ -1,6 +1,6 @@
 import { Button, HStack, Table, Text } from "@roll-and-call/ui";
 
-import { formatDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
+import { formatFullDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 import { ServerLink, TableColumns, Tag } from "@/shared/ui";
 
@@ -57,7 +57,7 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {row.since ? formatDate(row.since) : null}
+                  {row.since ? formatFullDate(row.since) : null}
                 </Text>
               </Table.Cell>
               <Table.Cell>

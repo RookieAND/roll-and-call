@@ -1,5 +1,5 @@
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { RANKING_MODE, type RankingMode } from "#/modules/servers/model/ranking-mode";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { RANKING_MODE, type RankingMode } from "#db/modules/servers/model";
 
 import { BADGE_ROLE } from "./badge-ladder";
 import { countsAsAttended } from "./counts-as-attended";

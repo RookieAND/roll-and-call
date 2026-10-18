@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { actionTone } from "@/entities/audit";
-import { formatDateTime, type TableSort } from "@/shared/lib";
+import { formatFullDateTime, type TableSort } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
 import { ServerLink, SortableHead, TableColumns, Tag } from "@/shared/ui";
 
@@ -59,7 +59,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                   render={<ServerLink path={detailHref} />}
                   className="whitespace-nowrap after:absolute after:inset-0"
                 >
-                  {formatDateTime(row.at)}
+                  {formatFullDateTime(row.at)}
                 </Text>
               </Table.Cell>
               <Table.Cell>

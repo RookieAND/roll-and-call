@@ -1,7 +1,7 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
+import type { ReviewCardRow } from "@roll-and-call/database/reviews";
 
 import { formatDate } from "@/shared/lib";
-import type { ReviewCardRow } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "./review-perspective";
 

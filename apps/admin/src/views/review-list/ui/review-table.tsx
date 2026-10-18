@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 import { REVIEW_SORT_COLUMN, type ReviewRow, type ReviewSortColumn } from "@/entities/review";
 import { GmBadge } from "@/entities/user";
-import { formatDateTime, type TableSort } from "@/shared/lib";
+import { formatFullDateTime, type TableSort } from "@/shared/lib";
 import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
 
 interface ReviewTableProps {
@@ -50,7 +50,7 @@ export function ReviewTable({ rows, sort, gameChip, empty, detailQuery }: Review
           <Table.Row key={row.id} interactive className="relative">
             <Table.Cell>
               <Text typography="body3" foreground="hint" numeric>
-                {formatDateTime(row.createdAt)}
+                {formatFullDateTime(row.createdAt)}
               </Text>
             </Table.Cell>
             <Table.Cell>

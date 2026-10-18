@@ -1,3 +1,6 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
+import { getProfileMemo } from "@roll-and-call/database/profiles";
+import { getReviewCounts } from "@roll-and-call/database/reviews";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -7,14 +10,7 @@ import { DepartedMemberScreen } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getProfileMemo,
-  getReviewCounts,
-  getRulebookRecords,
-  getUserBadges,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list/server";
 

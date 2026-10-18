@@ -1,13 +1,13 @@
 "use server";
 
+import { evaluateGameBadges } from "@roll-and-call/database/badges";
 import { removeOwnReview } from "@roll-and-call/database/reviews";
 import { after } from "next/server";
 
+import { removeUnusedReviewPhotos } from "@/entities/review/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import {
-  evaluateGameBadges,
   getActingMember,
-  removeUnusedReviewPhotos,
   revalidateReviews,
   siteOrigin,
   syncReviewForumPost,

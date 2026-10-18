@@ -1,8 +1,8 @@
 import { and, eq, isNull, ne, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { serverMembers } from "#/schema";
+import { db } from "#db/client";
+import type { Transaction } from "#db/modules/transaction";
+import { serverMembers } from "#db/schema";
 
 // 닉네임은 서버별이다. 같은 서버의 활동 중인 다른 멤버가 대소문자 없이 같은 닉네임을 쓰는지 본다.
 export async function isNicknameTaken({

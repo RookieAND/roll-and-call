@@ -1,7 +1,7 @@
 import "server-only";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { categoryEditions } from "../model/category-editions";
 import { listRulebooks } from "./list-rulebooks";
@@ -17,7 +17,14 @@ export interface CertifiedGm {
 
 // 폼은 카테고리를 고칠 때마다 포함하는 구판 후보를 다시 고르므로 모든 룰북을 함께 넘긴다.
 export async function getRulebookDetail(id: string) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData([
+    "users",
+    "rulebooks",
+    "certifications",
+    "certApplications",
+    "quizQuestions",
+    "sessions",
+  ]);
   const rulebook = db.rulebooks.find((candidate) => candidate.id === id);
   if (!rulebook) return null;
   const label = rulebookLabel(rulebook);

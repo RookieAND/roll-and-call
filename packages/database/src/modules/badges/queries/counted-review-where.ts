@@ -1,7 +1,7 @@
 import { and, eq, isNull, not, sql } from "drizzle-orm";
 
-import { participantReviewWhere } from "#/modules/reviews/queries/participant-review-where";
-import { games, participants, sessionReviews } from "#/schema";
+import { participantReviewWhere } from "#db/modules/reviews";
+import { games, participants, sessionReviews } from "#db/schema";
 
 // 후기 작성자가 지금 불참이면 보류된 후기라 세지 않는다.
 const reviewAuthorAbsent = sql<boolean>`exists (

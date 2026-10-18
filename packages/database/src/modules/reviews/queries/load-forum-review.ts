@@ -1,9 +1,9 @@
 import { and, asc, eq, isNotNull, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
-import { db } from "#/client";
-import { REVIEW_AUTHOR_ROLE } from "#/modules/games/model/review-author-role";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
+import { db } from "#db/client";
+import { REVIEW_AUTHOR_ROLE } from "#db/modules/games/model";
+import { memberNicknameSql } from "#db/modules/profiles";
 import {
   games,
   participants,
@@ -11,7 +11,7 @@ import {
   rulebookCategories,
   rulebooks,
   sessionReviews,
-} from "#/schema";
+} from "#db/schema";
 
 const gm = alias(profiles, "gm");
 

@@ -1,3 +1,4 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { Container, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
@@ -16,7 +17,6 @@ import {
 import { ERROR_DISPLAY } from "@/shared/api";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { ddayKst, formatDday } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 import { AppBar, PageShell } from "@/shared/ui";
 
 import { deriveActionView } from "../model/derive-action-view";

@@ -1,7 +1,7 @@
+import type { ReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { describe, expect, it } from "vitest";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { ReviewDraftTarget } from "@/shared/server";
 
 import { DISCORD_REVIEW_REFUSAL } from "./discord-review-refusal";
 import { discordReviewRefusalOf } from "./discord-review-refusal-of";

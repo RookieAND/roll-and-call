@@ -7,7 +7,7 @@ import {
   REQUEST_ACTION,
   type RequestAction,
 } from "@/features/process-rulebook-request";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { AdminHeader, KeyValueList, ListRow, Tag } from "@/shared/ui";
 
 import { RULEBOOKS_TAB } from "../../model/rulebooks-tab";
@@ -37,7 +37,7 @@ export function RequestDetail({ request, actionHref }: RequestDetailProps) {
               { label: "요청자", value: requester },
               {
                 label: "요청일",
-                value: `${formatDate(request.requestedAt)} · ${request.waitedDays}일째`,
+                value: `${formatFullDate(request.requestedAt)} · ${request.waitedDays}일째`,
               },
               { label: "카테고리", value: request.category ?? "—" },
               {

@@ -1,8 +1,8 @@
 import { and, asc, eq, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
-import { toBadgeSessions } from "#/modules/badges/model/to-badge-sessions";
+import { db } from "#db/client";
+import type { BadgeFacts } from "#db/modules/badges/model/badge-facts";
+import { toBadgeSessions } from "#db/modules/badges/model/to-badge-sessions";
 import {
   certifications,
   games,
@@ -10,7 +10,7 @@ import {
   rulebookCategories,
   rulebooks,
   sessionReviews,
-} from "#/schema";
+} from "#db/schema";
 
 import { attendedWhere } from "./attended-where";
 import { countedReviewWhere } from "./counted-review-where";

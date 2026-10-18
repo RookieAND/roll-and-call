@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { serverMessageTexts } from "#/schema";
+import { db } from "#db/client";
+import { serverMessageTexts } from "#db/schema";
 
 import { defaultMessageText, MESSAGE_TEXTS, type MessageTextKey } from "../model/message-texts";
 

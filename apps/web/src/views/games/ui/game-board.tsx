@@ -1,14 +1,14 @@
-import { Suspense } from "react";
-
-import { GAME_TAB, GAME_TAB_DEFAULT, hasGameFilters, type GamesFilter } from "@/shared/api";
 import {
-  getCurrentServer,
   getGamesCounts,
   getRecruitingGamesPage,
   listGameRuleOptions,
-} from "@/shared/server";
+} from "@roll-and-call/database/games";
+import { Suspense } from "react";
+
+import { getCurrentServer } from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
+import { GAME_TAB, GAME_TAB_DEFAULT, hasGameFilters, type GamesFilter } from "../model/game-sort";
 import { CrossTabHint } from "./cross-tab-hint";
 import { GameList } from "./game-list";
 import { GameListSkeleton } from "./game-list-skeleton";

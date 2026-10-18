@@ -1,7 +1,7 @@
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games, participants } from "#/schema";
+import { db } from "#db/client";
+import { games, participants } from "#db/schema";
 
 // 신청글은 그 구인의 GM만 읽는다. 요청자가 GM이 아니면 빈 목록이다.
 export async function getApplicationNotes({

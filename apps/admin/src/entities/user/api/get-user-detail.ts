@@ -1,17 +1,30 @@
 import "server-only";
 import { isAbsenceActive } from "@roll-and-call/database/games/model";
+import {
+  isSanctioned,
+  playedCountsByUser,
+  recentNoShowCountsByUser,
+} from "@roll-and-call/database/moderation/model";
 
-import { countPlayedSessions, countRecentNoShows, isSanctioned } from "@/shared/lib";
-import { loadSnapshot, type Snapshot, type Session } from "@/shared/server";
+import { loadAdminData, type Snapshot, type Session } from "@/shared/server";
 
 import { previousNicknameOf } from "../model/previous-nickname-of";
 import { staffMemoRowsOf } from "../model/staff-memo-rows-of";
 
-const nicknameOf = (db: Snapshot, userId: string) =>
+const nicknameOf = (db: Pick<Snapshot, "users">, userId: string) =>
   db.users.find((user) => user.id === userId)?.nickname ?? "";
 
 export async function getUserDetail(userId: string) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData([
+    "users",
+    "staff",
+    "certifications",
+    "certApplications",
+    "sessions",
+    "noShows",
+    "auditLog",
+    "staffMemos",
+  ]);
   const user = db.users.find((candidate) => candidate.id === userId);
   if (!user) return null;
   const now = Date.now();
@@ -19,6 +32,12 @@ export async function getUserDetail(userId: string) {
   const sanctionCount = db.auditLog.filter(
     (entry) => entry.action === "제재" && entry.targetUserId === userId,
   ).length;
+  const countOptions = {
+    sessions: db.sessions,
+    noShows: db.noShows,
+    now: new Date(now),
+    userIds: [userId],
+  };
   const mine = (session: Session) => session.gmId === userId || session.memberIds.includes(userId);
   const noShowOf = (sessionId: string) =>
     db.noShows.find((noShow) => noShow.userId === userId && noShow.sessionId === sessionId);
@@ -74,8 +93,8 @@ export async function getUserDetail(userId: string) {
     leftAt: user.leftAt ?? null,
     staffRole: db.staff.find((member) => member.userId === userId)?.role ?? null,
     hostedCount: user.hostedCount,
-    playedCount: countPlayedSessions({ db, userId, now: new Date(now) }),
-    recentNoShowCount: countRecentNoShows(db, userId, now),
+    playedCount: playedCountsByUser(countOptions).get(userId) ?? 0,
+    recentNoShowCount: recentNoShowCountsByUser(countOptions).get(userId) ?? 0,
     sanction,
     // 지금 걸린 제재는 지난 제재로 세지 않는다.
     pastSanctionCount: Math.max(0, sanctionCount - (sanction ? 1 : 0)),

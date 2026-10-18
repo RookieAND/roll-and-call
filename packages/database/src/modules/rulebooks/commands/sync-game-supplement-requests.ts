@@ -1,8 +1,8 @@
 import { and, eq, inArray, isNull, or } from "drizzle-orm";
 
-import { supplementNameKey } from "#/modules/games/model/supplement-name-key";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { rulebookRequestGames, rulebookRequests } from "#/schema";
+import { supplementNameKey } from "#db/modules/games/model";
+import type { Transaction } from "#db/modules/transaction";
+import { rulebookRequestGames, rulebookRequests } from "#db/schema";
 
 // 구인에 직접 입력한 서플리먼트마다 룰북 추가 요청을 붙인다. 같은 분류·판본에 같은 이름의 대기 요청이 있으면 그 요청에 묶고,
 // 반려된 이름이면 다시 요청하지 않는다. 구인에서 지운 이름의 연결은 빼고, 남은 구인이 없는 자동 요청은 트리거가 지운다.

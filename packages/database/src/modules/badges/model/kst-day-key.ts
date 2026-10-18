@@ -1,4 +1,4 @@
-import { KST_OFFSET_MS } from "#/modules/games/model/kst-offset";
+import { KST_OFFSET_MS } from "#db/modules/games/model";
 
 // 한국 시각 기준 "2026-09-20". 더블 헤더가 같은 날을 가른다.
 export function kstDayKey(date: Date): string {

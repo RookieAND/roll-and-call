@@ -8,7 +8,7 @@ import {
   type NoShowSortColumn,
 } from "@/entities/no-show";
 import type { NoShowDetail } from "@/entities/no-show/server";
-import { formatDate, SORT_DIR, withoutYear, withQuery, type TableSort } from "@/shared/lib";
+import { formatFullDate, SORT_DIR, withoutYear, withQuery, type TableSort } from "@/shared/lib";
 import {
   AdminHeader,
   EMPTY_IMAGE,
@@ -79,7 +79,7 @@ export function NoShowsMobileView({ rows, detail, sort, query, filtered }: NoSho
                     cancelled ? (
                       <StatusBadges status={NO_SHOW_STATUS_LABEL.cancelled} />
                     ) : (
-                      withoutYear(formatDate(row.startsAt))
+                      withoutYear(formatFullDate(row.startsAt))
                     )
                   }
                   description={row.sessionTitle}

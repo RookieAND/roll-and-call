@@ -1,13 +1,13 @@
 import { Button, Callout } from "@roll-and-call/ui";
 import Link from "next/link";
 
-import type { GamesFilter } from "@/shared/api";
 import { serverJoinPath, serverPath } from "@/shared/lib";
 import { getCurrentMembership, getCurrentServer } from "@/shared/server";
 import { FRAME_INNER_MX } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { type GamesFilter } from "../model/game-sort";
 
 interface GamesJoinCalloutProps {
   page: number;

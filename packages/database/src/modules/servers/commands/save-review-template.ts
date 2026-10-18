@@ -1,10 +1,10 @@
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { compactChanges, scalarChange } from "#/modules/moderation/model/audit-changes";
-import type { Actor } from "#/modules/moderation/model/types";
-import { serverMessageTexts } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import { compactChanges, scalarChange } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { serverMessageTexts } from "#db/schema";
 
 import {
   defaultReviewTemplate,

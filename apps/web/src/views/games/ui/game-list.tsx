@@ -1,6 +1,5 @@
-import { GAME_TAB, type GamesFilter } from "@/shared/api";
-
 import { loadNewGameSanction } from "../api/load-new-game-sanction";
+import { GAME_TAB, type GamesFilter } from "../model/game-sort";
 import type { GamesPage } from "../model/games-page";
 import { GamesEmpty } from "./games-empty";
 import { LiveGameList } from "./live-game-list";

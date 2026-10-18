@@ -1,7 +1,7 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
-import { formatDate, MEMBERSHIP_STATUS } from "@/shared/lib";
+import { formatFullDate, MEMBERSHIP_STATUS } from "@/shared/lib";
 
 import { rejoinedNotice } from "../../model/rejoined-notice";
 import { UserStateTag } from "../user-state-tag";
@@ -33,17 +33,17 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
         <HStack align="center" gap="100" wrap>
           <UserStateTag user={user} discordBanFailed={discordBanFailed} />
           <Text typography="body4" foreground="hint">
-            가입 {formatDate(user.joinedAt)}
+            가입 {formatFullDate(user.joinedAt)}
           </Text>
         </HStack>
         {ban ? (
           <Text typography="body4" foreground="danger">
-            {`${formatDate(ban.at)}에 추방했습니다. 사유: ${ban.reason} (${ban.by})`}
+            {`${formatFullDate(ban.at)}에 추방했습니다. 사유: ${ban.reason} (${ban.by})`}
           </Text>
         ) : null}
         {left && leftAt ? (
           <Text typography="body4" foreground="hint">
-            {`${formatDate(leftAt)}에 서버를 나갔습니다. 다시 가입하면 제재와 기록이 이어집니다.`}
+            {`${formatFullDate(leftAt)}에 서버를 나갔습니다. 다시 가입하면 제재와 기록이 이어집니다.`}
           </Text>
         ) : null}
         {user.rejoinedAt && !ban && !left ? (
@@ -53,7 +53,7 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
         ) : null}
         {previousNickname ? (
           <Text typography="body4" foreground="hint">
-            {`이전 닉네임: ${previousNickname.nickname} (${formatDate(previousNickname.at)} 운영진이 수정)`}
+            {`이전 닉네임: ${previousNickname.nickname} (${formatFullDate(previousNickname.at)} 운영진이 수정)`}
           </Text>
         ) : null}
       </VStack>

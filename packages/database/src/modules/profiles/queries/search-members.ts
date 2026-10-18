@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { profiles, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { profiles, serverMembers } from "#db/schema";
 
 import { memberSearchWhere } from "./member-search-where";
 

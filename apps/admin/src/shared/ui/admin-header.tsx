@@ -1,10 +1,10 @@
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { cn, HStack, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 
 import { MobileBackLink } from "./mobile/mobile-back-link";
 import { MobileMenuButton } from "./mobile/mobile-menu-button";
-import { ServerLink } from "./server-link";
 import { ThemeToggleButton } from "./theme-toggle-button";
 
 interface AdminHeaderProps {

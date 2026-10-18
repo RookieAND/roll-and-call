@@ -1,8 +1,8 @@
 import { and, desc, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games, profiles, sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { games, profiles, sessionReviews } from "#db/schema";
 
 import { ownReviewsWhere } from "./own-reviews-where";
 import { reviewAuthorAbsentSql } from "./review-author-absent-sql";

@@ -1,5 +1,6 @@
 "use server";
 
+import type { Game } from "@roll-and-call/database";
 import {
   findParticipantStatus,
   insertParticipant,
@@ -12,7 +13,7 @@ import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { idSchema, parseActionInput } from "@/shared/api";
-import { announceRecruitmentComplete, type Game } from "@/shared/server";
+import { announceRecruitmentComplete } from "@/shared/server";
 
 import { CAPACITY_ACTION } from "../model/capacity-action";
 import type { RosterActionResult } from "../model/roster-action-result";

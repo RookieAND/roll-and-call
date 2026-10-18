@@ -2,8 +2,8 @@ import "server-only";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { compact, uniq } from "es-toolkit";
 
-import { formatSessionTime } from "@/shared/lib";
-import { loadSnapshot, type Rulebook } from "@/shared/server";
+import { formatFullSessionTime } from "@/shared/lib";
+import { loadAdminData, type Rulebook } from "@/shared/server";
 
 const NINETY_DAYS = 90 * 86_400_000;
 
@@ -27,7 +27,7 @@ export async function getRulebookImpact({
   supersedesId,
   certRequired,
 }: RulebookImpactInput): Promise<RulebookImpactCase[]> {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "rulebooks", "certifications", "sessions"]);
   const rulebook = db.rulebooks.find((candidate) => candidate.id === rulebookId);
   if (!rulebook) return [];
   const now = Date.now();
@@ -73,7 +73,7 @@ export async function getRulebookImpact({
           title: session.title,
           meta: [
             `${lost.category} ${lost.edition}`.trim(),
-            formatSessionTime(session.startsAt),
+            formatFullSessionTime(session.startsAt),
             `GM ${nicknameOf(session.gmId)}`,
           ].join(" · "),
         })),

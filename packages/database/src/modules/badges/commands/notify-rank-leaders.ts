@@ -1,17 +1,14 @@
 import { and, desc, eq, gte, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { BADGE_ROLE } from "#/modules/badges/model/badge-ladder";
-import { kstMonthKey } from "#/modules/badges/model/kst-month-key";
-import { LEADER_ROLES, monthLeaders } from "#/modules/badges/model/month-leader";
-import { monthStart } from "#/modules/badges/model/month-start";
-import type { MonthlyAppearance } from "#/modules/badges/model/monthly-winners";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import {
-  MONTHLY_AWARD_ROLE,
-  NOTIFICATION_KIND,
-} from "#/modules/notifications/model/notification-kind";
-import { notifications } from "#/schema";
+import { db } from "#db/client";
+import { BADGE_ROLE } from "#db/modules/badges/model/badge-ladder";
+import { kstMonthKey } from "#db/modules/badges/model/kst-month-key";
+import { LEADER_ROLES, monthLeaders } from "#db/modules/badges/model/month-leader";
+import { monthStart } from "#db/modules/badges/model/month-start";
+import type { MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
+import { createNotifications } from "#db/modules/notifications";
+import { MONTHLY_AWARD_ROLE, NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { notifications } from "#db/schema";
 
 // 이 달의 기록 1위가 바뀌어 새로 1위가 된 사람에게 알림 한 줄을 넣는다.
 // 포인트제는 한 명, 참여 횟수제는 공동 1위 모두가 대상이다. 1위를 빼앗긴 사람에게는 보내지 않는다.

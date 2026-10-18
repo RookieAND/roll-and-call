@@ -2,13 +2,13 @@ import { Pagination, VStack, cn } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import { GameCard } from "@/entities/game";
-import type { GamesFilter } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
 
 import { filterParams } from "../lib/filter-params";
 import { LIVE_GRID_CLASS } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
+import { type GamesFilter } from "../model/game-sort";
 import type { GamesPage } from "../model/games-page";
 
 interface LiveGameListProps {

@@ -1,7 +1,7 @@
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { participants } from "#/schema";
+import { db } from "#db/client";
+import { participants } from "#db/schema";
 
 // 내가 참여한 구인 중 본인이 저장한 구인(자동 저장 제외, R15).
 export async function getRespondedGameIds({

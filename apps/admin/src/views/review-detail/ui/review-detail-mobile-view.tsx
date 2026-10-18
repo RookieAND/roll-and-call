@@ -8,7 +8,7 @@ import {
   type ReviewListTab,
 } from "@/entities/review";
 import { REVIEW_ACTION, type ReviewAction } from "@/features/moderate-review";
-import { formatDateTime, withQuery } from "@/shared/lib";
+import { formatFullDateTime, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
   KeyValueList,
@@ -81,7 +81,7 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
             <Callout.Icon />
             <Callout.Title>숨김 중인 후기입니다</Callout.Title>
             <Callout.Description>
-              {formatDateTime(review.hidden.at)}에 {review.hidden.by}님이 숨겼습니다. 사유:{" "}
+              {formatFullDateTime(review.hidden.at)}에 {review.hidden.by}님이 숨겼습니다. 사유:{" "}
               {review.hidden.reason}
               {review.held ? " · 작성자가 불참으로 기록되어 해제해도 공개되지 않습니다." : null}
             </Callout.Description>
@@ -101,7 +101,7 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
               <ZoomablePhotos
                 photos={review.photoUrls}
                 title={author.nickname}
-                subtitle={`${review.game.title} · ${formatDateTime(review.createdAt)}`}
+                subtitle={`${review.game.title} · ${formatFullDateTime(review.createdAt)}`}
                 thumbLabel="후기 사진"
                 spoiler={review.spoiler}
                 className="aspect-square w-full"
@@ -114,10 +114,10 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
             items={[
               { label: "작성자", value: author.isGm ? `${author.nickname} · GM` : author.nickname },
               { label: "구인", value: review.game.title },
-              { label: "작성 시각", value: formatDateTime(review.createdAt) },
+              { label: "작성 시각", value: formatFullDateTime(review.createdAt) },
               {
                 label: "수정 시각",
-                value: review.editedAt ? formatDateTime(review.editedAt) : "수정하지 않음",
+                value: review.editedAt ? formatFullDateTime(review.editedAt) : "수정하지 않음",
               },
               { label: "쓴 후기 · 받은 조치", value: `${author.reviewCount}개 · ${actionSummary}` },
               ...(review.spoiler ? [{ label: "스포일러", value: <Tag>스포일러 포함</Tag> }] : []),

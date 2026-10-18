@@ -3,7 +3,7 @@ import { VStack } from "@roll-and-call/ui";
 
 import { CERT_GRANT_METHOD, CERT_MANAGE_STATUS_LABEL, type CertManageRow } from "@/entities/cert";
 import type { RevokeTarget } from "@/entities/cert/server";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import {
   AdminHeader,
   KeyValueList,
@@ -69,7 +69,7 @@ export function CertDetailMobileView({
               { label: "판본", value: row.edition },
               { label: "인증 방식", value: METHOD_LABEL[row.method] },
               { label: "상태", value: <Tag tone={status.tone}>{status.label}</Tag> },
-              { label: "처리 일자", value: formatDate(row.changedAt) },
+              { label: "처리 일자", value: formatFullDate(row.changedAt) },
             ]}
           />
         </MobileSection>

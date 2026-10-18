@@ -1,3 +1,4 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import {
   Button,
   Callout,
@@ -15,7 +16,7 @@ import Link from "next/link";
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, LineBreaks, PageShell } from "@/shared/ui";
 
 import { myRulebooksHome } from "../model/my-rulebooks-home";

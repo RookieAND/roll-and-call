@@ -1,19 +1,18 @@
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { isNotNil } from "es-toolkit";
 
-import { db } from "#/client";
-import type { AuditAction } from "#/modules/moderation/model/audit-actions";
-import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
-import { CONTENT_REASON } from "#/modules/moderation/model/content-reason";
-import { isAuditAction } from "#/modules/moderation/model/is-audit-action";
-import { reasonLabel } from "#/modules/moderation/model/reason-label";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { auditLog, games, profiles, sessionReviews } from "#/schema";
-
-import { recordAudit } from "./record-audit";
+import { db } from "#db/client";
+import type { AuditAction } from "#db/modules/audit";
+import { isAuditAction } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import type { ChosenReason } from "#db/modules/moderation/model/chosen-reason";
+import { CONTENT_REASON } from "#db/modules/moderation/model/content-reason";
+import { reasonLabel } from "#db/modules/moderation/model/reason-label";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { auditLog, games, profiles, sessionReviews } from "#db/schema";
 
 export type ReviewModerationAction = "hide" | "unhide" | "remove";
 

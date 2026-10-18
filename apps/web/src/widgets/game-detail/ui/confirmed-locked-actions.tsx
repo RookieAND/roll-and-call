@@ -1,7 +1,7 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { VStack } from "@roll-and-call/ui";
 
 import type { ConfirmedLeaveBlock } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import type { ActionLinks } from "../model/game-action-view";
 import { LEAVE_LOCKED_REASON } from "../model/leave-locked-reason";

@@ -1,6 +1,6 @@
 import { minBy } from "es-toolkit";
 
-import { waitedDays } from "../../lib/waited-days";
+import { waitedDays } from "@/shared/lib";
 
 export const PENDING_KINDS = ["cert", "rulebookRequest"] as const;
 export type PendingKind = (typeof PENDING_KINDS)[number];

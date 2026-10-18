@@ -1,8 +1,8 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import type { Transaction } from "#db/modules/transaction";
+import { games } from "#db/schema";
 
 // GM 본인 글이 아니거나 취소된 구인이면 바꾸지 않고 false.
 // 1시간 전 리마인더 기록(notified_at)은 시각이 실제로 바뀔 때만 지운다(U14-07). 같은 시각 재확정은 그대로 둔다.

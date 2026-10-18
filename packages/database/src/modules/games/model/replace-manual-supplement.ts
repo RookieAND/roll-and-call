@@ -1,4 +1,4 @@
-import type { GameSupplement } from "#/schema";
+import type { GameSupplement } from "#db/schema";
 
 import { supplementNameKey } from "./supplement-name-key";
 

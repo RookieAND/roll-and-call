@@ -1,7 +1,7 @@
+import type { AvailabilityInterval } from "@roll-and-call/database";
 import { isNumber, isPlainObject } from "es-toolkit";
 
 import { padTwoDigits, WEEKDAY_LABELS } from "@/shared/lib";
-import type { AvailabilityInterval } from "@/shared/server";
 
 export const AVAILABILITY_MIN_HOUR = 0;
 export const AVAILABILITY_MAX_HOUR = 24;

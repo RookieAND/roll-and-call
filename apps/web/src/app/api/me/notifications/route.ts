@@ -1,6 +1,7 @@
+import { listNotifications } from "@roll-and-call/database/notifications";
 import type { NextRequest } from "next/server";
 
-import { getActingMember, getCurrentUser, listNotifications } from "@/shared/server";
+import { getActingMember, getCurrentUser } from "@/shared/server";
 
 // 서버 액션은 한 번에 하나씩 줄 서서 사용자의 변경 요청을 막으므로 GET으로 읽는다.
 export async function GET(request: NextRequest) {

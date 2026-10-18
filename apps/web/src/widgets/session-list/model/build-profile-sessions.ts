@@ -4,10 +4,11 @@ import {
   PARTICIPANT_STATUS,
   SESSION_ROLE,
   type SessionRole,
+  type SessionGame,
 } from "@/entities/game";
 
 import { buildSessions } from "./build-sessions";
-import type { MySessions, SessionGame } from "./session-card-model";
+import type { MySessions } from "./session-card-model";
 
 // 남의 세션 기록. 참여 탭은 확정자로 들어간 구인과 불참으로 내보낸(removed) 끝난 세션이다. 숨긴 구인은 보는 사람이 볼 수 없으면 가린다(R4).
 export function buildProfileSessions({

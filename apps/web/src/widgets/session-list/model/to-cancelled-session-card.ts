@@ -1,4 +1,4 @@
-import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+import { SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/game";
 import { formatDate } from "@/shared/lib";
 
 import { cancelSentence } from "./cancel-sentence";
@@ -8,7 +8,6 @@ import {
   SESSION_ICON,
   SESSION_TONE,
   type SessionCardBase,
-  type SessionGame,
 } from "./session-card-model";
 
 // 취소된 구인은 흐린 카드로 종료 칩에 남는다(D286). 끝난 날짜는 취소한 날이다(D53).

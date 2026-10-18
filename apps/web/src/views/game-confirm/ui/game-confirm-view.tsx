@@ -1,3 +1,4 @@
+import { getGameAvailabilities, getResponseCounts } from "@roll-and-call/database/games";
 import {
   AWAITING_RESULT_PHRASE,
   awaitingResultMethod,
@@ -18,13 +19,7 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm, FixedSessionChangeForm } from "@/features/confirm-session";
 import { formatDate, serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getGameAvailabilities,
-  getGameById,
-  getCurrentServer,
-  getResponseCounts,
-} from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 
 import { ConfirmPanelStats } from "./confirm-panel-stats";

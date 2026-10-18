@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games } from "#/schema";
+import type { Transaction } from "#db/modules/transaction";
+import { games } from "#db/schema";
 
 export async function closeGameRecruitment({
   transaction,

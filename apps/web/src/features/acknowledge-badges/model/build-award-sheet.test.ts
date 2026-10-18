@@ -1,7 +1,7 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import { describe, expect, it } from "vitest";
 
 import { heldBadges } from "@/entities/badge";
-import type { BadgeRecord } from "@/shared/server";
 
 import { buildAwardSheet } from "./build-award-sheet";
 

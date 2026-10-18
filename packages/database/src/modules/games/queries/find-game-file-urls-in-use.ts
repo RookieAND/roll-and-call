@@ -1,7 +1,7 @@
 import { and, arrayOverlaps, eq, inArray, or } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import { games } from "#db/schema";
 
 export async function findGameFileUrlsInUse({
   serverId,

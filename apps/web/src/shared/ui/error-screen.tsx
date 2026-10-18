@@ -1,7 +1,6 @@
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { Button, HStack, Text, UiImage, VStack, type UiAssetName } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
-
-import { ServerLink } from "./server-link";
 
 interface ErrorScreenProps {
   image?: UiAssetName;

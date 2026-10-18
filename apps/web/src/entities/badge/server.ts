@@ -1,5 +1,5 @@
 import "server-only";
-import { getMemberBadgeSummaries } from "@/shared/server";
+import { loadMemberBadgeSummaries } from "@roll-and-call/database/badges";
 
 import { pickRepresentativeBadge } from "./model/pick-representative-badge";
 
@@ -15,7 +15,7 @@ export async function loadRepresentativeBadges({
   userIds,
   now,
 }: LoadRepresentativeBadgesParams) {
-  const summaries = await getMemberBadgeSummaries({ serverId, userIds: [...new Set(userIds)] });
+  const summaries = await loadMemberBadgeSummaries({ serverId, userIds: [...new Set(userIds)] });
   return summaries.flatMap((summary) => {
     const badge = pickRepresentativeBadge({
       featuredKeys: summary.featuredBadges,

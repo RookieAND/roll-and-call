@@ -1,5 +1,5 @@
 import "server-only";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 export interface CertSellerRow {
   id: string;
@@ -8,7 +8,7 @@ export interface CertSellerRow {
 }
 
 export async function listCertSellers(): Promise<CertSellerRow[]> {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["certApplications", "sellers"]);
   return db.sellers.map((seller) => ({
     ...seller,
     certifiedCount: db.certApplications.filter(

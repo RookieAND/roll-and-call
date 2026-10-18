@@ -1,6 +1,5 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isAwaitingResult } from "@roll-and-call/database/games/model";
-
-import type { GameDetailData } from "@/shared/server";
 
 export function cancelRowDetail({
   game,

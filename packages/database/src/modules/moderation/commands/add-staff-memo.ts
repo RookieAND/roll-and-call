@@ -1,12 +1,11 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { addedChanges } from "#/modules/moderation/model/audit-changes";
-import type { Actor } from "#/modules/moderation/model/types";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, staffMemos } from "#/schema";
-
-import { recordAudit } from "./record-audit";
+import { db } from "#db/client";
+import { addedChanges } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { profiles, staffMemos } from "#db/schema";
 
 export async function addStaffMemo({
   serverId,

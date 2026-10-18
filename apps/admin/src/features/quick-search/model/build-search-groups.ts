@@ -1,7 +1,7 @@
 import { isUndefined } from "es-toolkit";
 import { BookOpen, Calendar, Flag, User } from "lucide-react";
 
-import { formatDate, withSubjectParticle } from "@/shared/lib";
+import { formatFullDate, withSubjectParticle } from "@/shared/lib";
 import type { UserSearchResult } from "@/shared/server";
 import { NAV_ITEMS } from "@/shared/ui";
 
@@ -60,7 +60,7 @@ export function buildSearchGroups({
         icon: Flag,
         tone: "primary" as const,
         title: "불참 취소",
-        meta: `${noShow.sessionTitle} · ${formatDate(noShow.startsAt)}`,
+        meta: `${noShow.sessionTitle} · ${formatFullDate(noShow.startsAt)}`,
         href: `/noshow?q=${encodeURIComponent(target.nickname)}&record=${noShow.id}`,
       })),
       ...target.certApplications.map((application) => ({
@@ -85,7 +85,7 @@ export function buildSearchGroups({
         id: `session-${session.id}`,
         icon: Calendar,
         title: session.title,
-        meta: `${session.rulebook} · ${formatDate(session.startsAt)} · ${session.hosted ? "본인이 GM" : `GM ${session.gmNickname}`}`,
+        meta: `${session.rulebook} · ${formatFullDate(session.startsAt)} · ${session.hosted ? "본인이 GM" : `GM ${session.gmNickname}`}`,
         href: `/posts/${session.id}`,
       })),
     });

@@ -1,17 +1,17 @@
 import { Chip, HStack } from "@roll-and-call/ui";
 
+import { TabCount, ServerLink } from "@/shared/ui";
+
+import { CHIP_HIT_AREA } from "../lib/chip-hit-area";
+import { filterParams } from "../lib/filter-params";
+import { gamesHref } from "../lib/games-href";
 import {
   GAME_STATUS_FILTERS,
   GAME_STATUS_FILTER_DEFAULT,
   GAME_TAB_DEFAULT,
   type GamesFilter,
   type GameStatusFilter,
-} from "@/shared/api";
-import { TabCount, ServerLink } from "@/shared/ui";
-
-import { CHIP_HIT_AREA } from "../lib/chip-hit-area";
-import { filterParams } from "../lib/filter-params";
-import { gamesHref } from "../lib/games-href";
+} from "../model/game-sort";
 
 interface GameStatusChipsProps {
   filter: GamesFilter;

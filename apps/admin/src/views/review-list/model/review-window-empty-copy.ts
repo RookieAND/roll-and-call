@@ -1,6 +1,6 @@
 import { REVIEW_WINDOW_STATE } from "@/entities/review";
 import { type ReviewList } from "@/entities/review/server";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { EMPTY_IMAGE } from "@/shared/ui";
 
 type ReviewWindow = NonNullable<ReviewList["game"]>["window"];
@@ -17,13 +17,13 @@ export function reviewWindowEmptyCopy({ state, deadline }: ReviewWindow) {
   if (state === REVIEW_WINDOW_STATE.open) {
     return {
       title: "아직 작성된 후기가 없습니다",
-      description: `참석자는 ${formatDate(deadline)}까지 후기를 쓸 수 있습니다.`,
+      description: `참석자는 ${formatFullDate(deadline)}까지 후기를 쓸 수 있습니다.`,
       image: EMPTY_IMAGE.hosted,
     };
   }
   return {
     title: "작성된 후기가 없습니다",
-    description: `작성 기한(${formatDate(deadline)})이 지났습니다.`,
+    description: `작성 기한(${formatFullDate(deadline)})이 지났습니다.`,
     image: EMPTY_IMAGE.hosted,
   };
 }

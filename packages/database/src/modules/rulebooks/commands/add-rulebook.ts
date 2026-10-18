@@ -1,12 +1,12 @@
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { relinkGames } from "#/modules/rulebooks/commands/relink-games";
-import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
-import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
-import { rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { relinkGames } from "#db/modules/rulebooks/commands/relink-games";
+import { rulebookChanges } from "#db/modules/rulebooks/model/rulebook-audit-changes";
+import type { RulebookFields } from "#db/modules/rulebooks/model/rulebook-fields";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { describeRulebook } from "#db/modules/rulebooks/queries/describe-rulebook";
+import { rulebooks } from "#db/schema";
 
 import { toRulebookValues } from "./rulebook-values";
 

@@ -1,4 +1,10 @@
-import { deriveGameStatus, GAME_STATUS, gameStatusColor, gameStatusLabel } from "@/entities/game";
+import {
+  deriveGameStatus,
+  GAME_STATUS,
+  gameStatusColor,
+  gameStatusLabel,
+  type SessionGame,
+} from "@/entities/game";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
@@ -7,7 +13,7 @@ import { hostScheduleIcon } from "./host-schedule-icon";
 import { hostScheduleTone } from "./host-schedule-tone";
 import { hostSessionChip } from "./host-session-chip";
 import { hostTodo } from "./host-todo";
-import { type SessionCardBase, type SessionContext, type SessionGame } from "./session-card-model";
+import { type SessionCardBase, type SessionContext } from "./session-card-model";
 
 export function toHostedSessionCard({
   game,

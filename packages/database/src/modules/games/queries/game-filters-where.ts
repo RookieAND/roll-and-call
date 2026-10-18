@@ -5,8 +5,8 @@ import {
   GAME_RULE_OTHER,
   GAME_TIME_SLOT_HOURS,
   type GamesFilter,
-} from "#/modules/games/model/games-filter";
-import { games, rulebooks } from "#/schema";
+} from "#db/modules/games/model/games-filter";
+import { games, rulebooks } from "#db/schema";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

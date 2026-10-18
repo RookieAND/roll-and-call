@@ -1,13 +1,13 @@
+import { type Actor } from "@roll-and-call/database/audit";
+import "server-only";
 import {
   notifyCertGroupDecision,
   type CertDecision,
   type CertDecisionResult,
 } from "@roll-and-call/database/certifications";
-import "server-only";
-import { type Actor } from "@roll-and-call/database/moderation";
 import { isUndefined } from "es-toolkit";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { decideCert } from "./decide-cert";
 
@@ -29,7 +29,7 @@ export async function decideCertGroup({
   actor: Actor;
   decision: CertDecision;
 }): Promise<CertGroupDecisionResult> {
-  const snapshot = await loadSnapshot();
+  const snapshot = await loadAdminData(["rulebooks", "certApplications"]);
   const applications = ids.map((id) => snapshot.certApplications.find((row) => row.id === id));
   const first = applications[0];
   if (!first?.groupId || applications.some((row) => row?.groupId !== first.groupId)) {

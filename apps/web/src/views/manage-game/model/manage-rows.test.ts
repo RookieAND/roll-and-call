@@ -1,3 +1,4 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -6,7 +7,6 @@ import {
   RECRUIT_METHOD,
   SCHEDULE_MODE,
 } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { cancelRowLock } from "./cancel-row-lock";
 import { MANAGE_ROW_ACTION, MANAGE_ROW_STATE } from "./manage-row-state";

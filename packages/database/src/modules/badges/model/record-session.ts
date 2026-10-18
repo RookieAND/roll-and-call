@@ -1,6 +1,6 @@
 import { isNil } from "es-toolkit";
 
-import { isSessionEnded } from "#/modules/games/model/session-timing";
+import { isSessionEnded } from "#db/modules/games/model";
 
 type Moment = Date | string | null;
 

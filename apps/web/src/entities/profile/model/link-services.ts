@@ -1,4 +1,4 @@
-import type { ProfileLink } from "@/shared/server";
+import type { ProfileLink } from "@roll-and-call/database";
 
 export const LINK_MAX_COUNT = 6;
 export const LINK_VALUE_MAX_LENGTH = 300;

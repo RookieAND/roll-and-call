@@ -1,7 +1,7 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { VStack } from "@roll-and-call/ui";
 
 import { GAME_TAG, gameTagLabel } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { AiImageBlock } from "./ai-image-block";
 import { GameNoticeBlock } from "./game-notice-block";

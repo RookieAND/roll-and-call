@@ -1,7 +1,7 @@
+import type { SessionGame } from "@/entities/game";
 import { formatDate } from "@/shared/lib";
 
 import { joinParts } from "./join-parts";
-import type { SessionGame } from "./session-card-model";
 
 export function pastEnding({
   waitlistRank,

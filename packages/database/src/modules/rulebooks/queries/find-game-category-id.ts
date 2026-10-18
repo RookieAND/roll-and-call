@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { games, rulebooks } from "#db/schema";
 
 // 구인의 룰이 룰북에 맞지 않으면 null.
 export async function findGameCategoryId({

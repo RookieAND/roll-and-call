@@ -1,3 +1,4 @@
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { cn, HStack, IconButton, Text } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { ChevronLeft, X } from "lucide-react";
@@ -6,7 +7,6 @@ import type { ReactNode } from "react";
 import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { BrandLogo } from "./brand-logo";
-import { ServerLink } from "./server-link";
 import { ServerSwitcher } from "./server-switcher";
 
 interface AppBarProps {

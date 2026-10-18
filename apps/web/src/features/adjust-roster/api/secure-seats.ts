@@ -1,10 +1,10 @@
 import "server-only";
+import type { Game } from "@roll-and-call/database";
 import { countParticipants, raiseGameCapacity } from "@roll-and-call/database/games";
 import type { Transaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import type { Game } from "@/shared/server";
 
 import type { CapacityAction } from "../model/capacity-action";
 import { capacityDecision } from "../model/capacity-decision";

@@ -1,7 +1,8 @@
+import type { MemberProfile } from "@roll-and-call/database/profiles";
 import { getMemberRole } from "@roll-and-call/database/servers";
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 
-import { SESSION_ROLE } from "@/entities/game";
+import { AbsenceNotice, SESSION_ROLE, type Absence } from "@/entities/game";
 import {
   AccentScope,
   EMPTY_BIO_TEXT,
@@ -10,13 +11,8 @@ import {
   ProfileHero,
 } from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
-import { getCurrentServer, type MemberProfile } from "@/shared/server";
-import {
-  AbsenceNotice,
-  SessionCountStats,
-  userSessionsHref,
-  type Absence,
-} from "@/widgets/session-list";
+import { getCurrentServer } from "@/shared/server";
+import { SessionCountStats, userSessionsHref } from "@/widgets/session-list";
 
 import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
 import { ProfileBlockLabel } from "./profile-block-label";

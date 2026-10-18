@@ -1,3 +1,4 @@
+import type { Game } from "@roll-and-call/database";
 import {
   deriveGameStatus,
   isSessionEnded,
@@ -6,7 +7,6 @@ import {
 import { compact, isNil } from "es-toolkit";
 
 import { formatDate, OG_IMAGE } from "@/shared/lib";
-import type { Game } from "@/shared/server";
 
 import { countConfirmed, type ParticipantStatus } from "./participant";
 

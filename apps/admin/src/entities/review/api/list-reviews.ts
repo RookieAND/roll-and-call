@@ -1,10 +1,10 @@
 import "server-only";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { selectReviewRows, type ReviewListFilter } from "../model/select-review-rows";
 
 export async function listReviews(filter: ReviewListFilter) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["reviews", "users", "sessions"]);
   return selectReviewRows({ ...db, filter, now: Date.now() });
 }
 

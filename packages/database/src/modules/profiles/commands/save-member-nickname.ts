@@ -1,10 +1,10 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { isNicknameTaken } from "#/modules/profiles/queries/is-nickname-taken";
-import { isUniqueViolation } from "#/modules/transaction/is-unique-violation";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { profiles, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { isNicknameTaken } from "#db/modules/profiles/queries/is-nickname-taken";
+import { isUniqueViolation } from "#db/modules/transaction";
+import type { Transaction } from "#db/modules/transaction";
+import { profiles, serverMembers } from "#db/schema";
 
 export type SaveMemberNicknameResult = { ok: true } | { ok: false; taken: true };
 

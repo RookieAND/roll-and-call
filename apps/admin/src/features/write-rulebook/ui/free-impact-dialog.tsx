@@ -1,6 +1,6 @@
 "use client";
 
-import { objectParticle } from "@roll-and-call/database/notifications/model";
+import { objectParticle } from "@roll-and-call/app-kit/lib";
 import { Button, Text, VStack } from "@roll-and-call/ui";
 
 import {

@@ -1,12 +1,12 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Actor } from "#/modules/moderation/model/types";
-import { staffMemos } from "#/schema";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { compactChanges, scalarChange } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import { staffMemos } from "#db/schema";
 
-import { compactChanges, scalarChange } from "../model/audit-changes";
 import { lockStaffMemo, type StaffMemoChangeResult } from "./lock-staff-memo";
-import { recordAudit } from "./record-audit";
 
 // owner는 서버 소유자(플랫폼 관리자 포함)다. 쓴 사람도 소유자도 아니면 아무것도 바꾸지 않는다.
 export async function editStaffMemo({

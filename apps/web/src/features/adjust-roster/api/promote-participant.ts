@@ -1,5 +1,6 @@
 "use server";
 
+import type { Game } from "@roll-and-call/database";
 import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
 import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
@@ -7,7 +8,7 @@ import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { parseActionInput } from "@/shared/api";
-import { announceRecruitmentComplete, type Game } from "@/shared/server";
+import { announceRecruitmentComplete } from "@/shared/server";
 
 import { CAPACITY_ACTION } from "../model/capacity-action";
 import type { RosterActionResult } from "../model/roster-action-result";

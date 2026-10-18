@@ -1,7 +1,7 @@
 import { Button } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import {
   ItemCard,
   ModalServerLabel,
@@ -18,7 +18,7 @@ interface ReviewGoneContentProps {
 
 // 작성자가 지운 후기. 확정 버튼 없이 [닫기](들어온 목록을 새로 읽는다)와 [다음 건]만 둔다.
 export function ReviewGoneContent({ deleted, nextHref, onClose }: ReviewGoneContentProps) {
-  const meta = deleted ? `${deleted.author} · ${formatDateTime(deleted.at)} 삭제` : undefined;
+  const meta = deleted ? `${deleted.author} · ${formatFullDateTime(deleted.at)} 삭제` : undefined;
   return (
     <>
       <ResponsiveDialog.Header>

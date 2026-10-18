@@ -1,12 +1,12 @@
 import "server-only";
+import { type Actor } from "@roll-and-call/database/audit";
 import {
   decideCertApplication,
   type CertDecision,
   type CertDecisionResult,
 } from "@roll-and-call/database/certifications";
-import { type Actor } from "@roll-and-call/database/moderation";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { certBlockers } from "../model/cert-blockers";
 import { waitingSupplements } from "../model/waiting-supplements";
@@ -26,7 +26,12 @@ export async function decideCert({
   notify?: boolean;
 }): Promise<CertDecisionResult> {
   // ponytail: 막는 조건은 트랜잭션 밖 스냅숏으로 본다. 두 운영진이 같은 순간 기본 룰북과 서플리먼트를 처리하는 경합은 막지 않는다.
-  const snapshot = await loadSnapshot();
+  const snapshot = await loadAdminData([
+    "users",
+    "rulebooks",
+    "certifications",
+    "certApplications",
+  ]);
   const application = snapshot.certApplications.find((row) => row.id === id);
   if (application?.status === "pending" && certBlockers(application, snapshot).waitingOn.length) {
     return { ok: false, blocked: "기본 룰북이 결정된 뒤에 심사할 수 있습니다" };

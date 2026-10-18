@@ -1,11 +1,11 @@
 import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
-import { isSessionEnded } from "@/entities/game";
+import { isSessionEnded, type SessionGame } from "@/entities/game";
 
 import type { SessionFacts } from "./derive-session-facts";
 import { isTodoStale } from "./is-todo-stale";
-import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./session-card-model";
+import { SESSION_ACTION_KIND, type SessionTodo } from "./session-card-model";
 
 // 한 구인에서 GM의 일은 하나만 올린다. 대기자가 없는 결원은 할 일이 아니다.
 export function hostTodo({

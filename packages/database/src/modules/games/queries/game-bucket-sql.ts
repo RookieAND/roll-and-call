@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { games } from "#/schema";
+import { games } from "#db/schema";
 
 import { confirmedCountSql } from "./confirmed-count-sql";
 import { sessionEndAtSql } from "./session-end-at-sql";

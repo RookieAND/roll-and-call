@@ -1,9 +1,9 @@
 import { clamp } from "es-toolkit";
 
-import { ATTENDANCE_EDIT_HOURS, attendanceDeadline } from "@/entities/game";
+import { ATTENDANCE_EDIT_HOURS, attendanceDeadline, type SessionGame } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
-import { SESSION_ACTION_KIND, type SessionGame, type SessionTodo } from "./session-card-model";
+import { SESSION_ACTION_KIND, type SessionTodo } from "./session-card-model";
 
 // 출석 할 일은 isAttendanceDue가 참일 때만 만든다. 그래서 세션 시각과 기한이 있다.
 export function confirmAttendanceTodo({

@@ -1,9 +1,9 @@
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import { CONTENT_REASON, reasonLabel } from "@roll-and-call/database/moderation/model";
+import type { MyReviewRow } from "@roll-and-call/database/reviews";
 
 import { deriveReviewState, REVIEW_STATE, reviewEditDeadline } from "@/entities/review";
 import { ddayKst, formatDate } from "@/shared/lib";
-import type { MyReviewRow } from "@/shared/server";
 
 type Palette = "primary" | "gray" | "warning" | "danger";
 

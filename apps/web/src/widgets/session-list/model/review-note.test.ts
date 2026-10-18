@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import type { SessionGame } from "@/entities/game";
+
 import { reviewNote } from "./review-note";
-import { SESSION_ACTION_KIND, type SessionContext, type SessionGame } from "./session-card-model";
+import { SESSION_ACTION_KIND, type SessionContext } from "./session-card-model";
 
 const NOW = new Date("2026-09-28T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;

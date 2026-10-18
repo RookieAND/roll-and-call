@@ -1,12 +1,8 @@
-import { certPolicyLabel } from "#/modules/certifications/model/cert-policy-label";
-import {
-  addedChanges,
-  compactChanges,
-  listChange,
-  scalarChange,
-} from "#/modules/moderation/model/audit-changes";
-import type { RulebookDescription } from "#/modules/rulebooks/model/rulebook-description";
-import type { AuditChange } from "#/schema/moderation";
+import { addedChanges, compactChanges, listChange, scalarChange } from "#db/modules/audit";
+import type { RulebookDescription } from "#db/modules/rulebooks/model/rulebook-description";
+import type { AuditChange } from "#db/schema/moderation";
+
+import { certPolicyLabel } from "./cert-policy-label";
 
 const KIND_LABEL = {
   core: "기본 룰북",

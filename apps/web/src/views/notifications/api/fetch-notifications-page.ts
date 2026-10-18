@@ -1,6 +1,5 @@
+import type { NotificationRow } from "@roll-and-call/database/notifications";
 import { isNull } from "es-toolkit";
-
-import type { NotificationRow } from "@/shared/server";
 
 import type { NotificationsPage } from "../model/inbox-page";
 

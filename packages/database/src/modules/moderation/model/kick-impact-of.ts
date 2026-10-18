@@ -1,4 +1,4 @@
-import { isAwaitingResult } from "#/modules/games/model/is-awaiting-result";
+import { isAwaitingResult } from "#db/modules/games/model";
 
 import type { MemberOngoing } from "./member-ongoing";
 import { ONGOING_ROLE } from "./ongoing-role";

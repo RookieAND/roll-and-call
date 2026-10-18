@@ -1,15 +1,15 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { cancelBlockReason } from "#/modules/games/model/cancel-block-reason";
-import { GAME_CANCEL_KIND, type GameCancelKind } from "#/modules/games/model/game-cancel-kind";
-import { gameCancelledRecipients } from "#/modules/games/model/game-cancelled-recipients";
-import { storedCancelReason } from "#/modules/games/model/stored-cancel-reason";
-import { lockGame } from "#/modules/games/queries/lock-game";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants, type Game } from "#/schema";
+import { db } from "#db/client";
+import { cancelBlockReason } from "#db/modules/games/model/cancel-block-reason";
+import { gameCancelledRecipients } from "#db/modules/games/model/game-cancelled-recipients";
+import { storedCancelReason } from "#db/modules/games/model/stored-cancel-reason";
+import { lockGame } from "#db/modules/games/queries/lock-game";
+import { createNotifications } from "#db/modules/notifications";
+import { GAME_CANCEL_KIND, type GameCancelKind } from "#db/modules/notifications/model";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants, type Game } from "#db/schema";
 
 export type CancelGameResult =
   | { ok: true; game: Game; notifiedCount: number }

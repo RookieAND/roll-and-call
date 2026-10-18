@@ -1,10 +1,11 @@
 "use server";
 
+import { markNotificationRead as markRead } from "@roll-and-call/database/notifications";
 import { revalidatePath } from "next/cache";
 
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getActingMember, markNotificationRead as markRead, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 // 이미 읽었거나 없는 줄이어도 성공이다. 다른 탭에서 먼저 읽었을 수 있다.
 export async function markNotificationRead(notificationId: string): Promise<ActionResult> {

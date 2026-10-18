@@ -1,7 +1,7 @@
 import { and, asc, count, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { certApplications, rulebookQuizQuestions } from "#/schema";
+import { db } from "#db/client";
+import { certApplications, rulebookQuizQuestions } from "#db/schema";
 
 import { pickQuizQuestion } from "../model/pick-quiz-question";
 

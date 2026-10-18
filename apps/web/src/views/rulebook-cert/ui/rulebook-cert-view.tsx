@@ -1,3 +1,4 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { Button, Container, Text, VStack } from "@roll-and-call/ui";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,15 +10,11 @@ import {
   setOf,
   toMyRulebooks,
 } from "@/entities/rulebook";
+import { signCertPhotoUrls } from "@/entities/rulebook/server";
 import { LoginRequired } from "@/features/auth";
 import { WithdrawApplicationButton } from "@/features/certify-rulebook";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getRulebookRecords,
-  getCurrentServer,
-  signCertPhotoUrls,
-} from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 import { applicationGroup } from "../model/application-group";

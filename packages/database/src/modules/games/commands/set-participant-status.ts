@@ -3,9 +3,9 @@ import { and, eq } from "drizzle-orm";
 import {
   PARTICIPANT_STATUS,
   type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+} from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 // 확정으로 바꾸면 불참 표시를 지운다(불참으로 내보낸 사람을 다시 넣는 경우).
 const attending = { absent: false, absenceReason: null };

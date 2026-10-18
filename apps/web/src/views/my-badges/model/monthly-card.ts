@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDER,
   BADGE_LADDERS,
@@ -18,7 +19,6 @@ import {
 } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
-import type { BadgeRecord } from "@/shared/server";
 
 interface MonthlyCardInput {
   ladder: BadgeLadderKey;

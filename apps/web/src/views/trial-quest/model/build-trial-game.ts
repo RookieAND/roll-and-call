@@ -1,5 +1,6 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
+
 import { RECRUIT_METHOD, SCHEDULE_MODE, PARTICIPANT_STATUS } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { TRIAL_GAME_ID, TRIAL_KIND, type TrialKind } from "./trial-kind";
 

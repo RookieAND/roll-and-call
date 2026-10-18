@@ -1,11 +1,11 @@
 "use client";
 
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { isNull } from "es-toolkit";
 
 import { countConfirmed, deriveGameStatus } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
 import { updateGame } from "@/features/write-game";
-import type { GameDetailData } from "@/shared/server";
 
 import { GameForm } from "./game-form";
 

@@ -1,6 +1,7 @@
 import { uniq } from "es-toolkit";
 
-import { GAME_CANCEL_KIND, type GameCancelKind } from "./game-cancel-kind";
+import { GAME_CANCEL_KIND, type GameCancelKind } from "#db/modules/notifications/model";
+
 import { isAwaitingResult } from "./is-awaiting-result";
 import { PARTICIPANT_STATUS, type ParticipantStatus } from "./participant-status";
 import type { RecruitMethod } from "./recruit-method";

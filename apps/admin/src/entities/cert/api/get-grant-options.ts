@@ -2,11 +2,11 @@ import "server-only";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 
 import { MEMBERSHIP_STATUS } from "@/shared/lib";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 // 인증 부여 페이지가 고르는 데 쓰는 것. 고른 책·유저마다 상태는 화면이 계산한다(서플리먼트 규칙은 숨기지 않은 책 전체로).
 export async function getGrantOptions() {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "rulebooks", "certifications", "certApplications"]);
   const pairOf = ({ userId, rulebookId }: { userId: string; rulebookId: string }) => ({
     userId,
     rulebookId,

@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 
 import type { CertifiedGm } from "@/entities/rulebook/server";
 import {
-  formatDate,
+  formatFullDate,
   paginate,
   parsePageSize,
   sortRows,
@@ -119,7 +119,7 @@ export function CertifiedGmPanel({
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatDate(gm.approvedAt)}
+                  {formatFullDate(gm.approvedAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="end" numeric>

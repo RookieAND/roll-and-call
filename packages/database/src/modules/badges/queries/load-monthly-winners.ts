@@ -1,12 +1,12 @@
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { sumBy } from "es-toolkit";
 
-import { db } from "#/client";
-import { badgeKey } from "#/modules/badges/model/badge-key";
-import { BADGE_LADDER, BADGE_ROLE } from "#/modules/badges/model/badge-ladder";
-import { kstMonthKey } from "#/modules/badges/model/kst-month-key";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { badgeKey } from "#db/modules/badges/model/badge-key";
+import { BADGE_LADDER, BADGE_ROLE } from "#db/modules/badges/model/badge-ladder";
+import { kstMonthKey } from "#db/modules/badges/model/kst-month-key";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { profiles, userBadges } from "#db/schema";
 
 import { loadMonthlyAppearances } from "./load-monthly-appearances";
 

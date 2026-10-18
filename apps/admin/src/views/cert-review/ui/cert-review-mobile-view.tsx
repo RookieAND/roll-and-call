@@ -1,11 +1,11 @@
-import { objectParticle } from "@roll-and-call/database/notifications/model";
+import { objectParticle } from "@roll-and-call/app-kit/lib";
 import { Button, Callout, VStack } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 
 import type { CertQueueFilter } from "@/entities/cert";
 import type { CertReview } from "@/entities/cert/server";
 import { CERT_REVIEW_STATE, MobileCertDecisionForm } from "@/features/decide-cert";
-import { formatDateTime, withQuery } from "@/shared/lib";
+import { formatFullDateTime, withQuery } from "@/shared/lib";
 import { AdminHeader, ServerLink } from "@/shared/ui";
 
 import { reviewState } from "../model/review-state";
@@ -62,7 +62,7 @@ export function CertReviewMobileView({ review, viewerId, filter }: CertReviewMob
           <Callout.Root colorPalette="warning">
             <Callout.Icon />
             <Callout.Title>신청자가 신청을 거뒀습니다</Callout.Title>
-            <Callout.Description>{`${formatDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}</Callout.Description>
+            <Callout.Description>{`${formatFullDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}</Callout.Description>
           </Callout.Root>
         ) : null}
         {waitingCore ? (

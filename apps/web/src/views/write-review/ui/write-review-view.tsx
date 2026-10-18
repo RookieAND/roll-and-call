@@ -1,3 +1,4 @@
+import { getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound } from "next/navigation";
@@ -6,7 +7,7 @@ import { reviewEditDeadline } from "@/entities/review";
 import { LoginRequired } from "@/features/auth";
 import { ReviewForm, reviewBlockOf } from "@/features/write-review";
 import { formatDateTime } from "@/shared/lib";
-import { getCurrentSessionUser, getReviewDraftTarget, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface WriteReviewViewProps {

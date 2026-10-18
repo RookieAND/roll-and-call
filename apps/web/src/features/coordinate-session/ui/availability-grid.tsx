@@ -6,8 +6,8 @@ import { useParams } from "next/navigation";
 
 import { availabilityQuery } from "@/entities/availability";
 import { AppError } from "@/shared/api";
-import { type DayColumn, formatDateTime, type TimeRow, useBeforeUnloadWarning } from "@/shared/lib";
-import { SLOT_ROW_PX, SlotGrid, toast } from "@/shared/ui";
+import { type DayColumn, formatDateTime, type TimeRow } from "@/shared/lib";
+import { SLOT_ROW_PX, SlotGrid, toast, useBeforeUnloadWarning } from "@/shared/ui";
 
 import { saveAvailability } from "../api/save-availability";
 import { useSlotFocus } from "../model/use-slot-focus";

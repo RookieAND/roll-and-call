@@ -1,4 +1,5 @@
-import type { CertApplication, RulebookRecords } from "@/shared/server";
+import type { CertApplication } from "@roll-and-call/database";
+import type { RulebookRecords } from "@roll-and-call/database/certifications";
 
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";

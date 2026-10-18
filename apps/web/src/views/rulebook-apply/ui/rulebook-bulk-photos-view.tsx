@@ -1,3 +1,4 @@
+import { loadBulkQuizQuestions, getRulebookRecords } from "@roll-and-call/database/certifications";
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
 import { Container } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
@@ -6,16 +7,12 @@ import { z } from "zod";
 import { profileDisplay } from "@/entities/profile";
 import { certApplyHref, toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { BulkCertApplyForm, isBulkSelectable, type BulkQuiz } from "@/features/certify-rulebook";
+import { BulkCertApplyForm, type BulkQuiz } from "@/features/certify-rulebook";
 import { serverPath } from "@/shared/lib";
-import {
-  getBulkQuizQuestions,
-  getCurrentServer,
-  getCurrentSessionUser,
-  getProfile,
-  getRulebookRecords,
-} from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser, getProfile } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
+
+import { isBulkSelectable } from "../model/bulk-selection";
 
 const rulebookIdsSchema = z.array(z.uuid()).min(2).max(BULK_CERT_MAX_BOOKS);
 
@@ -45,7 +42,7 @@ export async function RulebookBulkPhotosView({ rulebookIds }: RulebookBulkPhotos
   const [records, profile, quizQuestions] = await Promise.all([
     getRulebookRecords({ serverId: server.id, userId: user.id }),
     getProfile(server.id, user.id),
-    getBulkQuizQuestions({ serverId: server.id, userId: user.id, rulebookIds: parsedIds.data }),
+    loadBulkQuizQuestions({ serverId: server.id, userId: user.id, rulebookIds: parsedIds.data }),
   ]);
   const data = toMyRulebooks(records);
   if (data.sanction) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));

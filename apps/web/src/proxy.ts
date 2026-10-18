@@ -1,5 +1,5 @@
+import { refreshSession } from "@roll-and-call/app-kit/supabase/proxy";
 import { isServerSlug } from "@roll-and-call/database/servers/model";
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { legacyServerRedirect, REQUEST_PATH_HEADER, SERVER_SLUG_HEADER } from "@/shared/lib";
@@ -28,35 +28,10 @@ export async function proxy(request: NextRequest) {
   if (slug) request.headers.set(SERVER_SLUG_HEADER, slug);
   request.headers.set(REQUEST_PATH_HEADER, `${request.nextUrl.pathname}${request.nextUrl.search}`);
 
-  let response = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          for (const { name, value } of cookiesToSet) {
-            request.cookies.set(name, value);
-          }
-          response = NextResponse.next({ request });
-          for (const { name, value, options } of cookiesToSet) {
-            response.cookies.set(name, value, options);
-          }
-        },
-      },
-    },
-  );
-
-  // getClaims()는 만료된 토큰을 갱신해 응답 쿠키에 쓰고, 비대칭 키면 Auth 서버를 부르지 않는다. 로그인 쿠키가 없으면 갱신할 것이 없어 건너뛴다.
-  if (request.cookies.getAll().some(({ name }) => /^sb-.+-auth-token(\.\d+)?$/.test(name))) {
-    await supabase.auth.getClaims();
-  }
-
-  return response;
+  return refreshSession(request, {
+    createResponse: () => NextResponse.next({ request }),
+    skipWithoutAuthCookie: true,
+  });
 }
 
 export const config = {

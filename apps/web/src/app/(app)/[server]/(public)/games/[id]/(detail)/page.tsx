@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { OG_IMAGE, serverJoinPath, serverPath } from "@/shared/lib";
+import { gameOgImage, OG_IMAGE, serverJoinPath, serverPath } from "@/shared/lib";
 import {
   detectRosterDepartures,
   getCurrentMembership,
@@ -28,7 +28,7 @@ export async function generateMetadata({
     openGraph: {
       title: game.title,
       // 부모 openGraph는 통째로 덮이므로 기본 이미지를 여기서도 깐다.
-      images: [game.thumbnailSpoiler ? OG_IMAGE : (game.thumbnailUrl ?? OG_IMAGE)],
+      images: [gameOgImage(game)],
     },
   };
 }

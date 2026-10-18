@@ -1,7 +1,7 @@
+import type { Game } from "@roll-and-call/database";
 import { isNull } from "es-toolkit";
 
 import { isSessionStarted } from "@/entities/game";
-import type { Game } from "@/shared/server";
 
 // 서버(updateGame)도 같은 조건으로 저장을 막는다.
 export function editLockedTitle(

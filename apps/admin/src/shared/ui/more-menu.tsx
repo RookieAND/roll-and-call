@@ -1,10 +1,9 @@
 "use client";
 
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { Button, IconButton, Popover, VStack, cn } from "@roll-and-call/ui";
 import { Ellipsis, type LucideIcon } from "lucide-react";
 import { useState } from "react";
-
-import { ServerLink } from "./server-link";
 
 export interface MoreMenuItem {
   label: string;

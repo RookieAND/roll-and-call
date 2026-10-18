@@ -1,11 +1,10 @@
+import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { IconButton } from "@roll-and-call/ui";
 import { isString } from "es-toolkit";
 import { ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { withDirectionParticle } from "@/shared/lib";
-
-import { ServerLink } from "../server-link";
 
 interface MobileBackLinkProps {
   path: string;

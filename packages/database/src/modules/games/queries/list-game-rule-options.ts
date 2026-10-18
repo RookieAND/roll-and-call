@@ -1,9 +1,9 @@
 import { count, eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
-import { GAME_RULE_OTHER, type GameTab } from "#/modules/games/model/games-filter";
-import { games, rulebookCategories, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { GAME_RULE_OTHER, type GameTab } from "#db/modules/games/model/games-filter";
+import { games, rulebookCategories, rulebooks } from "#db/schema";
 
 import { recruitingGamesWhere } from "./recruiting-games-where";
 

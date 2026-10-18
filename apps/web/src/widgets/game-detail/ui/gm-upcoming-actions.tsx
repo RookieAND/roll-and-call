@@ -1,4 +1,4 @@
-import type { GameDetailData } from "@/shared/server";
+import type { GameDetailData } from "@roll-and-call/database/games";
 
 import { ActionPair } from "./action-pair";
 import { GameCalendarButton } from "./game-calendar-button";

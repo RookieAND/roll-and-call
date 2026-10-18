@@ -2,7 +2,7 @@ import "server-only";
 import type { RulebookKind } from "@roll-and-call/database";
 
 import { waitedDays } from "@/shared/lib";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 export interface RulebookRequestRow {
   id: string;
@@ -28,7 +28,7 @@ export interface RequestGame {
 }
 
 export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "rulebookRequests", "sessions"]);
   return db.rulebookRequests
     .filter((request) => !request.processed)
     .toSorted((a, b) => a.requestedAt.getTime() - b.requestedAt.getTime())

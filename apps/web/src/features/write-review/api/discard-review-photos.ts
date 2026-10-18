@@ -1,5 +1,5 @@
+import { REVIEW_PHOTO_BUCKET, reviewPhotoPathOf } from "@/entities/review";
 import { createSupabaseBrowserClient } from "@/shared/api";
-import { REVIEW_PHOTO_BUCKET, reviewPhotoPathOf } from "@/shared/lib";
 
 // 실패해도 나가기는 막지 않는다.
 export async function discardReviewPhotos(urls: string[]) {

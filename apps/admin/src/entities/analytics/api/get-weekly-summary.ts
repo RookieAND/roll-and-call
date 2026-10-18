@@ -1,8 +1,8 @@
 import "server-only";
+import { isRecognizedPost } from "@roll-and-call/database/games/model";
 import { compact, mean } from "es-toolkit";
 
-import { isRecognizedPost } from "@/shared/lib";
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { weekLabel } from "../model/week-label";
 
@@ -35,7 +35,7 @@ export interface WeeklySummary {
 // 이번 주는 오늘까지의 7일이다. 평균은 최근 7일을 뺀 지난 7주로 낸다.
 // 새 구인은 숨김·취소를 뺀 만든 시각(R6), 진행된 세션은 인정 세션의 시작 시각(R5)으로 센다.
 export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySummary> {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "sessions"]);
   const end = now.getTime();
   const weekIndex = (date: Date) => {
     const weeksAgo = Math.floor((end - date.getTime()) / WEEK);

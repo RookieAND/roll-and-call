@@ -1,5 +1,5 @@
-import { db } from "#/client";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
+import { db } from "#db/client";
+import { memberNicknameSql } from "#db/modules/profiles";
 
 export async function getGameForRecruitmentNotice({
   serverId,

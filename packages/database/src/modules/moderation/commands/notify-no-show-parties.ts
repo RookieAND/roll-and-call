@@ -1,6 +1,6 @@
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import type { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
+import { createNotifications } from "#db/modules/notifications";
+import type { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
 
 type NoShowKind =
   | typeof NOTIFICATION_KIND.absenceAddedByStaff

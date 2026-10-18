@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
-import { draftReason, formatDate, useActionSubmit } from "@/shared/lib";
+import { draftReason, formatFullDate, useActionSubmit } from "@/shared/lib";
 import type { Sanction } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -83,7 +83,7 @@ export function ReleaseSanctionDialog({
                   label: "현재 제재",
                   value: (
                     <>
-                      {until ? `${formatDate(until)}까지` : "무기한"}
+                      {until ? `${formatFullDate(until)}까지` : "무기한"}
                       {remaining ? <FactSub>{remaining}</FactSub> : null}
                     </>
                   ),

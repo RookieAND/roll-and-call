@@ -1,8 +1,8 @@
 import { and, eq, gt, inArray } from "drizzle-orm";
 
-import { NOTIFICATION_KINDS } from "#/modules/notifications/model/is-notification-kind";
-import { NOTIFICATION_RETENTION_DAYS } from "#/modules/notifications/model/notification-retention";
-import { notifications } from "#/schema";
+import { NOTIFICATION_KINDS } from "#db/modules/notifications/model/is-notification-kind";
+import { NOTIFICATION_RETENTION_DAYS } from "#db/modules/notifications/model/notification-retention";
+import { notifications } from "#db/schema";
 
 const DAY_MS = 86_400_000;
 

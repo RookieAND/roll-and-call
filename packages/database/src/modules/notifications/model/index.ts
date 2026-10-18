@@ -18,9 +18,9 @@ export { NOTIFICATION_RETENTION_DAYS } from "./notification-retention";
 export { dropOwnNotifications } from "./drop-own-notifications";
 export { encodeNotificationCursor } from "./encode-notification-cursor";
 export { decodeNotificationCursor } from "./decode-notification-cursor";
-export { objectParticle } from "./object-particle";
-export { subjectParticle } from "./subject-particle";
-export { topicParticle } from "./topic-particle";
-export { directionalParticle } from "./directional-particle";
-export { comitativeParticle } from "./comitative-particle";
-export { endsWithHangulSyllable } from "./ends-with-hangul-syllable";
+export {
+  GAME_CANCEL_KIND,
+  MIN_PLAYERS_UNMET_CANCEL_TEXT,
+  SELECTION_EXPIRED_CANCEL_TEXT,
+  type GameCancelKind,
+} from "./game-cancel-kind";

@@ -1,10 +1,10 @@
+import { formatFullDate } from "@roll-and-call/app-kit/date";
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { formatDate } from "#/modules/moderation/model/format-date";
-import type { Actor } from "#/modules/moderation/model/types";
-import { servers } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { servers } from "#db/schema";
 
 export const ENFORCEMENT_CHANGE = { set: "지정", postpone: "연기" } as const;
 export type EnforcementChange = keyof typeof ENFORCEMENT_CHANGE;
@@ -36,8 +36,8 @@ export async function updateCertEnforcementDate({
         action: "적용일 변경",
         target: `룰북 인증 적용일 · ${ENFORCEMENT_CHANGE[change]}`,
         reason: "",
-        before: { label: before ? formatDate(before) : "없음" },
-        after: { label: formatDate(date) },
+        before: { label: before ? formatFullDate(before) : "없음" },
+        after: { label: formatFullDate(date) },
       },
     });
   });

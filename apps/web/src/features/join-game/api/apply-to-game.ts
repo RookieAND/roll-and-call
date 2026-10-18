@@ -1,11 +1,11 @@
-import { insertParticipant } from "@roll-and-call/database/games";
+import type { Game } from "@roll-and-call/database";
 import "server-only";
+import { insertParticipant } from "@roll-and-call/database/games";
 import { normalizeApplicationNote } from "@roll-and-call/database/games/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isUndefined } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import { type Game } from "@/shared/server";
 
 import { NOTE_LENGTH_MESSAGE } from "../model/note-length-message";
 import {

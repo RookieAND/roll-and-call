@@ -1,7 +1,7 @@
 import { and, eq, or, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { serverMembers, servers } from "#/schema";
+import { db } from "#db/client";
+import { serverMembers, servers } from "#db/schema";
 
 import { evaluateBadges } from "./evaluate-badges";
 

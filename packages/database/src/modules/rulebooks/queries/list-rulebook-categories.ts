@@ -1,7 +1,7 @@
 import { asc, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { rulebookCategories } from "#/schema";
+import { db } from "#db/client";
+import { rulebookCategories } from "#db/schema";
 
 export async function listRulebookCategories({ serverId }: { serverId: string }) {
   return db

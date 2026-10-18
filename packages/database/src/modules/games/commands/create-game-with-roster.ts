@@ -1,7 +1,7 @@
-import { db } from "#/client";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants, type NewGame } from "#/schema";
+import { db } from "#db/client";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants, type NewGame } from "#db/schema";
 
 // 대기로 넣는 사람은 넘긴 순서를 지키도록 waitlistedAt을 now + 순번 밀리초로 둔다.
 export async function createGameWithRoster({

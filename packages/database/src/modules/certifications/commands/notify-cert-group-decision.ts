@@ -1,7 +1,7 @@
-import { db } from "#/client";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 
 interface NotifyCertGroupDecisionInput {
   serverId: string;

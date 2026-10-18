@@ -5,12 +5,12 @@ import type { DrawLotteryResult } from "@roll-and-call/database/games";
 import { DRAW_RESULT_KIND } from "@roll-and-call/database/games/model";
 import { notifyGameCancelled, refreshRecruitPost } from "@roll-and-call/game-notices";
 
+import { seedAvailabilityFromProfile } from "@/entities/availability/server";
 import {
   announceRecruitmentComplete,
   getGameById,
   notifyDrawResult,
   notifyDrawSkipped,
-  seedAvailabilityFromProfile,
 } from "@/shared/server";
 
 // 추첨 명령이 커밋된 뒤 할 일. 단계마다 실패해도 다음 단계를 이어 간다(디스코드 실패가 칭호 판정을 막지 않게).

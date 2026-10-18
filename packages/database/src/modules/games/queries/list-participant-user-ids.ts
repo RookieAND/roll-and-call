@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import type { ParticipantStatus } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+import type { ParticipantStatus } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 export async function listParticipantUserIds({
   transaction,

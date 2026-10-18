@@ -1,12 +1,12 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { BADGE_LADDERS } from "#/modules/badges/model/badge-ladders";
-import type { BadgeWrite } from "#/modules/badges/model/diff-badges";
-import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
-import { planBadgeNotices } from "#/modules/badges/model/plan-badge-notices";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { rulebookCategories, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { BADGE_LADDERS } from "#db/modules/badges/model/badge-ladders";
+import type { BadgeWrite } from "#db/modules/badges/model/diff-badges";
+import { parseBadgeKey } from "#db/modules/badges/model/parse-badge-key";
+import { planBadgeNotices } from "#db/modules/badges/model/plan-badge-notices";
+import { createNotifications } from "#db/modules/notifications";
+import { rulebookCategories, userBadges } from "#db/schema";
 
 type Grant = Extract<BadgeWrite, { kind: "grant" }>;
 

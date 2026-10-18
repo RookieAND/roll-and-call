@@ -1,4 +1,4 @@
-import { kickImpactOf, type KickImpact } from "#/modules/moderation/model/kick-impact-of";
+import { kickImpactOf, type KickImpact } from "#db/modules/moderation/model/kick-impact-of";
 
 import { loadMemberOngoing } from "./load-member-ongoing";
 

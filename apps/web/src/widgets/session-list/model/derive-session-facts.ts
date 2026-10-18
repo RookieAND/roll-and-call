@@ -10,11 +10,12 @@ import {
   scheduleLine,
   SESSION_STATE,
   type SessionRole,
+  type SessionGame,
 } from "@/entities/game";
 import { ddayKst, formatDateTime } from "@/shared/lib";
 
 import { relativeDay } from "./relative-day";
-import type { SessionContext, SessionGame } from "./session-card-model";
+import type { SessionContext } from "./session-card-model";
 
 export type SessionFacts = ReturnType<typeof deriveSessionFacts>;
 

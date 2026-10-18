@@ -8,7 +8,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
-import { formatDate, STAFF_ROLE_LABEL, useActionSubmit, withObjectParticle } from "@/shared/lib";
+import {
+  formatFullDate,
+  STAFF_ROLE_LABEL,
+  useActionSubmit,
+  withObjectParticle,
+} from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
 import {
   ActionNetworkError,
@@ -72,10 +77,10 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
                 labelWidth={80}
                 items={[
                   { label: "역할", value: <Tag>{STAFF_ROLE_LABEL[staff.role]}</Tag> },
-                  { label: "추가한 날", value: staff.since ? formatDate(staff.since) : "" },
+                  { label: "추가한 날", value: staff.since ? formatFullDate(staff.since) : "" },
                   {
                     label: "최근 활동",
-                    value: staff.lastActiveAt ? formatDate(staff.lastActiveAt) : "",
+                    value: staff.lastActiveAt ? formatFullDate(staff.lastActiveAt) : "",
                   },
                 ]}
               />

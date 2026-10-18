@@ -1,8 +1,8 @@
 import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
 import { compact, uniq } from "es-toolkit";
 
-import { db } from "#/client";
-import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
+import { db } from "#db/client";
+import { findActiveSanction } from "#db/modules/moderation";
 import {
   certApplications,
   certifications,
@@ -11,7 +11,7 @@ import {
   rulebookRequests,
   rulebooks,
   servers,
-} from "#/schema";
+} from "#db/schema";
 
 const RECENT_DAYS = 90;
 const REQUEST_RESULT_DAYS = 30;

@@ -1,7 +1,7 @@
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
-import { formatDate, MEMBERSHIP_STATUS } from "@/shared/lib";
+import { formatFullDate, MEMBERSHIP_STATUS } from "@/shared/lib";
 import { FactRows, UserInitial } from "@/shared/ui";
 
 import { rejoinedNotice } from "../model/rejoined-notice";
@@ -43,14 +43,14 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             </HStack>
             {ban ? (
               <Text typography="body4" foreground="danger">
-                {`${formatDate(ban.at)}에 추방했습니다.`}
+                {`${formatFullDate(ban.at)}에 추방했습니다.`}
                 <br />
                 {`사유: ${ban.reason} (${ban.by})`}
               </Text>
             ) : null}
             {left && leftAt ? (
               <Text typography="body4" foreground="hint">
-                {`${formatDate(leftAt)}에 서버를 나갔습니다.`}
+                {`${formatFullDate(leftAt)}에 서버를 나갔습니다.`}
                 <br />
                 다시 가입하면 제재와 기록이 이어집니다.
               </Text>
@@ -65,7 +65,7 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             ) : null}
             {previousNickname ? (
               <Text typography="body4" foreground="hint">
-                {`이전 닉네임: ${previousNickname.nickname} (${formatDate(previousNickname.at)} 운영진이 수정)`}
+                {`이전 닉네임: ${previousNickname.nickname} (${formatFullDate(previousNickname.at)} 운영진이 수정)`}
               </Text>
             ) : null}
             {showPastSanctions ? (
@@ -77,7 +77,7 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
           <FactRows
             labelWidth={72}
             items={[
-              { label: "가입일", value: formatDate(user.joinedAt) },
+              { label: "가입일", value: formatFullDate(user.joinedAt) },
               { label: "디스코드 ID", value: `@${user.discordHandle}` },
             ]}
           />

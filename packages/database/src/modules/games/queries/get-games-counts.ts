@@ -1,8 +1,8 @@
 import { and, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { GamesFilter } from "#/modules/games/model/games-filter";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import type { GamesFilter } from "#db/modules/games/model/games-filter";
+import { games } from "#db/schema";
 
 import { gameBucketSql } from "./game-bucket-sql";
 import { gameFiltersWhere } from "./game-filters-where";

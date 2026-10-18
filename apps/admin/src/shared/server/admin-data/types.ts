@@ -1,28 +1,12 @@
 import type { RulebookKind } from "@roll-and-call/database";
+import type { AuditAction, AuditActorKind, AuditState } from "@roll-and-call/database/audit";
 import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
-import type {
-  AuditAction,
-  AuditActorKind,
-  AuditState,
-  Sanction,
-  PhotoKey,
-  ShotKey,
-  StaffRole,
-} from "@roll-and-call/database/moderation";
+import type { Sanction, PhotoKey, ShotKey, StaffRole } from "@roll-and-call/database/moderation";
 
-import type { MembershipStatus } from "@/shared/lib";
+import type { MembershipStatus, PostStatus } from "@/shared/lib";
 
-import type { PostStatus } from "../../lib/post-status";
-
-export type {
-  Actor,
-  AuditChange,
-  AuditState,
-  PhotoKey,
-  Sanction,
-  ShotKey,
-  StaffRole,
-} from "@roll-and-call/database/moderation";
+export type { Actor, AuditChange, AuditState } from "@roll-and-call/database/audit";
+export type { PhotoKey, Sanction, ShotKey, StaffRole } from "@roll-and-call/database/moderation";
 
 export interface Staff {
   userId: string;
@@ -251,4 +235,59 @@ export interface StaffMemo {
   author: string;
   at: Date;
   body: string;
+}
+
+// 참여 세션·불참 수를 셀 때만 쓰는 가벼운 모양. Session·NoShow도 이 모양을 만족한다.
+export interface CountingSession {
+  id: string;
+  memberIds: string[];
+  startsAt: Date;
+  endsAt?: Date | null;
+  cancelled?: boolean;
+  hidden?: unknown;
+}
+
+export interface CountingNoShow {
+  userId: string;
+  sessionId: string;
+  cancelled: boolean;
+}
+
+export interface MemberNickname {
+  id: string;
+  nickname: string;
+}
+
+// 운영진이 마지막으로 조치한 시각.
+export interface LastActive {
+  userId: string;
+  at: Date;
+}
+
+export interface NicknameEdit {
+  userId: string;
+  previousNickname: string;
+}
+
+// loadAdminData가 고를 수 있는 모양. 앞의 열세 개가 Snapshot이다.
+export interface AdminShapes {
+  users: AdminUser[];
+  staff: Staff[];
+  rulebooks: Rulebook[];
+  certifications: Certification[];
+  certApplications: CertApplication[];
+  quizQuestions: QuizQuestion[];
+  sellers: CertSeller[];
+  rulebookRequests: RulebookRequest[];
+  sessions: Session[];
+  noShows: NoShow[];
+  reviews: Review[];
+  auditLog: AuditEntry[];
+  staffMemos: StaffMemo[];
+  countingSessions: CountingSession[];
+  countingNoShows: CountingNoShow[];
+  nicknameEdits: NicknameEdit[];
+  memberNicknames: MemberNickname[];
+  lastActive: LastActive[];
+  certifiedUserIds: string[];
 }

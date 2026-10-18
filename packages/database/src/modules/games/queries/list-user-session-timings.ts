@@ -1,10 +1,10 @@
 import { and, eq, isNotNull, isNull, ne, or, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { MySessionTiming } from "#/modules/games/model/find-overlapping-game";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games, participants } from "#/schema";
+import { db } from "#db/client";
+import type { MySessionTiming } from "#db/modules/games/model/find-overlapping-game";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { games, participants } from "#db/schema";
 
 import { sessionEndAtSql } from "./session-end-at-sql";
 

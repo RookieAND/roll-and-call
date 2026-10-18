@@ -2,7 +2,7 @@ import { Table, Text } from "@roll-and-call/ui";
 
 import { NoShowStatusTag } from "@/entities/no-show";
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime, paginate, parsePageSize } from "@/shared/lib";
+import { formatFullSessionTime, paginate, parsePageSize } from "@/shared/lib";
 import { EMPTY_IMAGE, ListPager, Panel, TableColumns, TableEmptyRow } from "@/shared/ui";
 
 import { noShowStatus } from "../model/no-show-status";
@@ -55,7 +55,7 @@ export function NoShowPanel({ noShows, page, pageSize: pageSizeParam }: NoShowPa
             <Table.Row key={noShow.id} className={noShow.cancelled ? "opacity-50" : undefined}>
               <Table.Cell>
                 <Text typography="body3" foreground="hint" numeric>
-                  {formatSessionTime(noShow.startsAt)}
+                  {formatFullSessionTime(noShow.startsAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell>

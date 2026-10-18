@@ -1,15 +1,12 @@
 "use server";
 
+import { markAllNotificationsRead as markAllRead } from "@roll-and-call/database/notifications";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import {
-  getActingMember,
-  markAllNotificationsRead as markAllRead,
-  notMemberError,
-} from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 import { readUpTo } from "../model/read-up-to";
 

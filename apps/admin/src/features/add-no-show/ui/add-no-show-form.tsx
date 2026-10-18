@@ -15,7 +15,7 @@ import type { NoShowSessionCandidate, NoShowSessionSearch } from "@/entities/no-
 import { NotificationPreview } from "@/entities/notification";
 import {
   conflictToastText,
-  formatDateTime,
+  formatFullDateTime,
   isAbsenceAddedTag,
   useActionSubmit,
 } from "@/shared/lib";
@@ -118,7 +118,7 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
                   <OptionRow
                     key={candidate.id}
                     value={candidate.id}
-                    label={`${candidate.title} · GM ${candidate.gmNickname} · ${formatDateTime(candidate.startsAt)}`}
+                    label={`${candidate.title} · GM ${candidate.gmNickname} · ${formatFullDateTime(candidate.startsAt)}`}
                     note={candidate.autoConfirmed ? "자동 확정" : "GM 확정"}
                     selected={candidate.id === session?.id}
                   />

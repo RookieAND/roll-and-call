@@ -1,10 +1,11 @@
 "use server";
 
+import { clearQuest } from "@roll-and-call/database/onboarding";
 import { ONBOARDING_QUEST, type OnboardingQuest } from "@roll-and-call/database/onboarding/model";
 import { z } from "zod";
 
 import { parseActionInput, type ActionResult } from "@/shared/api";
-import { clearQuest, getActingMember, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 const SAVE_FAILED = "진행 상황을 저장하지 못했습니다.";
 

@@ -1,16 +1,16 @@
 import { and, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
 import { uniq } from "es-toolkit";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { STAFF_CHANNEL_RELATED } from "#/modules/moderation/model/audit-actions";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { RULEBOOK_KIND } from "#/modules/rulebooks/model/rulebook-kind";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { certApplications, certifications, profiles, rulebooks, servers } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import { STAFF_CHANNEL_RELATED } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { RULEBOOK_KIND } from "#db/modules/rulebooks/model";
+import { rulebookLabel } from "#db/modules/rulebooks/model";
+import { certApplications, certifications, profiles, rulebooks, servers } from "#db/schema";
 
 import { GRANT_SKIP_REASON, type GrantSkipReason } from "../model/grant-skip-reason";
 import { supplementCoresOpened } from "../model/supplement-cores-opened";

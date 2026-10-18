@@ -1,3 +1,5 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
+import { getCertSellers, getQuizQuestion } from "@roll-and-call/database/rulebooks";
 import { Container } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
 import { redirect } from "next/navigation";
@@ -12,18 +14,11 @@ import {
   rejectionSummary,
   toMyRulebooks,
 } from "@/entities/rulebook";
+import { signCertPhotoUrls } from "@/entities/rulebook/server";
 import { LoginRequired } from "@/features/auth";
 import { CertApplyForm } from "@/features/certify-rulebook";
 import { serverPath } from "@/shared/lib";
-import {
-  getCertSellers,
-  getCurrentSessionUser,
-  getProfile,
-  getQuizQuestion,
-  getRulebookRecords,
-  getCurrentServer,
-  signCertPhotoUrls,
-} from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface RulebookPhotosViewProps {

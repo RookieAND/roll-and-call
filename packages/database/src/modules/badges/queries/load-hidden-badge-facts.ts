@@ -1,10 +1,10 @@
 import { and, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { BadgeFacts } from "#/modules/badges/model/badge-facts";
-import { HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
-import { GAME_KIND } from "#/modules/games/model/game-kind";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
+import { db } from "#db/client";
+import type { BadgeFacts } from "#db/modules/badges/model/badge-facts";
+import { HIDDEN_LADDER } from "#db/modules/badges/model/badge-ladder";
+import { GAME_KIND } from "#db/modules/games/model";
+import { RECRUIT_METHOD } from "#db/modules/games/model";
 import {
   drawResults,
   games,
@@ -12,7 +12,7 @@ import {
   serverMembers,
   sessionReviews,
   userBadges,
-} from "#/schema";
+} from "#db/schema";
 
 import { attendedWhere } from "./attended-where";
 import { countedReviewWhere } from "./counted-review-where";

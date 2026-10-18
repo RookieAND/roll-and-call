@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants } from "#/schema";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants } from "#db/schema";
 
 // 세션 시작 뒤 확정자를 불참으로 내보낸다. 행을 남겨 출석 명단과 불참 기록에 쓰고, 확정이 아니었으면 false.
 export async function markParticipantRemoved({

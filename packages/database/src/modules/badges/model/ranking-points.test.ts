@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { RANKING_MODE } from "#/modules/servers/model/ranking-mode";
+import { RANKING_MODE } from "#db/modules/servers/model";
 
 import { BADGE_ROLE } from "./badge-ladder";
 import { monthlyWinners } from "./monthly-winners";

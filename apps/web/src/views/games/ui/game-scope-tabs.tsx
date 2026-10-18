@@ -3,18 +3,13 @@
 import { Tabs, cn } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
-import {
-  GAME_TAB,
-  GAME_TAB_DEFAULT,
-  isGameTab,
-  type GamesFilter,
-  type GameTab,
-} from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 import { FRAME_INNER_PX, TabCount } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { GAME_TAB, GAME_TAB_DEFAULT, type GamesFilter, type GameTab } from "../model/game-sort";
+import { isGameTab } from "../model/is-game-tab";
 
 interface GameScopeTabsProps {
   filter: GamesFilter;

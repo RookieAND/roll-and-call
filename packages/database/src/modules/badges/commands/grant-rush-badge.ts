@@ -1,8 +1,8 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
-import { games, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { HIDDEN_LADDER } from "#db/modules/badges/model/badge-ladder";
+import { games, userBadges } from "#db/schema";
 
 import { applyBadgeWrites } from "./apply-badge-writes";
 

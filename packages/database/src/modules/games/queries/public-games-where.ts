@@ -1,6 +1,6 @@
 import { and, eq, isNull, type SQL } from "drizzle-orm";
 
-import { games } from "#/schema";
+import { games } from "#db/schema";
 
 import { hiddenGmWhere } from "./hidden-gm-where";
 

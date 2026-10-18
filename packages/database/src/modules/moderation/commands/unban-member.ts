@@ -1,15 +1,15 @@
 import { and, desc, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { ChosenReason } from "#/modules/moderation/model/chosen-reason";
-import { reasonLabel } from "#/modules/moderation/model/reason-label";
-import type { Actor } from "#/modules/moderation/model/types";
-import { USER_ACTION_REASON } from "#/modules/moderation/model/user-action-reason";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { auditLog, profiles, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import type { ChosenReason } from "#db/modules/moderation/model/chosen-reason";
+import { reasonLabel } from "#db/modules/moderation/model/reason-label";
+import { USER_ACTION_REASON } from "#db/modules/moderation/model/user-action-reason";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { auditLog, profiles, serverMembers } from "#db/schema";
 
 import { type ModerationConflict } from "../model/moderation-conflict";
-import { recordAudit } from "./record-audit";
 
 export type UnbanResult =
   | { ok: true; discordId: string }

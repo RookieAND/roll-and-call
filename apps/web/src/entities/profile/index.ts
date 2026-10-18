@@ -7,7 +7,7 @@ export {
   normalizeAvailability,
   type AvailabilityInterval,
 } from "./model/availability";
-export { availabilityPrefill, filledDays, WEEKDAY_LABELS } from "@/shared/lib";
+export { filledDays, WEEKDAY_LABELS } from "@/shared/lib";
 export { KEYWORD_MAX_COUNT, KEYWORD_MAX_LENGTH, normalizeKeywords } from "./model/keywords";
 export { linkError } from "./model/link-error";
 export {
@@ -33,9 +33,4 @@ export { normalizePlayStyle, PLAY_STYLE_MAX_LENGTH } from "./model/play-style";
 export { PlayStyleBlock } from "./ui/play-style-block";
 export { ProfileHero } from "./ui/profile-hero";
 export { AccentScope } from "./ui/accent-scope";
-export {
-  ACCENT_TINT_BORDER,
-  ACCENT_TINT_FILL,
-  ACCENT_TINT_HOVER,
-  ACCENT_TINT_TEXT,
-} from "./model/accent-tint";
+export { ACCENT_TINT_HOVER, ACCENT_TINT_TEXT } from "./model/accent-tint";

@@ -1,4 +1,5 @@
-import { certWaitingOn } from "@/shared/lib";
+import { certWaitingOn } from "@roll-and-call/database/certifications/model";
+
 import type { Snapshot, CertApplication } from "@/shared/server";
 
 type CertRecords = Pick<Snapshot, "rulebooks" | "certifications" | "certApplications" | "users">;

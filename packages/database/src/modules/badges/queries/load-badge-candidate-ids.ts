@@ -1,6 +1,6 @@
 import { and, eq, or, sql } from "drizzle-orm";
 
-import { db } from "#/client";
+import { db } from "#db/client";
 import {
   certifications,
   drawResults,
@@ -9,7 +9,7 @@ import {
   serverMembers,
   sessionReviews,
   userBadges,
-} from "#/schema";
+} from "#db/schema";
 
 // 기록(참가·진행·추첨·후기)이나 받은 뱃지가 하나도 없는 멤버는 다시 계산해도 결과가 늘 비어 있다.
 export async function loadBadgeCandidateIds(serverId: string): Promise<string[]> {

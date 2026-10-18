@@ -1,6 +1,6 @@
 import "server-only";
 import type { Server } from "@roll-and-call/database";
-import { isTestDiscordId } from "@roll-and-call/database/servers/model";
+import { isTestDiscordId } from "@roll-and-call/database/profiles/model";
 
 import { isDiscordGuildMember } from "./is-discord-guild-member";
 

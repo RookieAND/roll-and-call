@@ -1,9 +1,9 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import { BADGE_LADDERS, type BadgeLadderKey } from "@roll-and-call/database/badges/model";
 
 import { monthListLabel, monthsOfLadder, previousMonthKey, stepLook } from "@/entities/badge";
 import { buildMonthlyDetail } from "@/features/view-badge";
 import { toKst } from "@/shared/lib";
-import type { BadgeRecord } from "@/shared/server";
 
 import type { BadgeRowGroup } from "./badge-row";
 

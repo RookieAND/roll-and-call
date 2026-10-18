@@ -1,12 +1,12 @@
 import { and, desc, sql } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
-import { decodeNotificationCursor } from "#/modules/notifications/model/decode-notification-cursor";
-import { encodeNotificationCursor } from "#/modules/notifications/model/encode-notification-cursor";
-import { isNotificationKind } from "#/modules/notifications/model/is-notification-kind";
-import type { NotificationPayload } from "#/modules/notifications/model/notification-kind";
-import { notifications } from "#/schema";
+import { db } from "#db/client";
+import { decodeNotificationCursor } from "#db/modules/notifications/model/decode-notification-cursor";
+import { encodeNotificationCursor } from "#db/modules/notifications/model/encode-notification-cursor";
+import { isNotificationKind } from "#db/modules/notifications/model/is-notification-kind";
+import type { NotificationPayload } from "#db/modules/notifications/model/notification-kind";
+import { notifications } from "#db/schema";
 
 import { visibleNotificationsWhere } from "./visible-notifications-where";
 

@@ -1,10 +1,10 @@
 import { sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { grantApprenticeBadge } from "#/modules/badges/commands/grant-apprentice-badge";
-import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
-import { ONBOARDING_QUESTS } from "#/modules/onboarding/model/quests";
-import { onboardingQuestClears, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { grantApprenticeBadge } from "#db/modules/badges";
+import { BADGE_LADDER } from "#db/modules/badges/model";
+import { ONBOARDING_QUESTS } from "#db/modules/onboarding/model/quests";
+import { onboardingQuestClears, userBadges } from "#db/schema";
 
 // 클리어 기록이 4건인데 칭호가 빠진 사람을 채운다(지급 실패 복구). 매일 크론이 부른다.
 export async function syncApprenticeBadges() {

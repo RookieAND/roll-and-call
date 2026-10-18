@@ -1,14 +1,14 @@
 import { and, desc, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Actor } from "#/modules/moderation/model/types";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { auditLog, participants, profiles } from "#/schema";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { auditLog, participants, profiles } from "#db/schema";
 
 import { loadNoShowParties } from "./load-no-show-parties";
 import { NO_SHOW_NOTIFIED, notifyNoShowParties } from "./notify-no-show-parties";
-import { recordAudit } from "./record-audit";
 
 const ACTION = "불참 취소 되돌리기";
 

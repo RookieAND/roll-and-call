@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { RECRUIT_METHOD } from "@/entities/game";
-import { OG_IMAGE } from "@/shared/lib";
+import { gameOgImage } from "@/shared/lib";
 import { getCurrentServer, getGameById, requireMembership } from "@/shared/server";
 import { DrawResultView } from "@/views/draw-result";
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
       title,
       description: DESCRIPTION,
       // 부모 openGraph는 통째로 덮이므로 기본 이미지를 여기서도 깐다.
-      images: [game.thumbnailSpoiler ? OG_IMAGE : (game.thumbnailUrl ?? OG_IMAGE)],
+      images: [gameOgImage(game)],
     },
   };
 }

@@ -1,5 +1,5 @@
 import type { UserDetail } from "@/entities/user/server";
-import { formatDate, withQuery, type StatusTone } from "@/shared/lib";
+import { formatFullDate, withQuery, type StatusTone } from "@/shared/lib";
 
 export const CERT_ROW_STATE = {
   certified: "certified",
@@ -31,7 +31,7 @@ export function toCertRows(user: UserDetail): CertRow[] {
     rulebook: certification.rulebook,
     state: CERT_ROW_STATE.certified,
     reason: null,
-    date: `${formatDate(certification.approvedAt)} 승인`,
+    date: `${formatFullDate(certification.approvedAt)} 승인`,
     staff: certification.approvedBy,
     action: {
       label: "인증 관리에서 보기",
@@ -45,7 +45,7 @@ export function toCertRows(user: UserDetail): CertRow[] {
       rulebook: application.rulebook,
       state: CERT_ROW_STATE.pending,
       reason: null,
-      date: `${formatDate(application.appliedAt)} 신청`,
+      date: `${formatFullDate(application.appliedAt)} 신청`,
       staff: null,
       action: { label: "심사하기", href: `/cert/${application.id}` },
     }));
@@ -56,7 +56,7 @@ export function toCertRows(user: UserDetail): CertRow[] {
       rulebook: application.rulebook,
       state: CERT_ROW_STATE.rejected,
       reason: application.rejectReason,
-      date: `${formatDate(application.processedAt ?? application.appliedAt)} 반려`,
+      date: `${formatFullDate(application.processedAt ?? application.appliedAt)} 반려`,
       staff: application.processedBy ?? null,
       action: { label: "사유 보기", href: `/cert/${application.id}` },
     }));

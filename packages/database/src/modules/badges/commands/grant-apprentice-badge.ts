@@ -1,4 +1,4 @@
-import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
+import { BADGE_LADDER } from "#db/modules/badges/model/badge-ladder";
 
 import { grantSpecialBadge } from "./grant-special-badge";
 

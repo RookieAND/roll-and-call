@@ -1,10 +1,8 @@
-import type { Snapshot } from "../server/admin-data/snapshot";
-
 export function findUserNickname({
   users,
   userId,
 }: {
-  users: Snapshot["users"];
+  users: readonly { id: string; nickname: string }[];
   userId: string;
 }): string {
   const user = users.find((candidate) => candidate.id === userId);

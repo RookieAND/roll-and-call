@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { games, participants, rulebookCategories } from "#/schema";
+import { games, participants, rulebookCategories } from "#db/schema";
 
 // attendedWhere와 같은 조건. 참여 쿼리가 participants를 이미 조인하므로 별칭으로 센다.
 export const attendedCount = sql<number>`(

@@ -20,25 +20,24 @@
     "@roll-and-call/game-notices": "workspace:*",
     "@roll-and-call/tiptap": "workspace:*",
     "@roll-and-call/ui": "workspace:*",
-    "@supabase/ssr": "^0.12.4",
-    "@supabase/supabase-js": "^2.112.2",
-    "class-variance-authority": "^0.7.1",
-    "es-toolkit": "^1.52.0",
-    "lucide-react": "^1.32.0",
-    "next": "^16.3.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "server-only": "^0.0.1",
-    "zod": "^4.4.3"
+    "@supabase/ssr": "catalog:",
+    "class-variance-authority": "catalog:",
+    "es-toolkit": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^26.2.0",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3",
-    "vitest": "^5.0.1"
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

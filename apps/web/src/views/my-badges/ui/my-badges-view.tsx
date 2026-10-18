@@ -1,3 +1,4 @@
+import { loadBadgeFacts, loadMonthlyAppearances } from "@roll-and-call/database/badges";
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { Container, VStack } from "@roll-and-call/ui";
@@ -12,9 +13,7 @@ import {
 import { LoginRequired } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
 import {
-  getBadgeFacts,
   getCurrentSessionUser,
-  getMonthlyAppearances,
   getProfile,
   getUserBadges,
   getCurrentServer,
@@ -51,8 +50,8 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
   const [profile, records, facts, appearances] = await Promise.all([
     getProfile(server.id, user.id),
     getUserBadges(server.id, user.id),
-    getBadgeFacts({ serverId: server.id, userId: user.id, now }),
-    getMonthlyAppearances({ serverId: server.id, now }),
+    loadBadgeFacts({ serverId: server.id, userId: user.id, now }),
+    loadMonthlyAppearances({ serverId: server.id, now }),
   ]);
 
   const held = heldBadges(records, now);

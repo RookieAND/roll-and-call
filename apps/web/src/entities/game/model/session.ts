@@ -1,6 +1,5 @@
+import type { Game } from "@roll-and-call/database";
 import { isSessionEnded } from "@roll-and-call/database/games/model";
-
-import type { Game } from "@/shared/server";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "./schedule-mode";
 

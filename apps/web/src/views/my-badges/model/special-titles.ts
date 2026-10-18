@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDERS,
   BADGE_ROLE,
@@ -7,7 +8,6 @@ import {
 
 import type { BadgeView } from "@/entities/badge";
 import { heldBadgeDetail } from "@/features/view-badge";
-import type { BadgeRecord } from "@/shared/server";
 
 // 「???」 카드는 기록으로 받는 숨겨진 칭호만 센다. 운영진·월 정산이 주는 지급형(작은 등불·더블 크라운·명예의 전당)은 뺀다(R29).
 const HIDDEN_TITLE_COUNT = Object.values(HIDDEN_LADDER).filter(

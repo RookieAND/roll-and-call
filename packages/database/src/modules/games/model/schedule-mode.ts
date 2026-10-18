@@ -1,4 +1,4 @@
-import type { Game } from "#/schema/games";
+import type { Game } from "#db/schema/games";
 
 // schedule_mode pgEnum과 같다. 어긋나면 satisfies가 컴파일을 막는다.
 export const SCHEDULE_MODES = [

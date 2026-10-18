@@ -1,13 +1,13 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { compactChanges, listChange } from "#/modules/moderation/model/audit-changes";
-import type { Actor } from "#/modules/moderation/model/types";
-import { relinkGames } from "#/modules/rulebooks/commands/relink-games";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import { compactChanges, listChange } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { relinkGames } from "#db/modules/rulebooks/commands/relink-games";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { rulebooks } from "#db/schema";
 
 import { claimRulebookRequest } from "./claim-rulebook-request";
 import { resolveRequestSupplements } from "./resolve-request-supplements";

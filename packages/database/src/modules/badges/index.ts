@@ -21,3 +21,4 @@ export {
   type MemberBadgeSummary,
 } from "./queries/load-member-badge-summaries";
 export * from "./model";
+export { grantApprenticeBadge } from "./commands/grant-apprentice-badge";

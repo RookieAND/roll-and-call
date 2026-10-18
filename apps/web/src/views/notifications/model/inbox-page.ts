@@ -1,4 +1,4 @@
-import type { NotificationRow } from "@/shared/server";
+import type { NotificationRow } from "@roll-and-call/database/notifications";
 
 export type NotificationsPage = { items: NotificationRow[]; nextCursor: string | null };
 

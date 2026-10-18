@@ -1,8 +1,8 @@
 import { and, eq, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { BadgeLadderKey } from "#/modules/badges/model/badge-ladder";
-import { userBadges } from "#/schema";
+import { db } from "#db/client";
+import type { BadgeLadderKey } from "#db/modules/badges/model/badge-ladder";
+import { userBadges } from "#db/schema";
 
 import { applyBadgeWrites } from "./apply-badge-writes";
 

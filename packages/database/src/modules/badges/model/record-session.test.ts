@@ -1,7 +1,7 @@
 import { isNull } from "es-toolkit";
 import { describe, expect, it, vi } from "vitest";
 
-import { isSessionEnded } from "#/modules/games/model/session-timing";
+import { isSessionEnded } from "#db/modules/games/model";
 
 import { BADGE_ROLE } from "./badge-ladder";
 import { countsAsAttended } from "./counts-as-attended";

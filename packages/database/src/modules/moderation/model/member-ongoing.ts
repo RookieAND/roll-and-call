@@ -1,13 +1,10 @@
 import { isNull } from "es-toolkit";
 
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import { gameCancelledRecipients } from "#/modules/games/model/game-cancelled-recipients";
-import {
-  PARTICIPANT_STATUS,
-  type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
-import { isSessionStarted } from "#/modules/games/model/session-timing";
-import type { Game } from "#/schema";
+import { gameCancelledRecipients } from "#db/modules/games/model";
+import { PARTICIPANT_STATUS, type ParticipantStatus } from "#db/modules/games/model";
+import { isSessionStarted } from "#db/modules/games/model";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import type { Game } from "#db/schema";
 
 import type { OngoingRole } from "./ongoing-role";
 import { ongoingRoleOf } from "./ongoing-role-of";

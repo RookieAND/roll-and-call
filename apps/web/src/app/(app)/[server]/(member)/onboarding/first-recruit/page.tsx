@@ -1,8 +1,9 @@
+import { getQuestClears } from "@roll-and-call/database/onboarding";
 import { ONBOARDING_QUEST } from "@roll-and-call/database/onboarding/model";
 import { redirect } from "next/navigation";
 
 import { serverPath } from "@/shared/lib";
-import { getCurrentServer, getCurrentSessionUser, getQuestClears } from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { TrialFirstRecruitView } from "@/views/trial-quest";
 
 // 첫 모집은 룰북 인증 퀘스트를 깬 뒤에만 열린다(R19). 깨지 않았으면 퀘스트 목록으로 돌려보낸다.

@@ -7,7 +7,7 @@ import {
   RequestActions,
   type RequestAction,
 } from "@/features/process-rulebook-request";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
 
 import { RequestGamesPopover } from "./request-games-popover";
@@ -73,7 +73,7 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint" numeric>
-                  {`${formatDate(request.requestedAt)} · ${request.waitedDays}일째`}
+                  {`${formatFullDate(request.requestedAt)} · ${request.waitedDays}일째`}
                 </Text>
               </Table.Cell>
               <Table.Cell>

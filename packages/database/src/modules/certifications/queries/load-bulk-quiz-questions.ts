@@ -1,4 +1,4 @@
-import { findAssignedQuizQuestions } from "#/modules/rulebooks/queries/find-assigned-quiz-questions";
+import { findAssignedQuizQuestions } from "#db/modules/rulebooks";
 
 import { pickBulkQuizBooks } from "../model/pick-bulk-quiz-books";
 

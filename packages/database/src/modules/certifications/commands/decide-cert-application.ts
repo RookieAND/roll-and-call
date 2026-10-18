@@ -1,13 +1,14 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor, ShotKey } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { certApplications, certifications, profiles, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import type { ShotKey } from "#db/modules/moderation/model";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { rulebookLabel } from "#db/modules/rulebooks/model";
+import { certApplications, certifications, profiles, rulebooks } from "#db/schema";
 
 import { rejectionSummary } from "../model/rejection-summary";
 import { rejectWaitingSupplements, type WaitingSupplements } from "./reject-waiting-supplements";

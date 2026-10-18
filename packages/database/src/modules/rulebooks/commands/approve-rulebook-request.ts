@@ -1,16 +1,16 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { relinkGames } from "#/modules/rulebooks/commands/relink-games";
-import { resolveRequestSupplements } from "#/modules/rulebooks/commands/resolve-request-supplements";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookChanges } from "#/modules/rulebooks/model/rulebook-audit-changes";
-import type { RulebookFields } from "#/modules/rulebooks/model/rulebook-fields";
-import { rulebookLabel } from "#/modules/rulebooks/model/rulebook-label";
-import { describeRulebook } from "#/modules/rulebooks/queries/describe-rulebook";
-import { rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { relinkGames } from "#db/modules/rulebooks/commands/relink-games";
+import { resolveRequestSupplements } from "#db/modules/rulebooks/commands/resolve-request-supplements";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookChanges } from "#db/modules/rulebooks/model/rulebook-audit-changes";
+import type { RulebookFields } from "#db/modules/rulebooks/model/rulebook-fields";
+import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
+import { describeRulebook } from "#db/modules/rulebooks/queries/describe-rulebook";
+import { rulebooks } from "#db/schema";
 
 import type { AddRulebookResult } from "./add-rulebook";
 import { claimRulebookRequest } from "./claim-rulebook-request";

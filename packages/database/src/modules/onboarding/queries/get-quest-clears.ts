@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { isOnboardingQuest, type OnboardingQuest } from "#/modules/onboarding/model/quests";
-import { onboardingQuestClears } from "#/schema";
+import { db } from "#db/client";
+import { isOnboardingQuest, type OnboardingQuest } from "#db/modules/onboarding/model/quests";
+import { onboardingQuestClears } from "#db/schema";
 
 export async function getQuestClears({
   serverId,

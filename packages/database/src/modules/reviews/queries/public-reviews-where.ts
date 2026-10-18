@@ -1,8 +1,8 @@
 import { and, eq, isNull, not, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { games, participants, sessionReviews } from "#/schema";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { games, participants, sessionReviews } from "#db/schema";
 
 import { reviewAuthorAbsentSql } from "./review-author-absent-sql";
 

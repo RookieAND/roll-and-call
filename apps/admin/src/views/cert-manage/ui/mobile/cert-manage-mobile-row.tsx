@@ -1,5 +1,5 @@
 import { CERT_GRANT_METHOD, CERT_MANAGE_STATUS_LABEL, type CertManageRow } from "@/entities/cert";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import { ListRow, Tag } from "@/shared/ui";
 
 const METHOD_LABEL = {
@@ -26,7 +26,7 @@ export function CertManageMobileRow({ row }: CertManageMobileRowProps) {
       }
       trailing={<Tag tone={status.tone}>{status.label}</Tag>}
       description={`${row.nickname} · ${row.edition}`}
-      meta={`${METHOD_LABEL[row.method]} · ${formatDate(row.changedAt)}`}
+      meta={`${METHOD_LABEL[row.method]} · ${formatFullDate(row.changedAt)}`}
     />
   );
 }

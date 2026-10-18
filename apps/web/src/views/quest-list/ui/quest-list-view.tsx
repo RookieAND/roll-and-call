@@ -1,3 +1,4 @@
+import { getQuestClears } from "@roll-and-call/database/onboarding";
 import {
   isAllQuestsCleared,
   isOnboardingQuest,
@@ -6,7 +7,7 @@ import {
 import { Badge, Container, FloatingBar, Button, Text, VStack, HStack } from "@roll-and-call/ui";
 
 import { FinishOnboardingButton } from "@/features/finish-onboarding";
-import { getCurrentServer, getCurrentSessionUser, getQuestClears } from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { AppBar, PageShell, ServerLink } from "@/shared/ui";
 
 import { toQuestCards } from "../model/quest-card";

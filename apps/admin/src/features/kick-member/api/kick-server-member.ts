@@ -1,10 +1,12 @@
 "use server";
 
 import {
+  kickBlockCode,
   parseReason,
   USER_ACTION_REASON,
   type ChosenReason,
 } from "@roll-and-call/database/moderation/model";
+import { isNull } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { forbidden, notFound } from "next/navigation";
 import { after } from "next/server";
@@ -35,9 +37,12 @@ export async function kickServerMember(args: { userId: string; reason: ChosenRea
   const parsed = parseReason({ reason, reasons: USER_ACTION_REASON });
   const [server, user] = await Promise.all([getCurrentServer(), getUserDetail(userId)]);
   if (!user) notFound();
-  if (user.discordId === server.ownerDiscordId || user.staffRole || user.id === staff.id) {
-    forbidden();
-  }
+  const blocked = kickBlockCode({
+    serverOwner: user.discordId === server.ownerDiscordId,
+    staff: !isNull(user.staffRole),
+    self: user.id === staff.id,
+  });
+  if (blocked) forbidden();
 
   const result = await kickMember({ serverId: server.id, userId, actor: staff, reason: parsed });
   if (!result.ok) {

@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { serverMembers, type ProfileKeyword, type ProfileLink } from "#/schema";
+import { db } from "#db/client";
+import { serverMembers, type ProfileKeyword, type ProfileLink } from "#db/schema";
 
 import { saveMemberNickname } from "./save-member-nickname";
 

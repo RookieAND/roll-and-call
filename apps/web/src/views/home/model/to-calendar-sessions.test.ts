@@ -1,6 +1,5 @@
+import type { MonthSessionRow } from "@roll-and-call/database/games";
 import { describe, expect, it } from "vitest";
-
-import type { MonthSessionRow } from "@/shared/server";
 
 import { toCalendarSessions } from "./to-calendar-sessions";
 

@@ -3,7 +3,7 @@ import { isNull } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useRef } from "react";
 
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import {
   ActionNetworkError,
   FactBox,
@@ -49,7 +49,7 @@ export function SanctionConfirmDialog({
   const blocked =
     isNull(days) || isNull(end)
       ? `해제하기 전까지 ${BLOCKED_TEXT}`
-      : `${days}일 동안, ${formatDateTime(end)}까지 ${BLOCKED_TEXT}`;
+      : `${days}일 동안, ${formatFullDateTime(end)}까지 ${BLOCKED_TEXT}`;
   return (
     <ResponsiveDialog.Root
       alert
@@ -80,7 +80,7 @@ export function SanctionConfirmDialog({
                   value: (
                     <>
                       {period}
-                      {end ? <FactSub>{`${formatDateTime(end)}까지`}</FactSub> : null}
+                      {end ? <FactSub>{`${formatFullDateTime(end)}까지`}</FactSub> : null}
                     </>
                   ),
                 },

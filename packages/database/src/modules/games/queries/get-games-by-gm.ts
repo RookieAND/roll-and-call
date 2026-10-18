@@ -1,8 +1,8 @@
 import { desc } from "drizzle-orm";
 
-import { db } from "#/client";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { games } from "#/schema";
+import { db } from "#db/client";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { games } from "#db/schema";
 
 export async function getGamesByGm({ serverId, userId }: { serverId: string; userId: string }) {
   return db.query.games.findMany({

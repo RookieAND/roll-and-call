@@ -1,7 +1,7 @@
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { participants } from "#/schema";
+import { db } from "#db/client";
+import { participants } from "#db/schema";
 
 // 이 구인 참여자 중 본인이 저장한 사람(자동 저장 제외, R15).
 export async function getRespondedUserIds({

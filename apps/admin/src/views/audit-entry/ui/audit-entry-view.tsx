@@ -1,11 +1,11 @@
+import { STAFF_CHANNEL_RELATED } from "@roll-and-call/database/audit/model";
 import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { compact, isNull } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
 import { actionTone, auditLogHref, retentionDaysLeft } from "@/entities/audit";
 import { type AuditEntryDetail } from "@/entities/audit/server";
-import { formatDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
-import { STAFF_CHANNEL_RELATED } from "@/shared/server";
+import { formatFullDateTime, STAFF_ROLE_LABEL } from "@/shared/lib";
 import { AdminHeader, FactRows, FactSub, IconTile, Tag } from "@/shared/ui";
 
 import { actionIcon } from "../model/action-icon";
@@ -77,7 +77,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
                     </>
                   ),
                 },
-                { label: "처리 시각", value: formatDateTime(entry.at) },
+                { label: "처리 시각", value: formatFullDateTime(entry.at) },
               ]}
             />
             {sideFacts.length ? <FactRows labelWidth={80} items={sideFacts} /> : null}

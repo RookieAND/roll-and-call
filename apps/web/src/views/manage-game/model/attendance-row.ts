@@ -1,5 +1,6 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
+
 import { isAttendancePastDeadline, isSessionEnded, isSessionInProgress } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { attendanceRoster } from "./attendance-roster";
 import { MANAGE_ROW_ACTION, MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";

@@ -1,11 +1,11 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Executor } from "#/modules/transaction/executor";
-import { certApplications } from "#/schema";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Executor } from "#db/modules/transaction";
+import { certApplications } from "#db/schema";
 
 import { rejectionSummary } from "../model/rejection-summary";
 

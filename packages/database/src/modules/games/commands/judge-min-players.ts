@@ -1,14 +1,14 @@
-import { cancelForMinPlayers } from "#/modules/games/commands/cancel-for-min-players";
-import { markMinPlayersJudged } from "#/modules/games/commands/mark-min-players-judged";
-import { cancelBlockReason } from "#/modules/games/model/cancel-block-reason";
-import { countConfirmed } from "#/modules/games/model/count-confirmed";
-import { countWaiting } from "#/modules/games/model/count-waiting";
-import { judgeMinPlayers } from "#/modules/games/model/min-players-judgement";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
-import { listRosterStatuses } from "#/modules/games/queries/list-roster-statuses";
-import { lockGame } from "#/modules/games/queries/lock-game";
-import type { Transaction } from "#/modules/transaction/transaction";
-import type { Game } from "#/schema";
+import { cancelForMinPlayers } from "#db/modules/games/commands/cancel-for-min-players";
+import { markMinPlayersJudged } from "#db/modules/games/commands/mark-min-players-judged";
+import { cancelBlockReason } from "#db/modules/games/model/cancel-block-reason";
+import { countConfirmed } from "#db/modules/games/model/count-confirmed";
+import { countWaiting } from "#db/modules/games/model/count-waiting";
+import { judgeMinPlayers } from "#db/modules/games/model/min-players-judgement";
+import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { listRosterStatuses } from "#db/modules/games/queries/list-roster-statuses";
+import { lockGame } from "#db/modules/games/queries/lock-game";
+import type { Transaction } from "#db/modules/transaction";
+import type { Game } from "#db/schema";
 
 export type JudgeMinPlayersResult =
   | { kind: "skipped" }

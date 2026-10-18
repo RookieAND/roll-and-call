@@ -2,7 +2,7 @@ import { CERT_SHOT_LABEL } from "@roll-and-call/database/certifications/model";
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { RotateCcw } from "lucide-react";
 
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 import type { PreviousRejection } from "@/shared/server";
 import { FactRows, IconTile, Tag } from "@/shared/ui";
 
@@ -29,7 +29,7 @@ export function ReapplyNotice({ latest, attempt }: ReapplyNoticeProps) {
           {attempt}번째 신청
         </Text>
         <Text typography="body4" foreground="hint">
-          이전 신청은 {formatDate(latest.rejectedAt)}에 반려되었습니다
+          이전 신청은 {formatFullDate(latest.rejectedAt)}에 반려되었습니다
         </Text>
       </HStack>
       <div className="px-200 py-100">

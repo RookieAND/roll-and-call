@@ -1,5 +1,5 @@
 import type { ForumTagMap } from "@roll-and-call/database";
-import { compactChanges, scalarChange } from "@roll-and-call/database/moderation/model";
+import { compactChanges, scalarChange } from "@roll-and-call/database/audit/model";
 
 const STATUS_ROWS = [
   { key: "open", label: "모집중" },

@@ -1,9 +1,9 @@
 import { and, desc, eq, isNull, ne } from "drizzle-orm";
 
-import { db } from "#/client";
-import { findActiveSanction } from "#/modules/moderation/queries/find-active-sanction";
-import { findAssignedQuizQuestion } from "#/modules/rulebooks/queries/find-assigned-quiz-question";
-import { certApplications, certifications, rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { findActiveSanction } from "#db/modules/moderation";
+import { findAssignedQuizQuestion } from "#db/modules/rulebooks";
+import { certApplications, certifications, rulebooks } from "#db/schema";
 
 // 인증 신청을 받을지 가르는 데 필요한 것을 한 번에 읽는다. 사용자가 지운 기록은 없던 것으로 본다.
 export async function loadCertificationContext({

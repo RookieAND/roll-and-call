@@ -1,5 +1,5 @@
-import { db } from "#/client";
-import { servers } from "#/schema";
+import { db } from "#db/client";
+import { servers } from "#db/schema";
 
 import { loadBadgeCandidateIds } from "../queries/load-badge-candidate-ids";
 import { evaluateBadges } from "./evaluate-badges";

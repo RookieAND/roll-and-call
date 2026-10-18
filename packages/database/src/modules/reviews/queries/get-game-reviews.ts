@@ -1,8 +1,8 @@
 import { and, desc, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { REVIEW_AUTHOR_ROLE } from "#/modules/games/model/review-author-role";
-import { games, profiles, sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { REVIEW_AUTHOR_ROLE } from "#db/modules/games/model";
+import { games, profiles, sessionReviews } from "#db/schema";
 
 import { publicReviewsWhere } from "./public-reviews-where";
 import { reviewCardColumns } from "./review-card-columns";

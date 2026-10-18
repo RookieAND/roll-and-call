@@ -1,19 +1,23 @@
 "use server";
 
+import { evaluateBadges } from "@roll-and-call/database/badges";
 import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
-import { insertReview, updateReview } from "@roll-and-call/database/reviews";
+import { insertReview, updateReview, getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { REVIEW_BODY_MAX_LENGTH, reviewBodyError, REVIEW_PHOTO_MAX_COUNT } from "@/entities/review";
-import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
-import { reviewPhotoPathOf, richTextLength, serverPath } from "@/shared/lib";
 import {
-  evaluateBadges,
+  REVIEW_BODY_MAX_LENGTH,
+  reviewBodyError,
+  REVIEW_PHOTO_MAX_COUNT,
+  reviewPhotoPathOf,
+} from "@/entities/review";
+import { removeUnusedReviewPhotos } from "@/entities/review/server";
+import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
+import { richTextLength, serverPath } from "@/shared/lib";
+import {
   getActingMember,
-  getReviewDraftTarget,
-  removeUnusedReviewPhotos,
   revalidateReviews,
   siteOrigin,
   syncReviewForumPost,

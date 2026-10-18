@@ -1,4 +1,4 @@
-import type { CertShot } from "#/schema/certifications";
+import type { CertShot } from "#db/schema/certifications";
 
 import { CERT_SHOT_LABEL } from "./cert-shot-label";
 

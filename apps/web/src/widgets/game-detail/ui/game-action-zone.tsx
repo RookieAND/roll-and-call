@@ -1,7 +1,8 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
+
 import { RECRUIT_METHOD } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 import { formatDateClock } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import { GAME_ACTION_VIEW, type GameActionView } from "../model/game-action-view";
 import { AbsentActions } from "./absent-actions";

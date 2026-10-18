@@ -2,7 +2,7 @@ import "server-only";
 import { compact, mapValues } from "es-toolkit";
 
 import { waitedDays } from "@/shared/lib";
-import { loadSnapshot, type PhotoKey } from "@/shared/server";
+import { loadAdminData, type PhotoKey } from "@/shared/server";
 
 import { certBlockers } from "../model/cert-blockers";
 import type { CertQueueFilter } from "../model/cert-queue-filter";
@@ -13,7 +13,13 @@ import { signCertPhotoUrls } from "./sign-cert-photos";
 
 // filter는 대기열에서 고른 필터다. [다음 건]은 그 안에서 다음 심사 가능 건이다.
 export async function getCertReview({ id, filter }: { id: string; filter: CertQueueFilter }) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData([
+    "users",
+    "rulebooks",
+    "certifications",
+    "certApplications",
+    "sellers",
+  ]);
   const application = db.certApplications.find((candidate) => candidate.id === id);
   if (!application) return null;
   const user = db.users.find((candidate) => candidate.id === application.userId)!;

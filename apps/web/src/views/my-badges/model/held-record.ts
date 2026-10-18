@@ -1,10 +1,9 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDERS,
   type BadgeEvent,
   type BadgeLadderKey,
 } from "@roll-and-call/database/badges/model";
-
-import type { BadgeRecord } from "@/shared/server";
 
 // 저장본이 있으면 그것을, 판정이 아직 따라오지 않았으면 기록에서 바로 센 단계를 쓴다.
 export function heldRecord({

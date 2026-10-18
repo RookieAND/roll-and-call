@@ -1,7 +1,7 @@
 import { and, count, eq, inArray, isNull } from "drizzle-orm";
 
-import { db } from "#/client";
-import { certApplications, rulebookRequests, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { certApplications, rulebookRequests, serverMembers } from "#db/schema";
 
 // 어드민 서버 선택 화면의 서버별 멤버 수와 처리 대기 건수. 처리 대기 2종(인증 신청 + 룰북 추가 요청)을 센다.
 export async function listServerQueueCounts({ serverIds }: { serverIds: string[] }) {

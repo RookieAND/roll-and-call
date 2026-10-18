@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { serverMembers } from "#db/schema";
 
 export async function listRankingHiddenUserIds({ serverId }: { serverId: string }) {
   const rows = await db

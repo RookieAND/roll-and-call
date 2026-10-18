@@ -1,3 +1,5 @@
+import { getResponseCounts } from "@roll-and-call/database/games";
+import { getGameReviews, getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
 import { isNil } from "es-toolkit";
 import { notFound } from "next/navigation";
@@ -13,14 +15,7 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
 import { canReopenGame, ReopenGameLink } from "@/features/reopen-game";
-import {
-  getCurrentSessionUser,
-  getGameById,
-  getGameReviews,
-  getReviewDraftTarget,
-  getResponseCounts,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { reviewStatusOf } from "@/widgets/game-detail";
 

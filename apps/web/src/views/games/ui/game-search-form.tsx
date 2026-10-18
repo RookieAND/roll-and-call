@@ -5,11 +5,11 @@ import { Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-import type { GamesFilter } from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { type GamesFilter } from "../model/game-sort";
 
 interface GameSearchFormProps {
   filter: GamesFilter;

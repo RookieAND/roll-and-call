@@ -1,6 +1,5 @@
+import { formatTime } from "@roll-and-call/app-kit/date";
 import { isNull } from "es-toolkit";
-
-import { formatTime } from "./format-time";
 
 interface ConflictToastTextOptions {
   conflict: { by: string; at: Date } | null;

@@ -43,14 +43,19 @@ const noShow = (sessionId: string, userId: string, cancelled = false): NoShow =>
   cancelled,
 });
 
-const emptyDb = { sessions: [], noShows: [], certifications: [], auditLog: [] };
+const emptyDb = {
+  countingSessions: [],
+  countingNoShows: [],
+  certifiedUserIds: [],
+  nicknameEdits: [],
+};
 
 describe("selectUsers", () => {
   it("참여 세션은 끝난 인정 세션만 세고 유효 불참·숨김·취소·진행 전은 뺀다", () => {
     const db = {
       ...emptyDb,
       users: [user("a")],
-      sessions: [
+      countingSessions: [
         session("done", { memberIds: ["a"] }),
         session("absent", { memberIds: ["a"] }),
         session("absentCancelled", { memberIds: ["a"] }),
@@ -59,7 +64,7 @@ describe("selectUsers", () => {
         session("future", { memberIds: ["a"], endsAt: new Date(now.getTime() + DAY) }),
         session("undecided", { memberIds: ["a"], endsAt: null }),
       ],
-      noShows: [noShow("absent", "a"), noShow("absentCancelled", "a", true)],
+      countingNoShows: [noShow("absent", "a"), noShow("absentCancelled", "a", true)],
     };
     const { rows } = selectUsers({ db, now, sort: USER_SORT_FALLBACK });
     expect(rows[0]?.playedCount).toBe(2);
@@ -76,11 +81,9 @@ describe("selectUsers", () => {
         user("fresh", { memberJoinedAt: daysAgo(3) }),
         user("gone", { membership: "banned" }),
       ],
-      certifications: [
-        { userId: "gm", rulebookId: "r", rulebook: "", approvedAt: now, approvedBy: "" },
-      ],
-      sessions: [session("one"), session("two")],
-      noShows: [noShow("one", "absent"), noShow("two", "absent")],
+      certifiedUserIds: ["gm"],
+      countingSessions: [session("one"), session("two")],
+      countingNoShows: [noShow("one", "absent"), noShow("two", "absent")],
     };
     const pick = (filter: "gm" | "noshow" | "sanctioned" | "recent") =>
       selectUsers({ db, now, filter, sort: USER_SORT_FALLBACK }).rows.map((row) => row.id);
@@ -116,19 +119,7 @@ describe("selectUsers", () => {
     const db = {
       ...emptyDb,
       users: [user("Moon", { discordHandle: "Lunar_77" }), user("sun")],
-      auditLog: [
-        {
-          id: "1",
-          at: now,
-          actor: "s",
-          actorKind: "staff" as const,
-          action: "닉네임 수정" as const,
-          target: "옛이름",
-          targetUserId: "sun",
-          reason: "",
-          before: { label: "옛이름" },
-        },
-      ],
+      nicknameEdits: [{ userId: "sun", previousNickname: "옛이름" }],
     };
     const find = (query: string) =>
       selectUsers({ db, now, query, sort: USER_SORT_FALLBACK }).rows.map((row) => row.id);

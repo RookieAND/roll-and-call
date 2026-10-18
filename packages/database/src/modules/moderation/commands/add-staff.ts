@@ -1,14 +1,14 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { STAFF_ROLE_LABEL } from "#/modules/moderation/model/staff-role-label";
-import type { Actor, StaffRole } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, staff } from "#/schema";
-
-import { recordAudit } from "./record-audit";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import { STAFF_ROLE_LABEL } from "#db/modules/moderation/model/staff-role-label";
+import type { StaffRole } from "#db/modules/moderation/model/types";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { profiles, staff } from "#db/schema";
 
 // 그사이 이미 운영진이 됐으면 { ok: false }. 당사자 알림(staff_added)은 같은 트랜잭션에서 넣는다.
 export async function addStaff({

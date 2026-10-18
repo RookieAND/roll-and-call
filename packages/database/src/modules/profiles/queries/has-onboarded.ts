@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
-import { profiles } from "#/schema";
+import { db } from "#db/client";
+import { profiles } from "#db/schema";
 
 // 행이 없으면 소개로 보내지 않는다.
 export async function hasOnboarded(userId: string) {

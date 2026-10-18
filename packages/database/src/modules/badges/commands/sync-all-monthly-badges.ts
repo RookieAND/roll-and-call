@@ -1,5 +1,5 @@
-import { db } from "#/client";
-import { servers } from "#/schema";
+import { db } from "#db/client";
+import { servers } from "#db/schema";
 
 import { syncMonthlyBadges } from "./sync-monthly-badges";
 

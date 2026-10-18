@@ -1,5 +1,6 @@
 "use server";
 
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import {
   listParticipantUserIds,
   listRosterStatuses,
@@ -15,15 +16,14 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
+import { removeUnusedGameFiles } from "@/entities/game/server";
 import { isCertEnforced, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
   getActingMember,
-  getRulebookRecords,
   notifySessionConfirmed,
   refreshRecruitPost,
-  removeUnusedGameFiles,
   notMemberError,
   resolveNoticeLinkLabels,
 } from "@/shared/server";

@@ -2,7 +2,7 @@ import { Text } from "@roll-and-call/ui";
 
 import { NO_SHOW_STATUS } from "@/entities/no-show";
 import type { NoShowDetail } from "@/entities/no-show/server";
-import { formatDateTime, formatSessionTime } from "@/shared/lib";
+import { formatFullDateTime, formatFullSessionTime } from "@/shared/lib";
 import { FactRows, FactSub } from "@/shared/ui";
 
 const REPEATED_NO_SHOW_COUNT = 2;
@@ -41,7 +41,7 @@ export function NoShowSummary({ record }: NoShowSummaryProps) {
             value: (
               <>
                 {record.sessionTitle}
-                <FactSub>{`${formatSessionTime(record.startsAt)} · ${record.rulebook}`}</FactSub>
+                <FactSub>{`${formatFullSessionTime(record.startsAt)} · ${record.rulebook}`}</FactSub>
               </>
             ),
           },
@@ -53,7 +53,7 @@ export function NoShowSummary({ record }: NoShowSummaryProps) {
                 { label: "취소 사유", value: record.cancellation.reason },
                 {
                   label: "취소한 운영진",
-                  value: `${record.cancellation.by} · ${formatDateTime(record.cancellation.at)}`,
+                  value: `${record.cancellation.by} · ${formatFullDateTime(record.cancellation.at)}`,
                 },
               ]
             : []),

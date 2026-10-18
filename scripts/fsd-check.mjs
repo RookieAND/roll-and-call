@@ -42,8 +42,8 @@ for (const file of walk(SRC)) {
     } else if (spec.startsWith(".")) {
       const target = relative(SRC, resolve(dirname(file), spec));
       const to = unit(target);
-      const escapes =
-        to.layer !== from.layer || (from.layer !== "shared" && to.slice !== from.slice);
+      // shared는 세그먼트(lib·ui·server·api)가 슬라이스다. 다른 세그먼트는 상대 경로가 아니라 @/shared/<세그먼트>로 가져온다.
+      const escapes = to.layer !== from.layer || to.slice !== from.slice;
       if (escapes) {
         errors.push(`${rel}: relative import "${spec}" leaves ${from.layer}/${from.slice}`);
       }

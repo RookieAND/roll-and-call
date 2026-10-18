@@ -1,13 +1,9 @@
+import { getReceivedReviews } from "@roll-and-call/database/reviews";
 import { notFound } from "next/navigation";
 
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
-import {
-  getCurrentSessionUser,
-  getProfile,
-  getReceivedReviews,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";

@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { sessionReviews } from "#db/schema";
 
 // 작성자가 지운 후기도 다시 쓸 수 없으니 넣는다.
 export async function getReviewedGames({

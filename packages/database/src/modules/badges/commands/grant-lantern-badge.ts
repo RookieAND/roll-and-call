@@ -1,8 +1,8 @@
 import { and, eq, or } from "drizzle-orm";
 
-import { db } from "#/client";
-import { BADGE_LADDER } from "#/modules/badges/model/badge-ladder";
-import { profiles, serverMembers, servers } from "#/schema";
+import { db } from "#db/client";
+import { BADGE_LADDER } from "#db/modules/badges/model/badge-ladder";
+import { profiles, serverMembers, servers } from "#db/schema";
 
 import { grantSpecialBadge } from "./grant-special-badge";
 

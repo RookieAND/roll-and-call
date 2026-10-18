@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
 import { isNull } from "es-toolkit";
 
-import { db } from "#/client";
-import { ONGOING_ROLE } from "#/modules/moderation/model/ongoing-role";
-import { loadMemberOngoing } from "#/modules/moderation/queries/load-member-ongoing";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { rulebooks } from "#/schema";
+import { db } from "#db/client";
+import { loadMemberOngoing } from "#db/modules/moderation";
+import { ONGOING_ROLE } from "#db/modules/moderation/model";
+import type { Transaction } from "#db/modules/transaction";
+import { rulebooks } from "#db/schema";
 
 import { revokeCancelRulebookIds } from "../model/revoke-cancel-rulebook-ids";
 

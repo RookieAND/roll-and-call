@@ -1,9 +1,9 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { Dice5, UserCheck, Zap } from "lucide-react";
 
 import { PARTICIPANT_STATUS, RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 
 import { methodLines } from "../model/method-lines";
 import { minPlayersLine } from "../model/min-players-line";

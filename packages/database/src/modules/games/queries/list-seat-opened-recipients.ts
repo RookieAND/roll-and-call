@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
-import { seatOpenedRecipientIds } from "#/modules/games/model/seat-opened-recipient-ids";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants, type Game } from "#/schema";
+import { seatOpenedRecipientIds } from "#db/modules/games/model/seat-opened-recipient-ids";
+import type { Transaction } from "#db/modules/transaction";
+import { participants, type Game } from "#db/schema";
 
 // 빈자리 알림(seat_opened)을 받을 사람. 확정 자리를 비운 뒤 같은 트랜잭션에서 부른다. 조건은 seatOpenedRecipientIds.
 // 참여자 관리 내보내기(W04)·확정자 참여 취소(W02)·추방과 탈퇴 정리(A1)·제재의 참여 빼기(A3)가 함께 쓴다.

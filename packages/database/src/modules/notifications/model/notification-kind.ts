@@ -1,5 +1,5 @@
 // 알림을 만드는 연결은 각 기능 묶음이 한다. 종류를 지우면 남은 행은 목록에서 건너뛴다.
-import type { GameCancelKind } from "#/modules/games/model/game-cancel-kind";
+import type { GameCancelKind } from "#db/modules/notifications/model/game-cancel-kind";
 
 export const NOTIFICATION_KIND = {
   participationConfirmed: "participation_confirmed",

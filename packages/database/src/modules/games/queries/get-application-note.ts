@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { participants } from "#/schema";
+import { db } from "#db/client";
+import { participants } from "#db/schema";
 
 // 호출하는 쪽이 읽을 자격(그 구인의 GM이거나 운영진)을 이미 확인했다. 없으면 null이다.
 export async function getApplicationNote({

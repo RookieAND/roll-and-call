@@ -1,4 +1,4 @@
-import { AUDIT_ACTION_GROUPS } from "@roll-and-call/database/moderation/model";
+import { AUDIT_ACTION_GROUPS } from "@roll-and-call/database/audit/model";
 
 import type { AuditEntry } from "@/shared/server";
 

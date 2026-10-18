@@ -1,12 +1,12 @@
 import { Button, Text, VStack, cn } from "@roll-and-call/ui";
 
 import { PastGameCard } from "@/entities/game";
-import type { GamesFilter } from "@/shared/api";
 import { ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { LIVE_GRID_CLASS } from "../lib/games-desktop-class";
 import { gamesHref } from "../lib/games-href";
+import { type GamesFilter } from "../model/game-sort";
 import type { GamesPage } from "../model/games-page";
 import { groupByMonth } from "../model/group-by-month";
 import { pastFinishedAt } from "../model/past-finished-at";

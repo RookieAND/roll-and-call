@@ -1,3 +1,4 @@
+import { getProfileMemo } from "@roll-and-call/database/profiles";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -5,12 +6,7 @@ import { notFound, redirect } from "next/navigation";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { MemoForm } from "@/features/profile-memo";
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getProfile,
-  getProfileMemo,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 
 interface EditMemoViewProps {
   id: string;

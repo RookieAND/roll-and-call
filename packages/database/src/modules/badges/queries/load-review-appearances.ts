@@ -1,9 +1,9 @@
 import { and, eq, gte, lt, not, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { MonthlyAppearance } from "#/modules/badges/model/monthly-winners";
-import { reviewAppearances } from "#/modules/badges/model/record-appearances";
-import { games, participants, sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import type { MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
+import { reviewAppearances } from "#db/modules/badges/model/record-appearances";
+import { games, participants, sessionReviews } from "#db/schema";
 
 import { countedReviewWhere } from "./counted-review-where";
 

@@ -1,5 +1,6 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
+
 import { AddToCalendarButton } from "@/features/add-to-calendar";
-import type { GameDetailData } from "@/shared/server";
 
 interface GameCalendarButtonProps {
   game: GameDetailData;

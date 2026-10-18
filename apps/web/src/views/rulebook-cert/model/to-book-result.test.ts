@@ -1,7 +1,7 @@
+import type { CertApplication } from "@roll-and-call/database";
 import { describe, expect, it } from "vitest";
 
 import { CERT_STATE, RULEBOOK_KIND, type MyRulebook } from "@/entities/rulebook";
-import type { CertApplication } from "@/shared/server";
 
 import { toBookResult } from "./to-book-result";
 

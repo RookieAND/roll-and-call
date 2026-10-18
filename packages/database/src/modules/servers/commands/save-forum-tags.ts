@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor, AuditChange } from "#/modules/moderation/model/types";
-import { type ForumTagMap, servers } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor, AuditChange } from "#db/modules/audit";
+import { type ForumTagMap, servers } from "#db/schema";
 
 export async function saveForumTags({
   serverId,

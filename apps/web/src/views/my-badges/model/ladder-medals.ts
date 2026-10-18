@@ -1,3 +1,4 @@
+import type { BadgeRecord } from "@roll-and-call/database/badges";
 import {
   BADGE_LADDERS,
   type BadgeEvent,
@@ -6,7 +7,6 @@ import {
 
 import { stepLook } from "@/entities/badge";
 import { buildLadderDetail, LADDER_META } from "@/features/view-badge";
-import type { BadgeRecord } from "@/shared/server";
 
 import type { DexMedal } from "./dex-medal";
 import { heldRecord } from "./held-record";

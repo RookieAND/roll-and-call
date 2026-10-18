@@ -1,5 +1,7 @@
-import { getCurrentSessionUser, getReviewCounts, getCurrentServer } from "@/shared/server";
-import { countRecordSessions } from "@/widgets/session-list";
+import { getReviewCounts } from "@roll-and-call/database/reviews";
+
+import { countRecordSessions } from "@/entities/game";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 
 import { loadMyPageSessions } from "../api/load-my-page-sessions";
 import { MyPageReviews } from "./my-page-reviews";

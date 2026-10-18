@@ -5,11 +5,12 @@ import { Check, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 
-import { GAME_SORTS, type GameSort, type GamesFilter, parseGameSort } from "@/shared/api";
 import { useServerPath } from "@/shared/lib";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { GAME_SORTS, type GameSort, type GamesFilter } from "../model/game-sort";
+import { parseGameSort } from "../model/parse-game-sort";
 
 interface GameSortSheetProps {
   filter: GamesFilter;

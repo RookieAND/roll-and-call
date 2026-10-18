@@ -13,9 +13,9 @@
 | `packages/game-notices` | 두 앱이 함께 보내는 디스코드 구인글·공지, 후기 포럼 동기화(`/review-forum`) | notifyGameCancelled, syncReviewForumPost |
 | `packages/app-kit` | 두 앱이 똑같이 쓰는 KST 날짜·Supabase 클라이언트·작은 유틸 | formatDateTime, serverPath, parseJson |
 | `shared/ui`        | 앱 공용(도메인 약함) 조합 컴포넌트                        | AppBar, Sheet, EmptyState, StatusNotice, ThemeToggle                                  |
-| `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability                                                           |
+| `entities/*`       | 도메인 엔티티의 **도메인 규칙 + 작고 원자적인 표시** 단위 | game, profile, availability, badge, review, rulebook, sanction                        |
 | `features/*`       | **단일 사용자 동작**(server action·toggle 등 상태 변경)   | JoinGameButton, CancelGameRow, GameStatusChips, ThumbnailUpload                       |
-| `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list                                                               |
+| `widgets/*`        | **두 개 이상의 화면이 공유하는** 조합 블록 (아래 주의)    | game-form, session-list, game-detail, server-entry                                    |
 | `views/*`          | 한 화면의 조합 전체 + 라우트 글루                         | GamesView, GameDetail, ParticipantManager                                             |
 
 패키지는 두 앱이 같이 쓸 때만 만든다. 한 앱만 쓰는 코드는 그 앱의 `shared`나 slice에 둔다.
@@ -34,14 +34,14 @@
 
 | 세그먼트                | 내용                                                                                                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 목록 정렬/필터 파라미터                                                                  |
-| `shared/server`         | 서버 전용(`server-only`): `@roll-and-call/database/<도메인>` 쿼리 재노출, 요청 캐시를 씌운 `getCurrentServer`, Supabase 서버 클라이언트·`getCurrentUser`, Discord 알림(채널은 servers 행) |
+| `shared/api`            | 클라이언트 안전: `ActionResult`, Supabase 브라우저 클라이언트, 에러 문구·표시 방식                                                                      |
+| `shared/server`         | 서버 전용(`server-only`): 앱 전용 코드만. 요청 캐시를 씌운 `getCurrentServer`, Supabase 서버 클라이언트·`getCurrentUser`·멤버십, Discord 알림(채널은 servers 행), 크론 라우트 본문(`cron/`) |
 | `shared/lib`            | 순수 유틸: 날짜 포맷, 슬롯 계산                                                                                                                         |
 | `shared/ui`             | 앱 공용 조합 컴포넌트 + `toast`, `useAction`, `BoundaryFallback`                                                                                        |
 | `shared/error-boundary` | 클라이언트: `ErrorBoundary`(`catchError`). 테스트가 로드하지 않도록 `shared/ui`와 분리 (§8)                                                     |
 | `shared/trial`          | 클라이언트: 체험 모드 컨텍스트·훅(`TrialContext`, `useIsTrial`, `useTrialGuard`)                                                                     |
 
-DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `shared/server`에 둔다(FSD 권장). 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@/shared/server"`로 가져온다(타입 import는 번들에 남지 않는다). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
+DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 아니라 `packages/database`가 맡는다. 읽기·쓰기 함수는 `@roll-and-call/database/<도메인>`에서 **직접 import**하고(`shared/server`가 다시 내보내지 않는다), 클라이언트 컴포넌트가 스키마 타입만 필요하면 `import type { Game } from "@roll-and-call/database"`로 가져온다(타입 import는 번들에 남지 않는다). 도메인의 파일 정리(스토리지 삭제·업로드 등 `server-only` 코드)는 해당 엔티티의 `server.ts`에 둔다(`@/entities/review/server`). 세션 쿠키 갱신은 유일한 사용처인 `src/proxy.ts`가 소유한다.
 
 **레이어마다 나누는 축이 다르다.** 같은 `game`이라는 낱말이 여러 레이어에 나와도 기준은 다르다.
 
@@ -64,15 +64,19 @@ DB 읽기(CRUD)는 도메인 규칙이 아니라 인프라이므로 entity가 �
 - 재사용되는 동작과 그 UI → `features/*`
 - 맥락 없는 UI → `shared/ui`
 
-이미 있는 `widgets/game-form`과 `widgets/session-list`는 실제로 두 화면이 공유하므로 남긴다. 세 번째 화면이 생기기 전에는 widgets에 슬라이스를 늘리지 않는다.
+이미 있는 `widgets/game-form`(등록·수정), `widgets/session-list`(내 세션·프로필 세션·할 일), `widgets/game-detail`, `widgets/server-entry`는 실제로 여러 화면이 공유하므로 남긴다. 새 화면이 생기기 전에는 widgets에 슬라이스를 늘리지 않는다. 목록 필터·정렬 같은 한 화면 전용 코드는 widget이 아니라 그 view의 `model/`에 둔다(`views/games/model`).
 
-**엔티티는 실제 개념 단위로 나누되, 쪼개면 교차 import가 생기는 것은 합친다.** FSD는 "슬라이스는 같은 레이어의 다른 슬라이스를 쓸 수 없다"고 못박으므로, 이 규칙이 곧 분할 가능 여부의 시험대다. 현재 엔티티는 셋이다.
+**엔티티는 실제 개념 단위로 나누되, 쪼개면 교차 import가 생기는 것은 합친다.** FSD는 "슬라이스는 같은 레이어의 다른 슬라이스를 쓸 수 없다"고 못박으므로, 이 규칙이 곧 분할 가능 여부의 시험대다. 현재 엔티티는 일곱이다.
 
 | 엔티티         | 담는 개념                          | 비고                                                                                                                                       |
 | -------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`(원본은 `@roll-and-call/database/games/model`, entity가 다시 내보낸다)가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다 |
-| `availability` | 가능 시간 집계·후보 슬롯           | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다                                                                                            |
+| `game`         | 구인글 + 참여자 로스터 + 세션 일정 | 셋은 한 aggregate다. `deriveGameStatus`(원본은 `@roll-and-call/database/games/model`, entity가 다시 내보낸다)가 참여자 수로 모집 상태를 정하고, 세션 일정은 games의 컬럼이다. 쪼개면 양방향 교차 import가 생긴다. `SessionGame`·불참 기록·기록 세션 수와 구인 파일 정리(`server.ts`)도 여기 둔다 |
+| `availability` | 가능 시간 집계·후보 슬롯           | game 쪽과 서로 참조가 없어 독립 슬라이스로 뗐다. 프로필 기본 시간으로 조율표를 칠하는 시드(`server.ts`)도 여기 둔다                          |
 | `profile`      | 사용자 표시 정보                   | 특정 feature만 쓰는 값(기본 가능 시간대 프리셋)은 그 feature의 `model`에 둔다                                                              |
+| `badge`        | 업적 칭호·대표 칭호 표시           | 대표 칭호 조회는 `server.ts`                                                                                                               |
+| `review`       | 후기 규칙·카드·사진 경로           | 후기 사진 삭제·디스코드 사진 옮기기는 `server.ts`                                                                                          |
+| `rulebook`     | 룰북 인증 상태·세트·옵션           | 인증 사진 경로·서명 URL·삭제는 `server.ts`                                                                                                  |
+| `sanction`     | 제재 안내 문구                     |                                                                                                                                            |
 
 **entity에는 도메인 규칙과 원자 표시만**: 상태 판정(`deriveGameStatus`, `deriveSessionState`), 정원·순번 계산, 작은 표시 단위. 특정 화면의 문구·탭·라우트를 만드는 뷰 모델(`toSessionCard`, `bucketHosted`)이나 액션 존 분기(`deriveActionView`), 목록 행 문구(`gameSubline`)는 그걸 그리는 view·widget의 `model/`에 둔다. 화면별 구분이 필요하면 새 타입을 만들지 말고 도메인에 이미 있는 `SessionRole`(`host` | `player`)을 쓴다.
 

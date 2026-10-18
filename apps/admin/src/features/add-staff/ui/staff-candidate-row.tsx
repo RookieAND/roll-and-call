@@ -2,7 +2,7 @@ import { Button, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { Check } from "lucide-react";
 
 import type { StaffCandidate } from "@/entities/staff";
-import { formatDate } from "@/shared/lib";
+import { formatFullDate } from "@/shared/lib";
 
 interface StaffCandidateRowProps {
   candidate: StaffCandidate;
@@ -39,7 +39,7 @@ export function StaffCandidateRow({ candidate, selected, onToggle }: StaffCandid
           {candidate.nickname}
         </Text>
         <Text typography="body4" foreground="hint" truncate>
-          @{candidate.discordHandle} · {formatDate(candidate.joinedAt)} 가입
+          @{candidate.discordHandle} · {formatFullDate(candidate.joinedAt)} 가입
         </Text>
       </VStack>
     </Button>

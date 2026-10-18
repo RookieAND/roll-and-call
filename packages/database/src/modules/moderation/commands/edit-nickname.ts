@@ -1,16 +1,16 @@
 import { and, desc, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import type { Actor } from "#/modules/moderation/model/types";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import { isNicknameTaken } from "#/modules/profiles/queries/is-nickname-taken";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { isUniqueViolation } from "#/modules/transaction/is-unique-violation";
-import { auditLog, profiles, serverMembers } from "#/schema";
+import { db } from "#db/client";
+import type { Actor } from "#db/modules/audit";
+import { recordAudit } from "#db/modules/audit";
+import { createNotifications } from "#db/modules/notifications";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import { isNicknameTaken } from "#db/modules/profiles";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { isUniqueViolation } from "#db/modules/transaction";
+import { auditLog, profiles, serverMembers } from "#db/schema";
 
 import { type ModerationConflict } from "../model/moderation-conflict";
-import { recordAudit } from "./record-audit";
 
 export type EditNicknameResult =
   | { ok: true }

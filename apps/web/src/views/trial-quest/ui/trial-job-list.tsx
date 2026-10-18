@@ -1,7 +1,7 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { Container, VStack } from "@roll-and-call/ui";
 
 import { GameCard } from "@/entities/game";
-import type { GameDetailData } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell, ServerLink } from "@/shared/ui";
 
 import { buildTrialGame } from "../model/build-trial-game";

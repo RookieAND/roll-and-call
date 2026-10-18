@@ -1,15 +1,10 @@
 import { isNil } from "es-toolkit";
 
-import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+import { SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 
 import { deriveSessionFacts } from "./derive-session-facts";
-import type {
-  SessionCardBase,
-  SessionCardModel,
-  SessionContext,
-  SessionGame,
-} from "./session-card-model";
+import type { SessionCardBase, SessionCardModel, SessionContext } from "./session-card-model";
 import { toCancelledSessionCard } from "./to-cancelled-session-card";
 import { toHostedSessionCard } from "./to-hosted-session-card";
 import { toJoinedSessionCard } from "./to-joined-session-card";

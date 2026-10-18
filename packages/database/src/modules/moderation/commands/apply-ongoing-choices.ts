@@ -1,15 +1,15 @@
 import { and, eq } from "drizzle-orm";
 
-import { cancelGame } from "#/modules/games/commands/cancel-game";
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { listSeatOpenedRecipients } from "#/modules/games/queries/list-seat-opened-recipients";
-import { ONGOING_ROLE } from "#/modules/moderation/model/ongoing-role";
-import { loadMemberOngoing } from "#/modules/moderation/queries/load-member-ongoing";
-import { createNotifications } from "#/modules/notifications/commands/create-notifications";
-import { NOTIFICATION_KIND } from "#/modules/notifications/model/notification-kind";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants, type Game } from "#/schema";
+import { cancelGame } from "#db/modules/games";
+import { listSeatOpenedRecipients } from "#db/modules/games";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { ONGOING_ROLE } from "#db/modules/moderation/model/ongoing-role";
+import { loadMemberOngoing } from "#db/modules/moderation/queries/load-member-ongoing";
+import { createNotifications } from "#db/modules/notifications";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
+import { participants, type Game } from "#db/schema";
 
 export interface OngoingChoice {
   sessionId: string;

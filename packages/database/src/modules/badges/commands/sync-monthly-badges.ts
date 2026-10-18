@@ -1,17 +1,17 @@
 import { and, eq, inArray, like, or } from "drizzle-orm";
 import { groupBy, isNull, uniq } from "es-toolkit";
 
-import { db } from "#/client";
-import { applyBadgeWrites } from "#/modules/badges/commands/apply-badge-writes";
-import { BADGE_LADDER, HIDDEN_LADDER } from "#/modules/badges/model/badge-ladder";
-import { diffBadges } from "#/modules/badges/model/diff-badges";
-import { doubleCrownBadges } from "#/modules/badges/model/double-crown-badges";
-import { hallOfFameBadges } from "#/modules/badges/model/hall-of-fame-badges";
-import { isMonthSettled } from "#/modules/badges/model/is-month-settled";
-import { monthlyWinners } from "#/modules/badges/model/monthly-winners";
-import { parseBadgeKey } from "#/modules/badges/model/parse-badge-key";
-import { RANKING_MODE } from "#/modules/servers/model/ranking-mode";
-import { servers, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { applyBadgeWrites } from "#db/modules/badges/commands/apply-badge-writes";
+import { BADGE_LADDER, HIDDEN_LADDER } from "#db/modules/badges/model/badge-ladder";
+import { diffBadges } from "#db/modules/badges/model/diff-badges";
+import { doubleCrownBadges } from "#db/modules/badges/model/double-crown-badges";
+import { hallOfFameBadges } from "#db/modules/badges/model/hall-of-fame-badges";
+import { isMonthSettled } from "#db/modules/badges/model/is-month-settled";
+import { monthlyWinners } from "#db/modules/badges/model/monthly-winners";
+import { parseBadgeKey } from "#db/modules/badges/model/parse-badge-key";
+import { RANKING_MODE } from "#db/modules/servers/model";
+import { servers, userBadges } from "#db/schema";
 
 import { loadMonthlyAppearances } from "../queries/load-monthly-appearances";
 import { notifyRankLeaders } from "./notify-rank-leaders";

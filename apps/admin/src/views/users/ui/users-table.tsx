@@ -2,7 +2,7 @@ import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import type { UserRow, UserSortColumn } from "@/entities/user";
-import { formatDate, type TableSort } from "@/shared/lib";
+import { formatFullDate, type TableSort } from "@/shared/lib";
 import {
   EMPTY_IMAGE,
   ServerLink,
@@ -76,7 +76,7 @@ export function UsersTable({ rows, sort, showState }: UsersTableProps) {
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">
-                  {formatDate(row.joinedAt)}
+                  {formatFullDate(row.joinedAt)}
                 </Text>
               </Table.Cell>
               <Table.Cell align="end" numeric>

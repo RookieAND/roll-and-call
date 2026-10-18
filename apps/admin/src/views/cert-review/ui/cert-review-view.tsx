@@ -5,7 +5,7 @@ import { Quote } from "lucide-react";
 import type { CertQueueFilter } from "@/entities/cert";
 import type { CertReview } from "@/entities/cert/server";
 import { CERT_REVIEW_STATE, CertDecisionForm } from "@/features/decide-cert";
-import { formatDateTime, withQuery } from "@/shared/lib";
+import { formatFullDateTime, withQuery } from "@/shared/lib";
 import { AdminHeader, ConflictNotice, ItemCard, NextItemButton } from "@/shared/ui";
 
 import { reviewState } from "../model/review-state";
@@ -100,7 +100,7 @@ export function CertReviewView({ review, viewerId, filter }: CertReviewViewProps
         {withdrawnAt ? (
           <ConflictNotice
             title="신청자가 신청을 거뒀습니다"
-            description={`${formatDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}
+            description={`${formatFullDateTime(withdrawnAt)}에 거둔 신청이며, 올린 사진도 함께 삭제되었습니다.`}
             actions={<NextItemButton href={nextHref} />}
           />
         ) : null}

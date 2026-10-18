@@ -1,15 +1,12 @@
 import "server-only";
+import type { Server } from "@roll-and-call/database";
+import { grantRushBadge } from "@roll-and-call/database/badges";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
+import { seedAvailabilityFromProfile } from "@/entities/availability/server";
 import { serverPath } from "@/shared/lib";
-import {
-  announceRecruitmentComplete,
-  grantRushBadge,
-  refreshRecruitPost,
-  seedAvailabilityFromProfile,
-  type Server,
-} from "@/shared/server";
+import { announceRecruitmentComplete, refreshRecruitPost } from "@/shared/server";
 
 import { announceNewApplication } from "./announce-new-application";
 import { type Application } from "./apply-to-game";

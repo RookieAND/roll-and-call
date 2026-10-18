@@ -1,7 +1,7 @@
+import { isSanctioned } from "@roll-and-call/database/moderation/model";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 import { compact, maxBy, uniqBy } from "es-toolkit";
 
-import { isSanctioned } from "@/shared/lib";
 import type { Snapshot } from "@/shared/server";
 
 import { CERT_GRANT_METHOD, type CertManageRow } from "./cert-manage-row";

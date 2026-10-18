@@ -1,6 +1,5 @@
+import type { MyReviewRow } from "@roll-and-call/database/reviews";
 import { describe, expect, it } from "vitest";
-
-import type { MyReviewRow } from "@/shared/server";
 
 import { MY_REVIEW_ACTIONS, toMyReviewCard } from "./my-review-card";
 

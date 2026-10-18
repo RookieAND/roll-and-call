@@ -1,8 +1,8 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { VStack } from "@roll-and-call/ui";
 
 import { LEAVE_KIND, LeaveConfirmButton } from "@/features/join-game";
 import { formatDateTime } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 
 import type { ActionLinks } from "../model/game-action-view";
 import { ActionNotice } from "./action-notice";

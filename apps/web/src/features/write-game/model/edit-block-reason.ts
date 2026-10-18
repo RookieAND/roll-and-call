@@ -1,8 +1,8 @@
+import type { Game } from "@roll-and-call/database";
 import { isNil } from "es-toolkit";
 
 import { isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { GAME_CANCELLED_MESSAGE } from "@/shared/api";
-import type { Game } from "@/shared/server";
 
 import { isMinPlayersRaise } from "./is-min-players-raise";
 import { MIN_PLAYERS_RAISE_MESSAGE } from "./min-players-raise-message";

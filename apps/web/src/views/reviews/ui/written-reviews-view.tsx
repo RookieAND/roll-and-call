@@ -1,12 +1,8 @@
+import { getWrittenReviews } from "@roll-and-call/database/reviews";
 import { notFound, redirect } from "next/navigation";
 
 import { serverPath } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getProfile,
-  getWrittenReviews,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getProfile, getCurrentServer } from "@/shared/server";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";

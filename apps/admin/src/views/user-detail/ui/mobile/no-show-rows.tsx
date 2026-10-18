@@ -1,6 +1,6 @@
 import { NO_SHOW_STATUS, NoShowStatusTag } from "@/entities/no-show";
 import type { UserDetail } from "@/entities/user/server";
-import { formatSessionTime, withoutYear, withQuery } from "@/shared/lib";
+import { formatFullSessionTime, withoutYear, withQuery } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, InfiniteList, ListRow } from "@/shared/ui";
 
 import { noShowStatus } from "../../model/no-show-status";
@@ -29,7 +29,7 @@ export function NoShowRows({ noShows }: NoShowRowsProps) {
             path={withQuery("/noshow", {}, { record: noShow.id })}
             title={noShow.sessionTitle}
             trailing={status === NO_SHOW_STATUS.valid ? null : <NoShowStatusTag status={status} />}
-            meta={`${withoutYear(formatSessionTime(noShow.startsAt))} · ${noShow.recordedBy}`}
+            meta={`${withoutYear(formatFullSessionTime(noShow.startsAt))} · ${noShow.recordedBy}`}
             muted={noShow.cancelled}
           />
         );

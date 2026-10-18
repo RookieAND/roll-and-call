@@ -1,16 +1,16 @@
 import { Button, HStack } from "@roll-and-call/ui";
 
+import { EmptyState, ServerLink } from "@/shared/ui";
+
+import { filterParams } from "../lib/filter-params";
+import { gamesHref } from "../lib/games-href";
 import {
   GAME_STATUS_FILTER_DEFAULT,
   GAME_STATUS_FILTERS,
   GAME_TAB,
   GAME_TAB_DEFAULT,
   type GamesFilter,
-} from "@/shared/api";
-import { EmptyState, ServerLink } from "@/shared/ui";
-
-import { filterParams } from "../lib/filter-params";
-import { gamesHref } from "../lib/games-href";
+} from "../model/game-sort";
 import type { NewGameSanction } from "../model/new-game-sanction";
 import { NewGameButton } from "./new-game-button";
 

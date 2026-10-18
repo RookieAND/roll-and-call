@@ -1,13 +1,10 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
+import { findActiveSanction } from "@roll-and-call/database/moderation";
 import { Container } from "@roll-and-call/ui";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import {
-  findActiveSanction,
-  getCurrentServer,
-  getCurrentSessionUser,
-  getRulebookRecords,
-} from "@/shared/server";
+import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { CreateGameForm } from "@/widgets/game-form";
 

@@ -1,4 +1,4 @@
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model";
 
 import { countsAsAttended } from "./counts-as-attended";
 import { isTieSession } from "./is-tie-session";

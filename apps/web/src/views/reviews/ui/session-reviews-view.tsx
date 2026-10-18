@@ -1,3 +1,4 @@
+import { getGameReviews } from "@roll-and-call/database/reviews";
 import { Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
@@ -5,12 +6,7 @@ import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { formatDateTime } from "@/shared/lib";
-import {
-  getCurrentSessionUser,
-  getGameById,
-  getGameReviews,
-  getCurrentServer,
-} from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { EmptyState } from "@/shared/ui";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";

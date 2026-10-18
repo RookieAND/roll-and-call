@@ -1,0 +1,22 @@
+import "server-only";
+import { listDueEndNotices } from "@roll-and-call/database/games";
+import { getServerById } from "@roll-and-call/database/servers";
+import { notifyGameEnded } from "@roll-and-call/game-notices";
+
+// pg_cron notify-session-ended가 5분마다, 끝났는데 안내하지 않은 구인이 있을 때만 부른다(0091). GM이 마치기를 누르면 그 자리에서 이미 나가고, 예정 종료 시각이 지난 세션을 여기서 올린다.
+// 한 건이 실패해도 나머지를 이어 간다. 잠깐의 실패면 notifyGameEnded가 안내 권리를 돌려줘 다음 회차에 다시 집힌다.
+export async function runSessionEndedCron() {
+  const due = await listDueEndNotices({ now: new Date() });
+
+  const counts = { due: due.length, failed: 0 };
+  for (const { id: gameId, serverId } of due) {
+    try {
+      const server = await getServerById(serverId);
+      if (server) await notifyGameEnded({ server, gameId });
+    } catch (error) {
+      counts.failed += 1;
+      console.error("notify-session-ended 실패", { gameId, error });
+    }
+  }
+  return { ok: true, ...counts };
+}

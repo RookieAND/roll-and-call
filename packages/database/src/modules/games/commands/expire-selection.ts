@@ -1,13 +1,13 @@
-import { cancelGame } from "#/modules/games/commands/cancel-game";
-import { markSelectionFinished } from "#/modules/games/commands/mark-selection-finished";
-import { GAME_CANCEL_KIND } from "#/modules/games/model/game-cancel-kind";
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import { RECRUIT_METHOD } from "#/modules/games/model/recruit-method";
-import { selectionDeadline } from "#/modules/games/model/selection-deadline";
-import { countParticipants } from "#/modules/games/queries/count-participants";
-import { lockGame } from "#/modules/games/queries/lock-game";
-import type { Transaction } from "#/modules/transaction/transaction";
-import type { Game } from "#/schema";
+import { cancelGame } from "#db/modules/games/commands/cancel-game";
+import { markSelectionFinished } from "#db/modules/games/commands/mark-selection-finished";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { selectionDeadline } from "#db/modules/games/model/selection-deadline";
+import { countParticipants } from "#db/modules/games/queries/count-participants";
+import { lockGame } from "#db/modules/games/queries/lock-game";
+import { GAME_CANCEL_KIND } from "#db/modules/notifications/model";
+import type { Transaction } from "#db/modules/transaction";
+import type { Game } from "#db/schema";
 
 export type ExpireSelectionResult = { kind: "skipped" } | { kind: "expired"; game: Game };
 

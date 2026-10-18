@@ -75,3 +75,4 @@ export { listGameRuleOptions } from "./queries/list-game-rule-options";
 export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";
 export * from "./model";
+export { releaseMemberGames, type ReleasedMemberGames } from "./commands/release-member-games";

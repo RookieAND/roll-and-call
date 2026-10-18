@@ -1,7 +1,7 @@
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games, rulebookCategories, serverMembers, userBadges } from "#/schema";
+import { db } from "#db/client";
+import { games, rulebookCategories, serverMembers, userBadges } from "#db/schema";
 
 // 명단·순위처럼 여러 사람의 대표 칭호를 한 번에 보여 줄 때 쓴다. 한 사람 몫의 뱃지 기록은 loadUserBadges와 같은 모양이다(칭호를 눌러 여는 상세 시트가 받은 날·근거 세션을 쓴다).
 export async function loadMemberBadgeSummaries({

@@ -1,7 +1,7 @@
-import { and, eq, getTableColumns, isNull, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, isNull, ne, sql } from "drizzle-orm";
 import { omit } from "es-toolkit";
 
-import { db } from "#/client";
+import { db } from "#db/client";
 import {
   auditLog,
   certApplications,
@@ -20,115 +20,123 @@ import {
   sessionReviews,
   staff,
   staffMemos,
-} from "#/schema";
+} from "#db/schema";
 
-// 어드민 스냅숏이 읽는 표 전체. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
+// 어드민 화면이 읽는 표. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
 // 사람(profiles)은 그 서버 멤버만 읽고, 멤버십 상태(탈퇴·차단)를 함께 붙인다.
-export async function loadAdminTables(serverId: string) {
-  // 트랜잭션 풀러(:6543)에 13개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현).
-  // 같은 리전이라 순서대로 읽어도 0.1초 남짓이다.
-  const profileRows = await db
-    .select({
-      ...getTableColumns(profiles),
-      nickname: serverMembers.nickname,
-      memberJoinedAt: serverMembers.joinedAt,
-      leftAt: serverMembers.deletedAt,
-      rejoinedAt: serverMembers.rejoinedAt,
-      bannedAt: serverMembers.bannedAt,
-      bannedBy: serverMembers.bannedBy,
-      banReasonCode: serverMembers.banReasonCode,
-      banReasonText: serverMembers.banReasonText,
-    })
-    .from(profiles)
-    .innerJoin(
-      serverMembers,
-      and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
-    )
-    .orderBy(profiles.createdAt, profiles.id);
-  const gameRows = await db.select().from(games).where(eq(games.serverId, serverId));
-  // 신청글 본문은 스냅숏에 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.
-  const participantRows = await db
-    .select({
-      ...omit(getTableColumns(participants), ["applicationNote"]),
-      hasApplicationNote: sql<boolean>`${participants.applicationNote} is not null`,
-    })
-    .from(participants)
-    .where(eq(participants.serverId, serverId));
-  const rulebookRows = await db
-    .select({
-      ...getTableColumns(rulebooks),
-      category: rulebookCategories.name,
-      categoryAlias: rulebookCategories.alias,
-      categoryMiniRule: rulebookCategories.miniRule,
-    })
-    .from(rulebooks)
-    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-    .where(eq(rulebooks.serverId, serverId));
-  const requestRows = await db
-    .select()
-    .from(rulebookRequests)
-    .where(eq(rulebookRequests.serverId, serverId));
-  const requestGameRows = await db
-    .select()
-    .from(rulebookRequestGames)
-    .where(eq(rulebookRequestGames.serverId, serverId));
-  const categoryRows = await db
-    .select()
-    .from(rulebookCategories)
-    .where(eq(rulebookCategories.serverId, serverId));
-  const applicationRows = await db
-    .select()
-    .from(certApplications)
-    .where(eq(certApplications.serverId, serverId));
-  const certificationRows = await db
-    .select()
-    .from(certifications)
-    .where(eq(certifications.serverId, serverId));
-  const quizRows = await db
-    .select()
-    .from(rulebookQuizQuestions)
-    .where(eq(rulebookQuizQuestions.serverId, serverId));
-  const sellerRows = await db
-    .select()
-    .from(certSellers)
-    .where(eq(certSellers.serverId, serverId))
-    .orderBy(certSellers.createdAt);
-  const sanctionRows = await db
-    .select()
-    .from(sanctions)
-    .where(and(eq(sanctions.serverId, serverId), isNull(sanctions.releasedAt)));
-  const reviewRows = await db
-    .select()
-    .from(sessionReviews)
-    .where(eq(sessionReviews.serverId, serverId));
-  const staffRows = await db.select().from(staff).where(eq(staff.serverId, serverId));
-  const memoRows = await db.select().from(staffMemos).where(eq(staffMemos.serverId, serverId));
-  const auditRows = await db.select().from(auditLog).where(eq(auditLog.serverId, serverId));
+// 트랜잭션 풀러(:6543)에 여러 개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현). 호출하는 쪽이 순서대로 읽는다.
+const ADMIN_TABLE_LOADERS = {
+  profileRows: (serverId: string) =>
+    db
+      .select({
+        ...getTableColumns(profiles),
+        nickname: serverMembers.nickname,
+        memberJoinedAt: serverMembers.joinedAt,
+        leftAt: serverMembers.deletedAt,
+        rejoinedAt: serverMembers.rejoinedAt,
+        bannedAt: serverMembers.bannedAt,
+        bannedBy: serverMembers.bannedBy,
+        banReasonCode: serverMembers.banReasonCode,
+        banReasonText: serverMembers.banReasonText,
+      })
+      .from(profiles)
+      .innerJoin(
+        serverMembers,
+        and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
+      )
+      .orderBy(profiles.createdAt, profiles.id),
+  gameRows: (serverId: string) => db.select().from(games).where(eq(games.serverId, serverId)),
+  // 신청글 본문은 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.
+  participantRows: (serverId: string) =>
+    db
+      .select({
+        ...omit(getTableColumns(participants), ["applicationNote"]),
+        hasApplicationNote: sql<boolean>`${participants.applicationNote} is not null`,
+      })
+      .from(participants)
+      .where(eq(participants.serverId, serverId)),
+  rulebookRows: (serverId: string) =>
+    db
+      .select({
+        ...getTableColumns(rulebooks),
+        category: rulebookCategories.name,
+        categoryAlias: rulebookCategories.alias,
+        categoryMiniRule: rulebookCategories.miniRule,
+      })
+      .from(rulebooks)
+      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+      .where(eq(rulebooks.serverId, serverId)),
+  requestRows: (serverId: string) =>
+    db.select().from(rulebookRequests).where(eq(rulebookRequests.serverId, serverId)),
+  requestGameRows: (serverId: string) =>
+    db.select().from(rulebookRequestGames).where(eq(rulebookRequestGames.serverId, serverId)),
+  categoryRows: (serverId: string) =>
+    db.select().from(rulebookCategories).where(eq(rulebookCategories.serverId, serverId)),
+  applicationRows: (serverId: string) =>
+    db.select().from(certApplications).where(eq(certApplications.serverId, serverId)),
+  certificationRows: (serverId: string) =>
+    db.select().from(certifications).where(eq(certifications.serverId, serverId)),
+  quizRows: (serverId: string) =>
+    db.select().from(rulebookQuizQuestions).where(eq(rulebookQuizQuestions.serverId, serverId)),
+  sellerRows: (serverId: string) =>
+    db
+      .select()
+      .from(certSellers)
+      .where(eq(certSellers.serverId, serverId))
+      .orderBy(certSellers.createdAt),
+  sanctionRows: (serverId: string) =>
+    db
+      .select()
+      .from(sanctions)
+      .where(and(eq(sanctions.serverId, serverId), isNull(sanctions.releasedAt))),
+  reviewRows: (serverId: string) =>
+    db.select().from(sessionReviews).where(eq(sessionReviews.serverId, serverId)),
+  staffRows: (serverId: string) => db.select().from(staff).where(eq(staff.serverId, serverId)),
+  memoRows: (serverId: string) =>
+    db.select().from(staffMemos).where(eq(staffMemos.serverId, serverId)),
+  auditRows: (serverId: string) =>
+    db.select().from(auditLog).where(eq(auditLog.serverId, serverId)),
+  // 닉네임 수정 기록만. 유저 목록의 이전 닉네임 검색용이라 활동 기록 전체를 읽지 않는다.
+  nicknameEditRows: (serverId: string) =>
+    db
+      .select({
+        targetUserId: auditLog.targetUserId,
+        before: auditLog.before,
+        createdAt: auditLog.createdAt,
+      })
+      .from(auditLog)
+      .where(and(eq(auditLog.serverId, serverId), eq(auditLog.action, "닉네임 수정"))),
+  // 운영진 목록의 마지막 활동 시각. 활동 기록 전체 대신 행위자별 최근 시각만 읽는다.
+  lastActiveRows: (serverId: string) =>
+    db
+      .select({
+        actorId: auditLog.actorId,
+        lastAt: sql`max(${auditLog.createdAt})`.mapWith(auditLog.createdAt),
+      })
+      .from(auditLog)
+      .where(and(eq(auditLog.serverId, serverId), ne(auditLog.actorKind, "system")))
+      .groupBy(auditLog.actorId),
   // 디스코드 아이디는 profiles에 없다(username은 계정 이름이고 닉네임은 server_members.nickname). 디스코드 로그인은 full_name에 아이디를 넣는다.
-  const handleRows = await db.execute<{ id: string; handle: string | null }>(
-    sql`select u.id, u.raw_user_meta_data->>'full_name' as handle
+  handleRows: (serverId: string) =>
+    db.execute<{ id: string; handle: string | null }>(
+      sql`select u.id, u.raw_user_meta_data->>'full_name' as handle
         from auth.users u
         join public.server_members m on m.user_id = u.id and m.server_id = ${serverId}`,
-  );
-  return {
-    profileRows,
-    gameRows,
-    participantRows,
-    rulebookRows,
-    requestRows,
-    requestGameRows,
-    categoryRows,
-    applicationRows,
-    certificationRows,
-    quizRows,
-    sellerRows,
-    sanctionRows,
-    reviewRows,
-    staffRows,
-    memoRows,
-    auditRows,
-    handleRows,
-  };
-}
+    ),
+} as const;
 
-export type AdminTables = Awaited<ReturnType<typeof loadAdminTables>>;
+export type AdminTableKey = keyof typeof ADMIN_TABLE_LOADERS;
+
+export type AdminTables = {
+  [Key in AdminTableKey]: Awaited<ReturnType<(typeof ADMIN_TABLE_LOADERS)[Key]>>;
+};
+
+export const ADMIN_TABLE_KEYS = Object.keys(ADMIN_TABLE_LOADERS) as AdminTableKey[];
+
+export function loadAdminTable<Key extends AdminTableKey>(
+  serverId: string,
+  key: Key,
+): Promise<AdminTables[Key]> {
+  const load: (serverId: string) => Promise<unknown> = ADMIN_TABLE_LOADERS[key];
+  return load(serverId) as Promise<AdminTables[Key]>;
+}

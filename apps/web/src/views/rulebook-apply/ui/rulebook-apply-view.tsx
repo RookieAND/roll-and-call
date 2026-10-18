@@ -1,12 +1,14 @@
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { Container, Progress, Text } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
-import { BookPicker } from "@/features/certify-rulebook";
 import { serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getRulebookRecords, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
+
+import { BookPicker } from "./book-picker";
 
 interface RulebookApplyViewProps {
   rulebookIds: string[];

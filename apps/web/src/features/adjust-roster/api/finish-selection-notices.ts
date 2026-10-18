@@ -3,11 +3,8 @@ import type { Server } from "@roll-and-call/database";
 import type { FinishSelectionResult } from "@roll-and-call/database/games";
 import { refreshRecruitPost } from "@roll-and-call/game-notices";
 
-import {
-  getGameById,
-  notifySelectionResult,
-  seedAvailabilityFromProfile,
-} from "@/shared/server";
+import { seedAvailabilityFromProfile } from "@/entities/availability/server";
+import { getGameById, notifySelectionResult } from "@/shared/server";
 
 // 선발 마치기가 커밋된 뒤 할 일. 정원이 차도 모집 완료 공지는 내지 않는다(선발 결과 하나만 나간다). 단계마다 실패해도 다음 단계를 이어 간다.
 export async function finishSelectionNotices({

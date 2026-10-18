@@ -7,6 +7,7 @@ import {
   SCHEDULE_MODE,
   SESSION_ROLE,
   type SessionRole,
+  type SessionGame,
 } from "@/entities/game";
 
 import { buildProfileSessions } from "./build-profile-sessions";
@@ -16,7 +17,6 @@ import {
   SESSION_CHIP,
   SESSION_ICON,
   SESSION_TONE,
-  type SessionGame,
 } from "./session-card-model";
 import { toSessionCard } from "./to-session-card";
 

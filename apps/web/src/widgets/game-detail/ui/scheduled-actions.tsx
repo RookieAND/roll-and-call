@@ -1,6 +1,5 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { VStack } from "@roll-and-call/ui";
-
-import type { GameDetailData } from "@/shared/server";
 
 import { confirmedWhenText } from "../model/confirmed-when-text";
 import type { ActionLinks } from "../model/game-action-view";

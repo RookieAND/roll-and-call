@@ -1,9 +1,10 @@
 import { Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { ShieldCheck } from "lucide-react";
 
+import { OptionSelect } from "@/shared/ui";
+
 import type { BookDraft } from "../model/book-draft";
 import { OTHER_SELLER } from "../model/other-seller";
-import { OptionSelect } from "./option-select";
 
 interface EbookFieldsProps {
   idPrefix: string;

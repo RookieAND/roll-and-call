@@ -1,5 +1,6 @@
+import type { ReviewDraftTarget } from "@roll-and-call/database/reviews";
+
 import { reviewBlockOf } from "@/features/write-review";
-import type { ReviewDraftTarget } from "@/shared/server";
 
 import { REVIEW_STATUS, type ReviewStatus } from "./review-status";
 

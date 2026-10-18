@@ -1,14 +1,20 @@
 import "server-only";
 import { sumBy, uniq } from "es-toolkit";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import type { CertQueueFilter } from "../model/cert-queue-filter";
 import { certQueueRows } from "../model/cert-queue-rows";
 import { filterCertQueue } from "../model/filter-cert-queue";
 
 export async function listCertQueue(filter: CertQueueFilter) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData([
+    "users",
+    "rulebooks",
+    "certifications",
+    "certApplications",
+    "sellers",
+  ]);
   const pending = certQueueRows({
     records: db,
     applications: db.certApplications.filter((application) => application.status === "pending"),

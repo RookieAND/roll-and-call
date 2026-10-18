@@ -1,10 +1,10 @@
+import { topicParticle } from "@roll-and-call/app-kit/lib";
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import { topicParticle } from "#/modules/notifications/model/topic-particle";
-import { memberNicknameSql } from "#/modules/profiles/queries/member-nickname-sql";
-import { profiles, servers, staff, type Server } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import { memberNicknameSql } from "#db/modules/profiles";
+import { profiles, servers, staff, type Server } from "#db/schema";
 
 // 디스코드 길드 정보로 이름·아이콘·서버장을 맞춘다. 서버장이 바뀌면 시스템 조치로 기록하고 이전 서버장을 운영진으로 둔다.
 export async function syncServerGuild({

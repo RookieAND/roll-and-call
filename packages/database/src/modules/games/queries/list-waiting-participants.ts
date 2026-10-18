@@ -1,8 +1,8 @@
 import { and, eq, isNotNull } from "drizzle-orm";
 
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { participants, serverMembers } from "#/schema";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { participants, serverMembers } from "#db/schema";
 
 // 대기 순서를 정할 칼럼과 서버를 나갔는지(departed)를 함께 돌려준다. 정렬은 compareWaitlistOrder로 한다.
 export async function listWaitingParticipants({

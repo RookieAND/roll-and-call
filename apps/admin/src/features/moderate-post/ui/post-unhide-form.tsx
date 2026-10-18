@@ -7,7 +7,7 @@ import { useState } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
 import type { PostDetail } from "@/entities/post/server";
-import { formatDateTime, useActionSubmit } from "@/shared/lib";
+import { formatFullDateTime, useActionSubmit } from "@/shared/lib";
 import {
   ActionNetworkError,
   FactBox,
@@ -58,14 +58,14 @@ export function PostUnhideForm({ post, onSettled }: PostUnhideFormProps) {
               labelWidth={88}
               items={[
                 { label: "구인", value: post.title },
-                { label: "숨긴 일시", value: formatDateTime(hidden.at) },
+                { label: "숨긴 일시", value: formatFullDateTime(hidden.at) },
                 { label: "처리한 운영진", value: hidden.by },
                 { label: "숨김 사유", value: hidden.reason },
                 ...(editedSinceHiddenAt
                   ? [
                       {
                         label: "GM 조치",
-                        value: `구인 수정 · ${formatDateTime(editedSinceHiddenAt)}`,
+                        value: `구인 수정 · ${formatFullDateTime(editedSinceHiddenAt)}`,
                       },
                     ]
                   : []),

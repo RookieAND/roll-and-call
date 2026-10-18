@@ -1,11 +1,11 @@
 import { and, eq, inArray } from "drizzle-orm";
 
-import { db } from "#/client";
+import { db } from "#db/client";
 import {
   PARTICIPANT_STATUS,
   type ParticipantStatus,
-} from "#/modules/games/model/participant-status";
-import { participants, profiles } from "#/schema";
+} from "#db/modules/games/model/participant-status";
+import { participants, profiles } from "#db/schema";
 
 // 주어진 상태 참여자의 디스코드 ID. 스레드 안내가 이 사람들을 멘션한다.
 export async function listParticipantDiscordIds({

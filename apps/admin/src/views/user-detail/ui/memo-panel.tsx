@@ -1,7 +1,7 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { EMPTY_IMAGE, EmptyState, Panel, ServerLink, Tag } from "@/shared/ui";
 
 import { USER_ACTION } from "../model/user-action";
@@ -49,7 +49,7 @@ export function MemoPanel({ userId, nickname, memos, viewer }: MemoPanelProps) {
                     {memo.author}
                   </Text>
                   <Text typography="body4" foreground="hint">
-                    {formatDateTime(memo.at)}
+                    {formatFullDateTime(memo.at)}
                   </Text>
                   {memo.tag ? <Tag>{memo.tag}</Tag> : null}
                 </HStack>

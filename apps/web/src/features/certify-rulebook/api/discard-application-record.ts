@@ -5,9 +5,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { removeUnusedCertPhotos } from "@/entities/rulebook/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getActingMember, removeUnusedCertPhotos, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError } from "@/shared/server";
 
 const NOT_DISCARDABLE = "반려된 책만 기록을 지울 수 있습니다. 화면을 새로 고쳐 주세요.";
 

@@ -1,7 +1,7 @@
 import "server-only";
 import { isAbsenceActive } from "@roll-and-call/database/games/model";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 const LIMIT = 20;
 
@@ -18,7 +18,7 @@ export interface NoShowSessionCandidate {
 // 불참 기록 추가에서 고를 세션: 출석이 확정되고 세션 시작 30일 안인 이 서버 구인, 최신순.
 // total은 검색어와 상관없는 후보 수로, 0이면 「고를 세션 없음」을 보인다.
 export async function searchNoShowSessions(query: string | undefined) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "sessions", "noShows"]);
   const now = Date.now();
   const nicknameOf = (id: string) => db.users.find((user) => user.id === id)?.nickname ?? "";
   const candidates = db.sessions

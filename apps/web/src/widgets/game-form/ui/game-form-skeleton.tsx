@@ -58,7 +58,12 @@ export function GameFormSkeleton({ title, edit = false }: GameFormSkeletonProps)
         </VStack>
       }
     >
-      <div className={cn("flex min-h-[calc(100dvh-var(--rc-size-appbar)-3px)] flex-col desktop:min-h-0", DESKTOP_CARD_CLASS)}>
+      <div
+        className={cn(
+          "flex min-h-[calc(100dvh-var(--rc-size-appbar)-3px)] flex-col desktop:min-h-0",
+          DESKTOP_CARD_CLASS,
+        )}
+      >
         <Container size="md" className="flex-1 desktop:max-w-none desktop:px-400">
           <VStack gap="250" className="py-300 desktop:py-400">
             <div>

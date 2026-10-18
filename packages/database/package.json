@@ -3,8 +3,36 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "imports": {
+    "#db/schema": "./src/schema/index.ts",
+    "#db/modules/audit": "./src/modules/audit/index.ts",
+    "#db/modules/audit/model": "./src/modules/audit/model/index.ts",
+    "#db/modules/badges": "./src/modules/badges/index.ts",
+    "#db/modules/badges/model": "./src/modules/badges/model/index.ts",
+    "#db/modules/certifications": "./src/modules/certifications/index.ts",
+    "#db/modules/certifications/model": "./src/modules/certifications/model/index.ts",
+    "#db/modules/games": "./src/modules/games/index.ts",
+    "#db/modules/games/model": "./src/modules/games/model/index.ts",
+    "#db/modules/moderation": "./src/modules/moderation/index.ts",
+    "#db/modules/moderation/model": "./src/modules/moderation/model/index.ts",
+    "#db/modules/notifications": "./src/modules/notifications/index.ts",
+    "#db/modules/notifications/model": "./src/modules/notifications/model/index.ts",
+    "#db/modules/onboarding": "./src/modules/onboarding/index.ts",
+    "#db/modules/onboarding/model": "./src/modules/onboarding/model/index.ts",
+    "#db/modules/profiles": "./src/modules/profiles/index.ts",
+    "#db/modules/profiles/model": "./src/modules/profiles/model/index.ts",
+    "#db/modules/reviews": "./src/modules/reviews/index.ts",
+    "#db/modules/rulebooks": "./src/modules/rulebooks/index.ts",
+    "#db/modules/rulebooks/model": "./src/modules/rulebooks/model/index.ts",
+    "#db/modules/servers": "./src/modules/servers/index.ts",
+    "#db/modules/servers/model": "./src/modules/servers/model/index.ts",
+    "#db/modules/transaction": "./src/modules/transaction/index.ts",
+    "#db/*": "./src/*.ts"
+  },
   "exports": {
     ".": "./src/index.ts",
+    "./audit": "./src/modules/audit/index.ts",
+    "./audit/model": "./src/modules/audit/model/index.ts",
     "./badges": "./src/modules/badges/index.ts",
     "./badges/model": "./src/modules/badges/model/index.ts",
     "./certifications": "./src/modules/certifications/index.ts",
@@ -14,10 +42,11 @@
     "./moderation": "./src/modules/moderation/index.ts",
     "./moderation/model": "./src/modules/moderation/model/index.ts",
     "./notifications": "./src/modules/notifications/index.ts",
+    "./notifications/model": "./src/modules/notifications/model/index.ts",
     "./onboarding": "./src/modules/onboarding/index.ts",
     "./onboarding/model": "./src/modules/onboarding/model/index.ts",
-    "./notifications/model": "./src/modules/notifications/model/index.ts",
     "./profiles": "./src/modules/profiles/index.ts",
+    "./profiles/model": "./src/modules/profiles/model/index.ts",
     "./reviews": "./src/modules/reviews/index.ts",
     "./rulebooks": "./src/modules/rulebooks/index.ts",
     "./rulebooks/model": "./src/modules/rulebooks/model/index.ts",
@@ -34,17 +63,18 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@roll-and-call/app-kit": "workspace:*",
     "drizzle-orm": "^0.45.2",
-    "es-toolkit": "^1.52.0",
+    "es-toolkit": "catalog:",
     "postgres": "^3.4.9",
-    "server-only": "^0.0.1"
+    "server-only": "catalog:"
   },
   "devDependencies": {
     "@roll-and-call/typescript-config": "workspace:*",
-    "@types/node": "^26.2.0",
+    "@types/node": "catalog:",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
-    "typescript": "^5.9.3",
-    "vitest": "^5.0.1"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

@@ -1,9 +1,6 @@
 import { isNil } from "es-toolkit";
 
-import {
-  NOTIFICATION_KIND,
-  type NotificationInput,
-} from "#/modules/notifications/model/notification-kind";
+import { NOTIFICATION_KIND, type NotificationInput } from "#db/modules/notifications/model";
 
 import type { AttendanceChanges } from "./attendance-changes";
 import { isAttendingRow } from "./is-attending-row";

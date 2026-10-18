@@ -1,6 +1,7 @@
+import type { MemberProfile } from "@roll-and-call/database/profiles";
+
 import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
 import { ProfileMemoBlock } from "@/features/profile-memo";
-import type { MemberProfile } from "@/shared/server";
 
 import { ProfileBlockLabel } from "./profile-block-label";
 

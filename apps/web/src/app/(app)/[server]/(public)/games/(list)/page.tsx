@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 
-import { parseGameFilters, parseGameSort, parseGameStatusFilter, parseGameTab } from "@/shared/api";
-import { GamesView } from "@/views/games";
+import {
+  GamesView,
+  parseGameFilters,
+  parseGameSort,
+  parseGameStatusFilter,
+  parseGameTab,
+} from "@/views/games";
 
 export const metadata: Metadata = { title: "구인 목록" };
 

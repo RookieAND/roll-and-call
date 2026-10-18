@@ -1,8 +1,8 @@
 import { and, eq, isNotNull, or } from "drizzle-orm";
 
-import { PARTICIPANT_STATUS } from "#/modules/games/model/participant-status";
-import type { Transaction } from "#/modules/transaction/transaction";
-import { drawResults, participants } from "#/schema";
+import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import type { Transaction } from "#db/modules/transaction";
+import { drawResults, participants } from "#db/schema";
 
 // 추첨한 순간의 명단(굴린 사람 + 직접 확정자)을 따로 남긴다. 뒤에 누가 나가도 추첨 결과는 그대로다.
 export async function saveDrawResults({

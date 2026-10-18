@@ -1,10 +1,10 @@
+import type { GameDetailData } from "@roll-and-call/database/games";
 import { formatPlayRange } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import { MemberTitle } from "@/features/view-badge";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
-import type { GameDetailData } from "@/shared/server";
 import { ServerLink } from "@/shared/ui";
 
 import { GameSupplementList } from "./game-supplement-list";

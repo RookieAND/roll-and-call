@@ -1,8 +1,8 @@
 import "server-only";
+import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { cache } from "react";
 
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
-import { getRulebookRecords } from "@/shared/server";
 
 import { listTodos } from "../model/list-todos";
 import { loadMySessions } from "./load-sessions";

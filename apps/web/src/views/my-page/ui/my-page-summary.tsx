@@ -1,20 +1,12 @@
+import { findActiveSanction } from "@roll-and-call/database/moderation";
+
 import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
-import { SESSION_ROLE } from "@/entities/game";
+import { AbsenceNotice, countRecordSessions, recentAbsences, SESSION_ROLE } from "@/entities/game";
 import { profileDisplay } from "@/entities/profile";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
-import {
-  findActiveSanction,
-  getCurrentSessionUser,
-  getUserBadges,
-  getCurrentServer,
-} from "@/shared/server";
-import {
-  AbsenceNotice,
-  countRecordSessions,
-  recentAbsences,
-  sessionsHref,
-} from "@/widgets/session-list";
+import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
+import { sessionsHref } from "@/widgets/session-list";
 
 import { loadMyBadgeFacts } from "../api/load-my-badge-facts";
 import { loadMyPageSessions } from "../api/load-my-page-sessions";

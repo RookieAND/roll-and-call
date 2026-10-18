@@ -1,11 +1,11 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { recordAudit } from "#/modules/moderation/commands/record-audit";
-import type { Actor } from "#/modules/moderation/model/types";
-import { claimRulebookRequest } from "#/modules/rulebooks/commands/claim-rulebook-request";
-import type { RulebookActionResult } from "#/modules/rulebooks/model/rulebook-action-result";
-import { rulebookRequests } from "#/schema";
+import { db } from "#db/client";
+import { recordAudit } from "#db/modules/audit";
+import type { Actor } from "#db/modules/audit";
+import { claimRulebookRequest } from "#db/modules/rulebooks/commands/claim-rulebook-request";
+import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
+import { rulebookRequests } from "#db/schema";
 
 export async function rejectRulebookRequest({
   serverId,

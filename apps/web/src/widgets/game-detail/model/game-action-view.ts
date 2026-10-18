@@ -1,5 +1,6 @@
+import type { Game } from "@roll-and-call/database";
+
 import type { ConfirmedLeaveBlock, GameCancelKind, ParticipantStatus } from "@/entities/game";
-import type { Game } from "@/shared/server";
 
 import type { ReviewStatus } from "./review-status";
 

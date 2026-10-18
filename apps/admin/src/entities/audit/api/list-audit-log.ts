@@ -1,12 +1,12 @@
 import "server-only";
 import { compact, uniq } from "es-toolkit";
 
-import { loadSnapshot } from "@/shared/server";
+import { loadAdminData } from "@/shared/server";
 
 import { filterAuditLog, type AuditLogFilter } from "../model/filter-audit-log";
 
 export async function listAuditLog(filter: AuditLogFilter) {
-  const db = await loadSnapshot();
+  const db = await loadAdminData(["users", "sessions", "auditLog"]);
   const { rows, period } = filterAuditLog({ entries: db.auditLog, filter });
   const actors = uniq(db.auditLog.map((entry) => entry.actor));
   const targetNames = compact([

@@ -1,8 +1,8 @@
 import { and, eq, isNull, ne, sql } from "drizzle-orm";
 
-import { db } from "#/client";
-import { firstFreeNickname, nicknameBaseOf } from "#/modules/servers/model/member-nickname";
-import { serverMembers } from "#/schema";
+import { db } from "#db/client";
+import { firstFreeNickname, nicknameBaseOf } from "#db/modules/servers/model/member-nickname";
+import { serverMembers } from "#db/schema";
 
 import { lockServerNicknames } from "./lock-server-nicknames";
 

@@ -1,7 +1,7 @@
 import { Grid, Text, VStack } from "@roll-and-call/ui";
 
 import type { ReviewDetail } from "@/entities/review";
-import { formatDateTime } from "@/shared/lib";
+import { formatFullDateTime } from "@/shared/lib";
 import { ZoomablePhotos } from "@/shared/ui";
 
 interface ReviewPhotosProps {
@@ -20,7 +20,7 @@ export function ReviewPhotos({ review }: ReviewPhotosProps) {
         <ZoomablePhotos
           photos={photos}
           title={review.author.nickname}
-          subtitle={`${review.game.title} · ${formatDateTime(review.createdAt)}`}
+          subtitle={`${review.game.title} · ${formatFullDateTime(review.createdAt)}`}
           thumbLabel="후기 사진"
           spoiler={review.spoiler}
           className="h-[150px] w-50"

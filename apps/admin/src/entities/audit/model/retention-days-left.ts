@@ -1,7 +1,4 @@
-import {
-  AUDIT_RETENTION_DAYS,
-  EXPIRING_AUDIT_ACTIONS,
-} from "@roll-and-call/database/moderation/model";
+import { AUDIT_RETENTION_DAYS, EXPIRING_AUDIT_ACTIONS } from "@roll-and-call/database/audit/model";
 
 const DAY = 86_400_000;
 

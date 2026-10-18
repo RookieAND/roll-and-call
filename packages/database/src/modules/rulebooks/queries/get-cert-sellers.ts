@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { certSellers } from "#/schema";
+import { db } from "#db/client";
+import { certSellers } from "#db/schema";
 
 export async function getCertSellers({ serverId }: { serverId: string }) {
   const rows = await db

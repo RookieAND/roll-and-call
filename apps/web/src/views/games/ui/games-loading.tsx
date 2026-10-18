@@ -2,9 +2,10 @@
 
 import { useSearchParams } from "next/navigation";
 
-import { GAME_TAB, parseGameTab } from "@/shared/api";
 import { PageShell, ServerSwitcher } from "@/shared/ui";
 
+import { GAME_TAB } from "../model/game-sort";
+import { parseGameTab } from "../model/parse-game-tab";
 import { GameListSkeleton } from "./game-list-skeleton";
 import { GamesAppBarFrame } from "./games-app-bar-frame";
 import { GamesFilterPanelSkeleton } from "./games-filter-panel-skeleton";

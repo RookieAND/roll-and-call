@@ -1,3 +1,4 @@
+import type { Game } from "@roll-and-call/database";
 import {
   deriveGameStatus,
   formatPlayRange,
@@ -6,8 +7,6 @@ import {
 } from "@roll-and-call/database/games/model";
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { compact } from "es-toolkit";
-
-import type { Game } from "@/shared/server";
 
 import { isLiveGame } from "../model/is-live-game";
 import { countConfirmed, type ParticipantStatus } from "../model/participant";

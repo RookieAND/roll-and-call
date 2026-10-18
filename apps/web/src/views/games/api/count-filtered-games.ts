@@ -1,17 +1,16 @@
 "use server";
 
+import { getGamesCounts } from "@roll-and-call/database/games";
 import { isString } from "es-toolkit";
 import { z } from "zod";
 
-import {
-  GAME_STATUS_FILTER_DEFAULT,
-  parseActionInput,
-  parseGameFilters,
-  parseGameStatusFilter,
-  parseGameTab,
-} from "@/shared/api";
-import { getCurrentServer, getGamesCounts } from "@/shared/server";
+import { parseActionInput } from "@/shared/api";
+import { getCurrentServer } from "@/shared/server";
 
+import { GAME_STATUS_FILTER_DEFAULT } from "../model/game-sort";
+import { parseGameFilters } from "../model/parse-game-filters";
+import { parseGameStatusFilter } from "../model/parse-game-status-filter";
+import { parseGameTab } from "../model/parse-game-tab";
 import { statusCounts } from "../model/status-counts";
 
 type FilterParamKey = "q" | "tab" | "status" | "rule" | "day" | "time" | "unscheduled";

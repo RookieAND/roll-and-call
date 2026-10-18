@@ -1,6 +1,6 @@
 import { isNull } from "es-toolkit";
 
-import { RECRUIT_METHOD, splitRoster } from "@/entities/game";
+import { RECRUIT_METHOD, splitRoster, type SessionGame } from "@/entities/game";
 import { formatDate } from "@/shared/lib";
 
 import type { SessionFacts } from "./derive-session-facts";
@@ -12,7 +12,6 @@ import {
   SESSION_TONE,
   type SessionCardBase,
   type SessionContext,
-  type SessionGame,
 } from "./session-card-model";
 
 export function toJoinedSessionCard({

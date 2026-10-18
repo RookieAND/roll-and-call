@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import type { Transaction } from "#/modules/transaction/transaction";
-import { games } from "#/schema";
+import type { Transaction } from "#db/modules/transaction";
+import { games } from "#db/schema";
 
 // 값만 쓴다. 마칠 수 있는지는 잠근 행으로 부르는 쪽이 판단하고, 체크 games_ended_after_start가 한 번 더 막는다.
 export async function setSessionEndedAt({

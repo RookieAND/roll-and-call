@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
-import { db } from "#/client";
-import { games, sessionReviews } from "#/schema";
+import { db } from "#db/client";
+import { games, sessionReviews } from "#db/schema";
 
 import { evaluateBadges } from "./evaluate-badges";
 
