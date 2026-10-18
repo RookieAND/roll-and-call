@@ -743,6 +743,13 @@
       "when": 1799500000002,
       "tag": "0111_profile_banner_accent_style",
       "breakpoints": true
+    },
+    {
+      "idx": 112,
+      "version": "7",
+      "when": 1799500000003,
+      "tag": "0112_purge_keeps_banners",
+      "breakpoints": true
     }
   ]
 }
