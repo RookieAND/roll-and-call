@@ -96,6 +96,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
         rule: set.label,
         rulebookId: set.cores[0]!.id,
         ...columns,
+        // 인증 없이 열 수 있는 룰에는 인증 조건을 걸 수 없다.
+        requireRulebookCert: columns.requireRulebookCert && !set.free,
         supplements,
         linkLabels,
       },

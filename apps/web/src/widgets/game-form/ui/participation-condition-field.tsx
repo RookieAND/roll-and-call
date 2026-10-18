@@ -9,12 +9,15 @@ const DEFAULT_MIN_PLAYS = 3;
 
 interface ParticipationConditionFieldProps {
   form: UseFormReturn<GameFormValues>;
+  // 인증 없이 열 수 있는 룰이면 룰북 인증 줄을 숨긴다.
+  certAvailable: boolean;
   // 신청자가 있어도 조건은 바꿀 수 있고, 이미 신청한 사람은 그대로 남는다.
   hasApplicants: boolean;
 }
 
 export function ParticipationConditionField({
   form,
+  certAvailable,
   hasApplicants,
 }: ParticipationConditionFieldProps) {
   const { setValue, watch } = form;
@@ -59,24 +62,30 @@ export function ParticipationConditionField({
               onChange={(count) => setValue("minRulePlays", count, { shouldDirty: true })}
             />
           )}
-          <div className="h-px bg-gray-200" />
-          <HStack align="start" gap="150">
-            <VStack gap="025" className="min-w-0 flex-1">
-              <Text typography="subtitle2" render={<label htmlFor="requireRulebookCert" />}>
-                룰북 인증 필요
-              </Text>
-              <Text typography="body4" foreground="muted" render={<p />}>
-                {rule} 룰북을 인증한 사람만 신청할 수 있습니다.
-              </Text>
-            </VStack>
-            <Switch.Root
-              id="requireRulebookCert"
-              checked={requireRulebookCert}
-              onCheckedChange={(on) => setValue("requireRulebookCert", on, { shouldDirty: true })}
-            >
-              <Switch.Control />
-            </Switch.Root>
-          </HStack>
+          {certAvailable && (
+            <>
+              <div className="h-px bg-gray-200" />
+              <HStack align="start" gap="150">
+                <VStack gap="025" className="min-w-0 flex-1">
+                  <Text typography="subtitle2" render={<label htmlFor="requireRulebookCert" />}>
+                    룰북 인증 필요
+                  </Text>
+                  <Text typography="body4" foreground="muted" render={<p />}>
+                    {rule} 룰북을 인증한 사람만 신청할 수 있습니다.
+                  </Text>
+                </VStack>
+                <Switch.Root
+                  id="requireRulebookCert"
+                  checked={requireRulebookCert}
+                  onCheckedChange={(on) =>
+                    setValue("requireRulebookCert", on, { shouldDirty: true })
+                  }
+                >
+                  <Switch.Control />
+                </Switch.Root>
+              </HStack>
+            </>
+          )}
         </VStack>
       </Card.Root>
       {hasApplicants && (

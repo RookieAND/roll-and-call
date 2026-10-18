@@ -5,6 +5,7 @@ import { Field, SegmentedControl } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_KIND, GAME_TAG, GAME_TAG_KEYS, gameTagLabel, type GameTagKey } from "@/entities/game";
+import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import {
   GAME_NOTICE_MAX,
   GAME_TAGS_MAX,
@@ -36,10 +37,11 @@ const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
 
 interface GamePreflightFieldsProps {
   form: UseFormReturn<GameFormValues>;
+  rulebooks?: MyRulebooks;
   hasApplicants: boolean;
 }
 
-export function GamePreflightFields({ form, hasApplicants }: GamePreflightFieldsProps) {
+export function GamePreflightFields({ form, rulebooks, hasApplicants }: GamePreflightFieldsProps) {
   const {
     setValue,
     watch,
@@ -49,6 +51,10 @@ export function GamePreflightFields({ form, hasApplicants }: GamePreflightFields
   const noticeLength = richTextLength(notice);
   const aiImage = watch("aiImage");
   const isBriefing = watch("kind") === GAME_KIND.briefing;
+  // 인증 없이 열 수 있는 룰에는 룰북 인증 조건을 걸 수 없다.
+  const ruleSet = rulebooks
+    ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: watch("rulebookId") })
+    : null;
 
   return (
     <>
@@ -116,7 +122,11 @@ export function GamePreflightFields({ form, hasApplicants }: GamePreflightFields
         />
       </Field.Root>
 
-      <ParticipationConditionField form={form} hasApplicants={hasApplicants} />
+      <ParticipationConditionField
+        form={form}
+        certAvailable={!!ruleSet && !ruleSet.free}
+        hasApplicants={hasApplicants}
+      />
     </>
   );
 }

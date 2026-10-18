@@ -122,7 +122,13 @@ export function GameFormWizard({
           />
         );
       case FORM_SECTION.preflight:
-        return <GamePreflightFields form={form} hasApplicants={applicants > 0} />;
+        return (
+          <GamePreflightFields
+            form={form}
+            rulebooks={rulebooks ?? supplementRulebooks}
+            hasApplicants={applicants > 0}
+          />
+        );
       case FORM_SECTION.media:
         return <GameMediaFields serverId={serverId} form={form} />;
       case FORM_SECTION.recruit:

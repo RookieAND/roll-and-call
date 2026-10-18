@@ -108,6 +108,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       ...owner,
       columns: {
         ...columns,
+        requireRulebookCert: columns.requireRulebookCert && !!set && !set.free,
         supplements: supplementCheck.supplements,
         linkLabels,
         ...(clearsSession ? { confirmedAt: null } : {}),
