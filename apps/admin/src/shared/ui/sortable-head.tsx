@@ -45,7 +45,7 @@ export function SortableHead<Column extends string>({
         align="center"
         justify={align}
         gap="050"
-        render={<Link href={href} scroll={false} />}
+        render={<Link href={href} prefetch={false} scroll={false} />}
         className="h-full px-150"
       >
         {label}

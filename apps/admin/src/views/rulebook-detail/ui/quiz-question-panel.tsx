@@ -19,7 +19,7 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
             variant="outline"
             colorPalette="gray"
             size="sm"
-            render={<Link href="?tab=quiz&question=new" scroll={false} />}
+            render={<Link href="?tab=quiz&question=new" prefetch={false} scroll={false} />}
             className="gap-050"
           >
             <Plus size={14} aria-hidden />
@@ -69,7 +69,13 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
                 <Text
                   typography="body3"
                   truncate
-                  render={<Link href={`?tab=quiz&question=${question.id}`} scroll={false} />}
+                  render={
+                    <Link
+                      href={`?tab=quiz&question=${question.id}`}
+                      prefetch={false}
+                      scroll={false}
+                    />
+                  }
                   className="block after:absolute after:inset-0"
                 >
                   {question.question}

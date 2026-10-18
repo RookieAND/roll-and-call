@@ -30,7 +30,7 @@ export function UrlFilterChips({ param, options, allLabel = "전체" }: UrlFilte
         <Chip
           key={chip.label}
           selected={current === chip.value}
-          render={<Link href={hrefOf(chip.value)} replace scroll={false} />}
+          render={<Link href={hrefOf(chip.value)} prefetch={false} replace scroll={false} />}
         >
           {chip.label}
         </Chip>

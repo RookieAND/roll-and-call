@@ -49,7 +49,7 @@ export function ListPager({
         totalPages={totalPages}
         siblings={1}
         hrefFor={hrefFor}
-        renderLink={(href) => <Link href={href} />}
+        renderLink={(href) => <Link href={href} prefetch={false} />}
         className="**:data-[slot^=pagination-]:h-8 **:data-[slot^=pagination-]:min-w-8"
       />
       <div className="col-start-3 flex justify-end">

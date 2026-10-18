@@ -1,6 +1,7 @@
-import { ServerLink } from "@roll-and-call/app-kit/navigation";
 import { Button } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
+
+import { ServerLink } from "./server-link";
 
 interface NextItemButtonProps {
   href?: string;
