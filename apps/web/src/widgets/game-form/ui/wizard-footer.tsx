@@ -36,7 +36,7 @@ export function WizardFooter({
   return (
     <FloatingBar.Root elevated={false}>
       <FloatingBar.Content>
-        <Container size="md" className="desktop:max-w-none desktop:px-150">
+        <Container size="md" className="desktop:max-w-160 desktop:px-0">
           <VStack gap="150">
             {isLastStep && error && (
               <Callout.Root colorPalette="danger" size="sm">
