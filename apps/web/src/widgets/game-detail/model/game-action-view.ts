@@ -22,6 +22,7 @@ export const GAME_ACTION_VIEW = {
   closedScheduled: "closedScheduled",
   closed: "closed",
   sanctioned: "sanctioned",
+  conditionsUnmet: "conditionsUnmet",
   joinWaitlist: "joinWaitlist",
   join: "join",
   joinLottery: "joinLottery",
@@ -68,6 +69,10 @@ export interface ActionContext {
   // 굴린 추첨이 실제로 있었는지. 신청자가 자리 이하라 추첨 없이 확정된 구인은 false라 [결과 보러 가기]를 두지 않는다.
   lotteryHeld: boolean;
   sanction: ActionSanction | null;
+  // 참여 조건 가운데 내가 못 채운 것의 안내 문장. 조건이 없거나 다 채웠으면 비어 있다.
+  unmetLines: string[];
+  // 못 채운 조건에 룰북 인증이 들어 있는지. 인증하러 가는 버튼을 붙인다.
+  certUnmet: boolean;
   review: ReviewStatus;
   now: Date;
 }
@@ -122,6 +127,7 @@ export type GameActionView =
   | { kind: typeof GAME_ACTION_VIEW.closedScheduled; confirmedAt: Date }
   | { kind: typeof GAME_ACTION_VIEW.closed }
   | ({ kind: typeof GAME_ACTION_VIEW.sanctioned } & ActionSanction)
+  | { kind: typeof GAME_ACTION_VIEW.conditionsUnmet; lines: string[]; certUnmet: boolean }
   | { kind: typeof GAME_ACTION_VIEW.joinWaitlist; nextRank: number }
   | { kind: typeof GAME_ACTION_VIEW.join }
   | { kind: typeof GAME_ACTION_VIEW.joinLottery; endDate: Date }

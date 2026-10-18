@@ -750,6 +750,13 @@
       "when": 1799500000003,
       "tag": "0112_purge_keeps_banners",
       "breakpoints": true
+    },
+    {
+      "idx": 113,
+      "version": "7",
+      "when": 1799500000004,
+      "tag": "0113_game_participation_conditions",
+      "breakpoints": true
     }
   ]
 }

@@ -29,6 +29,7 @@ export const GAME_TAGS_MAX = {
 } as const;
 export const GAME_TAG_MAX_LENGTH = 20;
 export const GAME_NOTICE_MAX = 500;
+export const GAME_RULE_PLAYS_MAX = 99;
 export const GAME_SYNOPSIS_MAX = 2000;
 export const INVALID_INPUT_MESSAGE = "입력값을 확인해야 합니다.";
 
@@ -112,6 +113,9 @@ export const gameFormSchema = z
       .max(GAME_IMAGES_MAX, `이미지는 최대 ${GAME_IMAGES_MAX}장까지 올릴 수 있습니다.`),
     waitlistEnabled: z.boolean(),
     applicationNoteEnabled: z.boolean(),
+    // null이면 플레이 횟수 제한 없음. 룰북 인증은 이 구인의 룰북 기준이다.
+    minRulePlays: z.number().int().min(1).max(GAME_RULE_PLAYS_MAX).nullable(),
+    requireRulebookCert: z.boolean(),
     // 등록과 함께 확정으로 넣을 사람. 서버는 userId만 쓰고 나머지는 목록 표시용이다.
     preConfirmed: z
       .array(

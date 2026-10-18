@@ -28,6 +28,8 @@ export function toGameColumns(values: GameFormValues) {
     waitlistEnabled:
       values.recruitMethod === RECRUIT_METHOD.firstCome ? values.waitlistEnabled : true,
     applicationNoteEnabled: values.applicationNoteEnabled,
+    minRulePlays: values.minRulePlays,
+    requireRulebookCert: values.requireRulebookCert,
     scheduleMode: values.scheduleMode,
     endDate: fromKstDateTimeInput(values.endDate),
     rangeStart: values.rangeStart || null,

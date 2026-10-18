@@ -34,6 +34,8 @@ export const SECTION_FIELDS = {
     "playType",
     "aiImage",
     "notice",
+    "minRulePlays",
+    "requireRulebookCert",
   ],
   [FORM_SECTION.media]: ["thumbnailUrl", "thumbnailSpoiler", "images"],
   [FORM_SECTION.recruit]: [

@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 
 import {
   deriveGameStatus,
+  participationConditions,
+  type ParticipationStanding,
   GAME_STATUS,
   isApplicationClosed,
   isGameGm,
@@ -23,6 +25,7 @@ import { deriveActionView } from "../model/derive-action-view";
 import type { ActionSanction } from "../model/game-action-view";
 import type { ReviewStatus } from "../model/review-status";
 import { GameActionZone } from "./game-action-zone";
+import { GameConditionsSection } from "./game-conditions-section";
 import { GameDetailActions } from "./game-detail-actions";
 import { GameDetailHeader } from "./game-detail-header";
 import { GameDetailThumbnail } from "./game-detail-thumbnail";
@@ -38,6 +41,8 @@ interface GameDetailProps {
   game: GameDetailData;
   viewerId: string | null;
   sanction: ActionSanction | null;
+  // 참여 조건이 있는 구인에서 내 현황. 로그인하지 않았거나 GM이거나 이미 참여 중이면 null.
+  standing: ParticipationStanding | null;
   review: ReviewStatus;
   now: Date;
   // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
@@ -48,6 +53,7 @@ export function GameDetail({
   game,
   viewerId,
   sanction,
+  standing,
   review,
   now,
   belowAppBar,
@@ -78,6 +84,9 @@ export function GameDetail({
   const showSessionDday = !game.cancelledAt && !ended && !isNull(sessionDays) && sessionDays >= 0;
   const sessionBadge = showSessionDday ? formatDday(sessionDays) : null;
 
+  const conditions = participationConditions({ game, standing });
+  const unmet = conditions.filter((condition) => condition.met === false);
+
   const actionView = deriveActionView({
     game,
     viewer: {
@@ -91,12 +100,19 @@ export function GameDetail({
     waitingCount: waiting.length,
     lotteryHeld: game.participants.some((participant) => !isNull(participant.drawRank)),
     sanction,
+    unmetLines: unmet.map((condition) => condition.unmetLine),
+    certUnmet: unmet.some((condition) => condition.key === "cert"),
     review,
     now,
   });
 
   // 모집 방식·명단·신청 막대는 모바일에서는 본문 안에, 1100px 이상에서는 우측 패널에 둔다. 같은 요소를 두 자리에 그리고 폭으로 한쪽을 숨긴다.
-  const recruitMethod = <GameRecruitMethodSection game={game} now={now} />;
+  const recruitMethod = (
+    <VStack gap="200">
+      <GameRecruitMethodSection game={game} now={now} />
+      <GameConditionsSection conditions={conditions} />
+    </VStack>
+  );
   const roster = (
     <GameRosterSection
       gm={{ userId: game.gmId, ...game.gm }}

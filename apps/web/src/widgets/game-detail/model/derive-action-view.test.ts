@@ -48,6 +48,8 @@ const view = (overrides: Partial<ActionContext>) =>
     waitingCount: 0,
     lotteryHeld: true,
     sanction: null,
+    unmetLines: [],
+    certUnmet: false,
     review: REVIEW_STATUS.unavailable,
     now: NOW,
     ...overrides,

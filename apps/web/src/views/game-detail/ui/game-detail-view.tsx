@@ -1,3 +1,4 @@
+import { loadParticipationStanding } from "@roll-and-call/database/badges";
 import { findActiveSanction } from "@roll-and-call/database/moderation";
 import { getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { notFound } from "next/navigation";
@@ -49,8 +50,18 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
     participant?.status === PARTICIPANT_STATUS.confirmed ||
     isGameGm({ gmId: game.gmId, userId: viewerId });
   const needsReview = viewerId && takesPartInGame && isSessionEnded(game, now);
-  const [sanction, reviewTarget, titleSheets] = await Promise.all([
+  // 참여 조건은 신청을 고민하는 사람(참여 기록 없는 로그인 사용자)에게만 내 현황과 견준다.
+  const needsStanding = needsSanction && (game.minRulePlays !== null || game.requireRulebookCert);
+  const [sanction, standing, reviewTarget, titleSheets] = await Promise.all([
     needsSanction ? findActiveSanction({ serverId: server.id, userId: viewerId, now }) : null,
+    needsStanding
+      ? loadParticipationStanding({
+          serverId: server.id,
+          userId: viewerId,
+          rule: game.rule,
+          rulebookId: game.rulebookId,
+        })
+      : null,
     needsReview
       ? getReviewDraftTarget({ serverId: server.id, gameId: id, userId: viewerId })
       : null,
@@ -64,7 +75,14 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
 
   return (
     <MemberTitleSheetsProvider sheets={titleSheets}>
-      <GameDetail game={game} viewerId={viewerId} sanction={sanction} review={review} now={now} />
+      <GameDetail
+        game={game}
+        viewerId={viewerId}
+        sanction={sanction}
+        standing={standing}
+        review={review}
+        now={now}
+      />
       <QueryNoticeToast messages={NOTICE_MESSAGES} />
     </MemberTitleSheetsProvider>
   );

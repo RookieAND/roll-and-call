@@ -13,6 +13,11 @@ export { isDeadlinePassed } from "./model/is-deadline-passed";
 export { PARTICIPANT_STATUS, countConfirmed, type ParticipantStatus } from "./model/participant";
 export { splitRoster, type RosterMember } from "./model/split-roster";
 export { isGameGm } from "./model/is-game-gm";
+export {
+  participationConditions,
+  type ParticipationCondition,
+  type ParticipationStanding,
+} from "./model/participation-conditions";
 export { GameCard } from "./ui/game-card";
 export { PastGameCard } from "./ui/past-game-card";
 export { GameThumbnail } from "./ui/game-thumbnail";

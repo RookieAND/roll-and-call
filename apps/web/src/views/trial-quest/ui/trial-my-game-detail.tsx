@@ -19,6 +19,7 @@ export function TrialMyGameDetail({ recruit, now }: TrialMyGameDetailProps) {
       game={buildTrialMyGame({ recruit, now })}
       viewerId={TRIAL_VIEWER_ID}
       sanction={null}
+      standing={null}
       review={REVIEW_STATUS.unavailable}
       now={now}
       belowAppBar={<TrialBanner />}

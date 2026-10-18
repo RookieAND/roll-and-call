@@ -1,5 +1,6 @@
 import "server-only";
 import type { Game } from "@roll-and-call/database";
+import { loadParticipationStanding } from "@roll-and-call/database/badges";
 import {
   countParticipants,
   listUserSessionTimings,
@@ -13,6 +14,7 @@ import {
   DIE_FACES,
   isApplicationClosed,
   findOverlappingGame,
+  participationConditions,
   PARTICIPANT_STATUS,
   RECRUIT_METHOD,
   SCHEDULE_MODE,
@@ -67,6 +69,18 @@ export async function evaluateApplication({
   if (isApplicationClosed(game)) return { error: APPLICATION_CLOSED_MESSAGE };
   if (game.endDate.getTime() <= Date.now()) {
     return { error: "모집이 마감되었습니다." };
+  }
+
+  if (game.minRulePlays !== null || game.requireRulebookCert) {
+    const standing = await loadParticipationStanding({
+      transaction,
+      serverId,
+      userId,
+      rule: game.rule,
+      rulebookId: game.rulebookId,
+    });
+    const unmet = participationConditions({ game, standing }).find((condition) => !condition.met);
+    if (unmet) return { error: unmet.unmetLine };
   }
 
   // 일정 조율형은 신청 때 일시가 없어 겹침을 보지 않는다. 같은 사람의 신청끼리 줄을 세워 동시 신청도 막는다.

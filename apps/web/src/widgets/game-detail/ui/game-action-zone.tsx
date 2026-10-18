@@ -8,6 +8,7 @@ import { GAME_ACTION_VIEW, type GameActionView } from "../model/game-action-view
 import { AbsentActions } from "./absent-actions";
 import { CancelledActions } from "./cancelled-actions";
 import { ClosedActions } from "./closed-actions";
+import { ConditionsUnmetActions } from "./conditions-unmet-actions";
 import { ConfirmedLockedActions } from "./confirmed-locked-actions";
 import { ConfirmedOpenActions } from "./confirmed-open-actions";
 import { EndedGmActions } from "./ended-gm-actions";
@@ -71,6 +72,8 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return <ClosedActions title="모집이 끝났습니다" />;
     case GAME_ACTION_VIEW.sanctioned:
       return <SanctionedActions reason={view.reason} until={view.until} />;
+    case GAME_ACTION_VIEW.conditionsUnmet:
+      return <ConditionsUnmetActions lines={view.lines} certUnmet={view.certUnmet} />;
     case GAME_ACTION_VIEW.joinWaitlist:
       return (
         <JoinableActions

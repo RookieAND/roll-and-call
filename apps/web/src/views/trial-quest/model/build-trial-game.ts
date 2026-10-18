@@ -94,6 +94,8 @@ export function buildTrialGame({
     recruitMethod: lottery ? RECRUIT_METHOD.lottery : RECRUIT_METHOD.firstCome,
     waitlistEnabled: true,
     applicationNoteEnabled: false,
+    minRulePlays: null,
+    requireRulebookCert: false,
     scheduleMode: SCHEDULE_MODE.fixed,
     endDate: new Date(sessionAt.getTime() - DAY_MS),
     rangeStart: null,

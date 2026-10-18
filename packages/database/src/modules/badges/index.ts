@@ -22,3 +22,4 @@ export {
 } from "./queries/load-member-badge-summaries";
 export * from "./model";
 export { grantApprenticeBadge } from "./commands/grant-apprentice-badge";
+export { loadParticipationStanding } from "./queries/load-participation-standing";

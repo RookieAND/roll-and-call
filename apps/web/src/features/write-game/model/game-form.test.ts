@@ -27,6 +27,8 @@ const base = {
   aiImage: false,
   waitlistEnabled: true,
   applicationNoteEnabled: false,
+  minRulePlays: null,
+  requireRulebookCert: false,
   preConfirmed: [],
   playMinutesMin: 180,
   playMinutes: null,

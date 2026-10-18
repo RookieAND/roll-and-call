@@ -14,6 +14,8 @@ export function outsiderActionView({
   confirmedCount,
   waitingCount,
   sanction,
+  unmetLines,
+  certUnmet,
   now,
 }: Omit<ActionContext, "viewer" | "review">): GameActionView {
   if (isSessionEnded(game, now)) return { kind: GAME_ACTION_VIEW.endedOther };
@@ -22,6 +24,9 @@ export function outsiderActionView({
   }
   if (isRecruitmentClosed({ game, confirmedCount, now })) return { kind: GAME_ACTION_VIEW.closed };
   if (sanction) return { kind: GAME_ACTION_VIEW.sanctioned, ...sanction };
+  if (unmetLines.length > 0) {
+    return { kind: GAME_ACTION_VIEW.conditionsUnmet, lines: unmetLines, certUnmet };
+  }
   if (game.recruitMethod === RECRUIT_METHOD.lottery) {
     return { kind: GAME_ACTION_VIEW.joinLottery, endDate: game.endDate };
   }

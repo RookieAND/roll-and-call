@@ -99,6 +99,8 @@ export function GameForm({
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
       applicationNoteEnabled: defaultGame?.applicationNoteEnabled ?? false,
+      minRulePlays: defaultGame?.minRulePlays ?? null,
+      requireRulebookCert: defaultGame?.requireRulebookCert ?? false,
       preConfirmed: [],
     },
   });

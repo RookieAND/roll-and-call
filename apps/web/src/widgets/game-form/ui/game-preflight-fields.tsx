@@ -14,6 +14,7 @@ import {
 import { richTextLength } from "@/shared/lib";
 import { TagInput } from "@/shared/ui";
 
+import { ParticipationConditionField } from "./participation-condition-field";
 import { PlayTypeField } from "./play-type-field";
 
 const TAG_PLACEHOLDER: Record<GameTagKey, string> = {
@@ -35,9 +36,10 @@ const TAG_SUGGESTIONS: Record<GameTagKey, string[]> = {
 
 interface GamePreflightFieldsProps {
   form: UseFormReturn<GameFormValues>;
+  hasApplicants: boolean;
 }
 
-export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
+export function GamePreflightFields({ form, hasApplicants }: GamePreflightFieldsProps) {
   const {
     setValue,
     watch,
@@ -113,6 +115,8 @@ export function GamePreflightFields({ form }: GamePreflightFieldsProps) {
           onChange={(value) => setValue("notice", value, { shouldDirty: true })}
         />
       </Field.Root>
+
+      <ParticipationConditionField form={form} hasApplicants={hasApplicants} />
     </>
   );
 }
