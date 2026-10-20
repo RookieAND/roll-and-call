@@ -22,7 +22,7 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
         title: "새 룰북 인증 신청이 들어왔습니다",
         fields: [
           { name: "📋 항목", value: "룰북 인증 신청", inline: true },
-          { name: "🙋 신청자", value: `<@${notice.applicantDiscordId}>`, inline: true },
+          { name: "🙋 신청자", value: notice.applicantNickname, inline: true },
           { name: "📖 룰북", value: notice.rulebookLabel, inline: true },
           { name: "🧾 인증 방식", value: notice.formatLabel, inline: true },
         ],

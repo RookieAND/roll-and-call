@@ -26,7 +26,7 @@ describe("staffNoticeMessage", () => {
     });
     expect(result.embeds?.[0]?.fields).toEqual([
       { name: "📋 항목", value: "룰북 인증 신청", inline: true },
-      { name: "🙋 신청자", value: "<@111>", inline: true },
+      { name: "🙋 신청자", value: "김코코", inline: true },
       { name: "📖 룰북", value: "크툴루의 부름 7판", inline: true },
       { name: "🧾 인증 방식", value: "실물", inline: true },
     ]);
