@@ -12,7 +12,11 @@ description: >
 
 - `notes.json` — 지금까지 발행한 모든 패치노트. 발행 후 `message_id`가 기록되므로
   **이 파일이 곧 발행 대장이다.** 절대 항목을 지우지 말 것.
-- 웹훅 주소는 `apps/web/.env.local`의 `DISCORD_PATCHNOTE_WEBHOOK_URL`에서 읽는다.
+- 서버별로 나눠 보낸다. 항목의 `channel`(예: `"canvas"`)이 대상 서버이고, 없으면 기본(트피아)이다.
+  - 기본·웹훅 서버: `apps/web/.env.local`의 `DISCORD_PATCHNOTE_WEBHOOK_URL`(기본), `DISCORD_PATCHNOTE_WEBHOOK_URL_<CHANNEL>`(서버별).
+  - 포럼 서버: `channels.json`에 `{"canvas": {"forum_id", "tag_id"}}`로 적는다. 봇(`DISCORD_BOT_TOKEN`)이 그 포럼에 글을 올리고, `thread_id`·`message_id`가 기록된다. 포럼은 태그가 필수라 `tag_id`가 필요하다.
+  - 설정이 없는 서버는 건너뛴다. 다른 서버의 채널로 대신 보내지 않는다.
+  - 서버마다 항목을 따로 둔다(같은 내용이어도 `channel`이 다르면 별개 항목이고 각자 `message_id`를 가진다).
 
 ## 새 패치노트를 발행할 때
 
@@ -43,7 +47,8 @@ description: >
      순서는 이 순서를 지키되, 그 패치의 핵심이 든 묶음을 맨 앞에 둬도 된다.
    - 항목 중 핵심 하나는 `**굵게**`로 강조한다. 한 줄은 한 문장을 넘기지 않는다.
 
-4. `python3 .claude/skills/patch-notes/post.py` 실행. 새 항목만 전송되고
+4. `python3 .claude/skills/patch-notes/post.py --version v0.35.0` 실행(그 버전 항목만 처리).
+   `--version`을 빼면 `message_id`가 없는 항목이 모두 전송되니, 옛 항목이 남아 있으면 반드시 붙인다.
    받은 `message_id`가 `notes.json`에 기록된다.
 
 ## 이미 올린 패치노트를 고칠 때
