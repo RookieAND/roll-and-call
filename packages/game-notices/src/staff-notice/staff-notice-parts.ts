@@ -26,8 +26,7 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
           { name: "📖 룰북", value: notice.rulebookLabel, inline: true },
           { name: "🧾 인증 방식", value: notice.formatLabel, inline: true },
         ],
-        description:
-          "새로운 룰북 인증 신청이 들어왔습니다.\n제출한 자료를 확인하고 승인할지 반려할지 결정해 주세요.",
+        description: `${notice.applicantNickname}님이 ${notice.rulebookLabel} 인증을 신청했습니다!\n제출한 자료를 확인하고 승인할지 반려할지 결정해 주세요.`,
         thumbnail: notice.applicantAvatarUrl ? { url: notice.applicantAvatarUrl } : undefined,
         path: `/cert/${notice.applicationId}`,
         color: DISCORD_COLOR.recruit,
