@@ -1,40 +1,25 @@
 "use client";
 
-import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
-import { Button, Field, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, TextInput, VStack, toast } from "@roll-and-call/ui";
 
 import { MobileActionBar } from "@/shared/ui";
 
-import { adultOnlyFeatureNote } from "../model/adult-only-feature-note";
-import { ADULT_ONLY_DESCRIPTION, POINTS_DESCRIPTION } from "../model/feature-descriptions";
-import { rankingFeatureNote } from "../model/ranking-feature-note";
-import { useServerSettingsForm } from "../model/use-server-settings-form";
-import { FeatureRow } from "./feature-row";
+import { useServerInfoForm } from "../model/use-server-info-form";
 import { MobileSettingsFrame } from "./mobile/mobile-settings-frame";
 import { MobileSettingsSection } from "./mobile/mobile-settings-section";
 
-interface ServerSettingsMobileFormProps {
+interface ServerInfoMobileFormProps {
   server: { name: string; slug: string; icon: string | null };
   savedInviteUrl: string;
-  savedRankingMode: RankingMode;
-  savedAdultOnlyEnabled: boolean;
   joinUrl: string;
 }
 
-export function ServerSettingsMobileForm({
+export function ServerInfoMobileForm({
   server,
   savedInviteUrl,
-  savedRankingMode,
-  savedAdultOnlyEnabled,
   joinUrl,
-}: ServerSettingsMobileFormProps) {
-  const form = useServerSettingsForm({
-    savedInviteUrl,
-    savedRankingMode,
-    savedAdultOnlyEnabled,
-  });
-  const rankingChanged = form.rankingMode !== savedRankingMode;
-  const adultOnlyChanged = form.adultOnlyEnabled !== savedAdultOnlyEnabled;
+}: ServerInfoMobileFormProps) {
+  const form = useServerInfoForm({ savedInviteUrl });
 
   const copy = async () => {
     try {
@@ -94,33 +79,6 @@ export function ServerSettingsMobileForm({
               onChange={(event) => form.setInviteUrl(event.target.value)}
             />
           </Field.Root>
-        </MobileSettingsSection>
-        <MobileSettingsSection title="서버 기능">
-          <Text typography="body3" foreground="muted" render={<p />}>
-            서버마다 쓸 기능을 켜고 끕니다.
-          </Text>
-          <FeatureRow
-            id="mobile-feature-points"
-            label="점수제"
-            description={POINTS_DESCRIPTION}
-            checked={form.rankingMode === RANKING_MODE.points}
-            note={rankingChanged ? rankingFeatureNote(form.rankingMode) : undefined}
-            disabled={form.saving}
-            showState={false}
-            onCheckedChange={(checked) =>
-              form.setRankingMode(checked ? RANKING_MODE.points : RANKING_MODE.count)
-            }
-          />
-          <FeatureRow
-            id="mobile-feature-adult-only"
-            label="성인 전용 구인 표기"
-            description={ADULT_ONLY_DESCRIPTION}
-            checked={form.adultOnlyEnabled}
-            note={adultOnlyChanged ? adultOnlyFeatureNote(form.adultOnlyEnabled) : undefined}
-            disabled={form.saving}
-            showState={false}
-            onCheckedChange={form.setAdultOnlyEnabled}
-          />
         </MobileSettingsSection>
       </VStack>
       <MobileActionBar>

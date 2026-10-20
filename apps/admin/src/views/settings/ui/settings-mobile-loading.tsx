@@ -12,11 +12,19 @@ interface SettingsMobileLoadingProps {
 
 export function SettingsMobileLoading({ active }: SettingsMobileLoadingProps) {
   const staff = active === "/settings/staff";
+  const options = active === "/settings/options";
   return (
     <MobileSettingsFrame active={active}>
       <LoadingRegion label="설정을 불러오는 중입니다">
         {staff ? (
           <SkeletonListRows rows={3} meta />
+        ) : options ? (
+          <VStack gap="150" className="px-150 pt-150 pb-200">
+            <MobileSettingsSection title="서버 기능">
+              <Skeleton width="100%" height={44} rounded={400} />
+              <Skeleton width="100%" height={44} rounded={400} />
+            </MobileSettingsSection>
+          </VStack>
         ) : (
           <VStack gap="150" className="px-150 pt-150 pb-200">
             <MobileSettingsSection title="서버 기본 정보">

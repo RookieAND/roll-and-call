@@ -1,7 +1,10 @@
 export { SettingsStaffView } from "./ui/settings-staff-view";
 export { SettingsStaffLoading } from "./ui/settings-staff-loading";
-export { ServerSettingsForm } from "./ui/server-settings-form";
-export { ServerSettingsLoading } from "./ui/server-settings-loading";
-export { ServerSettingsMobileForm } from "./ui/server-settings-mobile-form";
+export { ServerInfoForm } from "./ui/server-info-form";
+export { ServerInfoLoading } from "./ui/server-info-loading";
+export { ServerInfoMobileForm } from "./ui/server-info-mobile-form";
+export { ServerOptionsForm } from "./ui/server-options-form";
+export { ServerOptionsLoading } from "./ui/server-options-loading";
+export { ServerOptionsMobileForm } from "./ui/server-options-mobile-form";
 export { SettingsStaffMobileView } from "./ui/settings-staff-mobile-view";
 export { SettingsMobileLoading } from "./ui/settings-mobile-loading";

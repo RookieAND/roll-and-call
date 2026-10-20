@@ -1,5 +1,6 @@
 export const SETTINGS_NAV_ITEMS = [
-  { href: "/settings/server", label: "서버 설정" },
+  { href: "/settings/server", label: "서버 정보" },
+  { href: "/settings/options", label: "서버 설정" },
   { href: "/settings/staff", label: "운영진 관리" },
 ] as const;
 
