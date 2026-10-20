@@ -25,6 +25,7 @@ const base = {
   images: [] as string[],
   thumbnailSpoiler: false,
   aiImage: false,
+  adultOnly: false,
   waitlistEnabled: true,
   applicationNoteEnabled: false,
   minRulePlays: null,

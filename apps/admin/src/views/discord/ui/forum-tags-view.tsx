@@ -19,6 +19,8 @@ const KIND_ROWS = [
   { key: "session", label: "세션" },
 ] as const;
 
+const ADULT_ROWS = [{ key: "adult", label: "성인 전용" }] as const;
+
 const STATUS_ROWS = [
   { key: "open", label: "모집중" },
   { key: "closed", label: "마감" },
@@ -42,6 +44,7 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
     ...categories.map(({ id, name }) => ({ label: name, id: form.categories[id] })),
     ...PLAY_TYPE_ROWS.map(({ key, label }) => ({ label, id: form.playTypes[key] })),
     ...KIND_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
+    ...ADULT_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
   ];
   const deletedLabels =
     options.status === "forum"
@@ -129,6 +132,23 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
             }))}
             onChange={(key, tagId) => setForm({ ...form, [key as "briefing" | "session"]: tagId })}
           />
+          <ForumTagSection
+            title="성인 구분"
+            columnLabel="성인 구분"
+            optional
+            tags={options.tags}
+            rows={ADULT_ROWS.map(({ key, label }) => ({
+              key,
+              label,
+              value: form[key],
+              savedValue: saved[key],
+            }))}
+            onChange={(key, tagId) => setForm({ ...form, [key as "adult"]: tagId })}
+          />
+          <Text typography="body4" foreground="hint">
+            서버 설정에서 성인 전용 구인 표기를 켠 서버에서만 쓰입니다. 성인 전용으로 올린 구인에 이
+            태그가 붙습니다.
+          </Text>
           {hasDeleted ? (
             <Callout.Root colorPalette="warning">
               <Callout.Icon />

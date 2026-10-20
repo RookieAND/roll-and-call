@@ -13,9 +13,10 @@ interface EditGameFormProps {
   serverId: string;
   game: GameDetailData;
   rulebooks: MyRulebooks;
+  adultOnlyEnabled: boolean;
 }
 
-export function EditGameForm({ serverId, game, rulebooks }: EditGameFormProps) {
+export function EditGameForm({ serverId, game, rulebooks, adultOnlyEnabled }: EditGameFormProps) {
   const confirmedCount = countConfirmed(game.participants);
   return (
     <GameForm
@@ -23,6 +24,7 @@ export function EditGameForm({ serverId, game, rulebooks }: EditGameFormProps) {
       onSubmit={updateGame.bind(null, game.id)}
       defaultGame={game}
       supplementRulebooks={rulebooks}
+      adultOnlyEnabled={adultOnlyEnabled}
       submitLabel="수정 저장"
       successMessage="수정되었습니다"
       edit={{

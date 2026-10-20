@@ -36,6 +36,7 @@ interface GameFormProps {
   supplementRulebooks?: MyRulebooks;
   initialRulebookId?: string;
   reopen?: ReopenContext;
+  adultOnlyEnabled?: boolean;
 }
 
 export function GameForm({
@@ -49,6 +50,7 @@ export function GameForm({
   supplementRulebooks,
   initialRulebookId,
   reopen,
+  adultOnlyEnabled = false,
 }: GameFormProps) {
   const { pending, run } = useAction();
   // 체험에서는 일부 단계만 보인다.
@@ -77,6 +79,7 @@ export function GameForm({
       platforms: defaultGame?.platforms ?? [],
       notice: defaultGame?.notice ?? "",
       aiImage: defaultGame?.aiImage ?? false,
+      adultOnly: defaultGame?.adultOnly ?? false,
       playMinutesMin:
         defaultGame?.playMinutesMin ?? defaultGame?.playMinutes ?? DEFAULT_PLAY_MINUTES,
       // 최소와 같으면 최대는 비운 것으로 연다.
@@ -129,6 +132,7 @@ export function GameForm({
       rulebooks={rulebooks}
       supplementRulebooks={supplementRulebooks}
       reopen={reopen}
+      adultOnlyEnabled={adultOnlyEnabled}
     />
   );
 }

@@ -25,7 +25,14 @@ export async function EditGameView({ id }: EditGameViewProps) {
     const rulebooks = toMyRulebooks(
       await getRulebookRecords({ serverId: server.id, userId: game.gmId }),
     );
-    return <EditGameForm serverId={server.id} game={game} rulebooks={rulebooks} />;
+    return (
+      <EditGameForm
+        serverId={server.id}
+        game={game}
+        rulebooks={rulebooks}
+        adultOnlyEnabled={server.adultOnlyEnabled}
+      />
+    );
   }
 
   return (

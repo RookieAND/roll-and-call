@@ -10,6 +10,7 @@ export function recruitStatusTagIds({
   categoryId,
   kind,
   playType,
+  adultOnly = false,
 }: {
   target: RecruitTarget;
   closed: boolean;
@@ -17,6 +18,7 @@ export function recruitStatusTagIds({
   categoryId: string | null;
   kind: GameKind;
   playType: PlayType;
+  adultOnly?: boolean;
 }) {
   const { open, closed: closedTag, cancelled: cancelledTag, categories } = target.tags;
   const categoryTag = categoryId ? categories[categoryId] : undefined;
@@ -24,7 +26,8 @@ export function recruitStatusTagIds({
   const endedTag = cancelled ? (cancelledTag ?? closedTag) : closedTag;
   const statusTag = closed ? endedTag : open;
   const kindTag = kind === "briefing" ? target.tags.briefing : target.tags.session;
-  return [statusTag, categoryTag, target.tags.playTypes[playType], kindTag].flatMap(
+  const adultTag = adultOnly ? target.tags.adult : undefined;
+  return [statusTag, categoryTag, target.tags.playTypes[playType], kindTag, adultTag].flatMap(
     (id) => id ?? [],
   );
 }

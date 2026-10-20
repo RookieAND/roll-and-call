@@ -11,6 +11,7 @@ export { syncServerGuild } from "./commands/sync-server-guild";
 export { saveForumTags } from "./commands/save-forum-tags";
 export { saveMessageHead } from "./commands/save-message-head";
 export { saveMessageText } from "./commands/save-message-text";
+export { updateAdultOnlyEnabled } from "./commands/update-adult-only-enabled";
 export { updateRankingMode } from "./commands/update-ranking-mode";
 export { saveReviewTemplate } from "./commands/save-review-template";
 export { updateServerSettings, type ServerSettings } from "./commands/update-server-settings";

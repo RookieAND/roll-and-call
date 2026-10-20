@@ -14,6 +14,7 @@ export default async function SettingsServerPage() {
     server: { name: server.name, slug: server.slug, icon: server.icon },
     savedInviteUrl: server.inviteUrl ?? "",
     savedRankingMode: server.rankingMode as RankingMode,
+    savedAdultOnlyEnabled: server.adultOnlyEnabled,
     joinUrl: `${userAppUrl}/${server.slug}/join`,
   };
   return (

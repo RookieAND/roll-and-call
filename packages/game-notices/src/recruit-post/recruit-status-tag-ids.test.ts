@@ -12,6 +12,7 @@ const target = (cancelled?: string): RecruitTarget => ({
     playTypes: { voice: "v", text: "t" },
     briefing: "b",
     session: "s",
+    adult: "a",
     managed: [],
   },
 });
@@ -56,4 +57,10 @@ it("연결하지 않은 태그는 빼고 붙인다", () => {
       playType: "voice",
     }),
   ).toEqual(["o"]);
+});
+
+it("성인 전용 구인에만 성인 전용 태그를 붙인다", () => {
+  const args = { target: target(), closed: false, categoryId: null, ...session };
+  expect(recruitStatusTagIds({ ...args, adultOnly: true })).toEqual(["o", "v", "s", "a"]);
+  expect(recruitStatusTagIds({ ...args, adultOnly: false })).toEqual(["o", "v", "s"]);
 });

@@ -7,19 +7,21 @@ import { useState, useTransition } from "react";
 
 import {
   normalizeInviteUrl,
+  saveAdultOnlyEnabled,
   saveRankingMode,
   saveServerSettings,
 } from "@/features/edit-server-settings";
 
 import { JoinLinkPanel } from "./join-link-panel";
-import { RankingModePanel } from "./ranking-mode-panel";
 import { ServerBasicPanel } from "./server-basic-panel";
+import { ServerFeaturePanel } from "./server-feature-panel";
 import { SettingsFrame } from "./settings-frame";
 
 interface ServerSettingsFormProps {
   server: { name: string; slug: string; icon: string | null };
   savedInviteUrl: string;
   savedRankingMode: RankingMode;
+  savedAdultOnlyEnabled: boolean;
   joinUrl: string;
 }
 
@@ -27,18 +29,21 @@ export function ServerSettingsForm({
   server,
   savedInviteUrl,
   savedRankingMode,
+  savedAdultOnlyEnabled,
   joinUrl,
 }: ServerSettingsFormProps) {
   const router = useRouter();
   const [saving, startSaving] = useTransition();
   const [inviteUrl, setInviteUrl] = useState(savedInviteUrl);
   const [rankingMode, setRankingMode] = useState(savedRankingMode);
+  const [adultOnlyEnabled, setAdultOnlyEnabled] = useState(savedAdultOnlyEnabled);
 
   const inviteChanged = inviteUrl.trim() !== savedInviteUrl.trim();
   const invite = normalizeInviteUrl(inviteUrl);
   const inviteError = invite.ok ? undefined : invite.error;
   const rankingChanged = rankingMode !== savedRankingMode;
-  const canSave = (inviteChanged || rankingChanged) && invite.ok && !saving;
+  const adultOnlyChanged = adultOnlyEnabled !== savedAdultOnlyEnabled;
+  const canSave = (inviteChanged || rankingChanged || adultOnlyChanged) && invite.ok && !saving;
 
   const save = () =>
     startSaving(async () => {
@@ -47,6 +52,7 @@ export function ServerSettingsForm({
         if (!result.ok) return;
       }
       if (rankingChanged) await saveRankingMode({ rankingMode });
+      if (adultOnlyChanged) await saveAdultOnlyEnabled({ enabled: adultOnlyEnabled });
       toast.success("서버 설정을 저장했습니다");
       router.refresh();
     });
@@ -69,11 +75,14 @@ export function ServerSettingsForm({
           inviteError={inviteError}
           onInviteUrlChange={setInviteUrl}
         />
-        <RankingModePanel
-          value={rankingMode}
-          savedValue={savedRankingMode}
+        <ServerFeaturePanel
+          rankingMode={rankingMode}
+          savedRankingMode={savedRankingMode}
+          adultOnlyEnabled={adultOnlyEnabled}
+          savedAdultOnlyEnabled={savedAdultOnlyEnabled}
           disabled={saving}
-          onChange={setRankingMode}
+          onRankingModeChange={setRankingMode}
+          onAdultOnlyEnabledChange={setAdultOnlyEnabled}
         />
       </VStack>
     </SettingsFrame>

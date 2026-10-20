@@ -26,6 +26,8 @@ export interface ForumTagMap {
   // 구분(game_kind)마다 태그 하나.
   briefing?: string;
   session?: string;
+  // 성인 전용으로 올린 구인에 붙일 태그.
+  adult?: string;
 }
 
 // 디스코드 서버 하나가 한 행이다. 서버 안의 데이터는 모두 server_id로 이 행에 묶인다.
@@ -54,6 +56,8 @@ export const servers = pgTable(
     certEnforcementDate: timestamp("cert_enforcement_date", { withTimezone: true }),
     // 이 달의 기록 순위를 매기는 방식. count(참여 횟수제)와 points(포인트제) 중 하나이고, 서버마다 정한다.
     rankingMode: text("ranking_mode").notNull().default("count"),
+    // 구인을 올릴 때 성인 전용 여부를 고르게 할지. 꺼 두면 선택이 나타나지 않는다.
+    adultOnlyEnabled: boolean("adult_only_enabled").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [check("servers_ranking_mode", sql`${table.rankingMode} in ('count', 'points')`)],

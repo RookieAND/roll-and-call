@@ -33,6 +33,7 @@ export const SECTION_FIELDS = {
     GAME_TAG.platforms,
     "playType",
     "aiImage",
+    "adultOnly",
     "notice",
     "minRulePlays",
     "requireRulebookCert",

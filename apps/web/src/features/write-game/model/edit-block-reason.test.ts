@@ -48,6 +48,7 @@ const form: GameFormValues = {
   images: [],
   thumbnailSpoiler: false,
   aiImage: false,
+  adultOnly: false,
   waitlistEnabled: true,
   applicationNoteEnabled: false,
   minRulePlays: null,

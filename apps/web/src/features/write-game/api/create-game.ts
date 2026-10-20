@@ -96,6 +96,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
         rule: set.label,
         rulebookId: set.cores[0]!.id,
         ...columns,
+        // 성인 전용 표기를 켜지 않은 서버에서는 고를 수 없다.
+        adultOnly: columns.adultOnly && server.adultOnlyEnabled,
         // 인증 없이 열 수 있는 룰에는 인증 조건을 걸 수 없다.
         requireRulebookCert: columns.requireRulebookCert && !set.free,
         supplements,

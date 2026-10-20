@@ -14,6 +14,7 @@ interface GameDetailHeaderProps {
   kind: GameKind;
   status: GameStatus;
   ended: boolean;
+  adultOnly: boolean;
   statusLine: ScheduleLine;
 }
 
@@ -23,6 +24,7 @@ export function GameDetailHeader({
   kind,
   status,
   ended,
+  adultOnly,
   statusLine,
 }: GameDetailHeaderProps) {
   return (
@@ -39,6 +41,11 @@ export function GameDetailHeader({
         <span className="mt-025">
           {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
         </span>
+        {adultOnly && (
+          <Badge colorPalette="danger" className="mt-025">
+            성인 전용
+          </Badge>
+        )}
       </HStack>
       <GameScheduleRow line={statusLine} scale="header" />
     </VStack>

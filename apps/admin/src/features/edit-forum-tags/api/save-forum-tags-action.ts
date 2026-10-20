@@ -36,6 +36,7 @@ export async function saveForumTagsAction(rawForm: ForumTagForm): Promise<SaveFo
     map?.playTypes?.text,
     map?.briefing,
     map?.session,
+    map?.adult,
   ];
   const known = options.tags.map((tag) => tag.id);
   if (chosen.some((id) => id && !known.includes(id))) return { ok: false };

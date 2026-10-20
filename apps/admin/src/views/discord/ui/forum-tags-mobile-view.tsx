@@ -7,7 +7,7 @@ import { useState, useTransition } from "react";
 import type { ForumTagForm, ForumTagOptions } from "@/features/edit-forum-tags";
 import { MobileActionBar } from "@/shared/ui";
 
-import { KIND_ROWS, PLAY_TYPE_ROWS, STATUS_ROWS } from "../model/forum-tag-rows";
+import { ADULT_ROWS, KIND_ROWS, PLAY_TYPE_ROWS, STATUS_ROWS } from "../model/forum-tag-rows";
 import { MobileDiscordFrame } from "./mobile/mobile-discord-frame";
 import { MobileForumTagSection } from "./mobile/mobile-forum-tag-section";
 
@@ -33,6 +33,7 @@ export function ForumTagsMobileView({
     ...categories.map(({ id, name }) => ({ label: name, id: form.categories[id] })),
     ...PLAY_TYPE_ROWS.map(({ key, label }) => ({ label, id: form.playTypes[key] })),
     ...KIND_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
+    ...ADULT_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
   ];
   const deletedLabels = forum
     ? linkedRows
@@ -110,6 +111,22 @@ export function ForumTagsMobileView({
             }))}
             onChange={(key, tagId) => setForm({ ...form, [key as "briefing"]: tagId })}
           />
+          <MobileForumTagSection
+            title="성인 구분"
+            optional
+            tags={options.tags}
+            rows={ADULT_ROWS.map(({ key, label }) => ({
+              key,
+              label,
+              value: form[key],
+              savedValue: saved[key],
+            }))}
+            onChange={(key, tagId) => setForm({ ...form, [key as "adult"]: tagId })}
+          />
+          <Text typography="body4" foreground="hint">
+            서버 설정에서 성인 전용 구인 표기를 켠 서버에서만 쓰입니다. 성인 전용으로 올린 구인에 이
+            태그가 붙습니다.
+          </Text>
           {deletedLabels.length > 0 ? (
             <Callout.Root colorPalette="warning">
               <Callout.Icon />

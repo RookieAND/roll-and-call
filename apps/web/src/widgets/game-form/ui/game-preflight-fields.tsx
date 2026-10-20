@@ -15,6 +15,7 @@ import {
 import { richTextLength } from "@/shared/lib";
 import { TagInput } from "@/shared/ui";
 
+import { AdultOnlyField } from "./adult-only-field";
 import { ParticipationConditionField } from "./participation-condition-field";
 import { PlayTypeField } from "./play-type-field";
 
@@ -39,9 +40,15 @@ interface GamePreflightFieldsProps {
   form: UseFormReturn<GameFormValues>;
   rulebooks?: MyRulebooks;
   hasApplicants: boolean;
+  adultOnlyEnabled: boolean;
 }
 
-export function GamePreflightFields({ form, rulebooks, hasApplicants }: GamePreflightFieldsProps) {
+export function GamePreflightFields({
+  form,
+  rulebooks,
+  hasApplicants,
+  adultOnlyEnabled,
+}: GamePreflightFieldsProps) {
   const {
     setValue,
     watch,
@@ -104,6 +111,13 @@ export function GamePreflightFields({ form, rulebooks, hasApplicants }: GamePref
           <SegmentedControl.Item value={AI_IMAGE.on}>사용</SegmentedControl.Item>
         </SegmentedControl.Root>
       </Field.Root>
+
+      {adultOnlyEnabled && (
+        <AdultOnlyField
+          value={watch("adultOnly")}
+          onChange={(next) => setValue("adultOnly", next, { shouldDirty: true })}
+        />
+      )}
 
       <Field.Root
         label="주의 사항"

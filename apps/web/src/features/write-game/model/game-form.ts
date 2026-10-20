@@ -85,6 +85,7 @@ export const gameFormSchema = z
       )
       .optional(),
     aiImage: z.boolean({ error: "AI 이미지 사용 여부를 골라야 합니다." }),
+    adultOnly: z.boolean(),
     // 최소는 필수, 최대는 비우면 최소와 같다. 범위는 superRefine에서 함께 본다.
     playMinutesMin: z.number().int(),
     playMinutes: z.number().int().nullable(),

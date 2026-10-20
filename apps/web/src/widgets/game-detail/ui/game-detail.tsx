@@ -45,6 +45,8 @@ interface GameDetailProps {
   standing: ParticipationStanding | null;
   review: ReviewStatus;
   now: Date;
+  // 서버가 성인 전용 구인 표기를 쓰는지. 쓰는 서버에서는 전체 이용가 구인에도 항목이 보인다.
+  adultOnlyEnabled?: boolean;
   // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
   belowAppBar?: ReactNode;
 }
@@ -56,6 +58,7 @@ export function GameDetail({
   standing,
   review,
   now,
+  adultOnlyEnabled = false,
   belowAppBar,
 }: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
@@ -157,6 +160,7 @@ export function GameDetail({
               kind={game.kind}
               status={status}
               ended={ended}
+              adultOnly={game.adultOnly}
               statusLine={statusLine}
             />
 
@@ -169,7 +173,7 @@ export function GameDetail({
 
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
 
-            <GamePreflightSection game={game} />
+            <GamePreflightSection game={game} adultOnlyEnabled={adultOnlyEnabled} />
 
             <div className="desktop:hidden">{recruitMethod}</div>
 

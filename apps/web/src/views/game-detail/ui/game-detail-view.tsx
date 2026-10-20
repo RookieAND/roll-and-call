@@ -82,6 +82,7 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
         standing={standing}
         review={review}
         now={now}
+        adultOnlyEnabled={server.adultOnlyEnabled}
       />
       <QueryNoticeToast messages={NOTICE_MESSAGES} />
     </MemberTitleSheetsProvider>

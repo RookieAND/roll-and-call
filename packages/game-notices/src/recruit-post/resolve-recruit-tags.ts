@@ -11,6 +11,7 @@ export type RecruitTags = {
   playTypes: { voice?: string; text?: string };
   briefing?: string;
   session?: string;
+  adult?: string;
   // 봇이 붙이고 떼는 태그 전부. 운영진이 직접 단 다른 태그는 건드리지 않는다.
   managed: string[];
 };
@@ -44,6 +45,7 @@ export function resolveRecruitTags({
   };
   const briefing = existing(saved?.briefing);
   const session = existing(saved?.session);
+  const adult = existing(saved?.adult);
   return {
     open,
     closed,
@@ -52,6 +54,7 @@ export function resolveRecruitTags({
     playTypes,
     briefing,
     session,
+    adult,
     managed: [
       ...new Set(
         [
@@ -63,6 +66,7 @@ export function resolveRecruitTags({
           playTypes.text,
           briefing,
           session,
+          adult,
         ].flatMap((id) => id ?? []),
       ),
     ],

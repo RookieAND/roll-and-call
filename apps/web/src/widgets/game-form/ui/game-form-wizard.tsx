@@ -42,6 +42,7 @@ export function GameFormWizard({
   rulebooks,
   supplementRulebooks,
   reopen,
+  adultOnlyEnabled = false,
 }: GameFormLayoutProps) {
   const push = useTrialPush();
   const trial = use(TrialContext);
@@ -127,6 +128,7 @@ export function GameFormWizard({
             form={form}
             rulebooks={rulebooks ?? supplementRulebooks}
             hasApplicants={applicants > 0}
+            adultOnlyEnabled={adultOnlyEnabled}
           />
         );
       case FORM_SECTION.media:

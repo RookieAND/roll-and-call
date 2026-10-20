@@ -36,6 +36,7 @@ export {
   saveMessageText,
   saveReviewTemplate,
   updateCertEnforcementDate,
+  updateAdultOnlyEnabled,
   updateRankingMode,
   type EnforcementChange,
 } from "@roll-and-call/database/servers";

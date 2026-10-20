@@ -3,6 +3,7 @@ import { VStack } from "@roll-and-call/ui";
 
 import { GAME_TAG, gameTagLabel } from "@/entities/game";
 
+import { AdultOnlyBlock } from "./adult-only-block";
 import { AiImageBlock } from "./ai-image-block";
 import { GameNoticeBlock } from "./game-notice-block";
 import { GameTagBlock } from "./game-tag-block";
@@ -15,9 +16,10 @@ const TRIGGER_NOTE_LINES = [
 
 interface GamePreflightSectionProps {
   game: GameDetailData;
+  adultOnlyEnabled: boolean;
 }
 
-export function GamePreflightSection({ game }: GamePreflightSectionProps) {
+export function GamePreflightSection({ game, adultOnlyEnabled }: GamePreflightSectionProps) {
   return (
     <VStack gap="175">
       {game.genres.length > 0 && (
@@ -37,6 +39,7 @@ export function GamePreflightSection({ game }: GamePreflightSectionProps) {
         <GameTagBlock label={gameTagLabel[GAME_TAG.platforms]} tags={game.platforms} />
       )}
       <AiImageBlock label={game.aiImage ? "사용" : "사용 안 함"} />
+      {(adultOnlyEnabled || game.adultOnly) && <AdultOnlyBlock adultOnly={game.adultOnly} />}
     </VStack>
   );
 }

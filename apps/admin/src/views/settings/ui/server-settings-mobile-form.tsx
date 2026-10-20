@@ -1,39 +1,23 @@
 "use client";
 
-import {
-  RANKING_MODE,
-  RANKING_MODE_LABEL,
-  type RankingMode,
-} from "@roll-and-call/database/servers/model";
-import {
-  Button,
-  Field,
-  RadioCard,
-  RadioGroup,
-  Text,
-  TextInput,
-  VStack,
-  toast,
-} from "@roll-and-call/ui";
+import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
+import { Button, Field, Text, TextInput, VStack, toast } from "@roll-and-call/ui";
 
 import { MobileActionBar } from "@/shared/ui";
 
+import { adultOnlyFeatureNote } from "../model/adult-only-feature-note";
+import { ADULT_ONLY_DESCRIPTION, POINTS_DESCRIPTION } from "../model/feature-descriptions";
+import { rankingFeatureNote } from "../model/ranking-feature-note";
 import { useServerSettingsForm } from "../model/use-server-settings-form";
+import { FeatureRow } from "./feature-row";
 import { MobileSettingsFrame } from "./mobile/mobile-settings-frame";
 import { MobileSettingsSection } from "./mobile/mobile-settings-section";
-
-const MODE_DESCRIPTION: Record<RankingMode, string> = {
-  [RANKING_MODE.count]: "참여한 세션이 많은 순서로 순위를 정합니다.",
-  [RANKING_MODE.points]:
-    "세션과 후기 점수를 더하고 불참 점수를 빼서, 점수가 높은 순서로 순위를 정합니다.",
-};
-
-const MODES = [RANKING_MODE.count, RANKING_MODE.points] as const;
 
 interface ServerSettingsMobileFormProps {
   server: { name: string; slug: string; icon: string | null };
   savedInviteUrl: string;
   savedRankingMode: RankingMode;
+  savedAdultOnlyEnabled: boolean;
   joinUrl: string;
 }
 
@@ -41,10 +25,16 @@ export function ServerSettingsMobileForm({
   server,
   savedInviteUrl,
   savedRankingMode,
+  savedAdultOnlyEnabled,
   joinUrl,
 }: ServerSettingsMobileFormProps) {
-  const form = useServerSettingsForm({ savedInviteUrl, savedRankingMode });
+  const form = useServerSettingsForm({
+    savedInviteUrl,
+    savedRankingMode,
+    savedAdultOnlyEnabled,
+  });
   const rankingChanged = form.rankingMode !== savedRankingMode;
+  const adultOnlyChanged = form.adultOnlyEnabled !== savedAdultOnlyEnabled;
 
   const copy = async () => {
     try {
@@ -105,31 +95,32 @@ export function ServerSettingsMobileForm({
             />
           </Field.Root>
         </MobileSettingsSection>
-        <MobileSettingsSection title="이 달의 기록 방식">
+        <MobileSettingsSection title="서버 기능">
           <Text typography="body3" foreground="muted" render={<p />}>
-            이 서버의 이 달의 기록 순위를 매기는 방식을 정합니다.
+            서버마다 쓸 기능을 켜고 끕니다.
           </Text>
-          <RadioGroup
-            value={form.rankingMode}
+          <FeatureRow
+            id="mobile-feature-points"
+            label="점수제"
+            description={POINTS_DESCRIPTION}
+            checked={form.rankingMode === RANKING_MODE.points}
+            note={rankingChanged ? rankingFeatureNote(form.rankingMode) : undefined}
             disabled={form.saving}
-            aria-label="이 달의 기록 방식"
-            onValueChange={(next) => form.setRankingMode(next as RankingMode)}
-            className="flex flex-col gap-075"
-          >
-            {MODES.map((mode) => (
-              <RadioCard.Root key={mode} value={mode}>
-                <RadioCard.Title>{RANKING_MODE_LABEL[mode]}</RadioCard.Title>
-                <RadioCard.Description>{MODE_DESCRIPTION[mode]}</RadioCard.Description>
-                <RadioCard.Indicator />
-              </RadioCard.Root>
-            ))}
-          </RadioGroup>
-          {rankingChanged ? (
-            <Text typography="body3" foreground="muted" render={<p />}>
-              [변경 저장]을 누르면 이번 달 순위가 바로 {RANKING_MODE_LABEL[form.rankingMode]}로 다시
-              계산됩니다. 이미 확정한 지난달 순위는 바뀌지 않습니다.
-            </Text>
-          ) : null}
+            showState={false}
+            onCheckedChange={(checked) =>
+              form.setRankingMode(checked ? RANKING_MODE.points : RANKING_MODE.count)
+            }
+          />
+          <FeatureRow
+            id="mobile-feature-adult-only"
+            label="성인 전용 구인 표기"
+            description={ADULT_ONLY_DESCRIPTION}
+            checked={form.adultOnlyEnabled}
+            note={adultOnlyChanged ? adultOnlyFeatureNote(form.adultOnlyEnabled) : undefined}
+            disabled={form.saving}
+            showState={false}
+            onCheckedChange={form.setAdultOnlyEnabled}
+          />
         </MobileSettingsSection>
       </VStack>
       <MobileActionBar>

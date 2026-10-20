@@ -1,4 +1,5 @@
 export { checkServerSettings, type SettingChecks } from "./api/check-server-settings";
+export { saveAdultOnlyEnabled } from "./api/save-adult-only-enabled";
 export { saveRankingMode } from "./api/save-ranking-mode";
 export { saveServerSettings } from "./api/save-server-settings";
 export { normalizeInviteUrl } from "./model/normalize-invite-url";

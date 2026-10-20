@@ -66,6 +66,7 @@ export async function refreshRecruitPost({
         categoryId,
         kind: game.kind,
         playType: game.playType,
+        adultOnly: game.adultOnly,
         skipLocked: true,
       }),
   ]);

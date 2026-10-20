@@ -27,6 +27,7 @@ const CARRIED_COLUMNS = [
   "platforms",
   "notice",
   "aiImage",
+  "adultOnly",
   "playMinutesMin",
   "playMinutes",
   "maxPlayers",

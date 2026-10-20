@@ -107,6 +107,7 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
         categoryId,
         kind: game.kind,
         playType: game.playType,
+        adultOnly: game.adultOnly,
       }),
   ]);
 }

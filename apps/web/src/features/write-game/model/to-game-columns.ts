@@ -21,6 +21,7 @@ export function toGameColumns(values: GameFormValues) {
     platforms: values.platforms,
     notice: values.notice || null,
     aiImage: values.aiImage,
+    adultOnly: values.adultOnly,
     maxPlayers: Number(values.maxPlayers),
     minPlayers: values.minPlayers === "" ? null : Number(values.minPlayers),
     recruitMethod: values.recruitMethod,

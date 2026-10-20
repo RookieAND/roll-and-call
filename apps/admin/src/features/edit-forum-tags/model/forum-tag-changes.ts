@@ -14,6 +14,7 @@ const KIND_ROWS = [
   { key: "briefing", label: "설명회" },
   { key: "session", label: "세션" },
 ] as const;
+const ADULT_ROWS = [{ key: "adult", label: "성인 전용" }] as const;
 
 interface ForumTagChangesInput {
   before: ForumTagMap | null;
@@ -39,6 +40,7 @@ export function forumTagChanges({ before, after, categories, tags }: ForumTagCha
       after: after?.playTypes?.[key],
     })),
     ...KIND_ROWS.map(({ key, label }) => ({ label, before: before?.[key], after: after?.[key] })),
+    ...ADULT_ROWS.map(({ key, label }) => ({ label, before: before?.[key], after: after?.[key] })),
   ];
   return compactChanges(
     rows.map((row) => scalarChange(row.label, nameOf(row.before), nameOf(row.after))),

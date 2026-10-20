@@ -14,6 +14,7 @@ export async function syncRecruitThread({
   categoryId,
   kind,
   playType,
+  adultOnly,
   skipLocked,
 }: {
   target: RecruitTarget;
@@ -24,6 +25,7 @@ export async function syncRecruitThread({
   categoryId: string | null;
   kind: GameKind;
   playType: PlayType;
+  adultOnly?: boolean;
   skipLocked?: boolean;
 }) {
   await updateForumThread({
@@ -31,6 +33,14 @@ export async function syncRecruitThread({
     name,
     managedTagIds: target.tags.managed,
     skipLocked,
-    tagIds: recruitStatusTagIds({ target, closed, cancelled, categoryId, kind, playType }),
+    tagIds: recruitStatusTagIds({
+      target,
+      closed,
+      cancelled,
+      categoryId,
+      kind,
+      playType,
+      adultOnly,
+    }),
   });
 }

@@ -68,6 +68,7 @@ const original = {
   platforms: ["디스코드"],
   notice: null,
   aiImage: false,
+  adultOnly: false,
   playMinutesMin: 180,
   playMinutes: 300,
   maxPlayers: 4,

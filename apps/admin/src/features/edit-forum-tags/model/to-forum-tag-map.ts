@@ -17,6 +17,7 @@ export function toForumTagMap(form: ForumTagForm): ForumTagMap | null {
     ...(Object.keys(playTypes).length > 0 ? { playTypes } : {}),
     ...(form.briefing ? { briefing: form.briefing } : {}),
     ...(form.session ? { session: form.session } : {}),
+    ...(form.adult ? { adult: form.adult } : {}),
   };
   return Object.keys(map).length > 0 ? map : null;
 }

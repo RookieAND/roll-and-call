@@ -11,6 +11,7 @@ const empty: ForumTagForm = {
   playTypes: { voice: "", text: "" },
   briefing: "",
   session: "",
+  adult: "",
 };
 
 it("연결하지 않은 칸은 저장하지 않는다", () => {

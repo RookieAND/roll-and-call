@@ -108,6 +108,8 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       ...owner,
       columns: {
         ...columns,
+        // 표기를 꺼 둔 서버에서는 선택이 보이지 않으므로 올릴 때 정한 값을 그대로 둔다.
+        adultOnly: server.adultOnlyEnabled ? columns.adultOnly : game.adultOnly,
         requireRulebookCert: columns.requireRulebookCert && !!set && !set.free,
         supplements: supplementCheck.supplements,
         linkLabels,

@@ -43,6 +43,7 @@ export async function notifyGameCreated({
       categoryId,
       kind: game.kind,
       playType: game.playType,
+      adultOnly: game.adultOnly,
     }),
     input: post.input,
   });

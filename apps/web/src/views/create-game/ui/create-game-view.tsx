@@ -51,6 +51,7 @@ export async function CreateGameView({ rulebookId, fromGameId }: CreateGameViewP
       initialRulebookId={reopened?.defaults ? undefined : rulebookId}
       defaultGame={reopened?.defaults}
       reopen={reopened?.reopen}
+      adultOnlyEnabled={server.adultOnlyEnabled}
     />
   );
 }

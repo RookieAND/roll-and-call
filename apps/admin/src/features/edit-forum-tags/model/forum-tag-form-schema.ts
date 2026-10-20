@@ -14,4 +14,5 @@ export const forumTagFormSchema = z.object({
   playTypes: z.object({ voice: tagId, text: tagId }),
   briefing: tagId,
   session: tagId,
+  adult: tagId,
 }) satisfies z.ZodType<ForumTagForm>;

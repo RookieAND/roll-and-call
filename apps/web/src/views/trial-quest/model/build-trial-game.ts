@@ -88,6 +88,7 @@ export function buildTrialGame({
     notice: null,
     linkLabels: {},
     aiImage: false,
+    adultOnly: false,
     maxPlayers: 4,
     minPlayers: null,
     minPlayersJudgedAt: null,

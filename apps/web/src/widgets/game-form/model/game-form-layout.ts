@@ -26,6 +26,7 @@ export interface GameFormLayoutProps {
   steps: readonly WizardStepConfig[];
   edit?: GameEditContext;
   rulebooks?: MyRulebooks;
+  adultOnlyEnabled?: boolean;
   // 서플리먼트 목록을 만들 룰북. 수정은 룰을 바꿀 수 없어 rulebooks가 없으므로 따로 받는다.
   supplementRulebooks?: MyRulebooks;
   reopen?: ReopenContext;

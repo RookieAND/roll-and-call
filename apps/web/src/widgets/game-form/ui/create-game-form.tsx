@@ -14,6 +14,7 @@ interface CreateGameFormProps {
   initialRulebookId?: string;
   defaultGame?: GameDefaults;
   reopen?: ReopenContext;
+  adultOnlyEnabled?: boolean;
 }
 
 export function CreateGameForm({
@@ -22,6 +23,7 @@ export function CreateGameForm({
   initialRulebookId,
   defaultGame,
   reopen,
+  adultOnlyEnabled = false,
 }: CreateGameFormProps) {
   const create = useTrialHandler(TRIAL_HANDLER.createGame, createGame);
   return (
@@ -32,6 +34,7 @@ export function CreateGameForm({
       rulebooks={rulebooks}
       initialRulebookId={initialRulebookId}
       reopen={reopen}
+      adultOnlyEnabled={adultOnlyEnabled}
       submitLabel="구인 등록"
       successMessage="구인이 등록되었습니다"
     />

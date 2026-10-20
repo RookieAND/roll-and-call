@@ -88,6 +88,8 @@ export const games = pgTable(
     linkLabels: jsonb("link_labels").$type<Record<string, string>>().notNull().default({}),
     // 세션 진행 중 AI 이미지를 쓸 수 있는지. 등록할 때 반드시 고르고, 목록에는 내보내지 않는다.
     aiImage: boolean("ai_image").notNull().default(false),
+    // 성인 전용으로 올린 구인인지. 서버가 성인 전용 구인 표기를 켠 동안에만 고를 수 있고, 표기만 하며 신청을 막지는 않는다.
+    adultOnly: boolean("adult_only").notNull().default(false),
     maxPlayers: integer("max_players").notNull(),
     // 선택 입력. 모집 마감 때 모인 인원이 이보다 적으면 구인이 자동 취소된다. 1 이상 정원 이하.
     minPlayers: integer("min_players"),
