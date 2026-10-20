@@ -1,12 +1,13 @@
 import { DISCORD_COLOR, type DiscordEmbedField } from "@roll-and-call/discord";
 
 export const CERT_RESULT_FIELD_NAME = "📌 결과";
+export const CERT_STAFF_FIELD_NAME = "🧑‍⚖️ 처리한 운영진";
 
 export interface CertNoticeApplication {
   status: "pending" | "approved" | "rejected" | "withdrawn";
   staffNickname: string | null;
   rulebookLabel: string;
-  // 결정은 났지만 아직 메시지·스레드에 반영하지 않았다.
+  // 결정은 났지만 아직 메시지에 반영하지 않았다.
   pendingSync: boolean;
 }
 
@@ -17,33 +18,18 @@ const STATUS_MARK = {
   withdrawn: "↩️",
 } as const;
 
-function statusText({ status, staffNickname }: CertNoticeApplication) {
-  switch (status) {
-    case "pending":
-      return "심사 대기";
-    case "approved":
-      return `승인 · ${staffNickname ?? "알 수 없음"}`;
-    case "rejected":
-      return `반려 · ${staffNickname ?? "알 수 없음"}`;
-    case "withdrawn":
-      return "신청자가 철회";
-  }
-}
+const STATUS_TEXT = {
+  pending: "심사 대기",
+  approved: "승인",
+  rejected: "반려",
+  withdrawn: "신청자가 철회",
+} as const;
 
-function threadLine(application: CertNoticeApplication) {
-  const { status, staffNickname, rulebookLabel } = application;
-  const staff = staffNickname ?? "알 수 없음";
-  switch (status) {
-    case "approved":
-      return `${STATUS_MARK.approved} ${staff}님이 ${rulebookLabel} 인증을 승인했습니다.`;
-    case "rejected":
-      return `${STATUS_MARK.rejected} ${staff}님이 ${rulebookLabel} 인증을 반려했습니다.`;
-    case "withdrawn":
-      return `${STATUS_MARK.withdrawn} 신청자가 ${rulebookLabel} 신청을 철회했습니다.`;
-    case "pending":
-      return null;
-  }
-}
+const ALL_STATUS_TEXT = {
+  approved: "전체 승인",
+  rejected: "전체 반려",
+  withdrawn: "신청자가 전체 철회",
+} as const;
 
 // 결정이 하나도 없으면 색을 바꾸지 않는다. 묶음에 대기가 남아 있어도 처음 색을 둔다.
 function resultColor(applications: CertNoticeApplication[]): number | undefined {
@@ -55,25 +41,51 @@ function resultColor(applications: CertNoticeApplication[]): number | undefined 
   return DISCORD_COLOR.left;
 }
 
-// 신청 알림 임베드에 붙일 결과 칸·색과, 스레드에 새로 남길 줄. 사유는 넣지 않는다(D302).
-export function certNoticeResult(applications: CertNoticeApplication[]): {
-  field: DiscordEmbedField;
-  color: number | undefined;
-  threadLines: string[];
-} {
-  const single = applications.length === 1;
-  const value = applications
-    .map((application) =>
-      single
-        ? `${STATUS_MARK[application.status]} ${statusText(application)}`
-        : `${STATUS_MARK[application.status]} ${application.rulebookLabel} — ${statusText(application)}`,
+function resultValue(applications: CertNoticeApplication[]) {
+  const [first] = applications;
+  if (
+    applications.length > 1 &&
+    first &&
+    first.status !== "pending" &&
+    applications.every(({ status }) => status === first.status)
+  ) {
+    return `${STATUS_MARK[first.status]} ${ALL_STATUS_TEXT[first.status]}`;
+  }
+  return applications
+    .map(({ status, rulebookLabel }) =>
+      applications.length === 1
+        ? `${STATUS_MARK[status]} ${STATUS_TEXT[status]}`
+        : `${STATUS_MARK[status]} ${rulebookLabel} — ${STATUS_TEXT[status]}`,
     )
     .join("\n");
+}
+
+// 승인·반려한 운영진. 한 명이면 이름만, 여러 명이면 책마다 적는다.
+function staffValue(applications: CertNoticeApplication[]) {
+  const decided = applications.filter(
+    ({ status }) => status === "approved" || status === "rejected",
+  );
+  const names = new Set(decided.map(({ staffNickname }) => staffNickname ?? "알 수 없음"));
+  if (names.size === 0) return undefined;
+  if (names.size === 1) return [...names][0];
+  return decided
+    .map(
+      ({ rulebookLabel, staffNickname }) => `${rulebookLabel} — ${staffNickname ?? "알 수 없음"}`,
+    )
+    .join("\n");
+}
+
+// 신청 알림 임베드에 붙일 결과·처리한 운영진 칸과 색. 사유는 넣지 않는다(D302).
+export function certNoticeResult(applications: CertNoticeApplication[]): {
+  fields: DiscordEmbedField[];
+  color: number | undefined;
+} {
+  const staff = staffValue(applications);
   return {
-    field: { name: CERT_RESULT_FIELD_NAME, value, inline: false },
+    fields: [
+      { name: CERT_RESULT_FIELD_NAME, value: resultValue(applications), inline: false },
+      ...(staff ? [{ name: CERT_STAFF_FIELD_NAME, value: staff, inline: false }] : []),
+    ],
     color: resultColor(applications),
-    threadLines: applications
-      .filter((application) => application.pendingSync)
-      .flatMap((application) => threadLine(application) ?? []),
   };
 }
