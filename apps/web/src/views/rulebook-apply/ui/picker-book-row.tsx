@@ -139,7 +139,7 @@ export function PickerBookRow({
     );
   }
   return (
-    <Link href={href} className={row({ pickable: true })}>
+    <Link href={href} prefetch={false} className={row({ pickable: true })}>
       {body}
     </Link>
   );

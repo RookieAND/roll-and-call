@@ -26,6 +26,7 @@ export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProp
         {rows.map((game) => (
           <Link
             key={game.id}
+            prefetch={false}
             href={serverPath({ slug: server.slug, path: `/games/${game.id}` })}
             className="block h-full rounded-600 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
           >
@@ -36,7 +37,7 @@ export async function LiveGameList({ gamesPage, page, filter }: LiveGameListProp
       <Pagination
         page={page}
         totalPages={Math.ceil(total / pageSize)}
-        renderLink={(href) => <Link href={href} />}
+        renderLink={(href) => <Link href={href} prefetch={false} />}
         hrefFor={(pageNumber) =>
           serverPath({
             slug: server.slug,
