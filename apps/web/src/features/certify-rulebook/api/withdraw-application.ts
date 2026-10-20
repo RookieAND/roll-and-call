@@ -5,11 +5,12 @@ import {
   withdrawPendingApplications,
 } from "@roll-and-call/database/certifications";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 
 import { removeUnusedCertPhotos } from "@/entities/rulebook/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
-import { getActingMember, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError, syncCertStaffNotices } from "@/shared/server";
 
 const ALREADY_PROCESSED = "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.";
 
@@ -34,6 +35,7 @@ export async function withdrawApplication(input: string): Promise<ActionResult> 
     application: latest,
   });
   if (withdrawn.length === 0) return { error: ALREADY_PROCESSED };
+  after(() => syncCertStaffNotices({ server, userId: user.id }));
   await removeUnusedCertPhotos({
     serverId: server.id,
     userId: user.id,

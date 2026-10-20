@@ -36,6 +36,8 @@ function application(partial: Partial<CertApplication>): CertApplication {
     processedAt: new Date("2026-09-01T00:00:00Z"),
     filesPurgedAt: null,
     discardedAt: null,
+    staffMessageId: null,
+    staffMessageSyncedAt: null,
     createdAt: new Date("2026-08-30T00:00:00Z"),
     ...partial,
   };

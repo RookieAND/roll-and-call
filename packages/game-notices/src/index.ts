@@ -17,6 +17,7 @@ export { gameNoticeEmbed } from "./notify/game-notice-embed";
 export { headcountFields } from "./notify/headcount-fields";
 export { gameUrl } from "./lib/game-url";
 export { postStaffNotice } from "./staff-notice/post-staff-notice";
+export { syncCertStaffNotices } from "./staff-notice/sync-cert-staff-notices";
 export { STAFF_NOTICE_KIND, type StaffNotice } from "./staff-notice/staff-notice-kind";
 export { gameHeadValues, messageHeadInput } from "./lib/message-head-input";
 export { messageText } from "./lib/message-text";

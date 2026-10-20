@@ -5,6 +5,8 @@ export {
   type CertDecision,
   type CertDecisionResult,
 } from "./commands/decide-cert-application";
+export { markCertStaffMessagesSynced } from "./commands/mark-cert-staff-messages-synced";
+export { saveCertStaffMessage } from "./commands/save-cert-staff-message";
 export { notifyCertGroupDecision } from "./commands/notify-cert-group-decision";
 export { discardRulebookRecord } from "./commands/discard-rulebook-record";
 export {
@@ -20,5 +22,6 @@ export { findLatestCertApplication } from "./queries/find-latest-cert-applicatio
 export { getRulebookRecords, type RulebookRecords } from "./queries/get-rulebook-records";
 export { loadBulkQuizQuestions } from "./queries/load-bulk-quiz-questions";
 export { loadCertificationContext } from "./queries/load-certification-context";
+export { loadUnsyncedCertStaffMessages } from "./queries/load-unsynced-cert-staff-messages";
 export { loadRevokeCancelTargets } from "./queries/load-revoke-cancel-targets";
 export * from "./model";

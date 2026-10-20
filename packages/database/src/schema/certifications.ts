@@ -77,6 +77,10 @@ export const certApplications = pgTable(
     filesPurgedAt: timestamp("files_purged_at", { withTimezone: true }),
     // 사용자가 반려 기록을 지운 시각. 사용자 앱에서만 숨기고 어드민 이력에는 남는다
     discardedAt: timestamp("discarded_at", { withTimezone: true }),
+    // 운영진 채널에 올린 신청 알림. 묶음 신청은 같은 메시지를 나눠 쓴다.
+    staffMessageId: text("staff_message_id"),
+    // 결과를 알림 메시지·스레드에 마지막으로 반영한 시각. 결정 시각보다 이르면 다시 반영한다.
+    staffMessageSyncedAt: timestamp("staff_message_synced_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [

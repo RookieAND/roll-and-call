@@ -3,6 +3,7 @@
 import {
   createCertApplication,
   loadCertificationContext,
+  saveCertStaffMessage,
 } from "@roll-and-call/database/certifications";
 import { getMemberIdentity } from "@roll-and-call/database/profiles";
 import { redirect } from "next/navigation";
@@ -135,7 +136,7 @@ export async function submitCertification(
   after(async () => {
     const applicant = await getMemberIdentity({ serverId: server.id, userId: user.id });
     if (!applicant) return;
-    await postStaffNotice({
+    const message = await postStaffNotice({
       server,
       notice: {
         kind: STAFF_NOTICE_KIND.certApplied,
@@ -147,6 +148,13 @@ export async function submitCertification(
         formatLabel: CERT_FORMAT_LABEL[entry.format],
       },
     });
+    if (message) {
+      await saveCertStaffMessage({
+        serverId: server.id,
+        applicationIds: [applicationId],
+        messageId: message.id,
+      });
+    }
   });
   redirect(serverPath({ slug: server.slug, path: `/me/rulebooks/${book.id}/submitted` }));
 }

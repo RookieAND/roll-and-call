@@ -1,11 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { decideCert } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getCurrentServer, requireStaff, type ShotKey } from "@/shared/server";
+import {
+  getCurrentServer,
+  requireStaff,
+  syncCertStaffNotices,
+  type ShotKey,
+} from "@/shared/server";
 
 interface RejectCertInput {
   // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.
@@ -47,5 +53,6 @@ export async function rejectCert(rawApplicationId: string, rawInput: RejectCertI
     },
   });
   revalidatePath("/", "layout");
+  if (result.ok) after(() => syncCertStaffNotices({ server, userId: result.userId }));
   return result;
 }

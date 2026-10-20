@@ -4,6 +4,7 @@ import {
   createCertApplicationGroup,
   loadBulkQuizQuestions,
   loadCertificationContext,
+  saveCertStaffMessage,
 } from "@roll-and-call/database/certifications";
 import {
   BULK_CERT_MAX_BOOKS,
@@ -122,7 +123,7 @@ export async function submitCertificationGroup(
   after(async () => {
     const applicant = await getMemberIdentity({ serverId: server.id, userId: user.id });
     if (!applicant) return;
-    await postStaffNotice({
+    const message = await postStaffNotice({
       server,
       notice: {
         kind: STAFF_NOTICE_KIND.certApplied,
@@ -134,6 +135,13 @@ export async function submitCertificationGroup(
         formatLabel: CERT_FORMAT_LABEL[CERT_FORMAT.physical],
       },
     });
+    if (message) {
+      await saveCertStaffMessage({
+        serverId: server.id,
+        applicationIds: created.map((application) => application.id),
+        messageId: message.id,
+      });
+    }
   });
   redirect(serverPath({ slug: server.slug, path: `/me/rulebooks/${rulebookIds[0]}/submitted` }));
 }

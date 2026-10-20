@@ -2,11 +2,12 @@
 
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { decideCertGroup } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getCurrentServer, requireStaff } from "@/shared/server";
+import { getCurrentServer, requireStaff, syncCertStaffNotices } from "@/shared/server";
 
 interface RejectCertGroupInput {
   // 고른 반려 사유 이름. 기타면 null이고 userReason이 사유다.
@@ -48,5 +49,8 @@ export async function rejectCertGroup(rawApplicationIds: string[], rawInput: Rej
     },
   });
   revalidatePath("/", "layout");
+  if (result.ok && result.decided > 0) {
+    after(() => syncCertStaffNotices({ server, userId: result.userId }));
+  }
   return result;
 }

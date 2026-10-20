@@ -18,6 +18,8 @@ export { createFileMessage } from "./message/create-file-message";
 export { updateFileMessage } from "./message/update-file-message";
 export { deleteDiscordMessage } from "./message/delete-discord-message";
 export { editDiscordMessage } from "./message/edit-discord-message";
+export { getDiscordMessage } from "./message/get-discord-message";
+export { startMessageThread } from "./message/start-message-thread";
 export { createForumPost } from "./forum/create-forum-post";
 export { updateForumPost } from "./forum/update-forum-post";
 export { deleteDiscordThread } from "./forum/delete-discord-thread";

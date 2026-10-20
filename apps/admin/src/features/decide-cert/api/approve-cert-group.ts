@@ -7,7 +7,12 @@ import { z } from "zod";
 
 import { decideCertGroup } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
+import {
+  evaluateBadges,
+  getCurrentServer,
+  requireStaff,
+  syncCertStaffNotices,
+} from "@/shared/server";
 
 const idsSchema = z.array(idSchema).min(1).max(BULK_CERT_MAX_BOOKS);
 
@@ -24,6 +29,7 @@ export async function approveCertGroup(rawApplicationIds: string[]) {
   revalidatePath("/", "layout");
   if (result.ok && result.decided > 0) {
     after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
+    after(() => syncCertStaffNotices({ server, userId: result.userId }));
   }
   return result;
 }

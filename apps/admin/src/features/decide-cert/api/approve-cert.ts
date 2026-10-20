@@ -5,7 +5,12 @@ import { after } from "next/server";
 
 import { decideCert } from "@/entities/cert/server";
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { evaluateBadges, getCurrentServer, requireStaff } from "@/shared/server";
+import {
+  evaluateBadges,
+  getCurrentServer,
+  requireStaff,
+  syncCertStaffNotices,
+} from "@/shared/server";
 
 export async function approveCert(rawApplicationId: string) {
   const staff = await requireStaff();
@@ -18,6 +23,9 @@ export async function approveCert(rawApplicationId: string) {
     decision: { kind: "approve" },
   });
   revalidatePath("/", "layout");
-  if (result.ok) after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
+  if (result.ok) {
+    after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
+    after(() => syncCertStaffNotices({ server, userId: result.userId }));
+  }
   return result;
 }
