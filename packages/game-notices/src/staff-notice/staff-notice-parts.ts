@@ -36,7 +36,7 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
         title: "새 룰북 추가 요청이 들어왔습니다",
         fields: [
           { name: "📋 항목", value: "룰북 추가 요청", inline: true },
-          { name: "🙋 요청자", value: `<@${notice.requesterDiscordId}>`, inline: true },
+          { name: "🙋 요청자", value: notice.requesterNickname, inline: true },
           {
             name: "📖 룰북",
             value: [notice.name, notice.edition].filter(Boolean).join(" "),
@@ -46,7 +46,7 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
           ...(notice.category ? [{ name: "🗂️ 분류", value: notice.category, inline: true }] : []),
         ],
         description: [
-          "새로운 룰북 신청이 들어왔습니다.\n기존 룰북과 비교해서 추가할지 반려할지 결정해 주세요.",
+          `${notice.requesterNickname}님이 ${[notice.name, notice.edition].filter(Boolean).join(" ")} 추가를 요청했습니다!\n기존 룰북과 비교해서 추가할지 반려할지 결정해 주세요.`,
           ...(notice.link ? [`🔗 참고 링크\n${notice.link}`] : []),
         ].join("\n\n"),
         thumbnail: notice.requesterAvatarUrl ? { url: notice.requesterAvatarUrl } : undefined,

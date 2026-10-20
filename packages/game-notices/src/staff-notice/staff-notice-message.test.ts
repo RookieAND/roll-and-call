@@ -53,7 +53,7 @@ describe("staffNoticeMessage", () => {
     );
     expect(valuesOf({ ...base, name: "던전 월드", edition: "2판" })).toEqual([
       "룰북 추가 요청",
-      "<@222>",
+      "달빛토끼",
       "던전 월드 2판",
     ]);
     expect(valuesOf({ ...base, name: "던전 월드", edition: null })?.[2]).toBe("던전 월드");
