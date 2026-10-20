@@ -2,10 +2,7 @@ import { Field, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 
 const ADULT_ONLY = { off: "off", on: "on" } as const;
 
-const HINT = {
-  [ADULT_ONLY.off]: "이 서버는 성인 전용 구인을 허용합니다.",
-  [ADULT_ONLY.on]: "목록과 상세에 성인 전용 표시가 붙습니다.",
-} as const;
+const HINT = "목록과 상세에 성인 전용 표시가 붙습니다.";
 
 interface AdultOnlyFieldProps {
   value: boolean;
@@ -26,7 +23,7 @@ export function AdultOnlyField({ value, onChange }: AdultOnlyFieldProps) {
           <SegmentedControl.Item value={ADULT_ONLY.on}>성인 전용</SegmentedControl.Item>
         </SegmentedControl.Root>
         <Text typography="body4" foreground="hint" render={<p />}>
-          {HINT[selected]}
+          {HINT}
         </Text>
       </VStack>
     </Field.Root>
