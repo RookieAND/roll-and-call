@@ -8,12 +8,11 @@ import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
 import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { IncludedSupplementsField } from "./included-supplements-field";
+import { CoveredBooksField } from "./covered-books-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
-import { SupersedesField } from "./supersedes-field";
 
 const ID_PREFIX = "rulebook-mobile";
 
@@ -54,19 +53,6 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
                 onChange={(kind) => form.change({ kind })}
               />
             </Field.Root>
-            <SupersedesField
-              draft={draft}
-              category={form.category}
-              idPrefix={ID_PREFIX}
-              disabled={pending}
-              onChange={(supersedesId) => form.change({ supersedesId })}
-            />
-            <IncludedSupplementsField
-              draft={draft}
-              category={form.category}
-              disabled={pending}
-              onChange={(includedSupplementIds) => form.change({ includedSupplementIds })}
-            />
           </BasicInfoFields>
         </MobileFormSection>
         <MobileFormSection title="인증 정책">
@@ -75,6 +61,14 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
             certRequired={draft.certRequired}
             disabled={pending}
             onChange={(certRequired) => form.change({ certRequired })}
+          />
+        </MobileFormSection>
+        <MobileFormSection title="함께 인증되는 책">
+          <CoveredBooksField
+            draft={draft}
+            category={form.category}
+            disabled={pending}
+            onChange={form.change}
           />
         </MobileFormSection>
         <MobileFormSection title="미니룰">

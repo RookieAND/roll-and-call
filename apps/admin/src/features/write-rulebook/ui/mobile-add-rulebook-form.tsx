@@ -10,12 +10,11 @@ import { ActionNetworkError, MobileActionBar, RetryableLabel, ServerLink } from 
 import { useAddRulebookForm } from "../model/use-add-rulebook-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { IncludedSupplementsField } from "./included-supplements-field";
+import { CoveredBooksField } from "./covered-books-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
 import { RequestSummary } from "./request-summary";
-import { SupersedesField } from "./supersedes-field";
 
 const ID_PREFIX = "add-rulebook-mobile";
 
@@ -54,19 +53,6 @@ export function MobileAddRulebookForm({
         </MobileFormSection>
         <MobileFormSection title="2. 종류">
           <KindCards kind={draft.kind} disabled={pending} onChange={(kind) => change({ kind })} />
-          <SupersedesField
-            draft={draft}
-            category={category}
-            idPrefix={ID_PREFIX}
-            disabled={pending}
-            onChange={(supersedesId) => change({ supersedesId })}
-          />
-          <IncludedSupplementsField
-            draft={draft}
-            category={category}
-            disabled={pending}
-            onChange={(includedSupplementIds) => change({ includedSupplementIds })}
-          />
         </MobileFormSection>
         <MobileFormSection title="3. 인증 정책">
           <CertPolicyField
@@ -76,7 +62,15 @@ export function MobileAddRulebookForm({
             onChange={(certRequired) => change({ certRequired })}
           />
         </MobileFormSection>
-        <MobileFormSection title="4. 미니룰">
+        <MobileFormSection title="4. 함께 인증되는 책">
+          <CoveredBooksField
+            draft={draft}
+            category={category}
+            disabled={pending}
+            onChange={change}
+          />
+        </MobileFormSection>
+        <MobileFormSection title="5. 미니룰">
           <MiniRuleField
             miniRule={
               form.existingCategory ? form.existingCategory.categoryMiniRule : form.miniRule
