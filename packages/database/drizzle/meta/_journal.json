@@ -771,6 +771,13 @@
       "when": 1799500000006,
       "tag": "0115_adult_only",
       "breakpoints": true
+    },
+    {
+      "idx": 116,
+      "version": "7",
+      "when": 1799500000007,
+      "tag": "0116_rulebook_included_in",
+      "breakpoints": true
     }
   ]
 }

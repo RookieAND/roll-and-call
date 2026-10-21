@@ -1,0 +1,2 @@
+ALTER TABLE "rulebooks" ADD COLUMN "included_in_id" uuid;--> statement-breakpoint
+ALTER TABLE "rulebooks" ADD CONSTRAINT "rulebooks_included_in_id_rulebooks_id_fk" FOREIGN KEY ("included_in_id") REFERENCES "public"."rulebooks"("id") ON DELETE set null ON UPDATE no action;

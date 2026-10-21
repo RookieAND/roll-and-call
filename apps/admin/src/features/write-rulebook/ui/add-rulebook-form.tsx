@@ -11,6 +11,7 @@ import { ActionNetworkError, FormSection, RetryableLabel, ServerLink } from "@/s
 import { useAddRulebookForm } from "../model/use-add-rulebook-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
+import { IncludedSupplementsField } from "./included-supplements-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { RequestSummary } from "./request-summary";
@@ -67,6 +68,12 @@ export function AddRulebookForm({
                 idPrefix="add-rulebook"
                 disabled={pending}
                 onChange={(supersedesId) => change({ supersedesId })}
+              />
+              <IncludedSupplementsField
+                draft={draft}
+                category={category}
+                disabled={pending}
+                onChange={(includedSupplementIds) => change({ includedSupplementIds })}
               />
             </FormSection>
             <FormSection title="3. 인증 정책">

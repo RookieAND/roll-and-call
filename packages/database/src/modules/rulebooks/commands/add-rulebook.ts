@@ -9,6 +9,7 @@ import { describeRulebook } from "#db/modules/rulebooks/queries/describe-ruleboo
 import { rulebooks } from "#db/schema";
 
 import { toRulebookValues } from "./rulebook-values";
+import { saveIncludedSupplements } from "./save-included-supplements";
 
 export type AddRulebookResult = { ok: true; id: string } | { ok: false; duplicate: true };
 
@@ -31,6 +32,12 @@ export async function addRulebook({
       .onConflictDoNothing()
       .returning({ id: rulebooks.id });
     if (!row) return { ok: false, duplicate: true };
+    await saveIncludedSupplements({
+      executor: tx,
+      serverId,
+      coreId: row.id,
+      supplementIds: fields.includedSupplementIds,
+    });
     await relinkGames({ executor: tx, serverId });
     await recordAudit({
       executor: tx,

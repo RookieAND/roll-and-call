@@ -3,10 +3,9 @@ import type { RulebookRecords } from "@roll-and-call/database/certifications";
 
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";
-import { editionSetKey, editionSets } from "./edition-sets";
-import { isOpened } from "./is-opened";
+import { editionSets } from "./edition-sets";
 import { rejectionSummary } from "./rejection-summary";
-import { RULEBOOK_KIND, type RulebookKind } from "./rulebook-kind";
+import type { RulebookKind } from "./rulebook-kind";
 import { rulebookLabel } from "./rulebook-label";
 
 export interface MyRulebook {
@@ -21,6 +20,7 @@ export interface MyRulebook {
   categoryId: string;
   categoryName: string;
   supersedesId: string | null;
+  includedInId: string | null;
   state: CertState | null;
   stateAt: Date | null;
   latestApplication: CertApplication | null;
@@ -67,16 +67,13 @@ export function toMyRulebooks(records: RulebookRecords) {
         (newer) => newer.supersedesId === rulebook.id && newer.state === CERT_STATE.certified,
       ) ?? null;
   }
-  // 신판이 덮는 구판 세트의 서플리먼트는 구판 기본 룰북이 열린 이유(신판 인증)로 함께 열린다.
-  const cores = rulebooks.filter((rulebook) => rulebook.kind === RULEBOOK_KIND.core);
+  // 서플리먼트는 자기를 포함하는 기본 룰북이 열리면(인증·신판 인증) 함께 열린다.
   for (const rulebook of rulebooks) {
-    if (rulebook.kind !== RULEBOOK_KIND.supplement || rulebook.state === CERT_STATE.certified) {
-      continue;
-    }
-    const siblings = cores.filter((core) => editionSetKey(core) === editionSetKey(rulebook));
-    if (siblings.every(isOpened)) {
-      rulebook.unlockedBy = siblings.find((core) => core.unlockedBy)?.unlockedBy ?? null;
-    }
+    if (!rulebook.includedInId || rulebook.state === CERT_STATE.certified) continue;
+    const including = rulebooks.find((candidate) => candidate.id === rulebook.includedInId);
+    if (!including?.certRequired) continue;
+    rulebook.unlockedBy =
+      including.state === CERT_STATE.certified ? including : including.unlockedBy;
   }
   const requests = records.requestRows.map((request) => ({
     id: request.id,

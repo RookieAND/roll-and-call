@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "@roll-and-call/ui";
-import { isUndefined, uniq } from "es-toolkit";
+import { isEqual, isUndefined, uniq } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -39,6 +39,9 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
     categoryAlias: rulebook.categoryAlias ?? "",
     kind: rulebook.kind,
     supersedesId: rulebook.supersedesId,
+    includedSupplementIds: rulebook.allRulebooks
+      .filter((row) => row.includedInId === rulebook.id)
+      .map((row) => row.id),
     aliasesText: rulebook.aliases.join(", "),
     certRequired: rulebook.certRequired,
   };
@@ -53,13 +56,17 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
 
   const pending = checking || saving.pending || unhiding.pending;
   const category = draftCategory(draft, rulebook.allRulebooks, rulebook.id);
-  const next = { ...draft, supersedesId: category.supersedesId };
+  const next = {
+    ...draft,
+    supersedesId: category.supersedesId,
+    includedSupplementIds: category.includedSupplementIds,
+  };
   // 분류를 바꾼 초안이면 그 분류의 값을 따르므로 미니룰은 바꾸지 않는다.
   const miniRuleEditable = draft.category === saved.category;
   const miniRuleDirty = miniRuleEditable && miniRule !== rulebook.categoryMiniRule;
   const dirty =
     miniRuleDirty ||
-    (Object.keys(saved) as (keyof RulebookDraft)[]).some((key) => saved[key] !== next[key]);
+    (Object.keys(saved) as (keyof RulebookDraft)[]).some((key) => !isEqual(saved[key], next[key]));
   const categories = uniq(rulebook.allRulebooks.map((row) => row.category));
   const certifiedCount = rulebook.certifiedGms.length;
   const kindDescription = `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`;

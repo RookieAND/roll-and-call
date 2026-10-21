@@ -14,6 +14,7 @@ import { rulebookCategories, rulebooks } from "#db/schema";
 
 import { removeEmptyCategories } from "./remove-empty-categories";
 import { toRulebookValues } from "./rulebook-values";
+import { saveIncludedSupplements } from "./save-included-supplements";
 
 export type UpdateRulebookResult = { ok: true } | { ok: false; duplicate: true };
 
@@ -68,6 +69,13 @@ export async function updateRulebook({
           ? and(pointsHere, ne(rulebooks.categoryId, values.categoryId))
           : pointsHere,
       );
+    // 서플리먼트가 기본 룰북이 아니게 되면 자기를 포함하던 연결은 saveIncludedSupplements가 비운다.
+    await saveIncludedSupplements({
+      executor: tx,
+      serverId,
+      coreId: id,
+      supplementIds: fields.includedSupplementIds,
+    });
     await removeEmptyCategories({ executor: tx, serverId });
     await relinkGames({ executor: tx, serverId });
     if (values.name !== rulebook.name) {

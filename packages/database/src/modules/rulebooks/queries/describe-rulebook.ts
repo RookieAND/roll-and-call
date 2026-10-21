@@ -38,6 +38,14 @@ export async function describeRulebook({
         .from(rulebooks)
         .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, row.supersedesId)))
     : [];
+  const included = await executor
+    .select({ name: rulebooks.name, edition: rulebooks.edition })
+    .from(rulebooks)
+    .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.includedInId, id)));
   const { supersedesId: _supersedesId, ...rest } = row;
-  return { ...rest, supersedes: superseded ? rulebookLabel(superseded) : "" };
+  return {
+    ...rest,
+    supersedes: superseded ? rulebookLabel(superseded) : "",
+    includedSupplements: included.map(rulebookLabel).toSorted(),
+  };
 }

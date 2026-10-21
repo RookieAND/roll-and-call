@@ -7,6 +7,7 @@ export interface RulebookDescription {
   categoryAlias: string | null;
   kind: RulebookKind;
   supersedes: string;
+  includedSupplements: string[];
   aliases: string[];
   certRequired: boolean;
   miniRule: boolean;

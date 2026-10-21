@@ -16,6 +16,7 @@ const catalogBook = (id: string, overrides: Record<string, unknown> = {}) => ({
   categoryId: "coc",
   categoryName: "크툴루",
   supersedesId: null,
+  includedInId: null,
   ...overrides,
 });
 
@@ -24,7 +25,8 @@ function recordsOf({ certified }: { certified: string[] }) {
     catalog: [
       catalogBook("core6", { kind: "core" }),
       catalogBook("core7", { kind: "core", edition: "신판", supersedesId: "core6" }),
-      catalogBook("sup-old"),
+      catalogBook("sup-old", { includedInId: "core7" }),
+      catalogBook("sup-alone"),
       catalogBook("sup-new", { edition: "신판" }),
     ],
     certificationRows: certified.map((rulebookId) => ({
@@ -41,12 +43,13 @@ function recordsOf({ certified }: { certified: string[] }) {
   } as unknown as RulebookRecords;
 }
 
-describe("구판 서플리먼트 상속", () => {
+describe("포함된 서플리먼트 상속", () => {
   it("신판 인증으로 구판 기본 룰북이 열리면 구판 서플리먼트도 함께 열린다", () => {
     const { rulebooks } = toMyRulebooks(recordsOf({ certified: ["core7"] }));
     const byId = (id: string) => rulebooks.find((book) => book.id === id)!;
     expect(byId("sup-old").unlockedBy?.id).toBe("core7");
     expect(byId("sup-new").unlockedBy).toBeNull();
+    expect(byId("sup-alone").unlockedBy).toBeNull();
     expect(certOption({ rulebook: byId("sup-old"), rulebooks })).toMatchObject({
       type: CERT_OPTION.unlocked,
       note: "신판 인증으로 함께 열립니다",
@@ -60,13 +63,17 @@ describe("구판 서플리먼트 상속", () => {
       { id: "sup-old", name: "sup-old", state: SUPPLEMENT_OPTION_STATE.open },
       { id: "sup-new", name: "sup-new", state: SUPPLEMENT_OPTION_STATE.locked },
     ]);
+    expect(supplementOptions(set, { enforced: true }).map((option) => option.id)).not.toContain(
+      "sup-alone",
+    );
   });
 
   it("구판만 가진 사람의 구판 서플리먼트는 직접 인증해야 열린다", () => {
     const myRulebooks = toMyRulebooks(recordsOf({ certified: ["core6"] }));
     const set = ruleSetOf({ myRulebooks, rulebookId: "core6" })!;
-    expect(supplementOptions(set, { enforced: true })).toEqual([
-      { id: "sup-old", name: "sup-old", state: SUPPLEMENT_OPTION_STATE.locked },
+    expect(supplementOptions(set, { enforced: true }).map((option) => option.id)).toEqual([
+      "sup-alone",
+      "sup-old",
     ]);
   });
 });

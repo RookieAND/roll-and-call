@@ -65,6 +65,10 @@ export const rulebooks = pgTable(
     supersedesId: uuid("supersedes_id").references((): AnyPgColumn => rulebooks.id, {
       onDelete: "set null",
     }),
+    // 서플리먼트가 어느 기본 룰북에 포함돼 발간됐는지. 그 기본 룰북이 열리면 이 책도 함께 열린다.
+    includedInId: uuid("included_in_id").references((): AnyPgColumn => rulebooks.id, {
+      onDelete: "set null",
+    }),
     aliases: text("aliases").array().notNull().default([]),
     certRequired: boolean("cert_required").notNull().default(true),
     hidden: boolean("hidden").notNull().default(false),

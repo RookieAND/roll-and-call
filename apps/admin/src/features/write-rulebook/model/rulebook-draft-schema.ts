@@ -12,6 +12,7 @@ export const rulebookDraftSchema = z.object({
   categoryAlias: z.string().max(200),
   kind: z.enum(RULEBOOK_KIND),
   supersedesId: idSchema.nullable(),
+  includedSupplementIds: z.array(idSchema).max(200),
   aliasesText: z.string().max(2000),
   certRequired: z.boolean(),
 }) satisfies z.ZodType<RulebookDraft>;

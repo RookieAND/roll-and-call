@@ -8,6 +8,7 @@ import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
 import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
+import { IncludedSupplementsField } from "./included-supplements-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
@@ -59,6 +60,12 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
               idPrefix={ID_PREFIX}
               disabled={pending}
               onChange={(supersedesId) => form.change({ supersedesId })}
+            />
+            <IncludedSupplementsField
+              draft={draft}
+              category={form.category}
+              disabled={pending}
+              onChange={(includedSupplementIds) => form.change({ includedSupplementIds })}
             />
           </BasicInfoFields>
         </MobileFormSection>

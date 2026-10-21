@@ -10,6 +10,7 @@ const base: RulebookDescription = {
   categoryAlias: null,
   kind: "core",
   supersedes: "",
+  includedSupplements: [],
   aliases: [],
   certRequired: true,
   miniRule: false,

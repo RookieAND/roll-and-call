@@ -18,6 +18,7 @@ export const TRIAL_RULEBOOK: MyRulebook = {
   categoryId: "trial-category",
   categoryName: "CoC",
   supersedesId: null,
+  includedInId: null,
   state: null,
   stateAt: null,
   latestApplication: null,

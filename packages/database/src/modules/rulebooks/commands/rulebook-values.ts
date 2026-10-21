@@ -15,7 +15,14 @@ export async function toRulebookValues({
   fields: RulebookFields;
   selfId?: string;
 }) {
-  const { category, categoryAlias, miniRule, supersedesId, ...rest } = fields;
+  const {
+    category,
+    categoryAlias,
+    miniRule,
+    supersedesId,
+    includedSupplementIds: _included,
+    ...rest
+  } = fields;
   if (fields.kind === "core") {
     await executor
       .insert(rulebookCategories)

@@ -22,6 +22,10 @@ export function draftCategory(draft: RulebookDraft, rulebooks: RulebookOption[],
   const supersedesId = supersedesOptions.some((option) => option.id === draft.supersedesId)
     ? draft.supersedesId
     : null;
+  const supplementOptions = core ? books.filter((rulebook) => rulebook.kind === "supplement") : [];
+  const includedSupplementIds = draft.includedSupplementIds.filter((id) =>
+    supplementOptions.some((option) => option.id === id),
+  );
   return {
     name,
     typed: Boolean(typed),
@@ -30,6 +34,8 @@ export function draftCategory(draft: RulebookDraft, rulebooks: RulebookOption[],
     error,
     supersedesOptions,
     supersedesId,
+    supplementOptions,
+    includedSupplementIds,
   };
 }
 

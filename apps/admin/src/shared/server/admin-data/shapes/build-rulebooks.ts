@@ -13,6 +13,7 @@ export function buildRulebooks({ tables }: ShapeContext): Rulebook[] {
       categoryMiniRule: rulebook.categoryMiniRule,
       kind: rulebook.kind,
       supersedesId: rulebook.supersedesId,
+      includedInId: rulebook.includedInId,
       aliases: rulebook.aliases,
       certRequired: rulebook.certRequired,
       hidden: rulebook.hidden,
