@@ -25,19 +25,22 @@ describe("toSessionStart · sessionStartIso", () => {
     expect(toSessionStart({ iso, window: NOON })).toEqual({ date: "2026-09-18", minutes: 1230 });
   });
 
-  it("시간대 밖 시각은 그대로 두고 선택지에 하나 더한다", () => {
+  it("시간대 밖 시각도 그대로 두고 고를 수 있다", () => {
     const iso = slotIso({ date: "2026-09-18", hour: 9, minute: 0 });
     const start = toSessionStart({ iso, window: LATE });
     expect(start).toEqual({ date: "2026-09-18", minutes: 540 });
     expect(sessionStartIso(start)).toBe(iso);
     const options = hourOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: start.minutes });
-    expect(options).toHaveLength(5);
-    expect(options[0]!.label).toBe("9시");
+    expect(options.map((option) => option.label)).toContain("9시");
   });
 
-  it("시 선택지는 시간대의 시이고 자정 뒤는 +1을 붙인다", () => {
-    const options = hourOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: 1320 });
-    expect(options.map((option) => option.label)).toEqual(["22시", "23시", "0시 +1", "1시 +1"]);
+  it("시 선택지는 0~23시 전부이고 시간대의 자정 뒤는 +1을 붙여 잇는다", () => {
+    const labels = hourOptions({ timeRows: buildTimeRows(LATE), selectedMinutes: 1320 }).map(
+      (option) => option.label,
+    );
+    expect(labels).toHaveLength(26);
+    expect(labels.slice(0, 2)).toEqual(["0시", "1시"]);
+    expect(labels.slice(-2)).toEqual(["0시 +1", "1시 +1"]);
   });
 
   it("일시 지정은 0~23시, 분은 5분 단위에 예전 값을 더한다", () => {

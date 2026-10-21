@@ -13,7 +13,7 @@ function hourOption(hour: number): ClockOption {
   return { value: String(hour), label: `${hour % HOURS_PER_DAY}시${suffix}` };
 }
 
-// 시간대가 없으면(일시 지정) 0~23시 전부다. 이미 정한 시가 시간대 밖이면 그 값 하나를 더한다.
+// 0~23시 전부에 조율 시간대의 자정 뒤 시(+1)를 더한다. 시간대 밖 시각도 GM이 정할 수 있다.
 export function hourOptions({
   timeRows,
   selectedMinutes,
@@ -21,9 +21,11 @@ export function hourOptions({
   timeRows?: TimeRow[];
   selectedMinutes: number;
 }): ClockOption[] {
-  if (!timeRows) return range(HOURS_PER_DAY).map(hourOption);
+  const allHours = range(HOURS_PER_DAY);
+  if (!timeRows) return allHours.map(hourOption);
   const selectedHour = Math.floor(selectedMinutes / 60);
   const hours = uniq([
+    ...allHours,
     ...timeRows.map((row) => row.dayOffset * HOURS_PER_DAY + row.hour),
     selectedHour,
   ]);
