@@ -12,6 +12,7 @@ describe("toRulebookFields", () => {
         categoryAlias: "",
         kind: "supplement",
         supersedesId: "6",
+        includedSupplementIds: [],
         aliasesText: "황혼, 선서,, 황혼 ",
         certRequired: false,
       }),
@@ -22,6 +23,7 @@ describe("toRulebookFields", () => {
       categoryAlias: null,
       kind: "supplement",
       supersedesId: null,
+      includedSupplementIds: [],
       aliases: ["황혼", "선서"],
       certRequired: false,
     });
@@ -35,6 +37,7 @@ describe("toRulebookFields", () => {
       categoryAlias: "",
       kind: "core" as const,
       supersedesId: null,
+      includedSupplementIds: [],
       aliasesText: "",
       certRequired: true,
     };
@@ -49,6 +52,7 @@ describe("toRulebookFields", () => {
       categoryAlias: " 좀비라인 ",
       kind: "core" as const,
       supersedesId: null,
+      includedSupplementIds: [],
       aliasesText: "",
       certRequired: true,
     };
@@ -61,5 +65,21 @@ describe("toRulebookFields", () => {
     ).toHaveLength(12);
     expect(toRulebookFields({ ...draft, categoryAlias: " " }).categoryAlias).toBeNull();
     expect(toRulebookFields({ ...draft, kind: "supplement" }).categoryAlias).toBeNull();
+  });
+
+  it("기본 룰북만 포함하는 서플리먼트를 남기고 중복은 뺀다", () => {
+    const draft = {
+      name: "수호자 룰북",
+      edition: "7판",
+      category: "크툴루의 부름",
+      categoryAlias: "",
+      kind: "core" as const,
+      supersedesId: null,
+      includedSupplementIds: ["p", "p"],
+      aliasesText: "",
+      certRequired: true,
+    };
+    expect(toRulebookFields(draft).includedSupplementIds).toEqual(["p"]);
+    expect(toRulebookFields({ ...draft, kind: "supplement" }).includedSupplementIds).toEqual([]);
   });
 });

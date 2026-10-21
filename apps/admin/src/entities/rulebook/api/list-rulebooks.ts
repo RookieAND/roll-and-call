@@ -14,6 +14,7 @@ export interface RulebookRow {
   categoryMiniRule: boolean;
   kind: RulebookKind;
   supersedesEdition?: string;
+  includedInId: string | null;
   aliases: string[];
   certRequired: boolean;
   hidden: boolean;
@@ -38,6 +39,7 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
         category: rulebook.category,
         categoryMiniRule: rulebook.categoryMiniRule,
         kind: rulebook.kind,
+        includedInId: rulebook.includedInId,
         supersedesEdition: db.rulebooks.find((old) => old.id === rulebook.supersedesId)?.edition,
         aliases: rulebook.aliases,
         certRequired: rulebook.certRequired,

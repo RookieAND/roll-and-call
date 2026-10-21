@@ -15,9 +15,8 @@ export function ruleSetOf({
   const rulebook = rulebooks.find((candidate) => candidate.id === rulebookId);
   const set = rulebook ? setOf({ rulebook, sets }) : null;
   if (!set) return null;
-  // 신판이 덮는 구판 세트의 서플리먼트도 이 판본의 목록에 든다. 같은 책은 한 번만 둔다.
-  const inherited = sets
-    .filter((older) => older.categoryId === set.categoryId && set.covers.includes(older.edition))
-    .flatMap((older) => older.extras);
-  return { ...set, extras: uniqBy([...set.extras, ...inherited], (book) => book.id) };
+  // 이 판본의 기본 룰북이 포함하는 서플리먼트(구판 시절 서플리먼트)도 목록에 든다. 같은 책은 한 번만 둔다.
+  const coreIds = new Set(set.cores.map((core) => core.id));
+  const included = rulebooks.filter((book) => book.includedInId && coreIds.has(book.includedInId));
+  return { ...set, extras: uniqBy([...set.extras, ...included], (book) => book.id) };
 }

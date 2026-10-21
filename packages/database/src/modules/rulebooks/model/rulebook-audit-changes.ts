@@ -29,7 +29,10 @@ export function rulebookChanges(
         ["포함하는 구판", after.supersedes],
         ["인증", certPolicyLabel(after.certRequired)],
       ]),
-      ...compactChanges([listChange("다른 이름", [], after.aliases)]),
+      ...compactChanges([
+        listChange("포함하는 서플리먼트", [], after.includedSupplements),
+        listChange("다른 이름", [], after.aliases),
+      ]),
     ];
   }
   return compactChanges([
@@ -40,6 +43,7 @@ export function rulebookChanges(
     scalarChange("미니룰", miniRuleLabel(before.miniRule), miniRuleLabel(after.miniRule)),
     scalarChange("종류", KIND_LABEL[before.kind], KIND_LABEL[after.kind]),
     scalarChange("포함하는 구판", before.supersedes, after.supersedes),
+    listChange("포함하는 서플리먼트", before.includedSupplements, after.includedSupplements),
     listChange("다른 이름", before.aliases, after.aliases),
     scalarChange("인증", certPolicyLabel(before.certRequired), certPolicyLabel(after.certRequired)),
   ]);

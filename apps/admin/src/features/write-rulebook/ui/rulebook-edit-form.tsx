@@ -9,6 +9,7 @@ import { ActionNetworkError, Panel } from "@/shared/ui";
 import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
+import { IncludedSupplementsField } from "./included-supplements-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
@@ -60,6 +61,12 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
                     idPrefix="rulebook"
                     disabled={pending}
                     onChange={(supersedesId) => form.change({ supersedesId })}
+                  />
+                  <IncludedSupplementsField
+                    draft={draft}
+                    category={form.category}
+                    disabled={pending}
+                    onChange={(includedSupplementIds) => form.change({ includedSupplementIds })}
                   />
                 </div>
               </VStack>

@@ -20,6 +20,7 @@ const book = (id: string, overrides: Partial<MyRulebook> = {}) =>
     stateAt: null,
     latestApplication: null,
     unlockedBy: null,
+    includedInId: null,
     ...overrides,
   }) as MyRulebook;
 
@@ -117,7 +118,7 @@ describe("checkSupplements — 구판 서플리먼트 상속", () => {
     const rulebooks = [
       newCore,
       oldCore({ unlockedBy: newCore }),
-      oldSupplement({ unlockedBy: newCore }),
+      oldSupplement({ unlockedBy: newCore, includedInId: "신판 코어" }),
     ];
     const result = checkSupplements({
       supplements: [{ name: "구판 서플", rulebookId: "구판 서플" }],
@@ -137,7 +138,7 @@ describe("checkSupplements — 구판 서플리먼트 상속", () => {
     const holderOfNew = [
       newCore,
       oldCore({ unlockedBy: newCore }),
-      oldSupplement({ unlockedBy: newCore }),
+      oldSupplement({ unlockedBy: newCore, includedInId: "신판 코어" }),
     ];
     expect(
       checkSupplements({ supplements, set: setFor(holderOfNew, "신판 코어"), enforced: true }).ok,
@@ -148,7 +149,7 @@ describe("checkSupplements — 구판 서플리먼트 상속", () => {
     const rulebooks = [
       newCore,
       oldCore({ unlockedBy: newCore }),
-      oldSupplement({ unlockedBy: newCore }),
+      oldSupplement({ unlockedBy: newCore, includedInId: "신판 코어" }),
     ];
     expect(
       checkSupplements({

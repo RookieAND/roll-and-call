@@ -42,6 +42,7 @@ export interface Rulebook {
   categoryMiniRule: boolean;
   kind: RulebookKind;
   supersedesId: string | null;
+  includedInId: string | null;
   aliases: string[];
   certRequired: boolean;
   hidden: boolean;

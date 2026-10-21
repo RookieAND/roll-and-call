@@ -38,6 +38,7 @@ export function useAddRulebookForm({
     categoryAlias: "",
     kind: request?.kind ?? "core",
     supersedesId: null,
+    includedSupplementIds: [],
     aliasesText: "",
     certRequired: true,
   });
@@ -67,7 +68,11 @@ export function useAddRulebookForm({
   const add = async () => {
     const result = await submit({
       requestId: request?.id ?? null,
-      draft: { ...draft, supersedesId: category.supersedesId },
+      draft: {
+        ...draft,
+        supersedesId: category.supersedesId,
+        includedSupplementIds: category.includedSupplementIds,
+      },
       miniRule,
       reason,
     });

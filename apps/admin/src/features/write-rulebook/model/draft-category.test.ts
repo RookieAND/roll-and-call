@@ -16,6 +16,7 @@ const draft = (changes: Partial<RulebookDraft>): RulebookDraft => ({
   categoryAlias: "",
   kind: "core",
   supersedesId: null,
+  includedSupplementIds: [],
   aliasesText: "",
   certRequired: true,
   ...changes,
@@ -44,5 +45,23 @@ describe("draftCategory", () => {
   it("카테고리를 비운 기본 룰북은 룰북 이름으로 새 카테고리를 만든다", () => {
     const state = draftCategory(draft({ name: "팀 셜록" }), rulebooks);
     expect(state).toMatchObject({ name: "팀 셜록", exists: false, error: undefined });
+  });
+
+  it("기본 룰북이면 같은 카테고리의 서플리먼트를 고를 수 있고, 목록에 없는 id는 뺀다", () => {
+    const state = draftCategory(
+      draft({ category: "크툴루의 부름", includedSupplementIds: ["p", "없는 책"] }),
+      rulebooks,
+    );
+    expect(state.supplementOptions.map((option) => option.id)).toEqual(["p"]);
+    expect(state.includedSupplementIds).toEqual(["p"]);
+  });
+
+  it("서플리먼트 초안에는 포함할 서플리먼트 후보가 없다", () => {
+    const state = draftCategory(
+      draft({ category: "크툴루의 부름", kind: "supplement", includedSupplementIds: ["p"] }),
+      rulebooks,
+    );
+    expect(state.supplementOptions).toEqual([]);
+    expect(state.includedSupplementIds).toEqual([]);
   });
 });

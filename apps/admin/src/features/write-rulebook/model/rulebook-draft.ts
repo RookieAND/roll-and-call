@@ -8,6 +8,7 @@ export interface RulebookDraft {
   categoryAlias: string;
   kind: RulebookKind;
   supersedesId: string | null;
+  includedSupplementIds: string[];
   aliasesText: string;
   certRequired: boolean;
 }

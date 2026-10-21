@@ -15,6 +15,7 @@ export function toRulebookFields(draft: RulebookDraft): RulebookFields {
     categoryAlias: draft.kind === "core" ? toCategoryAlias(draft.categoryAlias) : null,
     kind: draft.kind,
     supersedesId: draft.kind === "core" ? draft.supersedesId : null,
+    includedSupplementIds: draft.kind === "core" ? uniq(draft.includedSupplementIds) : [],
     aliases: uniq(aliases),
     certRequired: draft.certRequired,
   };

@@ -10,6 +10,7 @@ const saved: RulebookDraft = {
   categoryAlias: "",
   kind: "core",
   supersedesId: "coc6",
+  includedSupplementIds: [],
   aliasesText: "",
   certRequired: false,
 };

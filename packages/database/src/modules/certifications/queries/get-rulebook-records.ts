@@ -33,6 +33,7 @@ export async function getRulebookRecords({
       certRequired: rulebooks.certRequired,
       kind: rulebooks.kind,
       supersedesId: rulebooks.supersedesId,
+      includedInId: rulebooks.includedInId,
       categoryId: rulebooks.categoryId,
       categoryName: rulebookCategories.name,
     })
