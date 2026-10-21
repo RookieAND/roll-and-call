@@ -5,18 +5,13 @@ import {
   loadCertificationContext,
   saveCertStaffMessage,
 } from "@roll-and-call/database/certifications";
+import { supplementCoresOpened } from "@roll-and-call/database/certifications/model";
 import { getMemberIdentity } from "@roll-and-call/database/profiles";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import {
-  CERT_FORMAT,
-  CERT_FORMAT_LABEL,
-  CERT_SHOTS,
-  RULEBOOK_KIND,
-  rulebookLabel,
-} from "@/entities/rulebook";
+import { CERT_FORMAT, CERT_FORMAT_LABEL, CERT_SHOTS, rulebookLabel } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -91,17 +86,17 @@ export async function submitCertification(
   if (certifiedIds.has(book.id)) return { error: "이미 인증된 룰북입니다." };
   const latest = applications.find((application) => application.rulebookId === book.id);
   if (latest?.status === "pending") return { error: "심사 중인 신청이 있습니다." };
-  const opened = (core: (typeof books)[number]) =>
-    !core.certRequired ||
-    certifiedIds.has(core.id) ||
-    books.some((newer) => newer.supersedesId === core.id && certifiedIds.has(newer.id));
-  const cores = books.filter(
-    (candidate) =>
-      candidate.kind === RULEBOOK_KIND.core &&
-      candidate.categoryId === book.categoryId &&
-      candidate.edition === book.edition,
-  );
-  if (book.kind === RULEBOOK_KIND.supplement && !cores.every(opened)) {
+  const withCategory = (candidate: (typeof books)[number]) => ({
+    ...candidate,
+    category: candidate.categoryId,
+  });
+  if (
+    !supplementCoresOpened({
+      book: withCategory(book),
+      books: books.map(withCategory),
+      certifiedIds,
+    })
+  ) {
     return { error: "같은 판본의 기본 룰북을 먼저 인증해야 합니다." };
   }
 
