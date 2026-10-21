@@ -20,6 +20,8 @@ export function HomeRecordPodiumStep({ row, position, mode }: HomeRecordPodiumSt
   const bronze = rank === 3;
   const tone = bronze ? "var(--color-rank-bronze)" : "var(--color-hint)";
   const scoreTone = bronze ? "text-rank-bronze" : "text-muted";
+  const bottomPadding = bronze ? "pb-400" : "pb-600";
+  const emptyHeight = bronze ? "min-h-[100px]" : "min-h-[132px]";
 
   return (
     <div
@@ -30,7 +32,7 @@ export function HomeRecordPodiumStep({ row, position, mode }: HomeRecordPodiumSt
       {row ? (
         <ServerLink
           path={`/users/${row.person.id}`}
-          className="flex min-w-0 flex-col items-center gap-075 rounded-t-600 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--tone)_26%,var(--rc-color-bg-canvas-base))_0%,color-mix(in_srgb,var(--tone)_10%,transparent)_60%,transparent_100%)] px-100 pt-300 pb-600 text-center shadow-[inset_0_1px_0_color-mix(in_srgb,var(--tone)_70%,transparent)]"
+          className={`flex min-w-0 flex-col items-center gap-075 rounded-t-600 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--tone)_26%,var(--rc-color-bg-canvas-base))_0%,color-mix(in_srgb,var(--tone)_10%,transparent)_60%,transparent_100%)] px-100 pt-300 ${bottomPadding} text-center shadow-[inset_0_1px_0_color-mix(in_srgb,var(--tone)_70%,transparent)]`}
         >
           <Avatar name={row.person.username} src={row.person.avatarUrl} size="xl" />
           <Text typography="subtitle2" weight="extrabold" truncate className="max-w-full">
@@ -51,7 +53,7 @@ export function HomeRecordPodiumStep({ row, position, mode }: HomeRecordPodiumSt
           typography="body4"
           foreground="hint"
           render={<div />}
-          className="flex min-h-[132px] items-center justify-center rounded-t-600 border border-b-0 border-dashed border-gray-300 px-100 py-175 text-center [mask-image:linear-gradient(180deg,#000_70%,transparent_100%)]"
+          className={`flex ${emptyHeight} items-center justify-center rounded-t-600 border border-b-0 border-dashed border-gray-300 px-100 py-175 text-center [mask-image:linear-gradient(180deg,#000_70%,transparent_100%)]`}
         >
           아직 비어 있습니다
         </Text>
