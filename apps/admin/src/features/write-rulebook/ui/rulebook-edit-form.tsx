@@ -9,11 +9,10 @@ import { ActionNetworkError, Panel } from "@/shared/ui";
 import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { IncludedSupplementsField } from "./included-supplements-field";
+import { CoveredBooksField } from "./covered-books-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
-import { SupersedesField } from "./supersedes-field";
 
 interface RulebookEditFormProps {
   rulebook: RulebookDetail;
@@ -54,36 +53,29 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
                     onChange={(kind) => form.change({ kind })}
                   />
                 </Field.Root>
-                <div className="max-w-[420px]">
-                  <SupersedesField
-                    draft={draft}
-                    category={form.category}
-                    idPrefix="rulebook"
-                    disabled={pending}
-                    onChange={(supersedesId) => form.change({ supersedesId })}
-                  />
-                  <IncludedSupplementsField
-                    draft={draft}
-                    category={form.category}
-                    disabled={pending}
-                    onChange={(includedSupplementIds) => form.change({ includedSupplementIds })}
-                  />
-                </div>
               </VStack>
             </BasicInfoFields>
-          </Panel>
-          <Panel title="미니룰" bodyClassName="p-175">
-            <MiniRuleField
-              miniRule={form.miniRule}
-              disabled={pending || !form.miniRuleEditable}
-              onChange={form.setMiniRule}
-            />
           </Panel>
           <Panel title="인증 정책" bodyClassName="p-175">
             <CertPolicyField
               certRequired={draft.certRequired}
               disabled={pending}
               onChange={(certRequired) => form.change({ certRequired })}
+            />
+          </Panel>
+          <Panel title="함께 인증되는 책" bodyClassName="p-175">
+            <CoveredBooksField
+              draft={draft}
+              category={form.category}
+              disabled={pending}
+              onChange={form.change}
+            />
+          </Panel>
+          <Panel title="미니룰" bodyClassName="p-175">
+            <MiniRuleField
+              miniRule={form.miniRule}
+              disabled={pending || !form.miniRuleEditable}
+              onChange={form.setMiniRule}
             />
           </Panel>
         </VStack>

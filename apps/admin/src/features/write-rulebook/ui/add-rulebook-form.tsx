@@ -11,11 +11,10 @@ import { ActionNetworkError, FormSection, RetryableLabel, ServerLink } from "@/s
 import { useAddRulebookForm } from "../model/use-add-rulebook-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
-import { IncludedSupplementsField } from "./included-supplements-field";
+import { CoveredBooksField } from "./covered-books-field";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { RequestSummary } from "./request-summary";
-import { SupersedesField } from "./supersedes-field";
 
 interface AddRulebookFormProps {
   rulebooks: RulebookRow[];
@@ -62,19 +61,6 @@ export function AddRulebookForm({
                 disabled={pending}
                 onChange={(kind) => change({ kind })}
               />
-              <SupersedesField
-                draft={draft}
-                category={category}
-                idPrefix="add-rulebook"
-                disabled={pending}
-                onChange={(supersedesId) => change({ supersedesId })}
-              />
-              <IncludedSupplementsField
-                draft={draft}
-                category={category}
-                disabled={pending}
-                onChange={(includedSupplementIds) => change({ includedSupplementIds })}
-              />
             </FormSection>
             <FormSection title="3. 인증 정책">
               <CertPolicyField
@@ -83,7 +69,15 @@ export function AddRulebookForm({
                 onChange={(certRequired) => change({ certRequired })}
               />
             </FormSection>
-            <FormSection title="4. 미니룰">
+            <FormSection title="4. 함께 인증되는 책">
+              <CoveredBooksField
+                draft={draft}
+                category={category}
+                disabled={pending}
+                onChange={change}
+              />
+            </FormSection>
+            <FormSection title="5. 미니룰">
               <MiniRuleField
                 miniRule={
                   form.existingCategory ? form.existingCategory.categoryMiniRule : form.miniRule
