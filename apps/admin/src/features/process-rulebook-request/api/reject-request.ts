@@ -1,10 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getCurrentServer, rejectRulebookRequest, requireStaff } from "@/shared/server";
+import {
+  getCurrentServer,
+  rejectRulebookRequest,
+  requireStaff,
+  syncRulebookRequestStaffNotice,
+} from "@/shared/server";
 
 import { REJECT_REASON_MAX_LENGTH } from "../model/reject-reason-max-length";
 
@@ -35,6 +41,9 @@ export async function rejectRequest(requestId: string, input: RejectRequestInput
     actor: staff,
     input: { userReason, staffMemo: parsed.input.staffMemo.trim() },
   });
+  if (result.ok) {
+    after(() => syncRulebookRequestStaffNotice({ server, requestId: parsed.requestId }));
+  }
   revalidatePath("/", "layout");
   return result;
 }

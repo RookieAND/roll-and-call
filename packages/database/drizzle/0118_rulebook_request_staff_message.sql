@@ -1,0 +1,1 @@
+ALTER TABLE "rulebook_requests" ADD COLUMN "staff_message_id" text;

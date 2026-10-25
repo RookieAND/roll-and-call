@@ -24,6 +24,7 @@ export {
   refreshRecruitPost,
   STAFF_NOTICE_KIND,
   syncCertStaffNotices,
+  syncRulebookRequestStaffNotice,
   type StaffNotice,
 } from "@roll-and-call/game-notices";
 export { listRulebookCategories } from "@roll-and-call/database/rulebooks";

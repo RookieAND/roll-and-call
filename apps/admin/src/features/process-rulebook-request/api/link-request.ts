@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { idSchema, parseActionInput } from "@/shared/lib";
@@ -8,6 +9,7 @@ import {
   getCurrentServer,
   linkRulebookRequest,
   requireStaff,
+  syncRulebookRequestStaffNotice,
   type RulebookLinkInput,
 } from "@/shared/server";
 
@@ -29,6 +31,9 @@ export async function linkRequest(requestId: string, input: RulebookLinkInput) {
     actor: staff,
     input: parsed.input,
   });
+  if (result.ok) {
+    after(() => syncRulebookRequestStaffNotice({ server, requestId: parsed.requestId }));
+  }
   revalidatePath("/", "layout");
   return result;
 }

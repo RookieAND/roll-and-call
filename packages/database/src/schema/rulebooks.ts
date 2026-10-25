@@ -109,6 +109,8 @@ export const rulebookRequests = pgTable(
     processedAt: timestamp("processed_at", { withTimezone: true }),
     // 반려할 때 요청자에게 보이는 사유. 내 룰북에 처리 뒤 30일 보인다
     rejectReason: text("reject_reason"),
+    // 운영진 채널에 올린 요청 알림. 처리 결과를 이 메시지에 반영한다.
+    staffMessageId: text("staff_message_id"),
   },
   (table) => [
     index("rulebook_requests_user_id_idx").on(table.userId),

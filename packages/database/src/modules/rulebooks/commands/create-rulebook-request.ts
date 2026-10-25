@@ -10,5 +10,9 @@ export async function createRulebookRequest({
   serverId: string;
   request: Omit<NewRulebookRequest, "serverId">;
 }) {
-  await db.insert(rulebookRequests).values({ ...request, serverId });
+  const [created] = await db
+    .insert(rulebookRequests)
+    .values({ ...request, serverId })
+    .returning({ id: rulebookRequests.id });
+  return created!.id;
 }

@@ -785,6 +785,13 @@
       "when": 1799500000008,
       "tag": "0117_drop_show_badges",
       "breakpoints": true
+    },
+    {
+      "idx": 118,
+      "version": "7",
+      "when": 1799500000009,
+      "tag": "0118_rulebook_request_staff_message",
+      "breakpoints": true
     }
   ]
 }

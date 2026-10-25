@@ -5,6 +5,7 @@ export {
   type ApproveRequestResult,
 } from "./commands/approve-rulebook-request";
 export { createRulebookRequest } from "./commands/create-rulebook-request";
+export { saveRulebookRequestStaffMessage } from "./commands/save-rulebook-request-staff-message";
 export { hideRulebook } from "./commands/hide-rulebook";
 export { linkRulebookRequest, type RulebookLinkInput } from "./commands/link-rulebook-request";
 export { syncGameSupplementRequests } from "./commands/sync-game-supplement-requests";
@@ -23,6 +24,7 @@ export {
 } from "./queries/find-assigned-quiz-questions";
 export { getQuizQuestion } from "./queries/get-quiz-question";
 export { hasPendingRulebookRequest } from "./queries/has-pending-rulebook-request";
+export { loadRulebookRequestNotice } from "./queries/load-rulebook-request-notice";
 export { rejectRulebookRequest } from "./commands/reject-rulebook-request";
 export * from "./model";
 export { findAssignedQuizQuestion } from "./queries/find-assigned-quiz-question";

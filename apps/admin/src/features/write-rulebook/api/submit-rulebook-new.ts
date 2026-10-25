@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { idSchema, parseActionInput } from "@/shared/lib";
@@ -9,6 +10,7 @@ import {
   approveRulebookRequest,
   getCurrentServer,
   requireStaff,
+  syncRulebookRequestStaffNotice,
 } from "@/shared/server";
 
 import { rulebookDraftSchema } from "../model/rulebook-draft-schema";
@@ -37,6 +39,9 @@ export async function submitRulebookNew(args: z.input<typeof schema>) {
         reason: reason.trim(),
       })
     : await addRulebook({ serverId: server.id, fields, actor: staff, reason: reason.trim() });
+  if (requestId && result.ok) {
+    after(() => syncRulebookRequestStaffNotice({ server, requestId }));
+  }
   revalidatePath("/", "layout");
   return result;
 }

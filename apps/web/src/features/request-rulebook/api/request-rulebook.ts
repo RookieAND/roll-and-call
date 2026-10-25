@@ -5,6 +5,7 @@ import {
   createRulebookRequest,
   findRulebookCategoryId,
   hasPendingRulebookRequest,
+  saveRulebookRequestStaffMessage,
 } from "@roll-and-call/database/rulebooks";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
@@ -42,7 +43,7 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
   const knownCategoryId = category
     ? await findRulebookCategoryId({ serverId: server.id, name: category })
     : null;
-  await createRulebookRequest({
+  const requestId = await createRulebookRequest({
     serverId: server.id,
     request: {
       userId: user.id,
@@ -58,7 +59,7 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
   after(async () => {
     const requester = await getMemberIdentity({ serverId: server.id, userId: user.id });
     if (!requester) return;
-    await postStaffNotice({
+    const message = await postStaffNotice({
       server,
       notice: {
         kind: STAFF_NOTICE_KIND.rulebookRequested,
@@ -72,6 +73,13 @@ export async function requestRulebook(input: RulebookRequestValues): Promise<Act
         link,
       },
     });
+    if (message) {
+      await saveRulebookRequestStaffMessage({
+        serverId: server.id,
+        id: requestId,
+        messageId: message.id,
+      });
+    }
   });
   return {};
 }
