@@ -46,7 +46,7 @@ export function badgeCondition({
   const note = conditionNote(ladder);
   const base = LONG_CONDITIONS[ladder] ?? badgeRequirement({ ladder, step, categoryName });
   const requirement = DESCRIBED_LADDERS.has(ladder) ? BADGE_LADDERS[ladder].description! : base;
-  return note ? `${requirement}\n${note}` : requirement;
+  return [requirement, note, BADGE_LADDERS[ladder].hint].filter(Boolean).join("\n");
 }
 
 // 목록·대표 뱃지 선택·획득 시트의 기준 한 줄. 룰북 인증 칭호는 몇 종인지 숨기고 설명을 쓴다.

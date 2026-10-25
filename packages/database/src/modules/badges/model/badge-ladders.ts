@@ -18,6 +18,8 @@ export type BadgeLadderDefinition = {
   granted: boolean;
   // 특별 칭호의 한 줄 설명. 숨겨진 칭호는 조건 대신 이 문장만 보인다.
   description?: string;
+  // 숨겨진 칭호를 받은 뒤 설명 아래에 덧붙이는 조건 힌트. 정확한 수치는 적지 않는다.
+  hint?: string;
   steps: BadgeStep[];
 };
 
