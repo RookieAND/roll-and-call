@@ -13,7 +13,7 @@ function hidden({
   name: string;
   grade: BadgeGrade;
   description: string;
-  hint: string;
+  hint?: string;
   granted?: boolean;
 }): BadgeLadderDefinition {
   return {
@@ -69,21 +69,21 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "한 달째",
     grade: 1,
     description: "롤앤콜과 함께한 지 한 달이 되었습니다.",
-    hint: "가입하고 한 달이 지난 뒤, 세션을 한 번이라도 했다면.",
+    hint: "세션을 한 번도 안 했다면 아직입니다.",
   }),
   [HIDDEN_LADDER.halfYear]: hidden({
     emoji: "🌿",
     name: "반년째",
     grade: 2,
     description: "롤앤콜과 함께한 지 반년이 되었습니다.",
-    hint: "가입하고 여섯 달이 지난 뒤, 세션을 한 번이라도 했다면.",
+    hint: "세션을 한 번도 안 했다면 아직입니다.",
   }),
   [HIDDEN_LADDER.oneYear]: hidden({
     emoji: "🌳",
     name: "1주년",
     grade: 3,
     description: "롤앤콜과 함께한 지 1년이 되었습니다.",
-    hint: "가입하고 1년이 지난 뒤, 세션을 한 번이라도 했다면.",
+    hint: "세션을 한 번도 안 했다면 아직입니다.",
   }),
   [HIDDEN_LADDER.ambidextrous]: hidden({
     emoji: "🤹",
@@ -97,14 +97,14 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "더블 헤더",
     grade: 3,
     description: "하루에 두 번 테이블에 앉았습니다.",
-    hint: "같은 날 세션을 두 번 하면.",
+    hint: "GM이든 PL이든 상관없습니다.",
   }),
   [HIDDEN_LADDER.tripleHeader]: hidden({
     emoji: "🌩️",
     name: "트리플 헤더",
     grade: 4,
     description: "하루에 세 번 테이블에 앉았습니다.",
-    hint: "같은 날 세션을 세 번 하면.",
+    hint: "더블 헤더에서 한 번만 더 가 보세요.",
   }),
   [HIDDEN_LADDER.expedition]: hidden({
     emoji: "🗺️",
@@ -146,7 +146,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "백일",
     grade: 1,
     description: "롤앤콜과 함께한 지 100일이 되었습니다.",
-    hint: "가입하고 100일이 지난 뒤, 세션을 한 번이라도 했다면.",
+    hint: "세션을 한 번도 안 했다면 아직입니다.",
   }),
   [HIDDEN_LADDER.owl]: hidden({
     emoji: "🦉",
@@ -181,7 +181,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "연속 출전",
     grade: 2,
     description: "사흘 내내 테이블에 앉았습니다.",
-    hint: "사흘 연속 매일 세션을 해 보세요.",
+    hint: "하루에 여러 번 앉아도 하루로 셉니다.",
   }),
   [HIDDEN_LADDER.allNight]: hidden({
     emoji: "🌄",
@@ -202,7 +202,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "요일 수집가",
     grade: 3,
     description: "일주일의 모든 요일에 테이블에 앉았습니다.",
-    hint: "월요일부터 일요일까지 요일을 하나도 빠뜨리지 마세요.",
+    hint: "연속일 필요는 없습니다. 세션 시작 요일 기준입니다.",
   }),
   [HIDDEN_LADDER.coin]: hidden({
     emoji: "🪙",
@@ -346,7 +346,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "꼬박꼬박",
     grade: 3,
     description: "한 달 꾸준히 테이블에 앉았습니다.",
-    hint: "4주 연속으로 매주 세션에 앉아 보세요.",
+    hint: "한 주에 한 번이면 충분합니다. 쉬는 주 없이 이어 가세요.",
   }),
   [HIDDEN_LADDER.weeks12]: hidden({
     emoji: "🧱",
@@ -367,7 +367,7 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "문지방",
     grade: 3,
     description: "매주 한 번은 모험가를 맞았습니다.",
-    hint: "4주 연속으로 매주 세션을 열어 보세요.",
+    hint: "PL이 아니라 GM으로 열어야 합니다.",
   }),
   [HIDDEN_LADDER.openDoor12]: hidden({
     emoji: "🪵",
@@ -409,7 +409,6 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     name: "명예의 전당",
     grade: 5,
     description: "이달의 GM·PL로 세 번 뽑혀 이름이 전당에 새겨졌습니다.",
-    hint: "이달의 GM이나 PL로 세 번 뽑히세요.",
     granted: true,
   }),
 };
