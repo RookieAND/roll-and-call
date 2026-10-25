@@ -36,6 +36,7 @@ export async function messageHeadInput({
   userMentions,
   after,
   defaultHead,
+  headSuffix,
   alsoMention,
 }: {
   serverId: string;
@@ -45,6 +46,8 @@ export async function messageHeadInput({
   after?: string;
   // 서버가 이 경우의 머리 줄을 저장하지 않았을 때만 기본 머리 줄 대신 쓴다. 저장했으면 그 문구가 우선한다.
   defaultHead?: string;
+  // 머리 줄이 있을 때만 그 끝에 한 칸 띄워 붙인다(예: 인원 「(1/4)」).
+  headSuffix?: string;
   // 이 메시지가 반드시 알려야 하는 사람들. 서버가 정한 머리 줄이 이미 멘션한 사람은 건너뛰고, 빠진 사람만 한 줄로 덧붙인다.
   // id가 없으면(디스코드 계정을 모르면) fallback 글자를 대신 적는다.
   alsoMention?: { id: string | null | undefined; fallback?: string }[];
@@ -53,7 +56,8 @@ export async function messageHeadInput({
   const saved = heads[key];
   const template = saved.updatedAt === null && defaultHead ? defaultHead : saved.headLine;
   const head = renderMessageHead({ template, values });
-  const written = [head, after].filter(Boolean).join("\n");
+  const headLine = head && headSuffix ? `${head} ${headSuffix}` : head;
+  const written = [headLine, after].filter(Boolean).join("\n");
   const tokens = (alsoMention ?? []).flatMap(({ id, fallback }) => {
     const token = id ? `<@${id}>` : fallback;
     return token ? [{ id, token }] : [];

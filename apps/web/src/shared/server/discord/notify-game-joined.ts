@@ -62,6 +62,10 @@ export async function notifyGameJoined({
         serverId: server.id,
         key: "apply",
         values,
+        headSuffix:
+          game.recruitMethod === RECRUIT_METHOD.firstCome
+            ? `(${confirmedCount}/${game.maxPlayers})`
+            : undefined,
         ...line,
       })),
     },
