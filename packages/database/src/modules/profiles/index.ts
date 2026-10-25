@@ -4,7 +4,6 @@ export { saveAvatarUrl } from "./commands/save-avatar-url";
 export { saveMemberAvailability } from "./commands/save-member-availability";
 export { saveMemberNickname, type SaveMemberNicknameResult } from "./commands/save-member-nickname";
 export { saveMemberProfile } from "./commands/save-member-profile";
-export { saveMemberShowBadges } from "./commands/save-member-show-badges";
 export { saveProfileMemo } from "./commands/save-profile-memo";
 export { countServerMembers } from "./queries/count-server-members";
 export { getAccountName } from "./queries/get-account-name";

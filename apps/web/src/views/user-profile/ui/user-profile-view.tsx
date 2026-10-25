@@ -55,7 +55,7 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
     .toSorted((left, right) => right.stateAt!.getTime() - left.stateAt!.getTime())
     .map((rulebook) => ({ id: rulebook.id, label: rulebook.label }));
   const now = new Date();
-  const held = profile.showBadges ? heldBadges(badgeRecords, now) : [];
+  const held = heldBadges(badgeRecords, now);
   const featuredBadges = pickFeaturedBadges({ featuredKeys: profile.featuredBadges, held }).map(
     (badge) => ({
       ...badge,
@@ -82,7 +82,7 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
             hosted={counts.hosted}
             played={counts.played}
             featuredBadges={featuredBadges}
-            badgeTotal={profile.showBadges ? countBadges(badgeRecords, now).total : 0}
+            badgeTotal={countBadges(badgeRecords, now).total}
           />
 
           {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}

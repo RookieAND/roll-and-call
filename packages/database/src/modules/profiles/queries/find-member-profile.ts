@@ -31,7 +31,6 @@ export async function findMemberProfile({
       availability: serverMembers.availability,
       links: serverMembers.links,
       showGmBadge: serverMembers.showGmBadge,
-      showBadges: serverMembers.showBadges,
       featuredBadges: serverMembers.featuredBadges,
     })
     .from(profiles)

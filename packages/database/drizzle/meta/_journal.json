@@ -778,6 +778,13 @@
       "when": 1799500000007,
       "tag": "0116_rulebook_included_in",
       "breakpoints": true
+    },
+    {
+      "idx": 117,
+      "version": "7",
+      "when": 1799500000008,
+      "tag": "0117_drop_show_badges",
+      "breakpoints": true
     }
   ]
 }

@@ -36,7 +36,6 @@ export const profiles = pgTable(
     availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
     links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),
     showGmBadge: boolean("show_gm_badge").notNull().default(true),
-    showBadges: boolean("show_badges").notNull().default(true),
     featuredBadges: text("featured_badges").array().notNull().default([]),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     // 서비스 소개를 처음 본 시각. null이면 서버 홈에 처음 닿을 때 소개로 보낸다(계정당 한 번).

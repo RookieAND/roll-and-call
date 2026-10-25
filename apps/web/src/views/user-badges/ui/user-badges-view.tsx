@@ -1,6 +1,5 @@
-import { Container, Text, VStack } from "@roll-and-call/ui";
+import { Container, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { Lock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import { BADGE_TABS, countBadges, heldBadges } from "@/entities/badge";
@@ -36,26 +35,6 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
 
   const title = `${profile.username}의 업적`;
   const back = `/users/${id}`;
-  if (!profile.showBadges) {
-    return (
-      <PageShell appBar={<AppBar back={back} title={title} />}>
-        <VStack
-          align="center"
-          gap="100"
-          className={`px-300 pt-500 pb-600 text-center ${DESKTOP_CARD_CLASS}`}
-        >
-          <span className="flex size-16 items-center justify-center rounded-full border-2 border-dashed border-gray-300 bg-canvas text-hint">
-            <Lock size={24} aria-hidden />
-          </span>
-          <Text typography="subtitle1">업적을 공개하지 않았습니다</Text>
-          <Text typography="body3" foreground="muted">
-            프로필 주인이 업적을 숨겨 두었습니다.
-          </Text>
-        </VStack>
-      </PageShell>
-    );
-  }
-
   const now = new Date();
   const records = await getUserBadges(server.id, id);
   const held = heldBadges(records, now);

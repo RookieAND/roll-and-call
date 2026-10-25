@@ -16,7 +16,6 @@ export async function loadMemberBadgeSummaries({
     db
       .select({
         userId: serverMembers.userId,
-        showBadges: serverMembers.showBadges,
         featuredBadges: serverMembers.featuredBadges,
       })
       .from(serverMembers)

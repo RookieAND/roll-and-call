@@ -18,7 +18,7 @@ export type MonthlyWinner = {
   score: number;
 };
 
-// 그 달 이달의 GM·PL을 받은 사람. 업적 보이기 설정과 상관없이 모두 넣는다(R6).
+// 그 달 이달의 GM·PL을 받은 사람.
 // 횟수는 이달의 뱃지를 정한 집계(loadMonthlyAppearances)와 같은 기준으로 센다.
 export async function loadMonthlyWinners({
   serverId,

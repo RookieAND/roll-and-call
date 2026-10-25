@@ -21,11 +21,7 @@ export async function MyPageAccount({ part }: MyPageAccountProps) {
   ]);
   const { handle } = profileDisplay({ profile, user });
   const settings = (
-    <MyPageSettings
-      handleLabel={handle ? `@${handle}` : null}
-      showBadges={profile?.showBadges ?? true}
-      questProgress={cleared.length}
-    />
+    <MyPageSettings handleLabel={handle ? `@${handle}` : null} questProgress={cleared.length} />
   );
 
   if (part === "panel") {

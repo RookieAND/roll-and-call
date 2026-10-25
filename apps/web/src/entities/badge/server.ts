@@ -19,7 +19,6 @@ export async function loadRepresentativeBadges({
   return summaries.flatMap((summary) => {
     const badge = pickRepresentativeBadge({
       featuredKeys: summary.featuredBadges,
-      showBadges: summary.showBadges,
       records: summary.records,
       now,
     });
