@@ -36,6 +36,7 @@ export { ladderEvents } from "./ladder-events";
 export { monthlyWinners, type MonthlyAppearance } from "./monthly-winners";
 export { nextMonthStart } from "./next-month-start";
 export { parseBadgeKey } from "./parse-badge-key";
+export { pickAutoFeaturedBadge } from "./pick-auto-featured-badge";
 export { previousMonthKey } from "./previous-month-key";
 export { type BadgeEvent } from "./reached-tier";
 export { miniRuleOf } from "./mini-rule-of";

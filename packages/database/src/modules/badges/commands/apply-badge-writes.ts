@@ -4,9 +4,13 @@ import { db } from "#db/client";
 import { BADGE_LADDERS } from "#db/modules/badges/model/badge-ladders";
 import type { BadgeWrite } from "#db/modules/badges/model/diff-badges";
 import { parseBadgeKey } from "#db/modules/badges/model/parse-badge-key";
+import { pickAutoFeaturedBadge } from "#db/modules/badges/model/pick-auto-featured-badge";
 import { planBadgeNotices } from "#db/modules/badges/model/plan-badge-notices";
 import { createNotifications } from "#db/modules/notifications";
 import { rulebookCategories, userBadges } from "#db/schema";
+
+import { registerFeaturedBadge } from "./register-featured-badge";
+import { removeFeaturedBadge } from "./remove-featured-badge";
 
 type Grant = Extract<BadgeWrite, { kind: "grant" }>;
 
@@ -118,6 +122,27 @@ export async function applyBadgeWrites({
           target: [userBadges.serverId, userBadges.userId, userBadges.badgeKey],
           set: { tier, earnedAt, sourceGameId, revokedAt: null, ...notice },
         });
+    }
+
+    // 회수된 칭호는 대표 뱃지 지정에서 빼고, 지정이 비어 있으면 새로 받은 칭호로 채운다. 소급(silent)은 채우지 않는다.
+    for (const write of writes) {
+      if (write.kind === "revoke") {
+        await removeFeaturedBadge({
+          executor: transaction,
+          serverId,
+          userId,
+          badgeKey: write.badgeKey,
+        });
+      }
+    }
+    const featuredKey = silent ? null : pickAutoFeaturedBadge(grants.map((write) => write.badge));
+    if (featuredKey) {
+      await registerFeaturedBadge({
+        executor: transaction,
+        serverId,
+        userId,
+        badgeKey: featuredKey,
+      });
     }
 
     await createNotifications({
