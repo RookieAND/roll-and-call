@@ -7,6 +7,7 @@ import { ownReviewsWhere } from "./own-reviews-where";
 import { participantReviewWhere } from "./participant-review-where";
 import { publicReviewsWhere } from "./public-reviews-where";
 
+// 작성한 후기는 마스터링(GM) 후기도 센다. 받은 후기는 참여자 후기만 센다.
 // own이면 작성한 후기에 본인만 보는 후기(숨김·보류·운영진 삭제)까지 센다.
 export async function getReviewCounts({
   serverId,
@@ -36,12 +37,8 @@ export async function getReviewCounts({
       .from(sessionReviews)
       .where(
         own
-          ? and(ownReviewsWhere({ serverId, authorId: userId }), participantReviewWhere)
-          : and(
-              eq(sessionReviews.authorId, userId),
-              participantReviewWhere,
-              publicReviewsWhere({ serverId, viewerId }),
-            ),
+          ? ownReviewsWhere({ serverId, authorId: userId })
+          : and(eq(sessionReviews.authorId, userId), publicReviewsWhere({ serverId, viewerId })),
       ),
   ]);
   return { received: received?.value ?? 0, written: written?.value ?? 0 };
