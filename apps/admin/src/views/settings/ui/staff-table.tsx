@@ -15,7 +15,7 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
   return (
     <Table.Root className="table-equal">
       <TableColumns
-        widths={[180, { fixed: 104 }, { fixed: 104 }, { fixed: 104 }, { fixed: 150 }]}
+        widths={[180, { fixed: 104 }, { fixed: 152 }, { fixed: 152 }, { fixed: 150 }]}
       />
       <Table.Header>
         <Table.Row>
@@ -47,13 +47,7 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
                 </HStack>
               </Table.Cell>
               <Table.Cell>
-                {owner ? (
-                  <Tag>{STAFF_ROLE_LABEL.owner}</Tag>
-                ) : (
-                  <Text typography="body3" foreground="muted">
-                    {STAFF_ROLE_LABEL[row.role]}
-                  </Text>
-                )}
+                <Tag>{STAFF_ROLE_LABEL[row.role]}</Tag>
               </Table.Cell>
               <Table.Cell>
                 <Text typography="body3" foreground="hint">

@@ -24,8 +24,8 @@ export function SettingsStaffLoading() {
             columns={[
               { label: "닉네임", kind: "text", width: 180 },
               { label: "역할", kind: "badge", width: 104, fixed: true },
-              { label: "추가한 날", kind: "date", width: 104, fixed: true },
-              { label: "최근 활동", kind: "date", width: 104, fixed: true },
+              { label: "추가한 날", kind: "date", width: 152, fixed: true },
+              { label: "최근 활동", kind: "date", width: 152, fixed: true },
               { label: "", kind: "button", width: 150, fixed: true, align: "end" },
             ]}
           />
