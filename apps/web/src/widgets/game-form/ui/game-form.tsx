@@ -14,7 +14,7 @@ import {
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
 import type { ActionResult } from "@/shared/api";
-import { toKstDateTimeInput } from "@/shared/lib";
+import { nextHourInput, toKstDateTimeInput } from "@/shared/lib";
 import { TrialContext } from "@/shared/trial";
 import { toast, useAction } from "@/shared/ui";
 
@@ -91,7 +91,7 @@ export function GameForm({
       minPlayers: String(defaultGame?.minPlayers ?? ""),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,
       scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
-      endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : "",
+      endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : nextHourInput(),
       confirmedAt: defaultGame?.confirmedAt ? toKstDateTimeInput(defaultGame.confirmedAt) : "",
       rangeStart: defaultGame?.rangeStart ?? "",
       rangeEnd: defaultGame?.rangeEnd ?? "",

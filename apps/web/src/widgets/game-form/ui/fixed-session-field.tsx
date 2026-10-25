@@ -7,15 +7,13 @@ import type { GameFormValues } from "@/features/write-game";
 import { toKstDateInput } from "@/shared/lib";
 import { DateTimePicker } from "@/shared/ui";
 
-import { defaultEndDateForSession } from "../model/default-end-date-for-session";
-
 interface FixedSessionFieldProps {
   form: UseFormReturn<GameFormValues>;
   locked?: boolean;
 }
 
 export function FixedSessionField({ form, locked = false }: FixedSessionFieldProps) {
-  const { control, getValues, setValue, formState } = form;
+  const { control, formState } = form;
   const error = formState.errors.confirmedAt;
 
   return (
@@ -31,12 +29,7 @@ export function FixedSessionField({ form, locked = false }: FixedSessionFieldPro
               invalid={!!error}
               disabled={locked}
               min={toKstDateInput(new Date())}
-              onChange={(value) => {
-                field.onChange(value);
-                if (value && !getValues("endDate")) {
-                  setValue("endDate", defaultEndDateForSession(value), { shouldDirty: true });
-                }
-              }}
+              onChange={field.onChange}
             />
           )}
         />

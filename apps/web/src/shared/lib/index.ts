@@ -15,6 +15,7 @@ export { rowSlotIso } from "./row-slot-iso";
 export { padTwoDigits } from "./pad-two-digits";
 export { toKstDateTimeInput } from "./to-kst-date-time-input";
 export { toKstDateInput } from "./to-kst-date-input";
+export { nextHourInput } from "./next-hour-input";
 export { fromKstDateTimeInput } from "./from-kst-date-time-input";
 export { addDays } from "./add-days";
 export { endDateBounds } from "./end-date-bounds";

@@ -7,8 +7,6 @@ import { GAME_RANGE_MAX_DAYS, type GameFormValues } from "@/features/write-game"
 import { endDateBounds, toKstDateInput } from "@/shared/lib";
 import { DatePicker } from "@/shared/ui";
 
-import { defaultEndDateForRange } from "../model/default-end-date-for-range";
-
 interface CoordinationRangeFieldsProps {
   form: UseFormReturn<GameFormValues>;
 }
@@ -17,8 +15,6 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
   const {
     control,
     watch,
-    getValues,
-    setValue,
     formState: { errors },
   } = form;
   const rangeStart = watch("rangeStart");
@@ -48,12 +44,7 @@ export function CoordinationRangeFields({ form }: CoordinationRangeFieldsProps) 
                   invalid={!!errors.rangeStart}
                   min={today}
                   max={rangeEnd || undefined}
-                  onChange={(date) => {
-                    field.onChange(date);
-                    if (!getValues("endDate")) {
-                      setValue("endDate", defaultEndDateForRange(date), { shouldDirty: true });
-                    }
-                  }}
+                  onChange={field.onChange}
                 />
               )}
             />

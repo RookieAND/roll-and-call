@@ -2,7 +2,7 @@
 
 import { HStack, Select, VStack } from "@roll-and-call/ui";
 
-import { padTwoDigits } from "@/shared/lib";
+import { nextHourInput, padTwoDigits } from "@/shared/lib";
 
 import { DatePicker } from "./date-picker";
 
@@ -14,7 +14,6 @@ const MINUTE_STEP = 5;
 const MINUTE_VALUES = Array.from({ length: 60 / MINUTE_STEP }, (_, index) =>
   padTwoDigits(index * MINUTE_STEP),
 );
-const DEFAULT_TIME = "19:00";
 
 export interface DateTimePickerProps {
   value?: string;
@@ -36,8 +35,8 @@ export function DateTimePicker({
   disabled = false,
 }: DateTimePickerProps) {
   const [datePart = "", timePart = ""] = value ? value.split("T") : [];
-  const time = timePart.slice(0, 5) || DEFAULT_TIME;
-  const [hour = "19", minute = "00"] = time.split(":");
+  const time = timePart.slice(0, 5) || nextHourInput().slice(11);
+  const [hour = "00", minute = "00"] = time.split(":");
   // 예전에 5분 단위가 아닌 시각으로 저장된 값도 그대로 고를 수 있게 목록에 끼워 둔다.
   const minuteValues = MINUTE_VALUES.includes(minute) ? MINUTE_VALUES : [minute, ...MINUTE_VALUES];
   const minuteItems = minuteValues.map((minuteValue) => ({
