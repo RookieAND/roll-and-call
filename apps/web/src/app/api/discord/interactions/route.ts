@@ -7,6 +7,7 @@ import { parseJson } from "@/shared/lib";
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import { handleApplyButton } from "./_lib/handle-apply-button";
 import { handleApplyModalSubmit } from "./_lib/handle-apply-modal-submit";
+import { handleCalendarCommand } from "./_lib/handle-calendar-command";
 import { handleOnboardingCommand } from "./_lib/handle-onboarding-command";
 import { handleReviewButton } from "./_lib/handle-review-button";
 import { handleReviewModalSubmit } from "./_lib/handle-review-modal-submit";
@@ -14,6 +15,7 @@ import { interactionSchema } from "./_lib/interaction-schema";
 import { verifyDiscordRequest } from "./_lib/verify-discord-request";
 
 const ONBOARDING_COMMAND_NAME = "온보딩";
+const CALENDAR_COMMAND_NAME = "캘린더";
 const INTERACTION_APPLICATION_COMMAND = 2;
 const INTERACTION_MESSAGE_COMPONENT = 3;
 const INTERACTION_MODAL_SUBMIT = 5;
@@ -45,6 +47,12 @@ export async function POST(request: Request) {
     interaction.data?.name === ONBOARDING_COMMAND_NAME
   ) {
     return NextResponse.json(await handleOnboardingCommand(interaction));
+  }
+  if (
+    interaction.type === INTERACTION_APPLICATION_COMMAND &&
+    interaction.data?.name === CALENDAR_COMMAND_NAME
+  ) {
+    return NextResponse.json(handleCalendarCommand(interaction));
   }
   return NextResponse.json(buildInteractionResponse(interaction));
 }

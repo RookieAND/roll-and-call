@@ -66,6 +66,20 @@ const COMMANDS = [
     type: CHAT_INPUT,
     description: "튜토리얼 퀘스트로 롤앤콜을 체험한다",
   },
+  {
+    name: "캘린더",
+    type: CHAT_INPUT,
+    description: "세션 달력을 이미지로 보여 준다 (나에게만 보임)",
+    options: [
+      {
+        name: "월",
+        type: INTEGER_OPTION,
+        description: "올해 몇 월인지, 기본은 이번 달",
+        min_value: 1,
+        max_value: 12,
+      },
+    ],
+  },
 ];
 
 const token = process.env.DISCORD_BOT_TOKEN;
