@@ -20,9 +20,23 @@ const COLOR = {
   muted: "#5f5f6b", // tokens-check-ignore
   hint: "#70707a", // tokens-check-ignore
   primary: "#4f46e5", // tokens-check-ignore
+  tint: "#f5f4ff", // tokens-check-ignore
+  tintInk: "#4338ca", // tokens-check-ignore
   sunday: "#b03a62", // tokens-check-ignore
   saturday: "#2c6ba0", // tokens-check-ignore
 } as const;
+
+// 아이콘을 못 받아도 달력은 그려야 하므로 실패하면 첫 글자 칸으로 대신한다.
+async function loadIconDataUrl(url: string | null) {
+  if (!url) return null;
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    if (!response.ok) return null;
+    return `data:image/png;base64,${Buffer.from(await response.arrayBuffer()).toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
 
 function dayColor({ weekday, holiday }: { weekday: number; holiday: boolean }) {
   if (holiday || weekday === 0) return COLOR.sunday;
@@ -47,17 +61,22 @@ function dayNumberColor({
 // 홈 달력의 데스크톱 모양을 satori가 읽는 flex 마크업으로 다시 그린다.
 export async function renderCalendarImage({
   monthStart,
+  serverName,
+  serverIcon,
   cells,
   sessionsByDay,
   holidays,
   todayKey,
 }: {
   monthStart: Dayjs;
+  serverName: string;
+  serverIcon: string | null;
   cells: ReturnType<typeof buildMonthCells>;
   sessionsByDay: ReturnType<typeof groupSessionsByDay>;
   holidays: Readonly<Record<string, readonly string[]>>;
   todayKey: string;
 }) {
+  const icon = await loadIconDataUrl(serverIcon);
   const weeks = Array.from({ length: cells.length / 7 }, (_, week) =>
     cells.slice(week * 7, week * 7 + 7),
   );
@@ -86,6 +105,42 @@ export async function renderCalendarImage({
         }}
       >
         {monthStart.format("YYYY년 M월")}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginLeft: 16,
+            padding: "6px 14px 6px 8px",
+            borderRadius: 999,
+            background: COLOR.tint, // tokens-check-ignore
+            color: COLOR.tintInk,
+            fontSize: 18,
+            fontWeight: 700,
+          }}
+        >
+          {icon ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={icon} alt="" width={24} height={24} style={{ borderRadius: 6 }} />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 24,
+                height: 24,
+                borderRadius: 6,
+                background: COLOR.primary,
+                color: COLOR.surface,
+                fontSize: 14,
+              }}
+            >
+              {serverName.slice(0, 1)}
+            </div>
+          )}
+          {serverName}
+        </div>
       </div>
       <div
         style={{

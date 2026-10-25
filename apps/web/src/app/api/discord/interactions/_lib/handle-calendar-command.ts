@@ -52,6 +52,8 @@ export function handleCalendarCommand(interaction: DiscordInteraction): DiscordI
       ]);
       const image = await renderCalendarImage({
         monthStart,
+        serverName: server.name,
+        serverIcon: server.icon,
         cells: buildMonthCells(monthStart),
         sessionsByDay: groupSessionsByDay(toCalendarSessions({ rows, viewerId: null })),
         holidays,
