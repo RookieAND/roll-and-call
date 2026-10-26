@@ -1,7 +1,7 @@
 import { and, eq, isNull, not, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
-import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import { GAME_VISIBILITY, PARTICIPANT_STATUS } from "#db/modules/games/model";
 import { games, participants, sessionReviews } from "#db/schema";
 
 import { reviewAuthorAbsentSql } from "./review-author-absent-sql";
@@ -11,7 +11,7 @@ const reviewGame = alias(games, "review_game");
 const reviewParticipant = alias(participants, "review_participant");
 
 // 숨김·제거·보류(작성자가 지금 불참)가 아닌 후기만 다른 사람에게 보인다.
-// 운영진이 숨긴 구인의 후기는 그 구인의 GM·확정 참여자에게만 보인다.
+// 운영진이 숨긴 구인과 비공개 구인의 후기는 그 구인의 GM·확정 참여자에게만 보인다.
 export function publicReviewsWhere({
   serverId,
   viewerId,
@@ -37,7 +37,7 @@ export function publicReviewsWhere({
       select 1 from ${games} ${reviewGame}
       where ${reviewGame.serverId} = ${sessionReviews.serverId}
         and ${reviewGame.id} = ${sessionReviews.gameId}
-        and (${reviewGame.hiddenAt} is null ${viewerTakesPart})
+        and ((${reviewGame.hiddenAt} is null and ${reviewGame.visibility} = ${GAME_VISIBILITY.public}) ${viewerTakesPart})
     )`,
   );
 }

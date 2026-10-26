@@ -19,6 +19,7 @@ export function toPostRow({
     sessionAt: session.timeFixed ? session.startsAt : null,
     memberCount: session.memberIds.length,
     capacity: session.capacity,
+    isPrivate: session.isPrivate ?? false,
     status: postStatusOf(session),
     staffAction: postStaffAction(session),
   };

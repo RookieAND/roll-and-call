@@ -15,6 +15,7 @@ interface PreConfirmedFieldProps {
   players: readonly PreConfirmedPlayer[];
   maxPlayers: number;
   method: RecruitMethod;
+  isPrivate?: boolean;
   onRemove: (userId: string) => void;
   onAdd: (players: PreConfirmedPlayer[]) => void;
 }
@@ -23,6 +24,7 @@ export function PreConfirmedField({
   players,
   maxPlayers,
   method,
+  isPrivate = false,
   onRemove,
   onAdd,
 }: PreConfirmedFieldProps) {
@@ -38,7 +40,7 @@ export function PreConfirmedField({
     <VStack gap="100">
       <HStack align="baseline" justify="between" gap="100">
         <Text typography="body4" weight="bold">
-          직접 확정한 참여자
+          {isPrivate ? "참여자 지정" : "직접 확정한 참여자"}
         </Text>
         {count > 0 && (
           <Text numeric typography="body4" foreground="hint">

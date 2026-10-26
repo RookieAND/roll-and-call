@@ -4,6 +4,8 @@ import { z } from "zod";
 import {
   GAME_KIND,
   GAME_KINDS,
+  GAME_VISIBILITIES,
+  GAME_VISIBILITY,
   GAME_TAG,
   PLAY_TYPE,
   PLAY_TYPES,
@@ -46,6 +48,8 @@ export const gameFormSchema = z
   .object({
     title: z.string().trim().min(1, "구인 제목을 입력해야 합니다.").max(100),
     kind: z.enum(GAME_KINDS),
+    // 비우면 공개다. 등록 때만 쓰고, 등록한 뒤에는 운영 관리의 전환으로만 바꾼다.
+    visibility: z.enum(GAME_VISIBILITIES).optional(),
     // 설명회는 보이스로 고정이다. 화면은 문항을 숨기고, 여기서 다른 값을 거부한다.
     playType: z.enum(PLAY_TYPES),
     // rule은 고른 룰북의 이름(표시용)이고, 등록할 때 서버는 rulebookId로 룰북을 다시 찾는다.
@@ -97,7 +101,8 @@ export const gameFormSchema = z
     minPlayers: z.string(),
     recruitMethod: z.enum(RECRUIT_METHODS),
     scheduleMode: z.enum(SCHEDULE_MODES),
-    endDate: z.string().min(1, "모집 마감 기한을 입력해야 합니다."),
+    // 비공개 구인은 모집 마감을 받지 않는다. 공개일 때 비어 있는지는 superRefine에서 본다.
+    endDate: z.string(),
     confirmedAt: z.string().optional(),
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
@@ -140,15 +145,34 @@ export const gameFormSchema = z
     if (values.preConfirmed.length > Number(values.maxPlayers)) {
       context.addIssue({
         code: "custom",
-        message: `직접 확정한 ${values.preConfirmed.length}명보다 줄일 수 없습니다.`,
+        message:
+          values.visibility === GAME_VISIBILITY.private
+            ? "지정한 참여자가 정원을 넘습니다."
+            : `직접 확정한 ${values.preConfirmed.length}명보다 줄일 수 없습니다.`,
         path: ["maxPlayers"],
+      });
+    }
+    const isPrivate = values.visibility === GAME_VISIBILITY.private;
+    if (isPrivate && values.scheduleMode !== SCHEDULE_MODE.fixed) {
+      context.addIssue({
+        code: "custom",
+        message: "비공개 구인은 일시 지정형만 열 수 있습니다.",
+        path: ["scheduleMode"],
+      });
+    }
+    if (!isPrivate && values.endDate === "") {
+      context.addIssue({
+        code: "custom",
+        message: "모집 마감 기한을 입력해야 합니다.",
+        path: ["endDate"],
       });
     }
     const playTime = playTimeError({ min: values.playMinutesMin, max: values.playMinutes });
     if (playTime) {
       context.addIssue({ code: "custom", message: playTime.message, path: [playTime.field] });
     }
-    const minPlayersError = minPlayersRangeError(values);
+    const minPlayersError =
+      values.visibility === GAME_VISIBILITY.private ? null : minPlayersRangeError(values);
     if (minPlayersError) {
       context.addIssue({ code: "custom", message: minPlayersError, path: ["minPlayers"] });
     }
@@ -162,6 +186,7 @@ export const gameFormSchema = z
     // 문자열은 로컬 ISO라 사전순 비교가 곧 시간순이다. 마감은 세션 시작·조율 첫 시간대보다 앞서야 한다.
     // 두 줄 문구는 제출 버튼 위 안내가 줄마다 나눠 그린다.
     if (
+      !isPrivate &&
       values.scheduleMode === SCHEDULE_MODE.fixed &&
       values.confirmedAt &&
       values.endDate >= values.confirmedAt
@@ -174,6 +199,7 @@ export const gameFormSchema = z
     }
     const { windowStartHour = "12" } = values;
     if (
+      !isPrivate &&
       values.scheduleMode === SCHEDULE_MODE.coordinate &&
       values.rangeStart &&
       isWindowHour(windowStartHour)

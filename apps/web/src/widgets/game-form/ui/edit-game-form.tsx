@@ -3,7 +3,7 @@
 import type { GameDetailData } from "@roll-and-call/database/games";
 import { isNull } from "es-toolkit";
 
-import { countConfirmed, deriveGameStatus } from "@/entities/game";
+import { countConfirmed, deriveGameStatus, isSessionStarted } from "@/entities/game";
 import type { MyRulebooks } from "@/entities/rulebook";
 import { updateGame } from "@/features/write-game";
 
@@ -30,6 +30,7 @@ export function EditGameForm({ serverId, game, rulebooks, adultOnlyEnabled }: Ed
       edit={{
         gameId: game.id,
         applicantCount: game.participants.length,
+        started: isSessionStarted(game),
         confirmedCount,
         drawn: !isNull(game.drawnAt),
         minPlayers: game.minPlayers,

@@ -32,7 +32,7 @@ export function toGameColumns(values: GameFormValues) {
     minRulePlays: values.minRulePlays,
     requireRulebookCert: values.requireRulebookCert,
     scheduleMode: values.scheduleMode,
-    endDate: fromKstDateTimeInput(values.endDate),
+    endDate: fromKstDateTimeInput(values.endDate || values.confirmedAt || ""),
     rangeStart: values.rangeStart || null,
     rangeEnd: values.rangeEnd || null,
     windowStartHour:

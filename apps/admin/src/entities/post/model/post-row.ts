@@ -11,6 +11,8 @@ export interface PostRow {
   sessionAt: Date | null;
   memberCount: number;
   capacity: number;
+  // 공개 범위가 비공개. 운영진 조치(staffAction)인 숨김과는 별개다.
+  isPrivate: boolean;
   status: PostStatus;
   staffAction: PostStaffAction | null;
 }

@@ -1,3 +1,11 @@
+export {
+  GAME_VISIBILITY,
+  GAME_VISIBILITIES,
+  VISIBILITY_SWITCH_BLOCK,
+  visibilitySwitchBlock,
+  type GameVisibility,
+  type VisibilitySwitchBlock,
+} from "./model/game-visibility";
 export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./model/schedule-mode";
 export { canDrawLottery, DIE_FACES, SELECTION_APPLICANT_LIMIT } from "./model/lottery";
 export { RECRUIT_METHOD, RECRUIT_METHODS, type RecruitMethod } from "./model/recruit-method";
@@ -20,6 +28,7 @@ export {
 } from "./model/participation-conditions";
 export { GameCard } from "./ui/game-card";
 export { PastGameCard } from "./ui/past-game-card";
+export { PrivateMark } from "./ui/private-mark";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameStatusBadge } from "./ui/game-status-badge";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
@@ -71,6 +80,7 @@ export {
 export { CALENDAR_VIEWER_ROLE, canAddToCalendar } from "./model/can-add-to-calendar";
 export { calendarViewerRole } from "./model/calendar-viewer-role";
 export { canViewHiddenGame } from "./model/can-view-hidden-game";
+export { canAccessGame } from "@roll-and-call/database/games/model";
 export {
   MANAGE_STAGE,
   MANAGE_STAGE_LABEL,

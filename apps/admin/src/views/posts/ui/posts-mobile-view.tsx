@@ -72,7 +72,9 @@ export function PostsMobileView({ posts, sort, query }: PostsMobileViewProps) {
                 path={`/posts/${row.id}${detailQuery}`}
                 title={row.title}
                 badges={row.staffAction ? <Tag>{row.staffAction}</Tag> : undefined}
-                trailing={<StatusBadges status={row.status} />}
+                trailing={
+                  <StatusBadges status={row.isPrivate ? `${row.status} · 비공개` : row.status} />
+                }
                 description={
                   <>
                     {sessionTimeLabel(row.sessionAt)} ·{" "}

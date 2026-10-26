@@ -28,6 +28,7 @@ function game(partial: Partial<SessionGame>): SessionGame {
   return {
     id: "g",
     gmId: "gm",
+    visibility: "public",
     title: "제목",
     rule: "CoC",
     maxPlayers: 4,
@@ -463,5 +464,26 @@ describe("남의 세션 기록 카드(readOnly)", () => {
       now: NOW,
     })[SESSION_ROLE.player];
     expect(card).toMatchObject({ hidden: true, title: "", schedule: "", gm: null });
+  });
+});
+
+describe("buildProfileSessions 비공개 구인", () => {
+  const privateGame = game({
+    id: "private",
+    gmId: "owner",
+    visibility: "private",
+    confirmedAt: at(2),
+    participants: [confirmedMe],
+  });
+
+  it("끝나기 전의 비공개 구인은 열 수 없는 사람의 프로필에 나오지 않는다", () => {
+    const sessions = buildProfileSessions({
+      hosted: [privateGame],
+      joined: [],
+      userId: "owner",
+      viewerId: "stranger",
+      now: NOW,
+    });
+    expect(sessions.host).toHaveLength(0);
   });
 });

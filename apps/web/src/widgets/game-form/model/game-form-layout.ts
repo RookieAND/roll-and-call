@@ -10,6 +10,8 @@ import type { ReopenContext } from "./reopen-context";
 export type GameEditContext = {
   gameId: string;
   applicantCount: number;
+  // 세션이 시작했는지. 시작한 구인은 공개 범위를 바꿀 수 없다.
+  started: boolean;
   confirmedCount: number;
   drawn: boolean;
   minPlayers: number | null;

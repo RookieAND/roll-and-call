@@ -3,6 +3,8 @@
 import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { createGameWithRoster } from "@roll-and-call/database/games";
 import { listSanctionedUserIds, findActiveSanction } from "@roll-and-call/database/moderation";
+import { createNotifications } from "@roll-and-call/database/notifications";
+import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { countServerMembers } from "@roll-and-call/database/profiles";
 import { syncGameSupplementRequests } from "@roll-and-call/database/rulebooks";
 import { withTransaction } from "@roll-and-call/database/transaction";
@@ -10,6 +12,7 @@ import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
+import { GAME_VISIBILITY } from "@/entities/game";
 import { RULE_GATE, isCertEnforced, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -26,6 +29,7 @@ import { invalidInputResult } from "../model/invalid-input-result";
 import { manualSupplementNames } from "../model/manual-supplement-names";
 import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
+import { toPrivateColumns } from "../model/to-private-columns";
 
 export async function createGame(input: GameFormValues): Promise<ActionResult> {
   const parsed = gameFormSchema.safeParse(input);
@@ -42,9 +46,12 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   if (await findActiveSanction({ serverId: server.id, userId: user.id })) {
     return { error: "활동 정지 기간에는 새 구인을 열 수 없습니다." };
   }
-  const columns = toGameColumns(parsed.data);
+  const isPrivate = parsed.data.visibility === GAME_VISIBILITY.private;
+  const columns = isPrivate
+    ? toPrivateColumns(toGameColumns(parsed.data))
+    : toGameColumns(parsed.data);
   const pastError = pastScheduleError({
-    endDate: columns.endDate,
+    endDate: isPrivate ? undefined : columns.endDate,
     confirmedAt: columns.confirmedAt,
   });
   if (pastError) return pastError;
@@ -93,6 +100,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       serverId: server.id,
       columns: {
         gmId: user.id,
+        visibility: isPrivate ? GAME_VISIBILITY.private : GAME_VISIBILITY.public,
         rule: set.label,
         rulebookId: set.cores[0]!.id,
         ...columns,
@@ -105,6 +113,19 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
       },
       confirmedUserIds: invitedIds,
     });
+    // 비공개 구인은 디스코드 확정 안내가 없으므로 지정한 사람에게 참여자 추가 때와 같은 받은 알림을 보낸다.
+    if (isPrivate) {
+      await createNotifications({
+        executor: transaction,
+        serverId: server.id,
+        actorId: user.id,
+        notifications: invitedIds.map((userId) => ({
+          userId,
+          kind: NOTIFICATION_KIND.participationConfirmed,
+          params: { gameId: createdId, gameTitle: columns.title },
+        })),
+      });
+    }
     await syncGameSupplementRequests({
       transaction,
       serverId: server.id,

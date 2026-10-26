@@ -6,16 +6,19 @@ import { notFound } from "next/navigation";
 
 import {
   GAME_CANCEL_KIND,
+  GAME_VISIBILITY,
   gameCancelledRecipients,
   isSessionEnded,
   MANAGE_STAGE_LABEL,
   MANAGE_STAGE_TONE,
   plannedEndAt,
+  visibilitySwitchBlock,
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
+import { GameVisibilityRow, VISIBILITY_SWITCH_MESSAGE } from "@/features/make-game-private";
 import { canReopenGame, ReopenGameLink } from "@/features/reopen-game";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { reviewStatusOf } from "@/widgets/game-detail";
 
@@ -36,7 +39,7 @@ interface ManageGameViewProps {
 export async function ManageGameView({ id }: ManageGameViewProps) {
   const server = await getCurrentServer();
   const [game, user, responseCounts, reviews] = await Promise.all([
-    getGameById(server.id, id),
+    getViewableGame(server.id, id),
     getCurrentSessionUser(),
     getResponseCounts({ serverId: server.id, gameIds: [id] }),
     getCurrentSessionUser().then((viewer) =>
@@ -74,6 +77,14 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     userId: user.id,
   });
   const gmReview = manageReviewButtonOf(reviewStatusOf(reviewTarget));
+  const visibilityBlock = visibilitySwitchBlock({
+    game,
+    participantCount: game.participants.length,
+  });
+  const visibilityBlockedReason =
+    game.visibility === GAME_VISIBILITY.public && visibilityBlock
+      ? VISIBILITY_SWITCH_MESSAGE[visibilityBlock]
+      : null;
   const rows = manageRows({ game, reviewCount: reviews.length, gmReview });
 
   return (
@@ -118,6 +129,11 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
               padding="none"
               className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
             >
+              <GameVisibilityRow
+                gameId={id}
+                visibility={game.visibility}
+                blockedReason={visibilityBlockedReason}
+              />
               {rows.map((row) => (
                 <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={plannedEndAt(game)} />
               ))}

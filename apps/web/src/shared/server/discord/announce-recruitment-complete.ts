@@ -1,6 +1,10 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForRecruitmentNotice } from "@roll-and-call/database/games";
-import { countWaiting, PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
+import {
+  countWaiting,
+  GAME_VISIBILITY,
+  PARTICIPANT_STATUS,
+} from "@roll-and-call/database/games/model";
 
 import { notifyRecruitmentComplete } from "./notify-recruitment-complete";
 
@@ -13,7 +17,7 @@ export async function announceRecruitmentComplete({
   gameId: string;
 }) {
   const game = await getGameForRecruitmentNotice({ serverId: server.id, gameId });
-  if (!game) return;
+  if (!game || game.visibility === GAME_VISIBILITY.private) return;
 
   const players = game.participants
     .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)

@@ -813,6 +813,20 @@
       "when": 1799500000012,
       "tag": "0121_drop_end_notice",
       "breakpoints": true
+    },
+    {
+      "idx": 122,
+      "version": "7",
+      "when": 1799500000013,
+      "tag": "0122_game_visibility",
+      "breakpoints": true
+    },
+    {
+      "idx": 123,
+      "version": "7",
+      "when": 1799500000014,
+      "tag": "0123_private_session_notices",
+      "breakpoints": true
     }
   ]
 }

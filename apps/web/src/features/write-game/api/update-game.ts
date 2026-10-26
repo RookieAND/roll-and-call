@@ -15,7 +15,7 @@ import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
+import { GAME_VISIBILITY, PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
 import { removeUnusedGameFiles } from "@/entities/game/server";
 import { isCertEnforced, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
@@ -37,6 +37,7 @@ import { manualSupplementNames } from "../model/manual-supplement-names";
 import { reopensMinPlayersJudgement } from "../model/reopens-min-players-judgement";
 import { sessionTimeChanged } from "../model/session-time-change";
 import { toGameColumns } from "../model/to-game-columns";
+import { toPrivateColumns } from "../model/to-private-columns";
 
 export async function updateGame(id: string, input: GameFormValues): Promise<ActionResult> {
   const parsedId = parseActionInput(idSchema, id);
@@ -53,11 +54,11 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   }
   const { server, user } = member;
   const values = parsed.data;
-  const columns = toGameColumns(values);
+  const formColumns = toGameColumns(values);
   // 디스코드를 부르므로 행을 잠그는 트랜잭션 밖에서 미리 가져온다.
   const linkLabels = await resolveNoticeLinkLabels({
     guildId: server.discordGuildId,
-    notice: columns.notice,
+    notice: formColumns.notice,
   });
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
   const myRulebooks = toMyRulebooks(
@@ -67,6 +68,11 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   // 같은 구인의 신청·명단 조정·추첨과 줄을 서도록 행을 잠그고 검사와 저장을 한 번에 한다.
   const result = await withTransaction(async (transaction) => {
     const game = await lockGame({ transaction, serverId: server.id, gameId: id });
+    const isPrivate = game?.visibility === GAME_VISIBILITY.private;
+    if (isPrivate && formColumns.scheduleMode !== SCHEDULE_MODE.fixed) {
+      return { error: "비공개 구인은 일시 지정형만 열 수 있습니다.", field: "scheduleMode" };
+    }
+    const columns = isPrivate ? toPrivateColumns(formColumns) : formColumns;
     const roster = await listRosterStatuses({ transaction, serverId: server.id, gameId: id });
     const block = editBlockReason({
       game,

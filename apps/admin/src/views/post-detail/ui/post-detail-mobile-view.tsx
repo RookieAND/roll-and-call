@@ -132,7 +132,12 @@ export function PostDetailMobileView({
               { label: "세션 일시", value: sessionTimeLabel(post.sessionAt) },
               { label: "플레이타임", value: post.playTime ?? "—" },
               { label: "참여", value: `${post.memberCount}/${post.capacity}명` },
-              { label: "상태", value: <StatusBadges status={post.status} /> },
+              {
+                label: "상태",
+                value: (
+                  <StatusBadges status={post.isPrivate ? `${post.status} · 비공개` : post.status} />
+                ),
+              },
             ]}
           />
         </MobileSection>

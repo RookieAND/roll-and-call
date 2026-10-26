@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import { gameOgImage } from "@/shared/lib";
-import { getCurrentServer, getGameById, requireMembership } from "@/shared/server";
+import { getCurrentServer, getViewableGame, requireMembership } from "@/shared/server";
 import { DrawResultView } from "@/views/draw-result";
 
 const DESCRIPTION = "1d100 추첨으로 정한 확정·대기 명단";
@@ -15,7 +15,7 @@ export async function generateMetadata({
   await requireMembership();
   const { id } = await params;
   const server = await getCurrentServer();
-  const game = await getGameById(server.id, id);
+  const game = await getViewableGame(server.id, id);
   if (!game || game.recruitMethod !== RECRUIT_METHOD.lottery) return { title: "추첨 결과" };
 
   const title = `${game.title} 추첨 결과`;

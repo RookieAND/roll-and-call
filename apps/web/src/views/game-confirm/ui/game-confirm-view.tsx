@@ -19,7 +19,7 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { ConfirmSessionForm, FixedSessionChangeForm } from "@/features/confirm-session";
 import { formatDate, serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 
 import { ConfirmPanelStats } from "./confirm-panel-stats";
@@ -31,7 +31,7 @@ interface GameConfirmViewProps {
 
 export async function GameConfirmView({ id }: GameConfirmViewProps) {
   const server = await getCurrentServer();
-  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
+  const [game, user] = await Promise.all([getViewableGame(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
     return (

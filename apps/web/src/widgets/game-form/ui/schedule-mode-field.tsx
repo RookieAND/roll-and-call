@@ -1,6 +1,6 @@
 "use client";
 
-import { Callout, Field, RadioCard, RadioGroup, VStack } from "@roll-and-call/ui";
+import { Callout, Field, RadioCard, RadioGroup, Text, VStack } from "@roll-and-call/ui";
 
 import { isScheduleMode, SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
@@ -26,9 +26,16 @@ interface ScheduleModeFieldProps {
   value: ScheduleMode;
   onChange: (mode: ScheduleMode) => void;
   locked?: boolean;
+  // 비공개 구인은 일시 지정형만 열 수 있다.
+  coordinateDisabled?: boolean;
 }
 
-export function ScheduleModeField({ value, onChange, locked = false }: ScheduleModeFieldProps) {
+export function ScheduleModeField({
+  value,
+  onChange,
+  locked = false,
+  coordinateDisabled = false,
+}: ScheduleModeFieldProps) {
   return (
     <VStack gap="100">
       <Field.Root label="일정 방식">
@@ -42,7 +49,12 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
           className="grid grid-cols-2 gap-100"
         >
           {OPTIONS.map((option) => (
-            <RadioCard.Root key={option.value} value={option.value} indicator="radio">
+            <RadioCard.Root
+              key={option.value}
+              value={option.value}
+              indicator="radio"
+              disabled={coordinateDisabled && option.value === SCHEDULE_MODE.coordinate}
+            >
               <RadioCard.Title>{option.label}</RadioCard.Title>
               <RadioCard.Description>{option.description}</RadioCard.Description>
               <RadioCard.Indicator />
@@ -50,9 +62,13 @@ export function ScheduleModeField({ value, onChange, locked = false }: ScheduleM
           ))}
         </RadioGroup>
       </Field.Root>
-      {locked ? (
-        <LockedModeNotice label="일정 방식" />
-      ) : (
+      {locked && <LockedModeNotice label="일정 방식" />}
+      {!locked && coordinateDisabled && (
+        <Text typography="body5" foreground="hint" render={<p />}>
+          비공개 구인은 일시를 정해서 열 수 있습니다.
+        </Text>
+      )}
+      {!locked && !coordinateDisabled && (
         <Callout.Root colorPalette="gray" size="sm">
           <Callout.Description>{HINT[value]}</Callout.Description>
         </Callout.Root>

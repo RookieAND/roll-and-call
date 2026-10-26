@@ -1,6 +1,6 @@
 import { Badge, Callout, Card, Text, VStack } from "@roll-and-call/ui";
 
-import { GameStatusBadge, type GameStatus } from "@/entities/game";
+import { GameStatusBadge, PrivateMark, type GameStatus } from "@/entities/game";
 
 import { isWizardStepSelectable, wizardStepState } from "../model/wizard-step-state";
 import { WizardStepRow } from "./wizard-step-row";
@@ -20,6 +20,7 @@ interface WizardSidePanelProps {
   ruleLabel: string;
   timeLabel: string;
   capacity: number;
+  isPrivate?: boolean;
   onSelectStep: (index: number) => void;
 }
 
@@ -33,6 +34,7 @@ export function WizardSidePanel({
   ruleLabel,
   timeLabel,
   capacity,
+  isPrivate = false,
   onSelectStep,
 }: WizardSidePanelProps) {
   return (
@@ -56,6 +58,7 @@ export function WizardSidePanel({
                 <Badge colorPalette="primary">작성 중</Badge>
               )}
               <Badge colorPalette="gray">정원 {capacity}명</Badge>
+              {isPrivate && <PrivateMark />}
             </div>
           </VStack>
         </Card.Root>

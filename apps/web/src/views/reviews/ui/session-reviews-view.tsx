@@ -2,11 +2,11 @@ import { getGameReviews } from "@roll-and-call/database/reviews";
 import { Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
-import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
+import { GAME_VISIBILITY, PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { formatDateTime } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
 import { EmptyState } from "@/shared/ui";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
@@ -22,7 +22,7 @@ interface SessionReviewsViewProps {
 export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
   const server = await getCurrentServer();
   const [game, viewer] = await Promise.all([
-    getGameById(server.id, gameId),
+    getViewableGame(server.id, gameId),
     getCurrentSessionUser(),
   ]);
   if (!game) notFound();
@@ -33,6 +33,8 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
       (participant) =>
         participant.userId === viewerId && participant.status === PARTICIPANT_STATUS.confirmed,
     );
+  // 비공개 구인의 후기는 GM과 참여자에게만 보이고, 그 밖의 사람에게는 후기 영역이 없는 구인과 같다.
+  if (game.visibility === GAME_VISIBILITY.private && !takesPart) notFound();
   if (game.hiddenAt && !takesPart) {
     return (
       <ReviewsPage title="세션 후기" back={`/games/${gameId}`}>

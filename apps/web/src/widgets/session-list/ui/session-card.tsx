@@ -1,7 +1,7 @@
 import { Avatar, Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, CircleAlert, Clock } from "lucide-react";
 
-import { GameThumbnail } from "@/entities/game";
+import { GameThumbnail, PrivateMark } from "@/entities/game";
 import { ReopenGameLink } from "@/features/reopen-game";
 import { ServerLink } from "@/shared/ui";
 
@@ -98,12 +98,17 @@ export function SessionCard({ model }: SessionCardProps) {
             <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className="shrink-0" />
             <span className="min-w-0 truncate">{model.schedule}</span>
           </Text>
-          {model.gm && (
-            <HStack align="center" gap="075">
-              <Avatar src={model.gm.avatarUrl} name={model.gm.username} size="sm" />
-              <Text typography="body4" foreground="muted" truncate>
-                GM {model.gm.username}
-              </Text>
+          {(model.gm || model.isPrivate) && (
+            <HStack align="center" gap="100" className="flex-wrap">
+              {model.gm && (
+                <HStack align="center" gap="075">
+                  <Avatar src={model.gm.avatarUrl} name={model.gm.username} size="sm" />
+                  <Text typography="body4" foreground="muted" truncate>
+                    GM {model.gm.username}
+                  </Text>
+                </HStack>
+              )}
+              {model.isPrivate && <PrivateMark />}
             </HStack>
           )}
           {model.caption && (

@@ -200,6 +200,16 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "함께한 세션의 후기를 남겨 주세요.",
   ],
   [
+    { kind: NOTIFICATION_KIND.sessionReminder, params: game },
+    "검은 산의 노래 세션이 1시간 뒤에 시작됩니다.",
+    null,
+  ],
+  [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: false } },
+    "검은 산의 노래 세션이 시작되었습니다.",
+    null,
+  ],
+  [
     { kind: NOTIFICATION_KIND.certApproved, params: rulebook },
     "인세인 인증이 승인되었습니다.",
     "내 인증 목록에서 확인할 수 있습니다.",

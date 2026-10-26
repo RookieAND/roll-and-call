@@ -11,6 +11,7 @@ vi.mock("server-only", () => ({}));
 const edit: GameEditContext = {
   gameId: "g",
   applicantCount: 0,
+  started: false,
   confirmedCount: 0,
   drawn: false,
   minPlayers: 4,

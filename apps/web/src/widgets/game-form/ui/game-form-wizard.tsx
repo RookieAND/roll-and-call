@@ -7,6 +7,7 @@ import { compact } from "es-toolkit";
 import { use, useState } from "react";
 import type { FieldErrors } from "react-hook-form";
 
+import { GAME_VISIBILITY } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 import { useServerPath } from "@/shared/lib";
 import { TrialContext, useTrialPush } from "@/shared/trial";
@@ -16,6 +17,7 @@ import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { FORM_SECTION, SECTION_FIELDS, type SectionKey } from "../model/game-form-steps";
 import { stepOfField } from "../model/step-of-field";
+import { visibilityLockReason as visibilityLockReasonOf } from "../model/visibility-lock-reason";
 import { wizardStepLabel } from "../model/wizard-step-label";
 import { EditWithApplicantsNotice } from "./edit-with-applicants-notice";
 import { EditWithoutApplicantsNotice } from "./edit-without-applicants-notice";
@@ -59,6 +61,10 @@ export function GameFormWizard({
   const leaveHref = toServerPath(edit ? `/games/${edit.gameId}` : "/games");
   const applicants = edit?.applicantCount ?? 0;
   const locked = applicants > 0;
+  const visibilityLockReason = visibilityLockReasonOf({
+    started: edit?.started ?? false,
+    hasApplicants: locked,
+  });
 
   // 숨겨진 단계의 필드로는 스크롤할 수 없어서 그 단계로 먼저 돌린다.
   function onInvalid(errors: FieldErrors<GameFormValues>) {
@@ -142,6 +148,7 @@ export function GameFormWizard({
             savedMinPlayers={edit?.minPlayers ?? null}
             locked={locked}
             preConfirmable={!edit && !trial}
+            visibilityEdit={edit ? { reason: visibilityLockReason } : undefined}
           />
         );
       case FORM_SECTION.schedule:
@@ -178,6 +185,7 @@ export function GameFormWizard({
             ruleLabel={watch("rule") || "룰북 미선택"}
             timeLabel={formatPlayRange(watch("playMinutesMin"), watch("playMinutes")) ?? ""}
             capacity={Number(watch("maxPlayers")) || 0}
+            isPrivate={watch("visibility") === GAME_VISIBILITY.private}
             onSelectStep={goToStep}
           />
         }

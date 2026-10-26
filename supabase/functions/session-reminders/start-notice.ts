@@ -178,6 +178,7 @@ export async function sendStartNotices(environment: Environment, now: Date) {
     .update({ start_notified_at: now.toISOString() })
     .not("confirmed_at", "is", null)
     .not("discord_thread_id", "is", null)
+    .eq("visibility", "public")
     .is("start_notified_at", null)
     .is("hidden_at", null)
     .is("cancelled_at", null)

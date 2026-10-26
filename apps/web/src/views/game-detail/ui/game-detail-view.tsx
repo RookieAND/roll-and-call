@@ -13,7 +13,7 @@ import {
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { QUERY_NOTICE } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
 import { QueryNoticeToast } from "@/shared/ui";
 import {
   GameDetail,
@@ -34,7 +34,7 @@ interface GameDetailViewProps {
 
 export async function GameDetailView({ id }: GameDetailViewProps) {
   const server = await getCurrentServer();
-  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
+  const [game, user] = await Promise.all([getViewableGame(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
   const viewerId = user?.id ?? null;
   if (!canViewHiddenGame({ game, viewerId })) return <GameHiddenView />;

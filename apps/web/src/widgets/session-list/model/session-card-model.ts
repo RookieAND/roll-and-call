@@ -79,6 +79,7 @@ export type SessionCardModel = {
   // 데스크톱 카드 위의 16:9 썸네일. 스포일러면 회색 칸으로 가린다.
   thumbnailUrl: string | null;
   thumbnailSpoiler: boolean;
+  isPrivate: boolean;
   titleDanger: boolean;
   urgent: boolean;
   cancelled: boolean;
@@ -106,6 +107,9 @@ export type SessionContext = {
 };
 
 // 썸네일은 toSessionCard가 구인 행에서 한 번에 붙인다. 종류별 빌더는 이 나머지를 만든다.
-export type SessionCardBase = Omit<SessionCardModel, "thumbnailUrl" | "thumbnailSpoiler">;
+export type SessionCardBase = Omit<
+  SessionCardModel,
+  "thumbnailUrl" | "thumbnailSpoiler" | "isPrivate"
+>;
 
 export type MySessions = Record<SessionRole, SessionCardModel[]>;

@@ -10,6 +10,7 @@ import {
   type ParticipationStanding,
   GAME_STATUS,
   isApplicationClosed,
+  GAME_VISIBILITY,
   isGameGm,
   isSessionEnded,
   RECRUIT_METHOD,
@@ -63,6 +64,7 @@ export function GameDetail({
 }: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
   const { confirmed, waiting, removed } = splitRoster(game.participants);
+  const isPrivate = game.visibility === GAME_VISIBILITY.private;
 
   const viewerParticipant = viewerId
     ? [...confirmed, ...waiting, ...removed].find((participant) => participant.userId === viewerId)
@@ -109,8 +111,11 @@ export function GameDetail({
     now,
   });
 
+  // 비공개 구인은 모집·신청 영역이 없고, 끝난 뒤 제3자에게는 액션 막대도 없다. 안내 문구도 두지 않는다.
+  const showsActions = !isPrivate || isGm || confirmed.some((row) => row.userId === viewerId);
+
   // 모집 방식·명단·신청 막대는 모바일에서는 본문 안에, 1100px 이상에서는 우측 패널에 둔다. 같은 요소를 두 자리에 그리고 폭으로 한쪽을 숨긴다.
-  const recruitMethod = (
+  const recruitMethod = isPrivate ? null : (
     <VStack gap="200">
       <GameRecruitMethodSection game={game} now={now} />
       <GameConditionsSection conditions={conditions} />
@@ -143,9 +148,11 @@ export function GameDetail({
         <VStack gap="200">
           {recruitMethod}
           {roster}
-          <ErrorBoundary display={ERROR_DISPLAY.toast}>
-            <GameActionZone game={game} view={actionView} />
-          </ErrorBoundary>
+          {showsActions && (
+            <ErrorBoundary display={ERROR_DISPLAY.toast}>
+              <GameActionZone game={game} view={actionView} />
+            </ErrorBoundary>
+          )}
         </VStack>
       }
     >
@@ -175,16 +182,18 @@ export function GameDetail({
 
             <GamePreflightSection game={game} adultOnlyEnabled={adultOnlyEnabled} />
 
-            <div className="desktop:hidden">{recruitMethod}</div>
+            {recruitMethod && <div className="desktop:hidden">{recruitMethod}</div>}
 
             {game.images.length > 0 && <GameImageGallery images={game.images} />}
 
             <div className="desktop:hidden">{roster}</div>
           </VStack>
 
-          <div className="desktop:hidden">
-            <GameDetailActions game={game} view={actionView} />
-          </div>
+          {showsActions && (
+            <div className="desktop:hidden">
+              <GameDetailActions game={game} view={actionView} />
+            </div>
+          )}
         </VStack>
       </Container>
     </PageShell>

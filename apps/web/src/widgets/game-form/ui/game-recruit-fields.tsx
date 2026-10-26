@@ -3,7 +3,12 @@
 import { Callout, Field, Stepper, VStack } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import { RECRUIT_METHOD } from "@/entities/game";
+import {
+  GAME_VISIBILITY,
+  RECRUIT_METHOD,
+  SCHEDULE_MODE,
+  type GameVisibility,
+} from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
 import { ApplicationNoteField } from "./application-note-field";
@@ -11,6 +16,7 @@ import { MinPlayersField } from "./min-players-field";
 import { PreConfirmedField } from "./pre-confirmed-field";
 import { RecruitMethodField } from "./recruit-method-field";
 import { RecruitMethodNote } from "./recruit-method-note";
+import { VisibilityField } from "./visibility-field";
 import { WaitlistField } from "./waitlist-field";
 
 interface GameRecruitFieldsProps {
@@ -20,6 +26,8 @@ interface GameRecruitFieldsProps {
   savedMinPlayers?: number | null;
   locked?: boolean;
   preConfirmable?: boolean;
+  // 수정에서는 공개 범위를 바꾸지 않고, 바꿀 수 없는 이유만 보인다. 새 구인은 null이다.
+  visibilityEdit?: { reason: string | null };
 }
 
 export function GameRecruitFields({
@@ -29,6 +37,7 @@ export function GameRecruitFields({
   savedMinPlayers = null,
   locked = false,
   preConfirmable = false,
+  visibilityEdit,
 }: GameRecruitFieldsProps) {
   const {
     setValue,
@@ -39,10 +48,30 @@ export function GameRecruitFields({
   const isFirstCome = method === RECRUIT_METHOD.firstCome;
   const maxPlayers = Number(watch("maxPlayers"));
   const preConfirmed = watch("preConfirmed");
+  const visibility = watch("visibility") ?? GAME_VISIBILITY.public;
+  const isPrivate = visibility === GAME_VISIBILITY.private;
   const playersFloor = Math.max(confirmedCount, preConfirmed.length);
+
+  function changeVisibility(next: GameVisibility) {
+    setValue("visibility", next, { shouldDirty: true, shouldValidate: true });
+    // 비공개 구인은 일시 지정형만 열 수 있다. 공개로 돌아와도 이전 모집 입력값은 그대로 둔다.
+    if (next === GAME_VISIBILITY.private) {
+      setValue("scheduleMode", SCHEDULE_MODE.fixed, { shouldDirty: true });
+    }
+  }
 
   return (
     <>
+      <VisibilityField
+        value={visibility}
+        onChange={changeVisibility}
+        suggestsPrivate={
+          !visibilityEdit && preConfirmed.length > 0 && preConfirmed.length === maxPlayers
+        }
+        locked={!!visibilityEdit}
+        lockedReason={visibilityEdit?.reason}
+      />
+
       <VStack gap="100">
         <Field.Root
           label="최대 참여 인원"
@@ -72,13 +101,16 @@ export function GameRecruitFields({
         )}
       </VStack>
 
-      <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
+      {!isPrivate && (
+        <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
+      )}
 
       {preConfirmable && (
         <PreConfirmedField
           players={preConfirmed}
           maxPlayers={maxPlayers}
           method={method}
+          isPrivate={isPrivate}
           onAdd={(players) =>
             setValue("preConfirmed", [...preConfirmed, ...players], {
               shouldDirty: true,
@@ -95,32 +127,38 @@ export function GameRecruitFields({
         />
       )}
 
-      <ApplicationNoteField
-        value={watch("applicationNoteEnabled")}
-        locked={locked}
-        onChange={(enabled) => setValue("applicationNoteEnabled", enabled, { shouldDirty: true })}
-      />
-
-      <VStack gap="100">
-        <RecruitMethodField
-          value={method}
-          locked={locked}
-          onChange={(next) => {
-            setValue("recruitMethod", next, { shouldDirty: true });
-            if (next === RECRUIT_METHOD.selection) {
-              setValue("applicationNoteEnabled", true, { shouldDirty: true });
+      {!isPrivate && (
+        <>
+          <ApplicationNoteField
+            value={watch("applicationNoteEnabled")}
+            locked={locked}
+            onChange={(enabled) =>
+              setValue("applicationNoteEnabled", enabled, { shouldDirty: true })
             }
-          }}
-        />
-
-        {!locked && <RecruitMethodNote method={method} />}
-        {isFirstCome && (
-          <WaitlistField
-            value={watch("waitlistEnabled")}
-            onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
           />
-        )}
-      </VStack>
+
+          <VStack gap="100">
+            <RecruitMethodField
+              value={method}
+              locked={locked}
+              onChange={(next) => {
+                setValue("recruitMethod", next, { shouldDirty: true });
+                if (next === RECRUIT_METHOD.selection) {
+                  setValue("applicationNoteEnabled", true, { shouldDirty: true });
+                }
+              }}
+            />
+
+            {!locked && <RecruitMethodNote method={method} />}
+            {isFirstCome && (
+              <WaitlistField
+                value={watch("waitlistEnabled")}
+                onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
+              />
+            )}
+          </VStack>
+        </>
+      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import type { Game } from "@roll-and-call/database";
 import {
   deriveGameStatus,
+  GAME_VISIBILITY,
   isSessionEnded,
   type GameStatus,
 } from "@roll-and-call/database/games/model";
@@ -17,6 +18,7 @@ export interface PastGameCardView {
   grayBadge: "취소됨" | "종료" | null;
   status: GameStatus;
   meta: string;
+  isPrivate: boolean;
   // null이면 스포일러라 회색 빈 칸을 그린다.
   thumbnailUrl: string | null;
 }
@@ -24,6 +26,7 @@ export interface PastGameCardView {
 // 취소를 세션 종료보다 먼저 본다(취소된 구인에 「종료」를 붙이지 않는다). 썸네일이 없으면 공유 미리보기 기본 이미지(D61).
 export function pastGameCardView(game: PastGame, now: Date = new Date()): PastGameCardView {
   const count = countConfirmed(game.participants);
+  const isPrivate = game.visibility === GAME_VISIBILITY.private;
   const status = deriveGameStatus({
     maxPlayers: game.maxPlayers,
     endDate: game.endDate,
@@ -40,6 +43,7 @@ export function pastGameCardView(game: PastGame, now: Date = new Date()): PastGa
       grayBadge: "취소됨",
       status,
       meta: compact([game.rule, `${formatDate(game.cancelledAt)} 취소`]).join(" · "),
+      isPrivate,
       thumbnailUrl,
     };
   }
@@ -51,6 +55,7 @@ export function pastGameCardView(game: PastGame, now: Date = new Date()): PastGa
     grayBadge: isSessionEnded(game, now) ? "종료" : null,
     status,
     meta: compact([game.rule, when]).join(" · "),
+    isPrivate,
     thumbnailUrl,
   };
 }

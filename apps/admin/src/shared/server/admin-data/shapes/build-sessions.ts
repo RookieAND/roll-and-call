@@ -94,6 +94,7 @@ export function buildSessions({
             at: game.hiddenAt,
           }
         : undefined,
+      isPrivate: game.visibility === "private" ? true : undefined,
       cancelled: !isNull(game.cancelledAt),
       cancelBlock: cancelBlockReason({ game, now: new Date(now) }),
       sessionStarted: isSessionStarted(game, new Date(now)),

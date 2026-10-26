@@ -179,6 +179,10 @@ export function notificationText(payload: NotificationPayload): NotificationText
         " 후기를 남길 수 있습니다.",
         "함께한 세션의 후기를 남겨 주세요.",
       );
+    case NOTIFICATION_KIND.sessionReminder:
+      return bold(payload.params.gameTitle, " 세션이 1시간 뒤에 시작됩니다.");
+    case NOTIFICATION_KIND.sessionStarted:
+      return bold(payload.params.gameTitle, " 세션이 시작되었습니다.");
     case NOTIFICATION_KIND.certApproved:
       return bold(
         bookNames(payload.params),

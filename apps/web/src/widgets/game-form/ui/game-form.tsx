@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import {
   DEFAULT_WINDOW,
   GAME_KIND,
+  GAME_VISIBILITY,
   PLAY_TYPE,
   RECRUIT_METHOD,
   SCHEDULE_MODE,
@@ -69,6 +70,7 @@ export function GameForm({
     defaultValues: {
       title: defaultGame?.title ?? "",
       kind: defaultGame?.kind ?? GAME_KIND.session,
+      visibility: defaultGame?.visibility ?? GAME_VISIBILITY.public,
       playType: defaultGame?.playType ?? PLAY_TYPE.voice,
       rule: defaultGame?.rule ?? initialSet?.label ?? "",
       rulebookId: defaultGame?.rulebookId ?? initialSet?.cores[0]?.id ?? "",

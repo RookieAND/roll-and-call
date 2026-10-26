@@ -1,4 +1,4 @@
-import { Table, Text } from "@roll-and-call/ui";
+import { HStack, Table, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -61,16 +61,19 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
             className={MUTED_STATUSES.includes(row.status) ? "relative opacity-50" : "relative"}
           >
             <Table.Cell>
-              <Text
-                typography="body3"
-                weight="bold"
-                truncate
-                title={row.title}
-                render={<ServerLink path={`/posts/${row.id}${detailQuery}`} />}
-                className="block after:absolute after:inset-0"
-              >
-                {row.title}
-              </Text>
+              <HStack align="center" gap="100">
+                <Text
+                  typography="body3"
+                  weight="bold"
+                  truncate
+                  title={row.title}
+                  render={<ServerLink path={`/posts/${row.id}${detailQuery}`} />}
+                  className="block min-w-0 after:absolute after:inset-0"
+                >
+                  {row.title}
+                </Text>
+                {row.isPrivate && <Tag>비공개</Tag>}
+              </HStack>
             </Table.Cell>
             <Table.Cell className="truncate">{row.gmNickname}</Table.Cell>
             <Table.Cell>

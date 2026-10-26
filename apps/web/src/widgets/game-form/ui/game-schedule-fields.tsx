@@ -3,7 +3,7 @@
 import { Field, Text, VStack } from "@roll-and-call/ui";
 import { Controller, type UseFormReturn } from "react-hook-form";
 
-import { SCHEDULE_MODE } from "@/entities/game";
+import { GAME_VISIBILITY, SCHEDULE_MODE } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 import { toKstDateInput } from "@/shared/lib";
 import { DateTimePicker } from "@/shared/ui";
@@ -33,12 +33,14 @@ export function GameScheduleFields({
     formState: { errors },
   } = form;
   const mode = watch("scheduleMode");
+  const isPrivate = watch("visibility") === GAME_VISIBILITY.private;
 
   return (
     <>
       <ScheduleModeField
         value={mode}
         locked={modeLocked}
+        coordinateDisabled={isPrivate}
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
       />
 
@@ -51,29 +53,31 @@ export function GameScheduleFields({
         </>
       )}
 
-      <VStack gap="075">
-        <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
-          <Controller
-            name="endDate"
-            control={control}
-            render={({ field }) => (
-              <DateTimePicker
-                id="endDate"
-                value={field.value}
-                onChange={field.onChange}
-                invalid={!!errors.endDate}
-                min={toKstDateInput(new Date())}
-                disabled={endDateLocked}
-              />
-            )}
-          />
-        </Field.Root>
-        {endDateLocked && (
-          <Text typography="body4" foreground="hint" render={<p />}>
-            추첨을 마친 구인은 모집 마감을 바꿀 수 없습니다.
-          </Text>
-        )}
-      </VStack>
+      {!isPrivate && (
+        <VStack gap="075">
+          <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <DateTimePicker
+                  id="endDate"
+                  value={field.value}
+                  onChange={field.onChange}
+                  invalid={!!errors.endDate}
+                  min={toKstDateInput(new Date())}
+                  disabled={endDateLocked}
+                />
+              )}
+            />
+          </Field.Root>
+          {endDateLocked && (
+            <Text typography="body4" foreground="hint" render={<p />}>
+              추첨을 마친 구인은 모집 마감을 바꿀 수 없습니다.
+            </Text>
+          )}
+        </VStack>
+      )}
     </>
   );
 }

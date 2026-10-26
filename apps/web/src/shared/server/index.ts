@@ -23,6 +23,7 @@ export {
   syncReviewForumPost,
 } from "@roll-and-call/game-notices/review-forum";
 export { getGameById } from "./db/get-game-by-id";
+export { getViewableGame } from "./db/get-viewable-game";
 export { getProfile } from "./db/get-profile";
 export { listMemberServers } from "./db/list-member-servers";
 export { getUserBadges } from "./db/get-user-badges";

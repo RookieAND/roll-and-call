@@ -64,6 +64,7 @@ export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPos
     title: session.title,
     rulebook: session.rulebook,
     status: postStatusOf(session, now),
+    isPrivate: session.isPrivate ?? false,
     sessionAt: session.timeFixed ? session.startsAt : null,
     memberCount: session.memberIds.length,
     waitingCount: waitingIds.length,

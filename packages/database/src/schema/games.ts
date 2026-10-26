@@ -31,6 +31,9 @@ export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
 // first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 마감 때 1d100 추첨으로 확정 인원을 정한다.
 // selection은 정원과 무관하게 받고 GM이 신청자 중에서 확정자를 직접 골라 [선발 마치기]로 끝낸다.
+// private은 모집 공지·신청 없이 GM이 참여자를 직접 지정하는 구인이다. 일시 지정형만 가능하다.
+export const gameVisibility = pgEnum("game_visibility", ["public", "private"]);
+
 export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery", "selection"]);
 
 // 정원(maxPlayers)만큼 confirmed로 채우고 초과분은 waiting. 승격/강등/자동 승계는 이 값만 바꾼다.
@@ -64,6 +67,7 @@ export const games = pgTable(
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
     title: text("title").notNull(),
     kind: gameKind("kind").notNull().default("session"),
+    visibility: gameVisibility("visibility").notNull().default("public"),
     playType: playType("play_type").notNull().default("voice"),
     rule: text("rule").notNull(),
     // rule 글자를 룰북 이름·다른 이름에 맞춰 트리거가 채운다. 맞는 룰북이 없으면 null.
@@ -158,6 +162,12 @@ export const games = pgTable(
     index("games_server_id_confirmed_at_idx")
       .on(table.serverId, table.confirmedAt)
       .where(sql`confirmed_at is not null`),
+    // 비공개 구인의 1시간 전·시작 웹 알림 크론이 집는 글
+    index("games_private_notice_due_idx")
+      .on(table.confirmedAt)
+      .where(
+        sql`visibility = 'private' and cancelled_at is null and (notified_at is null or start_notified_at is null)`,
+      ),
     // 마감 때 추첨 크론이 집는 글
     index("games_lottery_due_idx")
       .on(table.endDate)
@@ -175,6 +185,10 @@ export const games = pgTable(
         sql`recruit_method = 'selection' and selection_finished_at is null and cancelled_at is null`,
       ),
     check("games_briefing_voice", sql`${table.kind} <> 'briefing' or ${table.playType} = 'voice'`),
+    check(
+      "games_private_fixed",
+      sql`${table.visibility} = 'public' or ${table.scheduleMode} = 'fixed'`,
+    ),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check(
       "games_min_players_range",

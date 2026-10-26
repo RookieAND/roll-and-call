@@ -18,7 +18,8 @@ export async function getGamesCounts({
   q: string | undefined;
   filter?: GamesFilter;
 }) {
-  const { full, ended, live } = gameBucketSql({ now: new Date() });
+  const now = new Date();
+  const { full, ended, live } = gameBucketSql({ now });
   const count = (condition: ReturnType<typeof sql>) =>
     sql<number>`(count(*) filter (where ${condition}))::int`;
   const [row] = await db
@@ -31,7 +32,9 @@ export async function getGamesCounts({
       ended: count(ended),
     })
     .from(games)
-    .where(and(searchableGamesWhere({ serverId, q }), gameFiltersWhere(filter)));
+    .where(
+      and(searchableGamesWhere({ serverId, q, endedPrivateAt: now }), gameFiltersWhere(filter)),
+    );
   return row!;
 }
 

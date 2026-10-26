@@ -14,7 +14,7 @@ import {
 } from "@/entities/game";
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
-import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, EmptyState, PageShell } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
@@ -27,7 +27,7 @@ interface GameScheduleViewProps {
 
 export async function GameScheduleView({ id }: GameScheduleViewProps) {
   const server = await getCurrentServer();
-  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
+  const [game, user] = await Promise.all([getViewableGame(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
 
   if (game.scheduleMode !== SCHEDULE_MODE.coordinate)

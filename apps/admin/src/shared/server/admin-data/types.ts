@@ -171,6 +171,8 @@ export interface Session {
   attendanceFirstConfirmedAt?: Date;
   attendanceAutoConfirmed?: boolean;
   hidden?: { reason: string; by: string; at: Date };
+  // 공개 범위가 비공개인 구인. 운영진이 숨긴 구인(hidden)과는 별개다.
+  isPrivate?: boolean;
   cancelled?: boolean;
   // 운영진 취소를 막는 이유(cancelBlockReason). 없으면 null.
   cancelBlock?: "already_cancelled" | "session_started" | "session_ended" | null;

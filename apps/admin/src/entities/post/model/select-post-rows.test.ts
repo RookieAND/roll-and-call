@@ -17,6 +17,7 @@ const row = (fields: Partial<PostRow> & { id: string }): PostRow => ({
   memberCount: 1,
   capacity: 5,
   status: POST_STATUS.recruiting,
+  isPrivate: false,
   staffAction: null,
   ...fields,
 });

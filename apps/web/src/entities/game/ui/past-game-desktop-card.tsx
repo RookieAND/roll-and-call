@@ -1,8 +1,9 @@
-import { Badge, Card, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { PastGameCardView } from "../model/past-game-card-view";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
+import { PrivateMark } from "./private-mark";
 
 interface PastGameDesktopCardProps {
   title: string;
@@ -37,9 +38,12 @@ export function PastGameDesktopCard({ title, view }: PastGameDesktopCardProps) {
         <Text typography="heading3" foreground="muted" className="flex-1 text-pretty">
           {title}
         </Text>
-        <Text typography="body3" foreground="muted">
-          {view.meta}
-        </Text>
+        <HStack align="center" gap="100" className="flex-wrap">
+          <Text typography="body3" foreground="muted">
+            {view.meta}
+          </Text>
+          {view.isPrivate && <PrivateMark />}
+        </HStack>
       </VStack>
     </Card.Root>
   );

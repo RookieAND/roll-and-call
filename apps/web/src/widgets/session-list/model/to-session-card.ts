@@ -1,6 +1,6 @@
 import { isNil } from "es-toolkit";
 
-import { SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/game";
+import { GAME_VISIBILITY, SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 
 import { deriveSessionFacts } from "./derive-session-facts";
@@ -23,6 +23,7 @@ export function toSessionCard({
     ...buildSessionCard({ game, role, context }),
     thumbnailUrl: game.thumbnailUrl,
     thumbnailSpoiler: game.thumbnailSpoiler,
+    isPrivate: game.visibility === GAME_VISIBILITY.private,
   };
   // 남의 세션 기록은 viewerId에 프로필 주인이 들어가므로, 판정하지 않고 다시 열기를 두지 않는다.
   if (context.readOnly) return card;

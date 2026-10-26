@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { GmOnlyNotice } from "@/features/auth";
-import { getGameById, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
+import { getViewableGame, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { EditGameForm } from "@/widgets/game-form";
 
@@ -17,7 +17,7 @@ interface EditGameViewProps {
 
 export async function EditGameView({ id }: EditGameViewProps) {
   const server = await getCurrentServer();
-  const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
+  const [game, user] = await Promise.all([getViewableGame(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();
   const isGm = user?.id === game.gmId;
   const lockedTitle = isGm ? editLockedTitle(game) : null;

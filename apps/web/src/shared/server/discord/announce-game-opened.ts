@@ -1,6 +1,7 @@
 import "server-only";
 import { type Server } from "@roll-and-call/database";
 import { getGameWithGmName, saveDiscordThreadId } from "@roll-and-call/database/games";
+import { GAME_VISIBILITY } from "@roll-and-call/database/games/model";
 
 import { announceRecruitmentComplete } from "./announce-recruitment-complete";
 import { notifyDirectConfirmed } from "./notify-direct-confirmed";
@@ -19,6 +20,7 @@ export async function announceGameOpened({
   maxPlayers: number;
 }) {
   const game = await getGameWithGmName({ serverId: server.id, gameId });
+  if (game?.visibility === GAME_VISIBILITY.private) return;
   const threadId =
     game &&
     (await notifyGameCreated({

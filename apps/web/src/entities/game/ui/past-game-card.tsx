@@ -6,6 +6,7 @@ import { pastGameCardView } from "../model/past-game-card-view";
 import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 import { PastGameDesktopCard } from "./past-game-desktop-card";
+import { PrivateMark } from "./private-mark";
 
 interface PastGameCardProps {
   game: Game & {
@@ -41,9 +42,12 @@ export function PastGameCard({ game }: PastGameCardProps) {
                 <GameStatusBadge status={view.status} />
               )}
             </HStack>
-            <Text truncate typography="body4" foreground="muted">
-              {view.meta}
-            </Text>
+            <HStack align="center" gap="100" className="flex-wrap">
+              <Text truncate typography="body4" foreground="muted" className="min-w-0">
+                {view.meta}
+              </Text>
+              {view.isPrivate && <PrivateMark />}
+            </HStack>
           </VStack>
         </HStack>
       </Card.Root>

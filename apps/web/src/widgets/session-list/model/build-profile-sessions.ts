@@ -1,4 +1,5 @@
 import {
+  canAccessGame,
   canViewHiddenGame,
   isSessionEnded,
   PARTICIPANT_STATUS,
@@ -24,22 +25,25 @@ export function buildProfileSessions({
   viewerId: string | null;
   now?: Date;
 }): MySessions {
-  const played = joined.filter((game) =>
-    game.participants.some(
-      (participant) =>
-        participant.userId === userId &&
-        (participant.status === PARTICIPANT_STATUS.confirmed ||
-          (participant.status === PARTICIPANT_STATUS.removed && isSessionEnded(game, now))),
-    ),
+  const visible = (game: SessionGame) => canAccessGame({ game, viewerId, now });
+  const played = joined.filter(
+    (game) =>
+      visible(game) &&
+      game.participants.some(
+        (participant) =>
+          participant.userId === userId &&
+          (participant.status === PARTICIPANT_STATUS.confirmed ||
+            (participant.status === PARTICIPANT_STATUS.removed && isSessionEnded(game, now))),
+      ),
   );
   const hiddenIds = new Set(
-    [...hosted, ...played]
+    [...hosted.filter(visible), ...played]
       .filter((game) => !canViewHiddenGame({ game, viewerId }))
       .map((game) => game.id),
   );
 
   const sessions = buildSessions({
-    hosted,
+    hosted: hosted.filter(visible),
     joined: played,
     viewerId: userId,
     respondedGameIds: new Set(),

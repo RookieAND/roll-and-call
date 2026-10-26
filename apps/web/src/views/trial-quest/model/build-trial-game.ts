@@ -1,6 +1,11 @@
 import type { GameDetailData } from "@roll-and-call/database/games";
 
-import { RECRUIT_METHOD, SCHEDULE_MODE, PARTICIPANT_STATUS } from "@/entities/game";
+import {
+  GAME_VISIBILITY,
+  RECRUIT_METHOD,
+  SCHEDULE_MODE,
+  PARTICIPANT_STATUS,
+} from "@/entities/game";
 
 import { TRIAL_GAME_ID, TRIAL_KIND, type TrialKind } from "./trial-kind";
 
@@ -71,6 +76,7 @@ export function buildTrialGame({
     gmId: TRIAL_GM_ID,
     title: lottery ? "[연습] 추첨 세션" : "[연습] 선착순 세션",
     kind: "session",
+    visibility: GAME_VISIBILITY.public,
     playType: "voice",
     rule: "CoC 7th",
     rulebookId: null,

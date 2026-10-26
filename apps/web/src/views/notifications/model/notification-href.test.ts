@@ -74,6 +74,12 @@ const CASES: [NotificationPayload, string | null][] = [
   [{ kind: NOTIFICATION_KIND.absenceRestored, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.attendanceAutoConfirmed, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.reviewAvailable, params: game }, "/games/g1/review"],
+  [{ kind: NOTIFICATION_KIND.sessionReminder, params: game }, "/games/g1"],
+  [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: true } },
+    "/games/g1/attendance",
+  ],
+  [{ kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: false } }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.certApproved, params: rulebook }, "/me/rulebooks/r1"],
   [
     { kind: NOTIFICATION_KIND.certRejected, params: { ...rulebook, rejectionSummary: "x" } },

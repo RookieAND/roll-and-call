@@ -161,6 +161,7 @@ Deno.serve(async () => {
     .update({ notified_at: now.toISOString() })
     .not("confirmed_at", "is", null)
     .not("discord_thread_id", "is", null)
+    .eq("visibility", "public")
     .is("notified_at", null)
     .is("hidden_at", null)
     .is("cancelled_at", null)
