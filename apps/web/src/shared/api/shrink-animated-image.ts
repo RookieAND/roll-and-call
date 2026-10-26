@@ -1,5 +1,3 @@
-import { encodeAnimation } from "wasm-webp";
-
 const QUALITY = 75;
 const MICROSECONDS_PER_MILLISECOND = 1000;
 const DEFAULT_FRAME_MILLISECONDS = 100;
@@ -52,6 +50,7 @@ export async function shrinkAnimatedImage({
       image.close();
     }
 
+    const { encodeAnimation } = await import("wasm-webp");
     const encoded = await encodeAnimation(width, height, true, frames);
     if (!encoded || encoded.byteLength >= file.size) return file;
     return new File([new Uint8Array(encoded)], `${file.name.replace(/\.[^.]+$/, "")}.webp`, {
