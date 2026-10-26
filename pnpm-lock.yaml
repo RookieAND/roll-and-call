@@ -427,6 +427,9 @@ importers:
       server-only:
         specifier: 'catalog:'
         version: 0.0.1
+      wasm-webp:
+        specifier: ^0.1.0
+        version: 0.1.0
       zod:
         specifier: 'catalog:'
         version: 4.4.3
@@ -3302,6 +3305,9 @@ packages:
   w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
 
+  wasm-webp@0.1.0:
+    resolution: {integrity: sha512-Z1Sop+mLKogzDK3vJzSPfSxRF1yj/zbmn+XJuU9+7fvarxcuGhGkeLBqJr5H8LdgWuAwEKuZelCzx7ujztfhVQ==}
+
   why-is-node-running@2.3.0:
     resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
     engines: {node: '>=8'}
@@ -5271,6 +5277,8 @@ snapshots:
       - msw
 
   w3c-keyname@2.2.8: {}
+
+  wasm-webp@0.1.0: {}
 
   why-is-node-running@2.3.0:
     dependencies:

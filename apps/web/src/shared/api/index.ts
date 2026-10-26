@@ -31,6 +31,7 @@ export { ERROR_DISPLAY, UNEXPECTED_ERROR_MESSAGE, type ErrorDisplay } from "./er
 export { GAME_NOT_FOUND_RESULT } from "./game-not-found-result";
 export { isPageError } from "./is-page-error";
 export { putWithProgress } from "./put-with-progress";
+export { shrinkAnimatedImage } from "./shrink-animated-image";
 export { shrinkImage } from "./shrink-image";
 export { NAV_BADGES_QUERY_ROOT, navBadgesQueryKey } from "./nav-badges-query-key";
 export { useNavBadges } from "./use-nav-badges";

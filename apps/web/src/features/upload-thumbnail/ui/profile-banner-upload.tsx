@@ -9,7 +9,7 @@ import { BannerImage } from "@/shared/ui";
 import { uploadThumbnail } from "../api/upload-thumbnail";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
-import { IMAGE_ACCEPT } from "../model/upload-rules";
+import { BANNER_ACCEPT } from "../model/upload-rules";
 import { BannerActionButton } from "./banner-action-button";
 import { BannerCropSheet } from "./banner-crop-sheet";
 
@@ -30,7 +30,9 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
 
   function pick(file: File) {
     setError(null);
-    const invalid = imageFileError(file);
+    const invalid = BANNER_ACCEPT.split(",").includes(file.type)
+      ? imageFileError(file)
+      : "JPG·PNG 이미지만 올릴 수 있습니다.";
     if (invalid) {
       setError(invalid);
       return;
@@ -91,7 +93,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
       <input
         ref={inputRef}
         type="file"
-        accept={IMAGE_ACCEPT}
+        accept={BANNER_ACCEPT}
         className="hidden"
         onChange={(event) => {
           const file = event.target.files?.[0];

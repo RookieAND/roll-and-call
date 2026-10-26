@@ -147,7 +147,7 @@ export function GameImagesUpload({ serverId, value, onChange, max }: GameImagesU
         </Text>
       ) : (
         <Text typography="body4" foreground="hint" render={<p />}>
-          이미지당 최대 5MB까지 올릴 수 있습니다.
+          이미지당 최대 10MB까지 올릴 수 있습니다.
         </Text>
       )}
 

@@ -11,7 +11,7 @@ export function PickImageMessage() {
         이미지 올리기
       </Text>
       <Text typography="body4" foreground="hint">
-        16:9로 잘립니다 · JPG·PNG · 5MB 이하
+        16:9로 잘립니다 · JPG·PNG·GIF · 10MB 이하
       </Text>
     </>
   );
