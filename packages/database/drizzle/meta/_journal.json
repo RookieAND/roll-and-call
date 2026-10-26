@@ -792,6 +792,27 @@
       "when": 1799500000009,
       "tag": "0118_rulebook_request_staff_message",
       "breakpoints": true
+    },
+    {
+      "idx": 119,
+      "version": "7",
+      "when": 1799500000010,
+      "tag": "0119_review_notice",
+      "breakpoints": true
+    },
+    {
+      "idx": 120,
+      "version": "7",
+      "when": 1799500000011,
+      "tag": "0120_session_start_notice",
+      "breakpoints": true
+    },
+    {
+      "idx": 121,
+      "version": "7",
+      "when": 1799500000012,
+      "tag": "0121_drop_end_notice",
+      "breakpoints": true
     }
   ]
 }

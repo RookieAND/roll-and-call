@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import { canEditReview } from "./can-edit-review";
 import { deriveReviewState } from "./derive-review-state";
 import { REVIEW_STATE } from "./review-state";
-import { reviewWriteDeadline } from "./review-write-deadline";
 
 const NOW = new Date("2026-09-28T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
@@ -37,13 +36,5 @@ describe("deriveReviewState", () => {
     expect(canEditReview(REVIEW_STATE.hidden)).toBe(true);
     expect(canEditReview(REVIEW_STATE.held)).toBe(false);
     expect(canEditReview(REVIEW_STATE.locked)).toBe(false);
-  });
-});
-
-describe("reviewWriteDeadline", () => {
-  it("출석 확정 7일 뒤까지 받는다", () => {
-    expect(reviewWriteDeadline(new Date("2026-09-20T12:00:00+09:00")).toISOString()).toBe(
-      new Date("2026-09-27T12:00:00+09:00").toISOString(),
-    );
   });
 });

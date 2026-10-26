@@ -25,8 +25,9 @@ export async function getReviewDraftTarget({
       gmName: memberNicknameSql(serverId),
       confirmedAt: games.confirmedAt,
       playMinutes: games.playMinutes,
+      endedAt: games.endedAt,
+      cancelledAt: games.cancelledAt,
       attendanceConfirmedAt: games.attendanceConfirmedAt,
-      attendanceFirstConfirmedAt: games.attendanceFirstConfirmedAt,
     })
     .from(games)
     .innerJoin(profiles, eq(profiles.id, games.gmId))

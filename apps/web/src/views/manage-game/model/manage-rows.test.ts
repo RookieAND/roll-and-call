@@ -155,20 +155,15 @@ describe("manageRows", () => {
     expect(rows.attendance.detail).toBe("출석을 정리했습니다");
   });
 
-  it("세션 후기는 출석을 확인한 뒤에 열리고 받는 기한을 적는다", () => {
+  it("세션 후기는 시작 시각부터 열리고 받는 기한을 적는다", () => {
     expect(byKey(coordinating).review.state).toBe(MANAGE_ROW_STATE.locked);
-    const rows = byKey(
-      gameWith({
-        confirmedAt: at(-2 * DAY),
-        attendanceConfirmedAt: at(-DAY),
-        attendanceFirstConfirmedAt: at(-DAY),
-      }),
-    );
+    expect(byKey(gameWith({ confirmedAt: at(DAY) })).review.state).toBe(MANAGE_ROW_STATE.locked);
+    const rows = byKey(gameWith({ confirmedAt: at(-2 * DAY) }));
     expect(rows.review.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 26일까지 받습니다");
+    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 25일까지 받습니다");
   });
 
-  it("처음 확정 3일 뒤 다시 확정해도 후기 기한은 처음 확정 + 7일이다", () => {
+  it("출석 확정 시각과 상관없이 후기 기한은 종료 판정 + 7일이다", () => {
     const rows = byKey(
       gameWith({
         confirmedAt: at(-5 * DAY),
@@ -176,7 +171,7 @@ describe("manageRows", () => {
         attendanceConfirmedAt: at(-DAY),
       }),
     );
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 23일까지 받습니다");
+    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 22일까지 받습니다");
   });
 
   it("취소한 구인은 여섯 줄이 모두 잠긴다", () => {
@@ -211,7 +206,7 @@ describe("manageRows GM 마스터링 후기 버튼", () => {
     expect(reviewRow("write").button).toMatchObject({
       label: "마스터링 후기 쓰기",
       solid: true,
-      caption: "후기 마감 D-6",
+      caption: "후기 마감 D-5",
     });
     expect(reviewRow("view").button).toMatchObject({ label: "내 후기 보기", solid: false });
     expect(reviewRow(null).button).toBeUndefined();

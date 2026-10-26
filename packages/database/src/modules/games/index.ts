@@ -12,8 +12,7 @@ export { finishSelection, type FinishSelectionResult } from "./commands/finish-s
 export { expireSelection, type ExpireSelectionResult } from "./commands/expire-selection";
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
-export { claimEndNotice } from "./commands/claim-end-notice";
-export { releaseEndNotice } from "./commands/release-end-notice";
+export { notifyReviewAvailable } from "./commands/notify-review-available";
 export { setSessionEndedAt } from "./commands/end-session";
 export { insertParticipant } from "./commands/insert-participant";
 export { lockUserApplications } from "./commands/lock-user-applications";
@@ -66,7 +65,6 @@ export { listRosterStatuses } from "./queries/list-roster-statuses";
 export { listDueLotteries } from "./queries/list-due-lotteries";
 export { listDueSelectionDeadlines } from "./queries/list-due-selection-deadlines";
 export { listDueMinPlayers } from "./queries/list-due-min-players";
-export { listDueEndNotices } from "./queries/list-due-end-notices";
 export {
   listConfirmedDiscordIds,
   listParticipantDiscordIds,

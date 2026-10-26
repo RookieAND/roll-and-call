@@ -2,15 +2,11 @@ import "server-only";
 import type { Game } from "@roll-and-call/database";
 import { evaluateGameBadges } from "@roll-and-call/database/badges";
 import { listParticipantUserIds, lockGame } from "@roll-and-call/database/games";
+import { canConfirmAttendance } from "@roll-and-call/database/games/model";
 import { withTransaction, type Transaction } from "@roll-and-call/database/transaction";
 import { after } from "next/server";
 
-import {
-  isAttendanceDue,
-  isAttendancePastDeadline,
-  PARTICIPANT_STATUS,
-  isRosterRequest,
-} from "@/entities/game";
+import { isAttendancePastDeadline, PARTICIPANT_STATUS, isRosterRequest } from "@/entities/game";
 import {
   ERROR_DISPLAY,
   GAME_CANCELLED_MESSAGE,
@@ -18,8 +14,9 @@ import {
   INVALID_REQUEST_MESSAGE,
   type ActionResult,
 } from "@/shared/api";
-import { getActingMember, notMemberError, revalidateGamePaths } from "@/shared/server";
+import { revalidateGamePaths } from "@/shared/server";
 
+import type { AttendanceActor } from "../model/attendance-actor";
 import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
 import type { AttendanceRoster } from "../model/attendance-roster";
 import { AttendanceError } from "./attendance-error";
@@ -29,21 +26,17 @@ import { AttendanceError } from "./attendance-error";
 export async function guardAttendance({
   gameId,
   userIds,
+  actor,
   work,
 }: {
   gameId: string;
   userIds: string[];
+  actor: AttendanceActor;
   // game은 잠근 행이다(출석 확정 시각을 쓰기 전 값).
   work: (transaction: Transaction, roster: AttendanceRoster, game: Game) => Promise<void>;
 }): Promise<ActionResult> {
   if (!isRosterRequest({ gameId, userIds })) return { error: INVALID_REQUEST_MESSAGE };
-  const member = await getActingMember();
-  if (!member) {
-    return { error: await notMemberError() };
-  }
-  const { server } = member;
-  const gmId = member.user.id;
-  const serverId = server.id;
+  const { serverId, slug, gmId } = actor;
 
   try {
     await withTransaction(async (transaction) => {
@@ -65,17 +58,12 @@ export async function guardAttendance({
         status: PARTICIPANT_STATUS.removed,
       });
 
-      if (isAttendancePastDeadline({ ...game, now: new Date() })) {
+      const now = new Date();
+      if (isAttendancePastDeadline({ ...game, now })) {
         throw new AttendanceError(ATTENDANCE_PAST_DEADLINE_MESSAGE);
       }
-      // 다시 고친 뒤 확정하는 길도 같은 가드를 타므로 확정 시각은 빼고 "세션이 끝났는가"만 본다.
-      if (
-        !isAttendanceDue({
-          game: { ...game, attendanceConfirmedAt: null },
-          confirmedCount: confirmedUserIds.length,
-        })
-      ) {
-        throw new AttendanceError("아직 끝나지 않은 세션입니다.");
+      if (!canConfirmAttendance({ game, confirmedCount: confirmedUserIds.length, now })) {
+        throw new AttendanceError("아직 시작하지 않은 세션입니다.");
       }
 
       await work(transaction, { confirmedUserIds, removedUserIds }, game);
@@ -87,7 +75,7 @@ export async function guardAttendance({
     throw error;
   }
 
-  revalidateGamePaths({ slug: server.slug, gameId });
+  revalidateGamePaths({ slug, gameId });
   after(() => evaluateGameBadges({ serverId, gameId }));
   return {};
 }

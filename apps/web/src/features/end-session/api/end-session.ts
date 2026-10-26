@@ -4,16 +4,10 @@ import { listParticipantUserIds, lockGame, setSessionEndedAt } from "@roll-and-c
 import { END_SESSION_BLOCK, endSessionBlock } from "@roll-and-call/database/games/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isNull } from "es-toolkit";
-import { after } from "next/server";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
 import { GAME_NOT_FOUND_RESULT, idSchema, parseActionInput } from "@/shared/api";
-import {
-  getActingMember,
-  notifyGameEnded,
-  notMemberError,
-  revalidateGamePaths,
-} from "@/shared/server";
+import { getActingMember, notMemberError, revalidateGamePaths } from "@/shared/server";
 
 import { END_SESSION_MESSAGES } from "../model/end-session-messages";
 import type { EndSessionResult } from "../model/end-session-result";
@@ -58,7 +52,6 @@ export async function endSession(gameId: string): Promise<EndSessionResult> {
 
   if (!result.error) {
     revalidateGamePaths({ slug: server.slug, gameId });
-    after(() => notifyGameEnded({ server, gameId }));
   }
   return result;
 }

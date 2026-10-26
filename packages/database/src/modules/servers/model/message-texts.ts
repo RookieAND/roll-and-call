@@ -124,11 +124,11 @@ export const MESSAGE_TEXTS = [
     extra: [],
   },
   {
-    key: "end",
-    caseKey: "end",
+    key: "start",
+    caseKey: "start",
     place: "embed",
-    label: "세션이 끝났어요",
-    body: "세션이 끝났어요! 함께한 분들께 후기를 남겨 주세요.",
+    label: "세션이 시작되었어요",
+    body: "GM은 출석을, 참여자는 후기를 지금부터 입력할 수 있습니다.\n후기는 세션이 끝난 뒤에도 마감 전까지 작성할 수 있습니다.",
     extra: [],
   },
   {

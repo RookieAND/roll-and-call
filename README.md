@@ -61,12 +61,12 @@ pnpm -F @roll-and-call/database db:generate | db:migrate | db:studio
 | `purge-light-audit-log`      | `0 19 * * *`   | SQL                                | pg_cron                 |
 | `purge-orphan-files`         | `0 20 * * *`   | Edge Function `purge-orphan-files` | pg_cron → Edge Function |
 | `purge-notifications`        | `30 18 * * *`  | SQL                                | pg_cron                 |
-| `session-reminders`          | `*/5 * * * *`  | Edge Function `session-reminders`  | pg_cron → Edge Function |
+| `session-reminders`          | `*/5 * * * *`  | Edge Function `session-reminders` (1시간 전 알림 + 세션 시작 안내) | pg_cron → Edge Function |
 | `draw-lotteries`             | `*/10 * * * *` | `/api/cron/draws`                  | pg_cron → Next 라우트   |
 | `attendance-auto-confirm`    | `5 * * * *`    | `/api/cron/attendance`             | pg_cron → Next 라우트   |
 | `judge-min-players`          | `*/10 * * * *` | `/api/cron/min-players`            | pg_cron → Next 라우트   |
 | `expire-selection-deadlines` | `*/10 * * * *` | `/api/cron/selection-deadline`     | pg_cron → Next 라우트   |
-| `notify-session-ended`       | `*/5 * * * *`  | `/api/cron/session-ended`          | pg_cron → Next 라우트   |
+| `session-ended-tasks`        | `*/5 * * * *`  | `/api/cron/session-ended`          | pg_cron → Next 라우트   |
 | badges                       | `5 15 * * *`   | `/api/cron/badges`                 | pg_cron `refresh-badges` (0109) |
 | members                      | `10 19 * * *`  | `/api/cron/members`                | pg_cron `check-guild-members` (0109) |
 

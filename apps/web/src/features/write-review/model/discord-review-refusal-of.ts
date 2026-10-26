@@ -13,10 +13,10 @@ export function discordReviewRefusalOf(
 ): DiscordReviewRefusal | null {
   if (!target) return DISCORD_REVIEW_REFUSAL.gameNotFound;
   if (target.review) return DISCORD_REVIEW_REFUSAL.alreadyWritten;
+  if (target.isGm) return DISCORD_REVIEW_REFUSAL.gmOnWeb;
 
   const block = reviewBlockOf(target, now);
   if (block !== REVIEW_BLOCK.unavailable) return block;
-  if (target.isGm) return DISCORD_REVIEW_REFUSAL.noAttendee;
   if (!target.participant) return DISCORD_REVIEW_REFUSAL.notParticipant;
   if (target.participant.status === PARTICIPANT_STATUS.removed) {
     return DISCORD_REVIEW_REFUSAL.removed;

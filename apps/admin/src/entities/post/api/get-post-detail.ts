@@ -57,9 +57,7 @@ export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPos
   });
   const waitingIds = session.waitingIds ?? [];
   const cancelRecipientIds = new Set(session.staffCancelRecipientIds ?? []);
-  // ponytail: 작성 기한은 처음 출석 확인 + 7일로 어드민이 따로 계산한다. 사용자 앱(apps/web)의 계산과 같은 규칙이다.
   const attendanceConfirmedAt = session.attendanceConfirmedAt;
-  const reviewWindowStart = session.attendanceFirstConfirmedAt ?? attendanceConfirmedAt;
 
   return {
     id: session.id,
@@ -117,9 +115,10 @@ export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPos
     })),
     attendance: {
       confirmedAt: attendanceConfirmedAt,
-      reviewDeadline: reviewWindowStart
-        ? new Date(reviewWindowStart.getTime() + REVIEW_WRITE_DAYS * DAY)
-        : undefined,
+      reviewDeadline:
+        session.sessionStarted && session.endsAt
+          ? new Date(session.endsAt.getTime() + REVIEW_WRITE_DAYS * DAY)
+          : undefined,
     },
     gm: { id: gm.id, nickname: gm.nickname, receivedActionCount },
   };

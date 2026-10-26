@@ -65,13 +65,10 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
     color: DISCORD.recruit,
     fields: [{ name: "📜 룰", value: "피아스코", inline: true }, SESSION_TIME],
   },
-  end: {
-    emoji: "🏁",
-    color: DISCORD.complete,
-    fields: [
-      { name: "📜 룰", value: "피아스코", inline: true },
-      { name: "✍ 후기 작성 기간", value: "출석 확인 후 7일 이내", inline: true },
-    ],
+  start: {
+    emoji: "🚀",
+    color: DISCORD.recruit,
+    fields: [{ name: "📜 룰", value: "피아스코", inline: true }],
     button: "🌐 웹에서 작성하기",
   },
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },

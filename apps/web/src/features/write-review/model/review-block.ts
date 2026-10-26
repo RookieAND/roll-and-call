@@ -1,5 +1,6 @@
 export const REVIEW_BLOCK = {
   writePeriodOver: "write-period-over",
+  notStarted: "not-started",
   attendancePending: "attendance-pending",
   alreadyWritten: "already-written",
   absent: "absent",
@@ -19,6 +20,12 @@ export const REVIEW_BLOCK_DIALOG: Record<
   [REVIEW_BLOCK.writePeriodOver]: {
     title: "작성 기간이 지났습니다",
     description: "쓰던 글은 임시 저장되어 있습니다.",
+    confirmLabel: "확인",
+    toMyReviews: false,
+  },
+  [REVIEW_BLOCK.notStarted]: {
+    title: "아직 시작하지 않은 세션입니다",
+    description: "세션이 시작되면 후기를 쓸 수 있습니다.",
     confirmLabel: "확인",
     toMyReviews: false,
   },

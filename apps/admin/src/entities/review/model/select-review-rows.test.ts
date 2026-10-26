@@ -29,13 +29,15 @@ const sessions = [
   session({
     id: "g-open",
     title: "열린 기한",
-    attendanceFirstConfirmedAt: new Date(NOW - 3 * DAY),
+    sessionStarted: true,
+    endsAt: new Date(NOW - 3 * DAY),
     attendanceConfirmedAt: new Date(NOW - DAY),
   }),
   session({
     id: "g-closed",
     title: "닫힌 기한",
-    attendanceFirstConfirmedAt: new Date(NOW - 20 * DAY),
+    sessionStarted: true,
+    endsAt: new Date(NOW - 20 * DAY),
   }),
 ];
 
@@ -122,7 +124,7 @@ describe("selectReviewRows", () => {
     expect(unknown.counts.all).toBe(3);
   });
 
-  it("칩 0건이면 출석 상태를 돌려준다(기한 = 첫 출석 확정 + 7일)", () => {
+  it("칩 0건이면 후기 기간 상태를 돌려준다(기한 = 종료 판정 + 7일)", () => {
     expect(select({ game: "g-pending" }).game?.window).toEqual({
       state: REVIEW_WINDOW_STATE.pending,
       deadline: null,

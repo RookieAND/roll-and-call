@@ -1,4 +1,4 @@
-import { and, eq, exists, inArray, isNotNull, isNull, lte, sql } from "drizzle-orm";
+import { and, eq, exists, isNotNull, isNull, lte, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import {
@@ -21,7 +21,7 @@ export type AutoConfirmedGame = { serverId: string; gameId: string; gmId: string
 // 출석 결과는 그대로 두고 확정 시각만 기한 시각으로 남긴다. 그래서 자동 확정인지 나중에 가릴 수 있다.
 // onlyPastDeadline이 false면(GM이 서버를 나간 진행 중 세션) 기한을 기다리지 않는다.
 // 알림은 같은 트랜잭션에서 넣는다. 크론이 다시 돌아도 처음 확정 시각이 있는 구인은 고르지 않는다.
-// notifyGm이 false면(서버를 나간 GM) 자동 확정 알림을 남기지 않고 참석자 후기 알림만 보낸다.
+// notifyGm이 false면(서버를 나간 GM) 자동 확정 알림을 남기지 않는다.
 export async function autoConfirmAttendanceForGame({
   transaction,
   gameId,
@@ -58,28 +58,12 @@ export async function autoConfirmAttendanceForGame({
       gameId,
       at: attendanceDeadline(game)!,
     });
-    const rows = await tx
-      .select({
-        userId: participants.userId,
-        status: participants.status,
-        absent: participants.absent,
-        absenceCancelledAt: participants.absenceCancelledAt,
-      })
-      .from(participants)
-      .where(
-        and(
-          eq(participants.serverId, serverId),
-          eq(participants.gameId, gameId),
-          inArray(participants.status, [PARTICIPANT_STATUS.confirmed, PARTICIPANT_STATUS.removed]),
-        ),
-      );
     await createNotifications({
       executor: tx,
       serverId,
       actorId: null,
       notifications: autoConfirmNotices({
         game: { id: gameId, title: game.title, gmId: game.gmId },
-        rows,
         notifyGm,
       }),
     });

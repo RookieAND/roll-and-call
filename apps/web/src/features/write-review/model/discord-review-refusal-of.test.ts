@@ -11,8 +11,11 @@ const DAY = 24 * 60 * 60 * 1000;
 
 const target = {
   game: {
+    confirmedAt: new Date(NOW.getTime() - 3 * DAY),
+    playMinutes: 180,
+    endedAt: null,
+    cancelledAt: null,
     attendanceConfirmedAt: new Date(NOW.getTime() - 3 * DAY),
-    attendanceFirstConfirmedAt: new Date(NOW.getTime() - 3 * DAY),
   },
   participant: { status: PARTICIPANT_STATUS.confirmed, absent: false, absenceCancelledAt: null },
   review: null,
@@ -49,19 +52,17 @@ describe("discordReviewRefusalOf", () => {
     );
   });
 
-  it("확정 참여자가 없는 세션의 GM에게는 참여자가 없다고 알린다", () => {
-    const gm = { ...target, isGm: true, participant: null, confirmedCount: 0 };
-    expect(discordReviewRefusalOf(gm as ReviewDraftTarget, NOW)).toBe(
-      DISCORD_REVIEW_REFUSAL.noAttendee,
-    );
+  it("GM은 출석 확정 여부와 상관없이 웹에서 쓰게 안내한다", () => {
+    const gm = { ...target, isGm: true, participant: null } as ReviewDraftTarget;
+    expect(discordReviewRefusalOf(gm, NOW)).toBe(DISCORD_REVIEW_REFUSAL.gmOnWeb);
   });
 
-  it("출석 미확정, 불참, 정지, 기간 지남은 웹과 같은 사유로 알린다", () => {
-    const pending = {
+  it("시작 전, 불참, 정지, 기간 지남은 웹과 같은 사유로 알린다", () => {
+    const upcoming = {
       ...target,
-      game: { attendanceConfirmedAt: null, attendanceFirstConfirmedAt: null },
+      game: { ...target.game, confirmedAt: new Date(NOW.getTime() + DAY) },
     } as ReviewDraftTarget;
-    expect(discordReviewRefusalOf(pending, NOW)).toBe(DISCORD_REVIEW_REFUSAL.attendancePending);
+    expect(discordReviewRefusalOf(upcoming, NOW)).toBe(DISCORD_REVIEW_REFUSAL.notStarted);
 
     const absent = { ...target.participant!, absent: true };
     expect(discordReviewRefusalOf({ ...target, participant: absent }, NOW)).toBe(

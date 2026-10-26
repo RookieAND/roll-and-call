@@ -11,7 +11,7 @@ export const DISCORD_REVIEW_REFUSAL = {
   notParticipant: "not-participant",
   notConfirmed: "not-confirmed",
   removed: "removed",
-  noAttendee: "no-attendee",
+  gmOnWeb: "gm-on-web",
 } as const;
 
 export type DiscordReviewRefusal =
@@ -32,13 +32,13 @@ export const DISCORD_REVIEW_REFUSAL_MESSAGE: Record<DiscordReviewRefusal, string
     "참여가 확정되지 않은 세션입니다.\n확정 참여자만 후기를 쓸 수 있습니다.",
   [DISCORD_REVIEW_REFUSAL.removed]:
     "참여자 명단에서 제외된 세션입니다.\n확정 참여자만 후기를 쓸 수 있습니다.",
-  [DISCORD_REVIEW_REFUSAL.noAttendee]:
-    "확정된 참여자가 없는 세션입니다.\n참여자가 있어야 GM 후기를 쓸 수 있습니다.",
+  [DISCORD_REVIEW_REFUSAL.gmOnWeb]: "마스터링 후기는 출석이 확정된 뒤 웹에서 작성할 수 있습니다.",
   [DISCORD_REVIEW_REFUSAL.attendancePending]:
-    "출석 확인이 아직 끝나지 않았습니다.\nGM이 출석을 확정하면 후기를 쓸 수 있습니다.",
-  [DISCORD_REVIEW_REFUSAL.writePeriodOver]: `후기 작성 기간이 지났습니다.\n출석이 확정된 뒤 ${REVIEW_WRITE_DAYS}일 안에 쓸 수 있습니다.`,
-  [DISCORD_REVIEW_REFUSAL.alreadyWritten]:
-    "이미 이 세션의 후기를 썼습니다.\n고치려면 웹의 내 후기에서 수정해 주세요.",
+    "출석 확인이 아직 끝나지 않았습니다.\nGM 후기는 출석이 확정된 뒤에 쓸 수 있습니다.",
+  [DISCORD_REVIEW_REFUSAL.writePeriodOver]: `후기 작성 기간이 지났습니다.\n세션이 끝난 뒤 ${REVIEW_WRITE_DAYS}일 안에 쓸 수 있습니다.`,
+  [DISCORD_REVIEW_REFUSAL.notStarted]:
+    "아직 시작하지 않은 세션입니다.\n세션이 시작되면 후기를 쓸 수 있습니다.",
+  [DISCORD_REVIEW_REFUSAL.alreadyWritten]: "이미 후기를 작성했습니다.",
   [DISCORD_REVIEW_REFUSAL.absent]:
     "불참으로 처리된 세션입니다.\n불참한 세션은 후기를 쓸 수 없습니다.",
   [DISCORD_REVIEW_REFUSAL.suspended]: "활동 정지 기간입니다.\n정지가 끝나면 후기를 쓸 수 있습니다.",

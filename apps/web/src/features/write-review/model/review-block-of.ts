@@ -2,14 +2,10 @@ import type { ReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { isNull } from "es-toolkit";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
-import {
-  canEditReview,
-  deriveReviewState,
-  REVIEW_STATE,
-  reviewWriteDeadline,
-} from "@/entities/review";
+import { canEditReview, deriveReviewState, REVIEW_STATE } from "@/entities/review";
 
 import { REVIEW_BLOCK, type ReviewBlock } from "./review-block";
+import { writeWindowBlock } from "./write-window-block";
 
 export function reviewBlockOf(
   {
@@ -38,14 +34,10 @@ export function reviewBlockOf(
     return canEditReview(state) ? null : REVIEW_BLOCK.editPeriodOver;
   }
 
-  if (!game.attendanceConfirmedAt) return REVIEW_BLOCK.attendancePending;
+  if (game.cancelledAt) return REVIEW_BLOCK.unavailable;
   if (authorAbsent) return REVIEW_BLOCK.absent;
   if (suspended) return REVIEW_BLOCK.suspended;
-  const firstConfirmedAt = game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt;
-  if (reviewWriteDeadline(firstConfirmedAt).getTime() <= now.getTime()) {
-    return REVIEW_BLOCK.writePeriodOver;
-  }
-  return null;
+  return writeWindowBlock(game, now);
 }
 
 // GM 후기에는 불참 보류가 없다. 확정 참석자가 1명 이상이어야 쓴다.
@@ -64,12 +56,9 @@ function gmReviewBlockOf(
     return canEditReview(state) ? null : REVIEW_BLOCK.editPeriodOver;
   }
 
+  if (game.cancelledAt) return REVIEW_BLOCK.unavailable;
   if (!game.attendanceConfirmedAt) return REVIEW_BLOCK.attendancePending;
   if (confirmedCount < 1) return REVIEW_BLOCK.unavailable;
   if (suspended) return REVIEW_BLOCK.suspended;
-  const firstConfirmedAt = game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt;
-  if (reviewWriteDeadline(firstConfirmedAt).getTime() <= now.getTime()) {
-    return REVIEW_BLOCK.writePeriodOver;
-  }
-  return null;
+  return writeWindowBlock(game, now);
 }

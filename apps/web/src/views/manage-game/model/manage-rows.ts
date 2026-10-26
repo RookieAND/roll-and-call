@@ -42,14 +42,12 @@ export function manageRows({
     label: "세션 후기",
     href: `/games/${game.id}/reviews`,
   } as const;
-  const reviewDeadline = game.attendanceConfirmedAt
-    ? reviewWriteDeadline(game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt)
-    : null;
+  const reviewDeadline = started ? reviewWriteDeadline(game) : null;
   const review: ManageRow = !reviewDeadline
     ? {
         ...reviewBase,
         ...locked,
-        detail: ended ? "출석 확인 후 열립니다" : "세션이 끝나고 출석을 확인하면 열립니다",
+        detail: "세션이 시작되면 열립니다",
       }
     : {
         ...reviewBase,

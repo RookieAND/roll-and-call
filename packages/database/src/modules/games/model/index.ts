@@ -107,9 +107,16 @@ export {
   type AttendanceRosterRow,
   type AttendanceUpdate,
 } from "./attendance-changes";
+export { canConfirmAttendance } from "./can-confirm-attendance";
 export { gmAttendanceNotices } from "./gm-attendance-notices";
 export { autoConfirmNotices } from "./auto-confirm-notices";
 export { REVIEW_WRITE_DAYS } from "./review-write-days";
+export {
+  REVIEW_WINDOW,
+  reviewWindowOf,
+  reviewWriteDeadline,
+  type ReviewWindow,
+} from "./review-window";
 export { REVIEW_AUTHOR_ROLE, type ReviewAuthorRole } from "./review-author-role";
 export { KST_OFFSET_MS } from "./kst-offset";
 export { replaceManualSupplement } from "./replace-manual-supplement";

@@ -9,8 +9,10 @@ const NOW = new Date("2026-09-28T12:00:00+09:00");
 const DAY = 24 * 60 * 60 * 1000;
 const game = {
   id: "game",
+  confirmedAt: new Date(NOW.getTime() - 5 * DAY),
+  playMinutes: 60,
+  endedAt: null,
   attendanceConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
-  attendanceFirstConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
 } as SessionGame;
 const context = (reviewed: [string, { createdAt: Date; removedAt: Date | null }][] = []) =>
   ({ viewerId: "me", now: NOW, reviewedGames: new Map(reviewed) }) as unknown as SessionContext;
@@ -18,7 +20,7 @@ const context = (reviewed: [string, { createdAt: Date; removedAt: Date | null }]
 describe("reviewNote", () => {
   it("출석 확인 전에는 GM 확인을 기다린다", () => {
     const note = reviewNote({
-      game: { ...game, attendanceConfirmedAt: null, attendanceFirstConfirmedAt: null },
+      game: { ...game, attendanceConfirmedAt: null },
       context: context(),
     });
     expect(note.caption?.text).toBe("GM 확인 대기");
@@ -31,15 +33,9 @@ describe("reviewNote", () => {
     expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
   });
 
-  it("처음 확정 3일 뒤 다시 확정해도 마감은 처음 확정 + 7일이다", () => {
-    const reconfirmed = {
-      ...game,
-      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 8 * DAY),
-      attendanceConfirmedAt: new Date(NOW.getTime() - 5 * DAY),
-    };
-    expect(reviewNote({ game: reconfirmed, context: context() }).caption?.text).toBe(
-      "작성 기간 지남",
-    );
+  it("마감은 종료 판정 + 7일이라 출석 확정 시각과 무관하다", () => {
+    const old = { ...game, confirmedAt: new Date(NOW.getTime() - 9 * DAY) };
+    expect(reviewNote({ game: old, context: context() }).caption?.text).toBe("작성 기간 지남");
   });
 
   it("썼으면 수정 기한과 내 후기 보기를 단다", () => {
@@ -56,8 +52,8 @@ describe("reviewNote", () => {
   it("기한이 지났거나 남의 프로필이면 버튼이 없다", () => {
     const late = {
       ...game,
+      confirmedAt: new Date(NOW.getTime() - 20 * DAY),
       attendanceConfirmedAt: new Date(NOW.getTime() - 20 * DAY),
-      attendanceFirstConfirmedAt: new Date(NOW.getTime() - 20 * DAY),
     };
     expect(reviewNote({ game: late, context: context() }).caption?.text).toBe("작성 기간 지남");
     expect(reviewNote({ game, context: { ...context(), readOnly: true } }).caption).toBeNull();

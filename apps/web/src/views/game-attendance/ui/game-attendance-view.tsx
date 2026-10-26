@@ -7,6 +7,7 @@ import {
   attendanceDeadline,
   isAttendancePastDeadline,
   isSessionEnded,
+  isSessionStarted,
   splitRoster,
 } from "@/entities/game";
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
@@ -60,12 +61,13 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
 
   const { confirmed, removed } = splitRoster(game.participants);
   const now = new Date();
+  const started = isSessionStarted(game, now);
   const ended = isSessionEnded(game, now);
   // 확정을 마친 뒤에도 읽기 전용으로 남아 있어야 "다시 고치기"로 돌아올 수 있다.
   // 기한이 지났는데 크론 전인 세션도 연다(자동 확정된 것으로 보인다).
   const reachable =
     Boolean(game.attendanceConfirmedAt) ||
-    (confirmed.length > 0 && (ended || isAttendancePastDeadline({ ...game, now })));
+    (confirmed.length > 0 && (started || isAttendancePastDeadline({ ...game, now })));
   if (!reachable) {
     const fallback = ended ? "manage" : "participants";
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/${fallback}` }));

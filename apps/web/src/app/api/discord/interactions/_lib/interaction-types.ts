@@ -18,6 +18,13 @@ export type DiscordModalField = {
   values?: string[];
 };
 
+export type DiscordSelectOption = { label: string; value: string; default?: boolean };
+
+export type DiscordMessageComponent = {
+  custom_id?: string;
+  options?: DiscordSelectOption[];
+};
+
 export type DiscordInteraction = {
   type: number;
   application_id?: string;
@@ -26,10 +33,12 @@ export type DiscordInteraction = {
   data?: {
     name?: string;
     custom_id?: string;
+    values?: string[];
     options?: DiscordInteractionOption[];
     components?: { component: DiscordModalField }[];
     resolved?: { attachments?: Record<string, DiscordAttachment> };
   };
+  message?: { components?: { components?: DiscordMessageComponent[] }[] };
   member?: { nick?: string | null; user: DiscordInteractionUser };
   user?: DiscordInteractionUser;
 };

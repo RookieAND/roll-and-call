@@ -24,7 +24,7 @@ export function gmActionView({
     const attendanceRecorded =
       confirmedCount > 0 &&
       (Boolean(game.attendanceConfirmedAt) || isAttendancePastDeadline({ ...game, now }));
-    const writeFrom = game.attendanceFirstConfirmedAt ?? game.attendanceConfirmedAt;
+    const writeDeadline = reviewWriteDeadline(game);
     return {
       kind: GAME_ACTION_VIEW.gmEnded,
       attendanceDue,
@@ -32,9 +32,7 @@ export function gmActionView({
       endedOn: game.confirmedAt!,
       review,
       reviewDaysLeft:
-        review === REVIEW_STATUS.writable && writeFrom
-          ? ddayKst(reviewWriteDeadline(writeFrom), now)
-          : null,
+        review === REVIEW_STATUS.writable && writeDeadline ? ddayKst(writeDeadline, now) : null,
     };
   }
   if (isSessionInProgress(game, now))

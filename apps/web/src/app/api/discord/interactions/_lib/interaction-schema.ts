@@ -22,6 +22,17 @@ const modalFieldSchema = z.looseObject({
   values: z.array(z.string()).optional(),
 });
 
+const selectOptionSchema = z.looseObject({
+  label: z.string(),
+  value: z.string(),
+  default: z.boolean().optional(),
+});
+
+const messageComponentSchema = z.looseObject({
+  custom_id: z.string().optional(),
+  options: z.array(selectOptionSchema).optional(),
+});
+
 export const interactionSchema: z.ZodType<DiscordInteraction> = z.looseObject({
   type: z.number(),
   application_id: z.string().optional(),
@@ -31,6 +42,7 @@ export const interactionSchema: z.ZodType<DiscordInteraction> = z.looseObject({
     .looseObject({
       name: z.string().optional(),
       custom_id: z.string().optional(),
+      values: z.array(z.string()).optional(),
       options: z
         .array(
           z.looseObject({
@@ -42,6 +54,13 @@ export const interactionSchema: z.ZodType<DiscordInteraction> = z.looseObject({
       components: z.array(z.looseObject({ component: modalFieldSchema })).optional(),
       resolved: z
         .looseObject({ attachments: z.record(z.string(), attachmentSchema).optional() })
+        .optional(),
+    })
+    .optional(),
+  message: z
+    .looseObject({
+      components: z
+        .array(z.looseObject({ components: z.array(messageComponentSchema).optional() }))
         .optional(),
     })
     .optional(),

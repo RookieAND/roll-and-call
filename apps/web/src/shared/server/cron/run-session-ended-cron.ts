@@ -1,22 +1,33 @@
 import "server-only";
-import { listDueEndNotices } from "@roll-and-call/database/games";
-import { getServerById } from "@roll-and-call/database/servers";
-import { notifyGameEnded } from "@roll-and-call/game-notices";
+import { evaluateGameBadges, syncMonthlyBadges } from "@roll-and-call/database/badges";
+import { notifyReviewAvailable } from "@roll-and-call/database/games";
+import { uniq } from "es-toolkit";
 
-// pg_cron notify-session-ended가 5분마다, 끝났는데 안내하지 않은 구인이 있을 때만 부른다(0091). GM이 마치기를 누르면 그 자리에서 이미 나가고, 예정 종료 시각이 지난 세션을 여기서 올린다.
-// 한 건이 실패해도 나머지를 이어 간다. 잠깐의 실패면 notifyGameEnded가 안내 권리를 돌려줘 다음 회차에 다시 집힌다.
+// pg_cron session-ended-tasks가 5분마다, 종료 판정이 지났는데 후기 알림을 보내지 않은 구인이 있을 때만 부른다(0119).
+// 종료 판정이 지난 구인에는 후기 작성 웹 알림을 한 번 보내고, 종료 전에 확정된 출석이 이제 인정 세션이 되므로 업적을 다시 센다.
 export async function runSessionEndedCron() {
-  const due = await listDueEndNotices({ now: new Date() });
-
-  const counts = { due: due.length, failed: 0 };
-  for (const { id: gameId, serverId } of due) {
-    try {
-      const server = await getServerById(serverId);
-      if (server) await notifyGameEnded({ server, gameId });
-    } catch (error) {
-      counts.failed += 1;
-      console.error("notify-session-ended 실패", { gameId, error });
+  const counts = { failed: 0, reviewNotified: 0 };
+  try {
+    const { notified, ended } = await notifyReviewAvailable();
+    counts.reviewNotified = notified;
+    for (const { serverId, gameId } of ended) {
+      try {
+        await evaluateGameBadges({ serverId, gameId, syncMonthly: false });
+      } catch (error) {
+        console.error("종료 뒤 업적 평가 실패", { gameId, error });
+      }
     }
+    const now = new Date();
+    for (const serverId of uniq(ended.map((game) => game.serverId))) {
+      try {
+        await syncMonthlyBadges({ serverId, now });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  } catch (error) {
+    counts.failed += 1;
+    console.error("후기 작성 알림 실패", { error });
   }
   return { ok: true, ...counts };
 }

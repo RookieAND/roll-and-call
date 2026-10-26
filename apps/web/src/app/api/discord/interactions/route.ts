@@ -1,4 +1,10 @@
-import { APPLY_BUTTON_PREFIX, REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
+import {
+  APPLY_BUTTON_PREFIX,
+  ATTENDANCE_BUTTON_PREFIX,
+  ATTENDANCE_DONE_PREFIX,
+  ATTENDANCE_SELECT_PREFIX,
+  REVIEW_BUTTON_PREFIX,
+} from "@roll-and-call/game-notices";
 import { isNull } from "es-toolkit";
 import { NextResponse } from "next/server";
 
@@ -7,6 +13,9 @@ import { parseJson } from "@/shared/lib";
 import { buildInteractionResponse } from "./_lib/build-interaction-response";
 import { handleApplyButton } from "./_lib/handle-apply-button";
 import { handleApplyModalSubmit } from "./_lib/handle-apply-modal-submit";
+import { handleAttendanceButton } from "./_lib/handle-attendance-button";
+import { handleAttendanceDone } from "./_lib/handle-attendance-done";
+import { handleAttendanceSelect } from "./_lib/handle-attendance-select";
 import { handleCalendarCommand } from "./_lib/handle-calendar-command";
 import { handleOnboardingCommand } from "./_lib/handle-onboarding-command";
 import { handleReviewButton } from "./_lib/handle-review-button";
@@ -37,6 +46,16 @@ export async function POST(request: Request) {
     return NextResponse.json(handleReviewModalSubmit(interaction));
   }
   if (interaction.type === INTERACTION_MESSAGE_COMPONENT) {
+    const customId = interaction.data?.custom_id ?? "";
+    if (customId.startsWith(ATTENDANCE_SELECT_PREFIX)) {
+      return NextResponse.json(handleAttendanceSelect(interaction));
+    }
+    if (customId.startsWith(ATTENDANCE_DONE_PREFIX)) {
+      return NextResponse.json(await handleAttendanceDone(interaction));
+    }
+    if (customId.startsWith(ATTENDANCE_BUTTON_PREFIX)) {
+      return NextResponse.json(await handleAttendanceButton(interaction));
+    }
     if (interaction.data?.custom_id?.startsWith(REVIEW_BUTTON_PREFIX)) {
       return NextResponse.json(await handleReviewButton(interaction));
     }

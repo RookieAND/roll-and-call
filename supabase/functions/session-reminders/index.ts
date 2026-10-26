@@ -1,8 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 import { renderMessageHead, roleMentionIds } from "./render-message-head.ts";
+import { sendStartNotices } from "./start-notice.ts";
 
-// pg_cron이 5분마다 부른다(packages/database/drizzle/0040_session_reminder_cron.sql).
+// pg_cron이 5분마다 부른다(packages/database/drizzle/0040_session_reminder_cron.sql). 1시간 전 알림 뒤에 세션 시작 안내도 같은 주기로 보낸다(start-notice.ts).
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -169,7 +170,8 @@ Deno.serve(async () => {
       "id, title, rule, confirmed_at, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
     )
     .returns<DueGame[]>();
-  if (error) return Response.json({ error: error.message }, { status: 500 });
+  const start = await sendStartNotices({ supabase, botToken: BOT_TOKEN, siteUrl: SITE_URL }, now);
+  if (error) return Response.json({ error: error.message, start }, { status: 500 });
 
   const failed: string[] = [];
   for (const game of data) {
@@ -188,5 +190,5 @@ Deno.serve(async () => {
       await supabase.from("games").update({ notified_at: null }).eq("id", game.id);
     }
   }
-  return Response.json({ claimed: data.length, failed });
+  return Response.json({ claimed: data.length, failed, start });
 });

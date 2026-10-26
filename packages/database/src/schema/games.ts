@@ -123,12 +123,14 @@ export const games = pgTable(
     selectionFinishedAt: timestamp("selection_finished_at", { withTimezone: true }),
     // GM이 참석 여부를 확정한 시각. null이면 세션이 끝났어도 아직 출석 확인이 남아 있다.
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
-    // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 작성 7일 기준이고, attendanceConfirmedAt은 마지막 확정 시각이다.
+    // 출석을 처음 확정한 시각(GM이든 자동이든). 후기 기간과는 무관하고, attendanceConfirmedAt은 마지막 확정 시각이다.
     attendanceFirstConfirmedAt: timestamp("attendance_first_confirmed_at", { withTimezone: true }),
     // GM이 세션 마치기를 누른 시각. null이면 시작 + 플레이타임이 종료다.
     endedAt: timestamp("ended_at", { withTimezone: true }),
-    // 세션 종료 안내를 스레드에 올린 시각(한 번만 보내는 표시). 끝난 세션을 먼저 이 값으로 집어 간다.
-    endNotifiedAt: timestamp("end_notified_at", { withTimezone: true }),
+    // 세션 시작 안내를 스레드에 올린 시각(한 번만 보내는 표시). 시작 시각부터 30분 안의 구인을 먼저 이 값으로 집어 간다.
+    startNotifiedAt: timestamp("start_notified_at", { withTimezone: true }),
+    // 후기 작성 웹 알림을 보낸 시각. 종료 판정 시각이 지나면 한 번 보낸다.
+    reviewNotifiedAt: timestamp("review_notified_at", { withTimezone: true }),
     // 세션 시작 뒤 정원을 1명 늘린 시각. 구인당 한 번만 늘릴 수 있고 늘린 값은 maxPlayers에 들어간다.
     capacityRaisedAt: timestamp("capacity_raised_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.

@@ -5,7 +5,11 @@ export {
   REVIEW_WRITE_DAYS,
 } from "./model/review-rules";
 export { reviewBodyError } from "./model/review-body-error";
-export { reviewWriteDeadline } from "./model/review-write-deadline";
+export {
+  REVIEW_WINDOW,
+  reviewWindowOf,
+  reviewWriteDeadline,
+} from "@roll-and-call/database/games/model";
 export { reviewEditDeadline } from "./model/review-edit-deadline";
 export { REVIEW_STATE } from "./model/review-state";
 export { deriveReviewState } from "./model/derive-review-state";
