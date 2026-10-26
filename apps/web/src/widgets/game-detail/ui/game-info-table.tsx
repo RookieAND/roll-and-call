@@ -22,7 +22,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
   const isPrivate = game.visibility === GAME_VISIBILITY.private;
   // 비공개 구인은 모집 마감이 없다. 같은 자리에 공개 범위를 둔다.
   const deadlineOrVisibility = isPrivate
-    ? { label: "공개 범위", value: <PrivateMark /> }
+    ? { label: "모집 유형", value: <PrivateMark /> }
     : {
         label: "모집 마감일",
         value: (

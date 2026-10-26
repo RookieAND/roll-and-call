@@ -135,7 +135,9 @@ export function PostDetailMobileView({
               {
                 label: "상태",
                 value: (
-                  <StatusBadges status={post.isPrivate ? `${post.status} · 비공개` : post.status} />
+                  <StatusBadges
+                    status={post.isPrivate ? `${post.status} · 지정 모집` : post.status}
+                  />
                 ),
               },
             ]}

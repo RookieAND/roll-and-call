@@ -111,9 +111,6 @@ export function GameDetail({
     now,
   });
 
-  // 비공개 구인은 모집·신청 영역이 없고, 끝난 뒤 제3자에게는 액션 막대도 없다. 안내 문구도 두지 않는다.
-  const showsActions = !isPrivate || isGm || confirmed.some((row) => row.userId === viewerId);
-
   // 모집 방식·명단·신청 막대는 모바일에서는 본문 안에, 1100px 이상에서는 우측 패널에 둔다. 같은 요소를 두 자리에 그리고 폭으로 한쪽을 숨긴다.
   const recruitMethod = isPrivate ? null : (
     <VStack gap="200">
@@ -148,11 +145,9 @@ export function GameDetail({
         <VStack gap="200">
           {recruitMethod}
           {roster}
-          {showsActions && (
-            <ErrorBoundary display={ERROR_DISPLAY.toast}>
-              <GameActionZone game={game} view={actionView} />
-            </ErrorBoundary>
-          )}
+          <ErrorBoundary display={ERROR_DISPLAY.toast}>
+            <GameActionZone game={game} view={actionView} />
+          </ErrorBoundary>
         </VStack>
       }
     >
@@ -189,11 +184,9 @@ export function GameDetail({
             <div className="desktop:hidden">{roster}</div>
           </VStack>
 
-          {showsActions && (
-            <div className="desktop:hidden">
-              <GameDetailActions game={game} view={actionView} />
-            </div>
-          )}
+          <div className="desktop:hidden">
+            <GameDetailActions game={game} view={actionView} />
+          </div>
         </VStack>
       </Container>
     </PageShell>

@@ -4,7 +4,6 @@ import { CircleCheck, Clock } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 import {
-  canAccessGame,
   attendanceDeadline,
   isAttendancePastDeadline,
   isSessionEnded,
@@ -30,7 +29,7 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
     getGameParticipants({ serverId: server.id, gameId: id }),
     getCurrentSessionUser(),
   ]);
-  if (!data || !canAccessGame({ game: data.game, viewerId: user?.id ?? null })) notFound();
+  if (!data) notFound();
   const { game } = data;
 
   if (!user) {

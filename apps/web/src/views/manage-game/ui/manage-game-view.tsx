@@ -18,7 +18,7 @@ import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
 import { GameVisibilityRow, VISIBILITY_SWITCH_MESSAGE } from "@/features/make-game-private";
 import { canReopenGame, ReopenGameLink } from "@/features/reopen-game";
-import { getCurrentSessionUser, getViewableGame, getCurrentServer } from "@/shared/server";
+import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { reviewStatusOf } from "@/widgets/game-detail";
 
@@ -39,7 +39,7 @@ interface ManageGameViewProps {
 export async function ManageGameView({ id }: ManageGameViewProps) {
   const server = await getCurrentServer();
   const [game, user, responseCounts, reviews] = await Promise.all([
-    getViewableGame(server.id, id),
+    getGameById(server.id, id),
     getCurrentSessionUser(),
     getResponseCounts({ serverId: server.id, gameIds: [id] }),
     getCurrentSessionUser().then((viewer) =>

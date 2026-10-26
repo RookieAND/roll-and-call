@@ -156,7 +156,7 @@ export const gameFormSchema = z
     if (isPrivate && values.scheduleMode !== SCHEDULE_MODE.fixed) {
       context.addIssue({
         code: "custom",
-        message: "비공개 구인은 일시 지정형만 열 수 있습니다.",
+        message: "지정 모집은 일시 지정형만 열 수 있습니다.",
         path: ["scheduleMode"],
       });
     }

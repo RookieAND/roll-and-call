@@ -31,7 +31,7 @@ export function GameVisibilityRow({ gameId, visibility, blockedReason }: GameVis
     <>
       <HStack align="center" gap="150" className="min-h-16 px-175 py-150">
         <VStack gap="025" className="min-w-0 flex-1">
-          <Text typography="subtitle1">공개 범위</Text>
+          <Text typography="subtitle1">모집 유형</Text>
           {blocked && (
             <Text typography="body4" foreground="muted" className="text-pretty break-keep">
               {blockedReason}
@@ -42,7 +42,7 @@ export function GameVisibilityRow({ gameId, visibility, blockedReason }: GameVis
           <PrivateMark />
         ) : (
           <Text typography="body3" weight="medium" render={<span />}>
-            공개
+            일반 모집
           </Text>
         )}
         {!isPrivate && (
@@ -60,9 +60,9 @@ export function GameVisibilityRow({ gameId, visibility, blockedReason }: GameVis
       <ConfirmDialog
         open={confirming}
         onOpenChange={setConfirming}
-        title="비공개로 바꿀까요?"
+        title="지정 모집으로 바꿀까요?"
         description={<LineBreaks lines={CONFIRM_LINES} />}
-        confirmLabel="비공개로 바꾸기"
+        confirmLabel="지정 모집으로 바꾸기"
         danger
         pending={pending}
         onConfirm={change}

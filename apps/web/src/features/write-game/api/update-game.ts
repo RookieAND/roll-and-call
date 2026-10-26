@@ -70,7 +70,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     const game = await lockGame({ transaction, serverId: server.id, gameId: id });
     const isPrivate = game?.visibility === GAME_VISIBILITY.private;
     if (isPrivate && formColumns.scheduleMode !== SCHEDULE_MODE.fixed) {
-      return { error: "비공개 구인은 일시 지정형만 열 수 있습니다.", field: "scheduleMode" };
+      return { error: "지정 모집은 일시 지정형만 열 수 있습니다.", field: "scheduleMode" };
     }
     const columns = isPrivate ? toPrivateColumns(formColumns) : formColumns;
     const roster = await listRosterStatuses({ transaction, serverId: server.id, gameId: id });

@@ -3,13 +3,7 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import {
-  canAccessGame,
-  isSessionEnded,
-  isSessionStarted,
-  SCHEDULE_MODE,
-  splitRoster,
-} from "@/entities/game";
+import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { nextRoundBaseDate } from "@/features/open-next-round";
 import { serverPath } from "@/shared/lib";
@@ -30,7 +24,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     getGameParticipants({ serverId: server.id, gameId: id }),
     getCurrentSessionUser(),
   ]);
-  if (!data || !canAccessGame({ game: data.game, viewerId: user?.id ?? null })) notFound();
+  if (!data) notFound();
   const { game, availableUserIds } = data;
 
   if (!user || user.id !== game.gmId) {

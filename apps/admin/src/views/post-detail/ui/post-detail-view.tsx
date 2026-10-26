@@ -63,7 +63,7 @@ export function PostDetailView({
           <HStack align="center" gap="100" render={<span />}>
             {post.title}
             <Tag>{post.status}</Tag>
-            {post.isPrivate && <Tag>비공개</Tag>}
+            {post.isPrivate && <Tag>지정 모집</Tag>}
           </HStack>
         }
         trail={[{ href: listHref, label: "구인" }]}

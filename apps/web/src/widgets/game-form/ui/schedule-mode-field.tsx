@@ -65,7 +65,7 @@ export function ScheduleModeField({
       {locked && <LockedModeNotice label="일정 방식" />}
       {!locked && coordinateDisabled && (
         <Text typography="body5" foreground="hint" render={<p />}>
-          비공개 구인은 일시를 정해서 열 수 있습니다.
+          지정 모집은 일시를 정해서 열 수 있습니다.
         </Text>
       )}
       {!locked && !coordinateDisabled && (

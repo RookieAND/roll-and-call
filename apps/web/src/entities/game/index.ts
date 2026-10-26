@@ -80,7 +80,6 @@ export {
 export { CALENDAR_VIEWER_ROLE, canAddToCalendar } from "./model/can-add-to-calendar";
 export { calendarViewerRole } from "./model/calendar-viewer-role";
 export { canViewHiddenGame } from "./model/can-view-hidden-game";
-export { canAccessGame } from "@roll-and-call/database/games/model";
 export {
   MANAGE_STAGE,
   MANAGE_STAGE_LABEL,

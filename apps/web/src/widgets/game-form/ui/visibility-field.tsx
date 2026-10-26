@@ -19,7 +19,7 @@ const PRIVATE_LINES = [
   "구인방에 올라가지 않고 신청을 받지 않습니다.",
   "지정한 참여자만 참여합니다.",
 ];
-const SUGGEST_LINES = ["지정한 참여자가 정원을 채웠습니다.", "비공개로 등록할 수 있습니다."];
+const SUGGEST_LINES = ["지정한 참여자가 정원을 채웠습니다.", "지정 모집으로 등록할 수 있습니다."];
 
 // 설명은 선택지 아래 한 곳에만 둔다.
 export function VisibilityField({
@@ -34,18 +34,18 @@ export function VisibilityField({
 
   return (
     <VStack gap="100">
-      <Field.Root label="공개 범위" required>
+      <Field.Root label="모집 유형" required>
         <SegmentedControl.Root
           value={value}
           onValueChange={(next) => {
             if (next === GAME_VISIBILITY.public || next === GAME_VISIBILITY.private) onChange(next);
           }}
           disabled={locked}
-          aria-label="공개 범위"
+          aria-label="모집 유형"
           className={locked ? "opacity-50" : undefined}
         >
-          <SegmentedControl.Item value={GAME_VISIBILITY.public}>공개</SegmentedControl.Item>
-          <SegmentedControl.Item value={GAME_VISIBILITY.private}>비공개</SegmentedControl.Item>
+          <SegmentedControl.Item value={GAME_VISIBILITY.public}>일반 모집</SegmentedControl.Item>
+          <SegmentedControl.Item value={GAME_VISIBILITY.private}>지정 모집</SegmentedControl.Item>
         </SegmentedControl.Root>
       </Field.Root>
       <Text typography="body5" foreground="hint" render={<p />}>
@@ -72,7 +72,7 @@ export function VisibilityField({
             className="min-h-11 px-050"
             onClick={() => onChange(GAME_VISIBILITY.private)}
           >
-            비공개로 바꾸기
+            지정 모집으로 바꾸기
           </Button>
         </div>
       )}

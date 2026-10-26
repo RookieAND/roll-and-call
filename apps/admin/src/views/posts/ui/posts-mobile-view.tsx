@@ -73,7 +73,7 @@ export function PostsMobileView({ posts, sort, query }: PostsMobileViewProps) {
                 title={row.title}
                 badges={row.staffAction ? <Tag>{row.staffAction}</Tag> : undefined}
                 trailing={
-                  <StatusBadges status={row.isPrivate ? `${row.status} · 비공개` : row.status} />
+                  <StatusBadges status={row.isPrivate ? `${row.status} · 지정 모집` : row.status} />
                 }
                 description={
                   <>

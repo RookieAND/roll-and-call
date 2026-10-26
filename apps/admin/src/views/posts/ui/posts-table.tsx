@@ -72,7 +72,7 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
                 >
                   {row.title}
                 </Text>
-                {row.isPrivate && <Tag>비공개</Tag>}
+                {row.isPrivate && <Tag>지정 모집</Tag>}
               </HStack>
             </Table.Cell>
             <Table.Cell className="truncate">{row.gmNickname}</Table.Cell>

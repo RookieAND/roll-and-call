@@ -3,13 +3,7 @@ import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
-import {
-  canAccessGame,
-  countConfirmed,
-  isSessionEnded,
-  RECRUIT_METHOD,
-  splitRoster,
-} from "@/entities/game";
+import { countConfirmed, isSessionEnded, RECRUIT_METHOD, splitRoster } from "@/entities/game";
 import { QUERY_NOTICE, QUERY_NOTICE_PARAM, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar } from "@/shared/ui";
@@ -33,7 +27,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
     getGameParticipants({ serverId: server.id, gameId: id }),
     getCurrentSessionUser(),
   ]);
-  if (!data || !canAccessGame({ game: data.game, viewerId: user?.id ?? null })) notFound();
+  if (!data) notFound();
   const { game } = data;
 
   const noResultPath = serverPath({
