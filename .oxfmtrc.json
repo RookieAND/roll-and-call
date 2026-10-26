@@ -11,5 +11,13 @@
     ],
     "newlinesBetween": true
   },
-  "ignorePatterns": ["apps/web/docs/**"]
+  "ignorePatterns": [
+    "apps/web/docs/**",
+    "packages/database/drizzle/**",
+    "**/vercel.json",
+    ".oxlintrc.json",
+    ".claude/skills/**",
+    "README.md",
+    "docs/**"
+  ]
 }
