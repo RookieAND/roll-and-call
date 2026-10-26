@@ -149,10 +149,21 @@ describe("deriveActionView", () => {
     expect(view({ game: { ...firstCome, confirmedAt: at(-1) }, viewer: gm })).toEqual({
       kind: GAME_ACTION_VIEW.gmLive,
       attendanceExpected: true,
+      attendanceRecorded: false,
     });
     expect(
       view({ game: { ...firstCome, confirmedAt: at(-1) }, viewer: gm, confirmedCount: 0 }),
-    ).toEqual({ kind: GAME_ACTION_VIEW.gmLive, attendanceExpected: false });
+    ).toEqual({
+      kind: GAME_ACTION_VIEW.gmLive,
+      attendanceExpected: false,
+      attendanceRecorded: false,
+    });
+    expect(
+      view({
+        game: { ...firstCome, confirmedAt: at(-1), attendanceConfirmedAt: at(-0.5) },
+        viewer: gm,
+      }),
+    ).toMatchObject({ kind: GAME_ACTION_VIEW.gmLive, attendanceRecorded: true });
   });
 
   it("(4) GM 시작 전: 시각이 있으면 캘린더", () => {

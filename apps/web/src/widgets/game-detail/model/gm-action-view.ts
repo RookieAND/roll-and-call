@@ -36,7 +36,11 @@ export function gmActionView({
     };
   }
   if (isSessionInProgress(game, now))
-    return { kind: GAME_ACTION_VIEW.gmLive, attendanceExpected: confirmedCount > 0 };
+    return {
+      kind: GAME_ACTION_VIEW.gmLive,
+      attendanceExpected: confirmedCount > 0,
+      attendanceRecorded: Boolean(game.attendanceConfirmedAt),
+    };
   const calendar = canAddToCalendar({ game, viewerRole: CALENDAR_VIEWER_ROLE.gm, now });
   return { kind: GAME_ACTION_VIEW.gmUpcoming, calendar };
 }
