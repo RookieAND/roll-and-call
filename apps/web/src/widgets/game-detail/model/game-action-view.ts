@@ -118,7 +118,13 @@ export type GameActionView =
     }
   | { kind: typeof GAME_ACTION_VIEW.selectionApplied; endDate: Date; closed: boolean }
   | { kind: typeof GAME_ACTION_VIEW.waiting; rank: number; resultLink: boolean; selection: boolean }
-  | ({ kind: typeof GAME_ACTION_VIEW.scheduled; confirmedAt: Date; live: boolean } & ActionLinks)
+  | ({
+      kind: typeof GAME_ACTION_VIEW.scheduled;
+      confirmedAt: Date;
+      live: boolean;
+      // 진행 중에만 의미가 있다. 시작 시각부터 후기를 쓸 수 있다.
+      review: ReviewStatus;
+    } & ActionLinks)
   | ({ kind: typeof GAME_ACTION_VIEW.confirmedOpen; confirmedAt: Date | null } & ActionLinks)
   | ({
       kind: typeof GAME_ACTION_VIEW.confirmedLocked;

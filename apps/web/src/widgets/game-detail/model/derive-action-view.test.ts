@@ -238,6 +238,7 @@ describe("deriveActionView", () => {
       kind: GAME_ACTION_VIEW.scheduled,
       confirmedAt: at(24),
       live: false,
+      review: REVIEW_STATUS.unavailable,
       resultLink: false,
       scheduleLink: true,
       calendar: true,
@@ -250,6 +251,15 @@ describe("deriveActionView", () => {
       live: true,
       scheduleLink: false,
       calendar: false,
+    });
+  });
+
+  it("(10-1) 진행 중인 확정 참여자는 시작 시각부터 후기 상태를 받는다", () => {
+    const live = { ...fixed, confirmedAt: at(-1) };
+    expect(view({ game: live, viewer: confirmed, review: REVIEW_STATUS.writable })).toMatchObject({
+      kind: GAME_ACTION_VIEW.scheduled,
+      live: true,
+      review: REVIEW_STATUS.writable,
     });
   });
 

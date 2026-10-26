@@ -20,9 +20,6 @@ export function reviewNote({
   context: SessionContext;
 }): ReviewNote {
   if (context.readOnly || !context.reviewedGames) return NONE;
-  if (!game.attendanceConfirmedAt) {
-    return { ...NONE, caption: { text: "GM 확인 대기", strong: false } };
-  }
   const now = context.now ?? new Date();
   const review = context.reviewedGames.get(game.id);
 

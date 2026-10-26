@@ -117,13 +117,17 @@ describe("manageRows", () => {
     expect(rows.time.detail).toBe("9월 20일 (일) 11:30으로 정했습니다");
   });
 
-  it("진행 중이고 확정 1명 이상이면 출석 확인 줄이 세션 마치기 창을 연다", () => {
+  it("진행 중이고 확정 1명 이상이면 출석 확인 줄이 선택 시트를 연다", () => {
     const rows = byKey(gameWith({ confirmedAt: at(-0.5 * HOUR) }));
     expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.open);
     expect(rows.attendance.action).toBe(MANAGE_ROW_ACTION.endSession);
-    expect(rows.attendance.note).toBe(
-      "세션을 마치지 않으면 예정된 종료 시각에 출석 확인이 시작됩니다.",
+    expect(rows.attendance.detail).toBe(
+      "세션이 진행 중입니다 · 불참한 참여자가 있으면 입력해 주세요",
     );
+    expect(rows.attendance.note).toEqual([
+      "세션을 마치지 않으면 예정된 종료 시각에 세션이 끝난 것으로 봅니다.",
+      "종료 후 24시간 안에 입력하지 않으면 모두 참석으로 확정됩니다.",
+    ]);
     expect(rows.attendance.href).toBeNull();
     expect(rows.edit.state).toBe(MANAGE_ROW_STATE.locked);
     expect(rows.edit.detail).toBe("시작한 세션은 고칠 수 없습니다");
@@ -210,5 +214,16 @@ describe("manageRows GM 마스터링 후기 버튼", () => {
     });
     expect(reviewRow("view").button).toMatchObject({ label: "내 후기 보기", solid: false });
     expect(reviewRow(null).button).toBeUndefined();
+  });
+});
+
+describe("manageRows 진행 중 출석 확정", () => {
+  it("진행 중에 출석을 확정했다면 기존 확정됨 상태를 보인다", () => {
+    const rows = byKey(
+      gameWith({ confirmedAt: at(-0.5 * HOUR), attendanceConfirmedAt: at(-0.1 * HOUR) }),
+    );
+    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.done);
+    expect(rows.attendance.detail).toBe("출석을 정리했습니다");
+    expect(rows.attendance.action).toBeUndefined();
   });
 });

@@ -19,25 +19,30 @@ export function attendanceRow({
   const base = { key: "attendance", icon: "clipboard", label: "출석 확인" } as const;
   const locked = { ...base, state: MANAGE_ROW_STATE.locked, href: null } as const;
 
-  if (isSessionInProgress(game, now)) {
-    if (confirmedCount === 0) return { ...locked, detail: NOT_ENDED };
-    return {
-      ...base,
-      state: MANAGE_ROW_STATE.open,
-      href: null,
-      action: MANAGE_ROW_ACTION.endSession,
-      detail: "세션이 진행 중입니다 · 끝나면 여기서 세션을 마쳐 주세요",
-      note: "세션을 마치지 않으면 예정된 종료 시각에 출석 확인이 시작됩니다.",
-    };
-  }
-  if (!isSessionEnded(game, now)) return { ...locked, detail: NOT_ENDED };
-
   const done = {
     ...base,
     state: MANAGE_ROW_STATE.done,
     href: null,
     detail: "출석을 정리했습니다",
   } as const;
+
+  if (isSessionInProgress(game, now)) {
+    if (confirmedCount === 0) return { ...locked, detail: NOT_ENDED };
+    if (game.attendanceConfirmedAt) return done;
+    return {
+      ...base,
+      state: MANAGE_ROW_STATE.open,
+      href: null,
+      action: MANAGE_ROW_ACTION.endSession,
+      detail: "세션이 진행 중입니다 · 불참한 참여자가 있으면 입력해 주세요",
+      note: [
+        "세션을 마치지 않으면 예정된 종료 시각에 세션이 끝난 것으로 봅니다.",
+        "종료 후 24시간 안에 입력하지 않으면 모두 참석으로 확정됩니다.",
+      ],
+    };
+  }
+  if (!isSessionEnded(game, now)) return { ...locked, detail: NOT_ENDED };
+
   if (game.attendanceConfirmedAt) return done;
   if (attendanceRoster(game.participants).length === 0) {
     return { ...locked, detail: "확정 참여자가 없습니다" };

@@ -14,6 +14,9 @@ import { AttendanceRow } from "./attendance-row";
 import { AttendanceStats } from "./attendance-stats";
 import { ConfirmAttendanceSummary } from "./confirm-attendance-summary";
 
+const IN_PROGRESS_LEAD = "불참한 사람만 골라 주세요.";
+const IN_PROGRESS_FOOTNOTE = "확정한 뒤에도 세션이 끝난 뒤 24시간까지 고칠 수 있습니다.";
+
 interface AttendanceFormProps {
   appBar: ReactNode;
   header: ReactNode;
@@ -22,6 +25,8 @@ interface AttendanceFormProps {
   onConfirmed: () => void;
   onExpired: () => void;
   footnote?: string;
+  // 세션이 끝나기 전에 연 화면. 불참한 사람만 고르면 된다는 안내와 고칠 수 있는 기한을 덧붙인다.
+  inProgress?: boolean;
   children?: ReactNode;
 }
 
@@ -33,6 +38,7 @@ export function AttendanceForm({
   onConfirmed,
   onExpired,
   footnote,
+  inProgress = false,
   children,
 }: AttendanceFormProps) {
   const [absentIds, setAbsentIds] = useState(
@@ -127,6 +133,11 @@ export function AttendanceForm({
           {children}
         </VStack>
 
+        {inProgress && (
+          <Text typography="body3" foreground="muted">
+            {IN_PROGRESS_LEAD}
+          </Text>
+        )}
         <Card.Root
           radius={500}
           padding="none"
@@ -143,6 +154,11 @@ export function AttendanceForm({
             />
           ))}
         </Card.Root>
+        {inProgress && (
+          <Text typography="body4" foreground="hint">
+            {IN_PROGRESS_FOOTNOTE}
+          </Text>
+        )}
         {footnote && (
           <Text typography="body4" foreground="hint">
             {footnote}

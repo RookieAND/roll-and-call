@@ -18,6 +18,7 @@ interface AttendancePanelProps {
   phase: AttendancePhase;
   deadline: Date;
   attendanceConfirmedAt: Date | null;
+  inProgress: boolean;
   children?: ReactNode;
 }
 
@@ -30,6 +31,7 @@ export function AttendancePanel({
   phase,
   deadline,
   attendanceConfirmedAt,
+  inProgress,
   children,
 }: AttendancePanelProps) {
   const router = useRouter();
@@ -66,6 +68,7 @@ export function AttendancePanel({
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
         footnote={reeditNote}
+        inProgress={inProgress}
         onExpired={() => {
           setEditing(false);
           setExpired(true);

@@ -18,13 +18,13 @@ const context = (reviewed: [string, { createdAt: Date; removedAt: Date | null }]
   ({ viewerId: "me", now: NOW, reviewedGames: new Map(reviewed) }) as unknown as SessionContext;
 
 describe("reviewNote", () => {
-  it("출석 확인 전에는 GM 확인을 기다린다", () => {
+  it("출석 확인 전에도 마감 안이면 후기 쓰기를 단다", () => {
     const note = reviewNote({
       game: { ...game, attendanceConfirmedAt: null },
       context: context(),
     });
-    expect(note.caption?.text).toBe("GM 확인 대기");
-    expect(note.action).toBeNull();
+    expect(note.caption?.text).toBe("후기 마감 D-2");
+    expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
   });
 
   it("아직 안 썼으면 마감 D-n과 후기 쓰기를 단다", () => {

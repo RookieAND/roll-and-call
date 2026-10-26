@@ -98,13 +98,14 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
       phase={attendancePhaseOf({ game, now })}
       deadline={attendanceDeadline(game)!}
       attendanceConfirmedAt={game.attendanceConfirmedAt}
+      inProgress={!ended}
     >
       <SummaryLine
         icon={game.endedAt ? CircleCheck : Clock}
         tone="muted"
         label="세션 시각"
         value={sessionValue}
-        badge={game.endedAt ? undefined : "끝남"}
+        badge={ended && !game.endedAt ? "끝남" : undefined}
       />
     </AttendancePanel>
   );

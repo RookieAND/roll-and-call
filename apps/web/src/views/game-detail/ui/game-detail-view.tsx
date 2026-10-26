@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import {
   canViewHiddenGame,
   isGameGm,
-  isSessionEnded,
+  isSessionStarted,
   PARTICIPANT_STATUS,
   splitRoster,
 } from "@/entities/game";
@@ -43,13 +43,13 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
   const participant = game.participants.find((row) => row.userId === viewerId);
   const confirmedCount = splitRoster(game.participants).confirmed.length;
   const open = !game.cancelledAt && !isRecruitmentClosed({ game, confirmedCount, now });
-  // 제재는 참여 기록이 없고 모집이 열려 있을 때, 후기는 확정자·GM의 세션이 끝났을 때만 읽는다.
+  // 제재는 참여 기록이 없고 모집이 열려 있을 때, 후기는 확정자·GM의 세션이 시작된 뒤에만 읽는다.
   const needsSanction =
     viewerId && !participant && open && !isGameGm({ gmId: game.gmId, userId: viewerId });
   const takesPartInGame =
     participant?.status === PARTICIPANT_STATUS.confirmed ||
     isGameGm({ gmId: game.gmId, userId: viewerId });
-  const needsReview = viewerId && takesPartInGame && isSessionEnded(game, now);
+  const needsReview = viewerId && takesPartInGame && isSessionStarted(game, now);
   // 참여 조건은 신청을 고민하는 사람(참여 기록 없는 로그인 사용자)에게만 내 현황과 견준다.
   const needsStanding = needsSanction && (game.minRulePlays !== null || game.requireRulebookCert);
   const [sanction, standing, reviewTarget, titleSheets] = await Promise.all([

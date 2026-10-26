@@ -41,6 +41,7 @@ export function confirmedActionView({
       kind: GAME_ACTION_VIEW.scheduled,
       confirmedAt: game.confirmedAt!,
       live: isSessionInProgress(game, now),
+      review,
       resultLink: drawn,
       scheduleLink: coordinate && !drawn,
       calendar,
