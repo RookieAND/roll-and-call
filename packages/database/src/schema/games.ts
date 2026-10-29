@@ -206,7 +206,7 @@ export const games = pgTable(
     check("games_range_order", sql`${table.rangeEnd} >= ${table.rangeStart}`),
     check(
       "games_tag_limits",
-      sql`cardinality(${table.genres}) <= 5 and cardinality(${table.triggers}) <= 10 and cardinality(${table.platforms}) <= 5`,
+      sql`cardinality(${table.genres}) <= 5 and cardinality(${table.triggers}) <= 15 and cardinality(${table.platforms}) <= 5`,
     ),
     check("games_cancel_reason_length", sql`char_length(${table.cancelReason}) <= 200`),
     check("games_supplements_limit", sql`jsonb_array_length(${table.supplements}) <= 10`),

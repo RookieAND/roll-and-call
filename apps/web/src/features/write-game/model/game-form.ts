@@ -26,7 +26,7 @@ export const GAME_IMAGES_MAX = 5;
 export const GAME_MAX_PLAYERS = 20;
 export const GAME_TAGS_MAX = {
   [GAME_TAG.genres]: 5,
-  [GAME_TAG.triggers]: 10,
+  [GAME_TAG.triggers]: 15,
   [GAME_TAG.platforms]: 5,
 } as const;
 export const GAME_TAG_MAX_LENGTH = 20;
