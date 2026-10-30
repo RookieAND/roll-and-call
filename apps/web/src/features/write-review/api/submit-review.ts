@@ -18,6 +18,7 @@ import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { richTextLength, serverPath } from "@/shared/lib";
 import {
   getActingMember,
+  notifyCanvasReview,
   revalidateReviews,
   siteOrigin,
   syncReviewForumPost,
@@ -118,6 +119,17 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
       }),
     );
     after(() => evaluateBadges({ serverId: server.id, userIds: [target.game.gmId, user.id] }));
+    if (!target.review && !target.isGm) {
+      after(() =>
+        notifyCanvasReview({
+          server,
+          reviewId: createdReviewId,
+          gameTitle: target.game.title,
+          authorId: user.id,
+          gmId: target.game.gmId,
+        }),
+      );
+    }
   }
   redirect(serverPath({ slug: server.slug, path: MY_REVIEWS_HREF }));
 }

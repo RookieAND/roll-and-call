@@ -18,6 +18,7 @@
     "@roll-and-call/database": "workspace:*",
     "@roll-and-call/discord": "workspace:*",
     "@roll-and-call/game-notices": "workspace:*",
+    "@roll-and-call/integrations": "workspace:*",
     "@roll-and-call/tiptap": "workspace:*",
     "@roll-and-call/ui": "workspace:*",
     "@supabase/ssr": "catalog:",

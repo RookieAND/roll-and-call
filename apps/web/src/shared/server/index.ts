@@ -4,6 +4,7 @@ export { refreshRecruitPost } from "@roll-and-call/game-notices";
 export { notifyGameJoined } from "./discord/notify-game-joined";
 export { notifyGameLeft, notifyMovedToWaitlist } from "@roll-and-call/game-notices";
 export { notifyGameCancelled } from "@roll-and-call/game-notices";
+export { notifyCanvasReview } from "@roll-and-call/integrations/canvas";
 export {
   postStaffNotice,
   STAFF_NOTICE_KIND,

@@ -17,6 +17,7 @@ export {
 export { getApplicationNote } from "@roll-and-call/database/games";
 export { isNicknameTaken } from "@roll-and-call/database/profiles";
 export { banGuildMember, unbanGuildMember } from "@roll-and-call/discord";
+export { notifyCanvasCertGranted } from "@roll-and-call/integrations/canvas";
 export {
   notifyGameCancelled,
   notifyGameLeft,

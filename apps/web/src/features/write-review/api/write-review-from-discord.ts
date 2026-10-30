@@ -9,7 +9,12 @@ import { after } from "next/server";
 import { REVIEW_PHOTO_MAX_COUNT, reviewBodyError } from "@/entities/review";
 import { uploadReviewPhotos } from "@/entities/review/server";
 import { serverPath } from "@/shared/lib";
-import { revalidateReviews, siteOrigin, syncReviewForumPost } from "@/shared/server";
+import {
+  notifyCanvasReview,
+  revalidateReviews,
+  siteOrigin,
+  syncReviewForumPost,
+} from "@/shared/server";
 
 import {
   DISCORD_REVIEW_REFUSAL,
@@ -116,6 +121,17 @@ export async function writeReviewFromDiscord({
     }),
   );
   after(() => evaluateBadges({ serverId: server.id, userIds: [target.game.gmId, userId] }));
+  if (!target.isGm) {
+    after(() =>
+      notifyCanvasReview({
+        server,
+        reviewId: createdReviewId,
+        gameTitle: target.game.title,
+        authorId: userId,
+        gmId: target.game.gmId,
+      }),
+    );
+  }
 
   const url = `${siteOrigin() ?? ""}${serverPath({ slug: server.slug, path: MY_REVIEWS_HREF })}`;
   return `후기를 등록했습니다. 사진을 고치거나 더하려면 ${url}`;

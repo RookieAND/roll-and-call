@@ -10,6 +10,7 @@ import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   evaluateBadges,
   getCurrentServer,
+  notifyCanvasCertGranted,
   requireStaff,
   syncCertStaffNotices,
 } from "@/shared/server";
@@ -30,6 +31,7 @@ export async function approveCertGroup(rawApplicationIds: string[]) {
   if (result.ok && result.decided > 0) {
     after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
     after(() => syncCertStaffNotices({ server, userId: result.userId }));
+    after(() => notifyCanvasCertGranted({ server, userIds: [result.userId] }));
   }
   return result;
 }

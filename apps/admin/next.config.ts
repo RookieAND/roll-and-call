@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "@roll-and-call/database",
     "@roll-and-call/discord",
     "@roll-and-call/game-notices",
+    "@roll-and-call/integrations",
     "@roll-and-call/tiptap",
   ],
   // 후기는 구인 아래에서 독립 메뉴로 옮겼다(D212). 옛 주소는 308로 보내고 쿼리는 그대로 둔다.

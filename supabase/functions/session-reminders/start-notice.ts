@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2";
 
+import { sendCanvasGameStarted, type CanvasGame } from "./canvas-event.ts";
 import { formatKst } from "./format-kst.ts";
 import { renderMessageHead, roleMentionIds } from "./render-message-head.ts";
 
@@ -21,17 +22,14 @@ const DEFAULT_HEAD = "📢 세션이 시작되었습니다! 이제부터 후기 
 const DEFAULT_DESCRIPTION =
   "GM은 출석을, 참여자는 후기를 지금부터 입력할 수 있습니다.\n후기는 세션이 끝난 뒤에도 마감 전까지 작성할 수 있습니다.";
 
-type StartGame = {
-  id: string;
-  title: string;
+type StartGame = CanvasGame & {
   rule: string;
   confirmed_at: string;
   play_minutes: number | null;
   discord_thread_id: string;
   server_id: string;
   gm_id: string;
-  server: { slug: string };
-  gm: { username: string } | null;
+  gm: { username: string; discord_id: string } | null;
 };
 
 interface Environment {
@@ -203,20 +201,26 @@ export async function sendStartNotices(environment: Environment, now: Date) {
     .lte("confirmed_at", now.toISOString())
     .gt("confirmed_at", new Date(now.getTime() - WINDOW_MS).toISOString())
     .select(
-      "id, title, rule, confirmed_at, play_minutes, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(username)",
+      "id, title, rule, rulebook_id, confirmed_at, play_minutes, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(username, discord_id), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))",
     )
     .returns<StartGame[]>();
   if (error) return { claimed: 0, failed: [] as string[], error: error.message };
 
   const failed: string[] = [];
+  const canvasFailed: string[] = [];
   for (const game of data) {
     try {
       await sendStartNotice({ environment, game });
+      // 시작 안내와 따로 실패를 센다. Canvas가 막혀도 안내는 다시 보내지 않는다(Canvas 쪽 지급은 같은 구인에 한 번만 들어간다).
+      await sendCanvasGameStarted({ supabase, game, now }).catch((canvasError) => {
+        console.warn(`canvas event failed for ${game.id}:`, canvasError);
+        canvasFailed.push(game.id);
+      });
     } catch (sendError) {
       console.warn(`start notice failed for ${game.id}:`, sendError);
       failed.push(game.id);
       await supabase.from("games").update({ start_notified_at: null }).eq("id", game.id);
     }
   }
-  return { claimed: data.length, failed };
+  return { claimed: data.length, failed, canvasFailed };
 }

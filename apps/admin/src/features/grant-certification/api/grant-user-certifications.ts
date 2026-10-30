@@ -10,6 +10,7 @@ import {
   evaluateBadges,
   getCurrentServer,
   grantCertifications,
+  notifyCanvasCertGranted,
   postStaffNotice,
   requireStaff,
   STAFF_NOTICE_KIND,
@@ -50,6 +51,7 @@ export async function grantUserCertifications(args: GrantUserCertificationsInput
       grantedBooks.flatMap((book) => book.granted.map((row) => row.userId)),
     );
     after(() => evaluateBadges({ serverId: server.id, userIds: grantedUserIds }));
+    after(() => notifyCanvasCertGranted({ server, userIds: grantedUserIds }));
     // 운영진 채널에는 한 건으로 묶는다. 대상은 한 권이라도 받은 유저 모두다.
     const [firstBook] = grantedBooks;
     if (firstBook) {

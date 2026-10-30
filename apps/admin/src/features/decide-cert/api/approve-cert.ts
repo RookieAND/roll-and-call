@@ -8,6 +8,7 @@ import { idSchema, parseActionInput } from "@/shared/lib";
 import {
   evaluateBadges,
   getCurrentServer,
+  notifyCanvasCertGranted,
   requireStaff,
   syncCertStaffNotices,
 } from "@/shared/server";
@@ -26,6 +27,7 @@ export async function approveCert(rawApplicationId: string) {
   if (result.ok) {
     after(() => evaluateBadges({ serverId: server.id, userIds: [result.userId] }));
     after(() => syncCertStaffNotices({ server, userId: result.userId }));
+    after(() => notifyCanvasCertGranted({ server, userIds: [result.userId] }));
   }
   return result;
 }
