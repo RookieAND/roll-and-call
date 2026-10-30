@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "npm:@supabase/supabase-js@2";
 
+import { formatKst } from "./format-kst.ts";
 import { renderMessageHead, roleMentionIds } from "./render-message-head.ts";
 
 // 시작 시각이 지난 확정 구인의 스레드에 「세션 시작 안내」를 알림음 없이, 시스템 멘션 없이 한 번 올린다.
@@ -9,13 +10,14 @@ const RECRUIT_COLOR = 0x5865f2;
 const MESSAGE_FLAG_SUPPRESS_NOTIFICATIONS = 1 << 12;
 const HEAD_CASE_KEY = "start";
 const TEXT_KEY = "start";
-const EMBED_TITLE = "세션이 시작되었습니다";
+// packages/database/src/modules/games/model/session-timing.ts의 DEFAULT_PLAY_MINUTES와 같다.
+const DEFAULT_PLAY_MINUTES = 180;
 // packages/game-notices/src/notify/attendance-button.ts·review-button.ts와 같은 값이다.
 const ATTENDANCE_BUTTON_PREFIX = "attendance:";
 const REVIEW_BUTTON_PREFIX = "review:";
 // packages/database/src/modules/servers/model/message-heads.ts·message-texts.ts의 start 기본 문구와 같게 둔다.
 // start-notice-defaults.test.ts가 둘이 같은지 확인한다.
-const DEFAULT_HEAD = "";
+const DEFAULT_HEAD = "📢 세션이 시작되었습니다! 이제부터 후기 및 출석 처리가 가능합니다.";
 const DEFAULT_DESCRIPTION =
   "GM은 출석을, 참여자는 후기를 지금부터 입력할 수 있습니다.\n후기는 세션이 끝난 뒤에도 마감 전까지 작성할 수 있습니다.";
 
@@ -23,6 +25,8 @@ type StartGame = {
   id: string;
   title: string;
   rule: string;
+  confirmed_at: string;
+  play_minutes: number | null;
   discord_thread_id: string;
   server_id: string;
   gm_id: string;
@@ -120,6 +124,9 @@ async function sendStartNotice({
     description({ supabase, game, values }),
   ]);
   const detailUrl = values["링크"];
+  const endsAt = new Date(
+    new Date(game.confirmed_at).getTime() + (game.play_minutes || DEFAULT_PLAY_MINUTES) * 60_000,
+  ).toISOString();
   const userIds = [...head.matchAll(/<@!?(\d+)>/g)].flatMap((match) => match[1] ?? []);
 
   const response = await fetch(
@@ -131,11 +138,14 @@ async function sendStartNotice({
         content: head || undefined,
         embeds: [
           {
-            title: EMBED_TITLE,
+            title: game.title,
             url: detailUrl,
             description: body,
             color: RECRUIT_COLOR,
-            fields: [{ name: "📜 룰", value: game.rule, inline: true }],
+            fields: [
+              { name: "📜 룰", value: game.rule, inline: true },
+              { name: "🕒 종료 예정", value: formatKst(endsAt), inline: true },
+            ],
             footer: { text: `GM ${gmName}` },
             timestamp: new Date().toISOString(),
           },
@@ -146,17 +156,25 @@ async function sendStartNotice({
             components: [
               {
                 type: 2,
-                style: 1,
+                style: 3,
+                emoji: { name: "✅" },
                 label: "출석 입력하기",
                 custom_id: `${ATTENDANCE_BUTTON_PREFIX}${game.id}`,
               },
               {
                 type: 2,
                 style: 1,
+                emoji: { name: "📝" },
                 label: "후기 작성하기",
                 custom_id: `${REVIEW_BUTTON_PREFIX}${game.id}`,
               },
-              { type: 2, style: 5, label: "웹에서 작성하기", url: `${detailUrl}/review` },
+              {
+                type: 2,
+                style: 5,
+                emoji: { name: "🌐" },
+                label: "웹에서 작성하기",
+                url: `${detailUrl}/review`,
+              },
             ],
           },
         ],
@@ -185,7 +203,7 @@ export async function sendStartNotices(environment: Environment, now: Date) {
     .lte("confirmed_at", now.toISOString())
     .gt("confirmed_at", new Date(now.getTime() - WINDOW_MS).toISOString())
     .select(
-      "id, title, rule, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(username)",
+      "id, title, rule, confirmed_at, play_minutes, discord_thread_id, server_id, gm_id, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(username)",
     )
     .returns<StartGame[]>();
   if (error) return { claimed: 0, failed: [] as string[], error: error.message };

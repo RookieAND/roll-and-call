@@ -30,7 +30,7 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
   done: "📢 {구인 제목} 모집이 완료됐어요!",
   // supabase/functions/session-reminders/index.ts의 DEFAULT_HEAD와 같아야 한다.
   remind: "📢 {구인 제목} 세션이 곧 시작해요!",
-  start: "",
+  start: "📢 세션이 시작되었습니다! 이제부터 후기 및 출석 처리가 가능합니다.",
   cancel: "📢 {구인 제목} 구인이 취소됐어요.",
   monthly: "📢 {달}에 활약한 분들을 소개해요!",
 };
