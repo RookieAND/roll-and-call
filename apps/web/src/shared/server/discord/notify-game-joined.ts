@@ -62,10 +62,11 @@ export async function notifyGameJoined({
         serverId: server.id,
         key: "apply",
         values,
+        // 추첨·선발은 신청자가 모두 대기 상태라 그 수를 신청 인원으로 알린다.
         headSuffix:
           game.recruitMethod === RECRUIT_METHOD.firstCome
             ? `(${confirmedCount}/${game.maxPlayers})`
-            : undefined,
+            : `(${waitingCount}명 신청)`,
         ...line,
       })),
     },
