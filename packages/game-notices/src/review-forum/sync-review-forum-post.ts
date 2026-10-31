@@ -40,13 +40,7 @@ export async function syncReviewForumPost({
   if (!review) return;
 
   const held = Boolean(review.absent) && isNull(review.absenceCancelledAt);
-  // 비공개 구인의 후기는 디스코드에 올리지 않는다. 웹에서 GM과 참여자에게만 보인다.
-  const visible =
-    !review.removedAt &&
-    !review.hiddenAt &&
-    !review.gameHiddenAt &&
-    review.gameVisibility !== "private" &&
-    !held;
+  const visible = !review.removedAt && !review.hiddenAt && !review.gameHiddenAt && !held;
   if (!visible) {
     if (review.threadId) {
       await removePost(review.threadId);
