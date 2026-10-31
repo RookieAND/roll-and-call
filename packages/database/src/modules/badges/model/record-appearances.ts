@@ -84,22 +84,22 @@ export function recordAppearances(
   });
 }
 
-// 공개 상태인 참석자 후기 1건마다 쓴 사람에게 PL 점수를, 그 세션의 GM에게 GM 점수를 준다. 후기를 처음 공개한 달에 센다.
+// 공개 상태인 참석자 후기 1건마다 쓴 사람에게 PL 점수를, 그 세션의 GM에게 GM 점수를 준다. 연결된 세션의 시작 시각이 속한 달에 센다.
 export function reviewAppearances(
-  reviews: { authorId: string; gmId: string; createdAt: Date }[],
+  reviews: { authorId: string; gmId: string; startsAt: Date }[],
 ): MonthlyAppearance[] {
   return reviews.flatMap((review) => [
     {
       userId: review.authorId,
       role: BADGE_ROLE.player,
-      startsAt: review.createdAt,
+      startsAt: review.startsAt,
       weight: REVIEW_POINTS,
       sessions: 0,
     },
     {
       userId: review.gmId,
       role: BADGE_ROLE.gm,
-      startsAt: review.createdAt,
+      startsAt: review.startsAt,
       weight: REVIEW_POINTS,
       sessions: 0,
     },

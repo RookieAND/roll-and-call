@@ -95,9 +95,7 @@ describe("recordAppearances (포인트제)", () => {
   });
 
   it("후기 1건은 쓴 사람(PL)과 받은 GM에게 10점씩이고 세션 횟수로는 세지 않는다", () => {
-    const [written, received] = reviewAppearances([
-      { authorId: "a", gmId: "gm", createdAt: START },
-    ]);
+    const [written, received] = reviewAppearances([{ authorId: "a", gmId: "gm", startsAt: START }]);
     expect(written).toMatchObject({
       userId: "a",
       role: BADGE_ROLE.player,

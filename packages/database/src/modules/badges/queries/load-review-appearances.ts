@@ -1,4 +1,4 @@
-import { and, eq, gte, lt, not, sql } from "drizzle-orm";
+import { and, eq, gte, isNotNull, lt, not, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import type { MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
@@ -16,7 +16,7 @@ const isTieGame = sql<boolean>`(
 ) = 1`;
 
 // 포인트제 후기 점수. 후기 업적과 같은 후기(공개, 공백 제외 10자 이상, 작성자가 불참이 아님)만 센다.
-// 후기를 처음 공개한 달에 넣으므로 from·to는 후기를 쓴 시각 기준이다.
+// 후기는 쓴 시각이 아니라 연결된 세션의 시작 시각이 속한 달에 넣는다. from·to도 세션 시작 시각 기준이다.
 export async function loadReviewAppearances({
   serverId,
   from,
@@ -30,7 +30,7 @@ export async function loadReviewAppearances({
     .select({
       authorId: sessionReviews.authorId,
       gmId: games.gmId,
-      createdAt: sessionReviews.createdAt,
+      startsAt: games.confirmedAt,
     })
     .from(sessionReviews)
     .innerJoin(games, eq(games.id, sessionReviews.gameId))
@@ -39,9 +39,10 @@ export async function loadReviewAppearances({
         countedReviewWhere(serverId),
         // 타이만(1:1) 세션의 후기는 점수에 넣지 않는다.
         not(isTieGame),
-        from ? gte(sessionReviews.createdAt, from) : undefined,
-        to ? lt(sessionReviews.createdAt, to) : undefined,
+        isNotNull(games.confirmedAt),
+        from ? gte(games.confirmedAt, from) : undefined,
+        to ? lt(games.confirmedAt, to) : undefined,
       ),
     );
-  return reviewAppearances(rows);
+  return reviewAppearances(rows.map((row) => ({ ...row, startsAt: row.startsAt! })));
 }
