@@ -21,6 +21,7 @@ export const GAME_ACTION_VIEW = {
   confirmedLocked: "confirmedLocked",
   closedScheduled: "closedScheduled",
   closed: "closed",
+  closedPrivate: "closedPrivate",
   sanctioned: "sanctioned",
   conditionsUnmet: "conditionsUnmet",
   joinWaitlist: "joinWaitlist",
@@ -46,6 +47,7 @@ export type ActionGame = Pick<
   | "attendanceFirstConfirmedAt"
   | "maxPlayers"
   | "waitlistEnabled"
+  | "visibility"
 >;
 
 export interface ActionViewer {
@@ -137,6 +139,7 @@ export type GameActionView =
     } & ActionLinks)
   | { kind: typeof GAME_ACTION_VIEW.closedScheduled; confirmedAt: Date }
   | { kind: typeof GAME_ACTION_VIEW.closed }
+  | { kind: typeof GAME_ACTION_VIEW.closedPrivate }
   | ({ kind: typeof GAME_ACTION_VIEW.sanctioned } & ActionSanction)
   | { kind: typeof GAME_ACTION_VIEW.conditionsUnmet; lines: string[]; certUnmet: boolean }
   | { kind: typeof GAME_ACTION_VIEW.joinWaitlist; nextRank: number }

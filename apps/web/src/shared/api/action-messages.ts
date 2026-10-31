@@ -14,6 +14,7 @@ export const SELECTION_FINISHED_APPLY_MESSAGE = "이미 선발을 마친 구인�
 export const SELECTION_TOO_MANY_MESSAGE = "선발 신청은 100명까지만 받을 수 있습니다.";
 export const WAITLIST_CANCEL_ENDED_MESSAGE = "세션이 끝나 대기를 취소할 수 없습니다.";
 export const SANCTIONED_APPLY_MESSAGE = "활동 정지 기간에는 신청할 수 없습니다.";
+export const PRIVATE_GAME_APPLY_MESSAGE = "GM이 지정한 참여자만 함께하는 구인입니다.";
 export const HIDDEN_GAME_APPLY_MESSAGE = "운영진이 숨긴 구인입니다.";
 // 세션 종료 뒤 명단 조정 거부.
 export const ROSTER_SESSION_ENDED_MESSAGE = "세션이 끝나 명단을 바꿀 수 없습니다.";

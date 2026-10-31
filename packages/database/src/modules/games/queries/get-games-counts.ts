@@ -32,9 +32,7 @@ export async function getGamesCounts({
       ended: count(ended),
     })
     .from(games)
-    .where(
-      and(searchableGamesWhere({ serverId, q, endedPrivateAt: now }), gameFiltersWhere(filter)),
-    );
+    .where(and(searchableGamesWhere({ serverId, q }), gameFiltersWhere(filter)));
   return row!;
 }
 

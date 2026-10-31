@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { PARTICIPANT_STATUS, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import {
+  GAME_VISIBILITY,
+  PARTICIPANT_STATUS,
+  RECRUIT_METHOD,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 
 import { deriveActionView } from "./derive-action-view";
 import { type ActionContext, GAME_ACTION_VIEW } from "./game-action-view";
@@ -11,6 +16,7 @@ const HOUR = 60 * 60 * 1000;
 const at = (hours: number) => new Date(NOW.getTime() + hours * HOUR);
 
 const firstCome: ActionContext["game"] = {
+  visibility: GAME_VISIBILITY.public,
   scheduleMode: SCHEDULE_MODE.coordinate,
   recruitMethod: RECRUIT_METHOD.firstCome,
   confirmedAt: null,
@@ -87,6 +93,12 @@ describe("추첨 없이 확정된 구인", () => {
 });
 
 describe("deriveActionView", () => {
+  it("비공개 구인은 참여 기록이 없는 사람에게 신청 대신 안내만 둔다", () => {
+    expect(view({ game: { ...firstCome, visibility: GAME_VISIBILITY.private } }).kind).toBe(
+      GAME_ACTION_VIEW.closedPrivate,
+    );
+  });
+
   it("(1) 취소됨: GM 취소 사유, 운영진·자동 취소, GM과 비GM", () => {
     const cancelled = { ...firstCome, cancelledAt: at(-1), cancelKind: "gm" as const };
     expect(view({ game: { ...cancelled, cancelReason: "일정" }, viewer: gm })).toEqual({

@@ -26,6 +26,7 @@ import {
   GAME_CANCELLED_MESSAGE,
   GAME_NOT_FOUND_RESULT,
   HIDDEN_GAME_APPLY_MESSAGE,
+  PRIVATE_GAME_APPLY_MESSAGE,
   SELECTION_FINISHED_APPLY_MESSAGE,
   SELECTION_TOO_MANY_MESSAGE,
   SANCTIONED_APPLY_MESSAGE,
@@ -61,8 +62,7 @@ export async function evaluateApplication({
   if (game.gmId === userId) {
     return { error: "GM은 참여자로 참여할 수 없습니다." };
   }
-  // 비공개 구인은 신청을 받지 않고, 신청하는 사람에게는 없는 구인과 같게 답한다.
-  if (game.visibility === GAME_VISIBILITY.private) return GAME_NOT_FOUND_RESULT;
+  if (game.visibility === GAME_VISIBILITY.private) return { error: PRIVATE_GAME_APPLY_MESSAGE };
   if (game.selectionFinishedAt) return { error: SELECTION_FINISHED_APPLY_MESSAGE };
   if (game.hiddenAt) return { error: HIDDEN_GAME_APPLY_MESSAGE };
   if (await findActiveSanction({ executor: transaction, serverId, userId })) {

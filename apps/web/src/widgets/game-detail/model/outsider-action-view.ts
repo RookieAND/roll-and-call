@@ -1,4 +1,5 @@
 import {
+  GAME_VISIBILITY,
   isApplicationClosed,
   isSessionEnded,
   RECRUIT_METHOD,
@@ -19,6 +20,7 @@ export function outsiderActionView({
   now,
 }: Omit<ActionContext, "viewer" | "review">): GameActionView {
   if (isSessionEnded(game, now)) return { kind: GAME_ACTION_VIEW.endedOther };
+  if (game.visibility === GAME_VISIBILITY.private) return { kind: GAME_ACTION_VIEW.closedPrivate };
   if (game.scheduleMode === SCHEDULE_MODE.coordinate && isApplicationClosed(game, now)) {
     return { kind: GAME_ACTION_VIEW.closedScheduled, confirmedAt: game.confirmedAt! };
   }

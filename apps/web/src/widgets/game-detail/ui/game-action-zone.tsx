@@ -70,6 +70,8 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return <ClosedActions title="일정이 확정되어 신청을 받지 않습니다" />;
     case GAME_ACTION_VIEW.closed:
       return <ClosedActions title="모집이 끝났습니다" />;
+    case GAME_ACTION_VIEW.closedPrivate:
+      return <ClosedActions title="GM이 지정한 참여자만 함께하는 구인입니다" />;
     case GAME_ACTION_VIEW.sanctioned:
       return <SanctionedActions reason={view.reason} until={view.until} />;
     case GAME_ACTION_VIEW.conditionsUnmet:

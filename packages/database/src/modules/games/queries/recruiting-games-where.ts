@@ -22,7 +22,7 @@ export function recruitingGamesWhere({
 }) {
   const { full, ended, live } = gameBucketSql({ now });
   const status = filter.status ?? GAME_STATUS_FILTER.all;
-  const conditions: SQL[] = [searchableGamesWhere({ serverId, q: filter.q, endedPrivateAt: now })];
+  const conditions: SQL[] = [searchableGamesWhere({ serverId, q: filter.q })];
 
   if (filter.tab === GAME_TAB.past) {
     conditions.push(not(live));
