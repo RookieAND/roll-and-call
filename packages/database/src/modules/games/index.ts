@@ -13,6 +13,7 @@ export { expireSelection, type ExpireSelectionResult } from "./commands/expire-s
 export { drawLottery, type DrawLotteryResult } from "./commands/draw-lottery";
 export { deleteParticipant } from "./commands/delete-participant";
 export { notifyReviewAvailable } from "./commands/notify-review-available";
+export { getGameForCanvasStart } from "./queries/get-game-for-canvas-start";
 export { notifyPrivateSessions } from "./commands/notify-private-sessions";
 export { setSessionEndedAt } from "./commands/end-session";
 export { insertParticipant } from "./commands/insert-participant";

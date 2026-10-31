@@ -72,7 +72,12 @@ export async function notifyPrivateSessions({ now = new Date() }: { now?: Date }
         notifications,
       });
     }
-    return { notified, reminded: reminded.length, started: started.length };
+    return {
+      notified,
+      reminded: reminded.length,
+      started: started.length,
+      startedGameIds: started.map((game) => game.id),
+    };
   });
 }
 
