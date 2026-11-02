@@ -1,8 +1,7 @@
 "use client";
 
-import { Button, Checkbox, Chip, Grid, Sheet, Text, VStack, cn } from "@roll-and-call/ui";
+import { Button, Chip, Grid, Sheet, Text, VStack, cn } from "@roll-and-call/ui";
 import { xor } from "es-toolkit";
-import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
@@ -14,7 +13,9 @@ import { CHIP_HIT_AREA } from "../lib/chip-hit-area";
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
 import { EMPTY_FILTER_DRAFT, type FilterDraft } from "../model/filter-draft";
+import { PRIVATE_HINT, UNSCHEDULED_HINT } from "../model/filter-hints";
 import {
+  GAME_TAB,
   gameFilterCount,
   GAME_TIME_SLOTS,
   GAME_WEEKDAYS,
@@ -22,6 +23,7 @@ import {
 } from "../model/game-sort";
 import type { RuleOption } from "../model/rule-option";
 import { ruleSummary } from "../model/rule-summary";
+import { FilterCheckbox } from "./filter-checkbox";
 import { FilterSection } from "./filter-section";
 import { GameFilterButton } from "./game-filter-button";
 import { RuleField } from "./rule-field";
@@ -54,6 +56,7 @@ export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetP
         days: filter.days ?? [],
         times: filter.times ?? [],
         includeUnscheduled: filter.includeUnscheduled !== false,
+        includePrivate: filter.includePrivate !== false,
       });
       setDraftCount(count);
       setCounting(false);
@@ -141,28 +144,20 @@ export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetP
                     );
                   })}
                 </FilterSection>
-                <VStack gap="025">
-                  <Checkbox.Field>
-                    <Checkbox.Root
-                      checked={draft.includeUnscheduled}
-                      onCheckedChange={(checked) =>
-                        update({ ...draft, includeUnscheduled: checked })
-                      }
-                    >
-                      <Checkbox.Indicator>
-                        <Check size={14} strokeWidth={3} aria-hidden />
-                      </Checkbox.Indicator>
-                    </Checkbox.Root>
-                    <Checkbox.Label>일정 미정 구인도 보기</Checkbox.Label>
-                  </Checkbox.Field>
-                  <Text
-                    typography="body4"
-                    foreground="hint"
-                    className="pl-[calc(var(--spacing-250)+var(--spacing-125))] break-keep"
-                  >
-                    요일·시간대 조건과 관계없이 보입니다.
-                  </Text>
-                </VStack>
+                <FilterCheckbox
+                  label="일정 미정 구인도 보기"
+                  hint={UNSCHEDULED_HINT}
+                  checked={draft.includeUnscheduled}
+                  onCheckedChange={(checked) => update({ ...draft, includeUnscheduled: checked })}
+                />
+                {filter.tab === GAME_TAB.past && (
+                  <FilterCheckbox
+                    label="지정 구인도 보기"
+                    hint={PRIVATE_HINT}
+                    checked={draft.includePrivate}
+                    onCheckedChange={(checked) => update({ ...draft, includePrivate: checked })}
+                  />
+                )}
               </VStack>
             </Sheet.Body>
             <Sheet.Footer>

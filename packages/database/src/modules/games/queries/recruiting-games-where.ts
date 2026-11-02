@@ -8,6 +8,7 @@ import {
 
 import { gameBucketSql } from "./game-bucket-sql";
 import { gameFiltersWhere } from "./game-filters-where";
+import { publicVisibilityWhere } from "./public-visibility-where";
 import { searchableGamesWhere } from "./searchable-games-where";
 
 // 취소된 구인은 어느 탭에도 넣지 않는다.
@@ -28,6 +29,7 @@ export function recruitingGamesWhere({
     conditions.push(not(live));
     if (status === GAME_STATUS_FILTER.closed) conditions.push(not(ended));
     if (status === GAME_STATUS_FILTER.ended) conditions.push(ended);
+    if (filter.includePrivate === false) conditions.push(publicVisibilityWhere);
   } else {
     conditions.push(live);
     if (status === GAME_STATUS_FILTER.recruiting) conditions.push(not(full));

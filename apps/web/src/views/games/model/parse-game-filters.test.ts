@@ -12,6 +12,7 @@ describe("parseGameFilters", () => {
       days: [],
       times: [],
       includeUnscheduled: true,
+      includePrivate: true,
     });
   });
 
@@ -27,6 +28,7 @@ describe("parseGameFilters", () => {
       days: [0, 6],
       times: ["morning", "night"],
       includeUnscheduled: true,
+      includePrivate: true,
     });
   });
 
@@ -34,5 +36,10 @@ describe("parseGameFilters", () => {
     expect(parseGameFilters({ unscheduled: "0" }).includeUnscheduled).toBe(false);
     expect(parseGameFilters({ unscheduled: "1" }).includeUnscheduled).toBe(true);
     expect(parseGameFilters({ unscheduled: "false" }).includeUnscheduled).toBe(true);
+  });
+
+  it("designated=0만 지정 구인을 끈다", () => {
+    expect(parseGameFilters({ designated: "0" }).includePrivate).toBe(false);
+    expect(parseGameFilters({ designated: "1" }).includePrivate).toBe(true);
   });
 });

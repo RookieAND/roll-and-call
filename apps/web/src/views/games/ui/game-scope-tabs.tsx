@@ -34,6 +34,7 @@ export function GameScopeTabs({ filter, counts }: GameScopeTabsProps) {
                 days: filter.days,
                 times: filter.times,
                 includeUnscheduled: filter.includeUnscheduled,
+                includePrivate: filter.includePrivate,
                 tab,
               }),
             ),

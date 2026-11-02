@@ -17,6 +17,7 @@ export {
   GAME_TIME_SLOT,
   gameFilterCount,
   hasGameFilters,
+  hidesPrivateGames,
   type GameSort,
   type GameStatusFilter,
   type GameTab,

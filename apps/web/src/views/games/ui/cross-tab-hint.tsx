@@ -31,6 +31,7 @@ export function CrossTabHint({ filter, otherCount }: CrossTabHintProps) {
                 days: filter.days,
                 times: filter.times,
                 includeUnscheduled: filter.includeUnscheduled,
+                includePrivate: filter.includePrivate,
                 tab: otherTab,
               }),
             )}

@@ -16,6 +16,7 @@ export function filterParams({
   days,
   times,
   includeUnscheduled,
+  includePrivate,
   page,
 }: GamesFilter & { page?: number }) {
   return {
@@ -29,6 +30,7 @@ export function filterParams({
       .map((slot) => slot.key)
       .join(","),
     unscheduled: includeUnscheduled === false ? "0" : undefined,
+    designated: includePrivate === false ? "0" : undefined,
     page: page && page > 1 ? page : undefined,
   };
 }

@@ -23,9 +23,11 @@ export default async function Page({
     day?: string;
     time?: string;
     unscheduled?: string;
+    designated?: string;
   }>;
 }) {
-  const { page, q, sort, tab, status, rule, day, time, unscheduled } = await searchParams;
+  const { page, q, sort, tab, status, rule, day, time, unscheduled, designated } =
+    await searchParams;
   const gameTab = parseGameTab(tab);
   return (
     <GamesView
@@ -35,7 +37,7 @@ export default async function Page({
         sort: parseGameSort(sort),
         tab: gameTab,
         status: parseGameStatusFilter({ value: status, tab: gameTab }),
-        ...parseGameFilters({ rule, day, time, unscheduled }),
+        ...parseGameFilters({ rule, day, time, unscheduled, designated }),
       }}
     />
   );

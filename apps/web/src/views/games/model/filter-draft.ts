@@ -6,6 +6,7 @@ export interface FilterDraft {
   days: number[];
   times: GameTimeSlot[];
   includeUnscheduled: boolean;
+  includePrivate: boolean;
 }
 
 export const EMPTY_FILTER_DRAFT: FilterDraft = {
@@ -13,4 +14,5 @@ export const EMPTY_FILTER_DRAFT: FilterDraft = {
   days: [],
   times: [],
   includeUnscheduled: true,
+  includePrivate: true,
 };

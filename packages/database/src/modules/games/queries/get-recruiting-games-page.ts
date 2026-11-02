@@ -1,5 +1,5 @@
 import { db } from "#db/client";
-import { GAME_TAB, type GamesFilter } from "#db/modules/games/model/games-filter";
+import { type GamesFilter } from "#db/modules/games/model/games-filter";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games } from "#db/schema";
 
@@ -8,7 +8,7 @@ import { recruitingGamesWhere } from "./recruiting-games-where";
 
 export const GAMES_PAGE_SIZE = 9;
 
-// 지난 구인은 페이지를 넘기지 않고 "더 보기"로 늘린다: page n이면 처음부터 n쪽 분량.
+// 데스크톱은 두 탭 모두 "더 보기"로 늘려 page n이면 처음부터 n쪽 분량을 준다. 모바일 진행 중 탭은 그중 마지막 쪽만 보인다.
 // total은 목록과 같은 조건이라 지난 구인 [전체]에서는 취소된 카드까지 센다. 「더 보기」·쪽 번호에만 쓰고 화면 건수로 보이지 않는다.
 export async function getRecruitingGamesPage({
   serverId,
@@ -24,7 +24,6 @@ export async function getRecruitingGamesPage({
   const now = new Date();
   const where = recruitingGamesWhere({ serverId, filter, now });
   const current = Math.max(1, page);
-  const grows = filter.tab === GAME_TAB.past;
   const [rows, total] = await Promise.all([
     db.query.games.findMany({
       where,
@@ -36,8 +35,8 @@ export async function getRecruitingGamesPage({
           where: (participant, { eq }) => eq(participant.serverId, serverId),
         },
       },
-      limit: grows ? current * pageSize : pageSize,
-      offset: grows ? 0 : (current - 1) * pageSize,
+      limit: current * pageSize,
+      offset: 0,
     }),
     db.$count(games, where),
   ]);

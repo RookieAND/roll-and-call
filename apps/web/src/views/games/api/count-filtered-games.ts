@@ -13,7 +13,15 @@ import { parseGameStatusFilter } from "../model/parse-game-status-filter";
 import { parseGameTab } from "../model/parse-game-tab";
 import { statusCounts } from "../model/status-counts";
 
-type FilterParamKey = "q" | "tab" | "status" | "rule" | "day" | "time" | "unscheduled";
+type FilterParamKey =
+  | "q"
+  | "tab"
+  | "status"
+  | "rule"
+  | "day"
+  | "time"
+  | "unscheduled"
+  | "designated";
 
 const countSchema = z.object({ filter: z.record(z.string(), z.unknown()) });
 
@@ -37,6 +45,7 @@ export async function countFilteredGames({
       day: text(filter.day),
       time: text(filter.time),
       unscheduled: text(filter.unscheduled),
+      designated: text(filter.designated),
     }),
   });
   return statusCounts({ counts, tab })[status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0;

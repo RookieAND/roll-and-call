@@ -12,11 +12,13 @@ export function parseGameFilters({
   day,
   time,
   unscheduled,
+  designated,
 }: {
   rule?: string;
   day?: string;
   time?: string;
   unscheduled?: string;
+  designated?: string;
 }) {
   const split = (value: string | undefined) => (value ? value.split(",") : []);
   const rules = uniq(
@@ -30,5 +32,11 @@ export function parseGameFilters({
       .map(Number),
   ).toSorted((left, right) => left - right);
   const times = TIME_SLOT_ORDER.filter((slot) => split(time).includes(slot));
-  return { rules, days, times, includeUnscheduled: unscheduled !== "0" };
+  return {
+    rules,
+    days,
+    times,
+    includeUnscheduled: unscheduled !== "0",
+    includePrivate: designated !== "0",
+  };
 }

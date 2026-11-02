@@ -1,4 +1,5 @@
 import type { GamesFilter } from "./games-filter";
+import { hidesPrivateGames } from "./hides-private-games";
 
 export function gameFilterCount(filter: GamesFilter): number {
   const unscheduledCount = filter.includeUnscheduled === false ? 1 : 0;
@@ -6,6 +7,7 @@ export function gameFilterCount(filter: GamesFilter): number {
     (filter.rules?.length ?? 0) +
     (filter.days?.length ?? 0) +
     (filter.times?.length ?? 0) +
-    unscheduledCount
+    unscheduledCount +
+    (hidesPrivateGames(filter) ? 1 : 0)
   );
 }

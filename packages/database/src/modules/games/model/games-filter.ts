@@ -56,4 +56,6 @@ export type GamesFilter = {
   times?: GameTimeSlot[];
   // 없으면 true로 본다.
   includeUnscheduled?: boolean;
+  // false면 지난 구인 목록과 지난 구인 건수에서 지정(비공개) 구인을 뺀다. 없으면 true로 본다.
+  includePrivate?: boolean;
 };

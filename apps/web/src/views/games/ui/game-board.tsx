@@ -31,7 +31,11 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
   const [counts, allCounts, ruleOptions] = await Promise.all([
     getGamesCounts({ serverId: server.id, q: filter.q, filter }),
     filter.q || hasGameFilters(filter)
-      ? getGamesCounts({ serverId: server.id, q: undefined })
+      ? getGamesCounts({
+          serverId: server.id,
+          q: undefined,
+          filter: { includePrivate: filter.includePrivate },
+        })
       : null,
     listGameRuleOptions({ serverId: server.id, tab, now: new Date() }),
   ]);

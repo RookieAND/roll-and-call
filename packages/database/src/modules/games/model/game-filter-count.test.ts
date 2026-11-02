@@ -18,4 +18,11 @@ describe("gameFilterCount·hasGameFilters", () => {
     expect(hasGameFilters({ includeUnscheduled: false })).toBe(true);
     expect(hasGameFilters({ days: [3] })).toBe(true);
   });
+
+  it("지정 구인 끔은 지난 구인 탭에서만 1로 센다", () => {
+    expect(gameFilterCount({ tab: "past", includePrivate: false })).toBe(1);
+    expect(gameFilterCount({ tab: "live", includePrivate: false })).toBe(0);
+    expect(hasGameFilters({ tab: "past", includePrivate: false })).toBe(true);
+    expect(hasGameFilters({ tab: "live", includePrivate: false })).toBe(false);
+  });
 });
