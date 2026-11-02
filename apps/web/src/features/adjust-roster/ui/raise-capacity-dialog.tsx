@@ -29,8 +29,8 @@ export function RaiseCapacityDialog({
       pending={pending}
       onConfirm={onConfirm}
     >
-      <Card.Root padding="sm" radius={400} background="none" className="bg-gray-50 text-center">
-        <Text numeric typography="subtitle2">
+      <Card.Root padding="sm" radius={400} background="none" className="bg-gray-100">
+        <Text numeric typography="subtitle1">
           정원 {maxPlayers}명 → {maxPlayers + 1}명
         </Text>
       </Card.Root>

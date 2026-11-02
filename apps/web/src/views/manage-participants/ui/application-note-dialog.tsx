@@ -22,8 +22,8 @@ export function ApplicationNoteDialog({ member, onClose }: ApplicationNoteDialog
                 {`${toKst(member.joinedAt).format("M월 D일 HH:mm")} 신청`}
               </Text>
             </Dialog.Header>
-            <Dialog.Body className="max-h-[260px] rounded-400 border border-gray-200 px-150 py-125">
-              <Text typography="body3" className="whitespace-pre-wrap">
+            <Dialog.Body className="max-h-[260px] rounded-500 border border-gray-200 bg-gray-50 px-150 py-125">
+              <Text typography="body2" className="whitespace-pre-wrap">
                 {member.applicationNote}
               </Text>
             </Dialog.Body>

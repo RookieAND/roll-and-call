@@ -4,7 +4,7 @@ import { Button, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { toast, useAction, useDebouncedValue } from "@/shared/ui";
+import { SheetCloseIcon, toast, useAction, useDebouncedValue } from "@/shared/ui";
 
 import { addParticipants } from "../api/add-participants";
 import type { Candidate } from "../model/candidate";
@@ -135,6 +135,7 @@ export function DirectConfirmSheet({
                 {seats.label}
               </Text>
             )}
+            <SheetCloseIcon />
           </HStack>
 
           {notice && <SeatsFullNotice notice={notice} />}
@@ -168,17 +169,38 @@ export function DirectConfirmSheet({
             onToggle={toggle}
           />
 
-          <div className="sticky bottom-0 border-t border-gray-100 bg-surface px-250 pt-150 pb-250">
-            <Button
-              size="lg"
-              className="w-full"
-              disabled={selected.length === 0}
-              loading={pending}
-              onClick={confirm}
-            >
-              {selected.length > 0 ? `${selected.length}명 확정하기` : "확정하기"}
-            </Button>
-          </div>
+          <VStack
+            gap="100"
+            className="sticky bottom-0 border-t border-gray-100 bg-surface px-250 pt-150 pb-250"
+          >
+            {seatsFilled && !noSeats && (
+              <Text typography="body4" foreground="hint" render={<p />}>
+                남은 자리를 모두 채웠습니다
+              </Text>
+            )}
+            <HStack gap="100">
+              <Sheet.Close
+                render={
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="hidden flex-1 desktop:inline-flex"
+                  />
+                }
+              >
+                취소
+              </Sheet.Close>
+              <Button
+                size="lg"
+                className="flex-1"
+                disabled={selected.length === 0}
+                loading={pending}
+                onClick={confirm}
+              >
+                {selected.length > 0 ? `${selected.length}명 확정하기` : "확정하기"}
+              </Button>
+            </HStack>
+          </VStack>
         </VStack>
       </Sheet.Popup>
       <RaiseCapacityDialog

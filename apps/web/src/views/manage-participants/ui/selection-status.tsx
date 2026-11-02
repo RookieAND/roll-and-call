@@ -1,4 +1,4 @@
-import { Callout, VStack } from "@roll-and-call/ui";
+import { VStack } from "@roll-and-call/ui";
 import { CircleCheck } from "lucide-react";
 
 import { FinishSelectionCard } from "@/features/adjust-roster";
@@ -31,12 +31,7 @@ export function SelectionStatus({ gameId, summary }: SelectionStatusProps) {
   return (
     <VStack gap="175">
       <DeadlineCard summary={summary} />
-      {showEmpty ? (
-        <Callout.Root colorPalette="gray" size="sm">
-          <Callout.Icon />
-          <Callout.Description>아직 참여 신청자가 없습니다</Callout.Description>
-        </Callout.Root>
-      ) : (
+      {!showEmpty && (
         <FinishSelectionCard
           gameId={gameId}
           confirmedCount={summary.confirmedCount}

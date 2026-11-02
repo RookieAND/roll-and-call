@@ -45,3 +45,4 @@ export { ServerNavProvider } from "./server-nav-provider";
 export { ServerSwitcher } from "./server-switcher";
 export type { MenuServer } from "./menu-server";
 export { useBeforeUnloadWarning } from "./use-before-unload-warning";
+export { SheetCloseIcon } from "./sheet-close-icon";

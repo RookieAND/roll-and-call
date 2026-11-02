@@ -99,9 +99,10 @@ export function DrawLotteryCard({
             </>
           ) : (
             <>
-              신청 {applicantCount}명 중 {drawnCount}명을 무작위로 뽑습니다.
+              신청 <b className="text-fg-normal">{applicantCount}명</b> 중{" "}
+              <b className="text-fg-normal">{drawnCount}명</b>을 무작위로 뽑습니다.
               <br />
-              나머지 {leftoverCount}명은 대기로 남습니다.
+              나머지 <b className="text-fg-normal">{leftoverCount}명</b>은 대기로 남습니다.
             </>
           )
         }

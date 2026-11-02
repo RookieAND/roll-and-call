@@ -25,7 +25,7 @@ export function MemberSheetHeader({
       avatarUrl={member.avatarUrl}
       subline={subline.text}
       sublineForeground={subline.foreground}
-      className="flex-none border-b border-gray-100 pb-175"
+      className="min-w-0 flex-1"
     />
   );
 }

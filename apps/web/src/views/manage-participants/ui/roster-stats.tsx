@@ -30,11 +30,10 @@ export function RosterStats({
     );
   }
   if (summary.beforeDraw || summary.noApplicantsClosed) {
-    const drawTone = summary.noApplicantsClosed ? STAT_TONE.neutral : STAT_TONE.primary;
     return (
       <Grid cols={2} gap="100">
         <RosterStat label="신청" value={`${summary.applicantCount}명`} />
-        <RosterStat label="뽑을 인원" value={`${summary.drawCount}명`} tone={drawTone} />
+        <RosterStat label="뽑을 인원" value={`${summary.drawCount}명`} tone={STAT_TONE.primary} />
       </Grid>
     );
   }

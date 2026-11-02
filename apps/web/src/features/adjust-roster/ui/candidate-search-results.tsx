@@ -32,12 +32,7 @@ export function CandidateSearchResults({
 }: CandidateSearchResultsProps) {
   if (!typedEnough) {
     return (
-      <Text
-        typography="body3"
-        foreground="hint"
-        render={<p />}
-        className="px-400 pt-150 pb-500 text-center"
-      >
+      <Text typography="body3" foreground="hint" render={<p />} className="px-250 pt-150 pb-500">
         함께할 사람의 닉네임이나 디스코드 아이디를 적어 주세요.
         <br />
         두 글자부터 찾기 시작합니다.
@@ -63,7 +58,7 @@ export function CandidateSearchResults({
 
   return (
     <VStack gap={0} className="pb-125">
-      <Text typography="body4" weight="bold" foreground="hint" className="px-250 pb-100">
+      <Text typography="body4" foreground="hint" className="px-250 pb-100">
         검색 결과 {candidates.length}명
       </Text>
       {/* 줄 높이 60px × 4줄까지만 보이고 나머지는 목록 안에서 스크롤한다. */}
@@ -85,11 +80,6 @@ export function CandidateSearchResults({
           );
         })}
       </Card.Root>
-      {seatsFilled && !noSeats && (
-        <Text typography="body4" foreground="hint" render={<p />} className="px-250 pt-100">
-          남은 자리를 모두 채웠습니다.
-        </Text>
-      )}
     </VStack>
   );
 }

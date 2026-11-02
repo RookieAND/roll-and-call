@@ -68,6 +68,7 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
         </>
       }
       confirmLabel={failed ? "다시 시도" : "불참으로 내보내기"}
+      cancelLabel="닫기"
       danger
       pending={pending}
       onConfirm={markAbsent}

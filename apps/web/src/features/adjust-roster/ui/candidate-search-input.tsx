@@ -21,7 +21,7 @@ export function CandidateSearchInput({ value, onChange, disabled }: CandidateSea
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="닉네임 또는 디스코드 아이디"
-        aria-label="참여자 찾기"
+        aria-label="참여자 검색"
         enterKeyHint="search"
         className="h-[46px] pr-11 pl-11"
       />

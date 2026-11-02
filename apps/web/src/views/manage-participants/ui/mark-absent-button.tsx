@@ -11,7 +11,7 @@ export function MarkAbsentButton({ username, onClick }: MarkAbsentButtonProps) {
     <IconButton
       aria-label={`${username} 불참으로 내보내기`}
       onClick={onClick}
-      className="h-11 w-11 rounded-400 text-danger-600"
+      className="h-11 w-11 rounded-400"
     >
       <LogOut size={18} aria-hidden />
     </IconButton>

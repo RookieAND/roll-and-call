@@ -38,7 +38,7 @@ export function CandidateRow({ candidate, picked, capped, onToggle }: CandidateR
         <Badge className="flex-none">활동 정지 중</Badge>
       ) : (
         <Checkbox.Root
-          checked={picked || joined}
+          checked={picked}
           disabled={disabled}
           onCheckedChange={onToggle}
           aria-label={candidate.username}

@@ -1,11 +1,18 @@
 "use client";
 
-import { Button, Field, Grid, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Button, Field, Grid, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 import { addDays, fromKstDateTimeInput } from "@/shared/lib";
-import { DatePicker, DateTimePicker, LineBreaks, toast, useAction } from "@/shared/ui";
+import {
+  DatePicker,
+  DateTimePicker,
+  LineBreaks,
+  SheetCloseIcon,
+  toast,
+  useAction,
+} from "@/shared/ui";
 
 import { openNextRound } from "../api/open-next-round";
 import { nextRoundGuide } from "../model/next-round-guide";
@@ -68,12 +75,15 @@ export function NextRoundSheet({
     <Sheet.Root open={open} onOpenChange={changeOpen}>
       <Sheet.Popup className="max-h-[85dvh] overflow-y-auto">
         <Sheet.Handle />
-        <Sheet.Header>
-          <Sheet.Title className="mb-0">다음 회차 만들기</Sheet.Title>
-          <Text typography="body3" foreground="muted">
-            {game.title} · 대기 {waitingCount}명
-          </Text>
-        </Sheet.Header>
+        <HStack align="start" gap="100">
+          <Sheet.Header className="min-w-0 flex-1">
+            <Sheet.Title className="mb-0">다음 회차 만들기</Sheet.Title>
+            <Text typography="body3" foreground="muted">
+              {game.title} · 대기 {waitingCount}명
+            </Text>
+          </Sheet.Header>
+          <SheetCloseIcon />
+        </HStack>
         <VStack gap="200">
           <NextRoundCarryList waitingCount={waitingCount} />
           {coordinate ? (

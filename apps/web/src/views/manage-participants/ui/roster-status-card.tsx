@@ -37,29 +37,13 @@ export function RosterStatusCard({ gameId, summary }: RosterStatusCardProps) {
       />
     );
   }
-  if (summary.noApplicantsClosed) {
-    return (
-      <VStack gap="100">
-        <DeadlineCard summary={summary} />
-        <Callout.Root colorPalette="gray" size="sm">
-          <Callout.Icon />
-          <Callout.Description>신청자 없이 모집이 끝났습니다</Callout.Description>
-        </Callout.Root>
-      </VStack>
-    );
-  }
+  if (summary.noApplicantsClosed) return <DeadlineCard summary={summary} />;
   if (summary.isSelection) return <SelectionStatus gameId={gameId} summary={summary} />;
   if (summary.beforeDraw) {
     const hasApplicants = summary.applicantCount > 0;
     return (
       <VStack gap="175">
         <DeadlineCard summary={summary} />
-        {!hasApplicants && (
-          <Callout.Root colorPalette="gray" size="sm">
-            <Callout.Icon />
-            <Callout.Description>아직 참여 신청자가 없습니다</Callout.Description>
-          </Callout.Root>
-        )}
         {hasApplicants && (
           <DrawLotteryCard
             gameId={gameId}

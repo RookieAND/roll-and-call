@@ -1,7 +1,9 @@
 "use client";
 
-import { VStack, Sheet } from "@roll-and-call/ui";
+import { HStack, VStack, Sheet } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
+
+import { SheetCloseIcon } from "@/shared/ui";
 
 import type { MemberSummary } from "../model/member-summary";
 import type { RosterContext } from "../model/roster-context";
@@ -38,12 +40,15 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
         <Sheet.Handle />
         {member && (
           <VStack gap={0}>
-            <MemberSheetHeader
-              member={member}
-              isCoordinate={isCoordinate}
-              beforeDraw={beforeDraw}
-              started={started}
-            />
+            <HStack align="start" gap="100" className="border-b border-gray-100 pb-175">
+              <MemberSheetHeader
+                member={member}
+                isCoordinate={isCoordinate}
+                beforeDraw={beforeDraw}
+                started={started}
+              />
+              <SheetCloseIcon />
+            </HStack>
             {isConfirmed && !started && (
               <DemoteMemberItem
                 gameId={gameId}
