@@ -48,6 +48,7 @@ export function toPastSessionCard({
     waitlistRank,
     absent,
     finished: Boolean(finished),
+    attendancePending: player && facts.attendanceDue,
     when,
     ago,
     endDate: game.endDate,
