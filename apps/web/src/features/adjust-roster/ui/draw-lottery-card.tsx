@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useServerPath } from "@/shared/lib";
-import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
 
@@ -87,6 +87,7 @@ export function DrawLotteryCard({
       </Callout.Root>
 
       <ConfirmDialog
+        titleClassName={LARGE_DIALOG_TITLE_CLASS}
         open={confirming}
         onOpenChange={setConfirming}
         title={skipsDraw ? "지금 확정할까요?" : "지금 추첨할까요?"}

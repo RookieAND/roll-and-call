@@ -5,7 +5,7 @@ import { Button, Callout } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useState } from "react";
 
-import { ConfirmDialog, LineBreaks, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { finishSelection } from "../api/finish-selection";
 import { finishSelectionLines } from "../model/finish-selection-lines";
@@ -78,6 +78,7 @@ export function FinishSelectionCard({
       </Callout.Root>
 
       <ConfirmDialog
+        titleClassName={LARGE_DIALOG_TITLE_CLASS}
         open={confirming}
         onOpenChange={setConfirming}
         title="선발을 마칠까요?"

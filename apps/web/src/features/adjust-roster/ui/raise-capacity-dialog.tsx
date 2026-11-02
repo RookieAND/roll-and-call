@@ -2,7 +2,7 @@
 
 import { Card, Text } from "@roll-and-call/ui";
 
-import { ConfirmDialog } from "@/shared/ui";
+import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS } from "@/shared/ui";
 
 interface RaiseCapacityDialogProps {
   open: boolean;
@@ -21,6 +21,7 @@ export function RaiseCapacityDialog({
 }: RaiseCapacityDialogProps) {
   return (
     <ConfirmDialog
+      titleClassName={LARGE_DIALOG_TITLE_CLASS}
       open={open}
       onOpenChange={onOpenChange}
       title="정원을 1명 늘릴까요?"

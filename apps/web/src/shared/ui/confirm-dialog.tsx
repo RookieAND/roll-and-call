@@ -7,6 +7,7 @@ interface ConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
+  titleClassName?: string;
   description?: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
@@ -22,6 +23,7 @@ export function ConfirmDialog({
   open,
   onOpenChange,
   title,
+  titleClassName,
   description,
   confirmLabel = "확인",
   cancelLabel = "취소",
@@ -45,7 +47,7 @@ export function ConfirmDialog({
     <AlertDialog.Root open={open} onOpenChange={handleOpenChange}>
       <AlertDialog.Popup initialFocus={danger ? cancelRef : undefined}>
         <AlertDialog.Header>
-          <AlertDialog.Title>{title}</AlertDialog.Title>
+          <AlertDialog.Title className={titleClassName}>{title}</AlertDialog.Title>
           {description && <AlertDialog.Description>{description}</AlertDialog.Description>}
         </AlertDialog.Header>
         {children && <AlertDialog.Body>{children}</AlertDialog.Body>}

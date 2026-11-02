@@ -4,7 +4,7 @@ import { Callout, cn, Sheet, VStack } from "@roll-and-call/ui";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, toast, useAction } from "@/shared/ui";
 
 import { removeParticipant } from "../api/remove-participant";
 import type { MemberSummary } from "../model/member-summary";
@@ -51,6 +51,7 @@ export function RemoveMemberItem({
         <MenuItemBody label="내보내기" />
       </Sheet.Item>
       <ConfirmDialog
+        titleClassName={LARGE_DIALOG_TITLE_CLASS}
         open={confirming}
         onOpenChange={setConfirming}
         title="참여자 내보내기"

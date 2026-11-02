@@ -46,3 +46,4 @@ export { ServerSwitcher } from "./server-switcher";
 export type { MenuServer } from "./menu-server";
 export { useBeforeUnloadWarning } from "./use-before-unload-warning";
 export { SheetCloseIcon } from "./sheet-close-icon";
+export { LARGE_DIALOG_TITLE_CLASS } from "./large-dialog-title-class";

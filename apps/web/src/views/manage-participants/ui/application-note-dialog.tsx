@@ -2,6 +2,7 @@ import { Button, Dialog, Text } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { toKst } from "@/shared/lib";
+import { LARGE_DIALOG_TITLE_CLASS } from "@/shared/ui";
 
 import type { ManagedMember } from "../model/managed-member";
 
@@ -17,7 +18,9 @@ export function ApplicationNoteDialog({ member, onClose }: ApplicationNoteDialog
         {member && (
           <>
             <Dialog.Header>
-              <Dialog.Title>{`${member.username}님의 신청글`}</Dialog.Title>
+              <Dialog.Title
+                className={LARGE_DIALOG_TITLE_CLASS}
+              >{`${member.username}님의 신청글`}</Dialog.Title>
               <Text typography="body4" foreground="muted" numeric>
                 {`${toKst(member.joinedAt).format("M월 D일 HH:mm")} 신청`}
               </Text>

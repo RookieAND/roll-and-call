@@ -5,7 +5,7 @@ import { isNull } from "es-toolkit";
 import { unstable_rethrow } from "next/navigation";
 import { useId, useState, useTransition } from "react";
 
-import { ConfirmDialog, handleActionResult, toast } from "@/shared/ui";
+import { ConfirmDialog, handleActionResult, LARGE_DIALOG_TITLE_CLASS, toast } from "@/shared/ui";
 
 import { removeParticipant } from "../api/remove-participant";
 import { ABSENCE_REASON_MAX_LENGTH } from "../model/absence-reason-of";
@@ -57,6 +57,7 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
 
   return (
     <ConfirmDialog
+      titleClassName={LARGE_DIALOG_TITLE_CLASS}
       open={!isNull(member)}
       onOpenChange={close}
       title="불참으로 내보내기"

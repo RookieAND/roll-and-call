@@ -5,9 +5,10 @@ import { CopyLinkButton } from "./copy-link-button";
 interface RosterEmptyStateProps {
   gameId: string;
   closed: boolean;
+  selection: boolean;
 }
 
-export function RosterEmptyState({ gameId, closed }: RosterEmptyStateProps) {
+export function RosterEmptyState({ gameId, closed, selection }: RosterEmptyStateProps) {
   if (closed) {
     return (
       <EmptyState
@@ -23,6 +24,9 @@ export function RosterEmptyState({ gameId, closed }: RosterEmptyStateProps) {
         }
       />
     );
+  }
+  if (selection) {
+    return <EmptyState image="empty-party" size="section" title="아직 참여 신청자가 없습니다" />;
   }
   return (
     <EmptyState
