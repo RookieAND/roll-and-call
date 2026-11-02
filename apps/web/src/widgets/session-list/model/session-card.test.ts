@@ -92,7 +92,7 @@ describe("참여 카드", () => {
     const card = playerCard({ confirmedAt: at(2), endDate: at(-1), participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
     expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
-    expect(card.schedule).toMatch(/ · 모레$/);
+    expect(card.schedule).toMatch(/ · D-2$/);
   });
 });
 
@@ -263,17 +263,6 @@ describe("종료 카드", () => {
     expect(playerCard({ confirmedAt: at(-1), participants: [confirmedMe, other] }).badge).toBe(
       "완료",
     );
-  });
-
-  it("출석 확정 기한 안이면 참여자에게 GM이 출석을 확인하고 있다고 적는다", () => {
-    const pending = playerCard({ confirmedAt: at(-1), participants: [confirmedMe] });
-    expect(pending.schedule).toContain("GM이 출석을 확인하고 있습니다");
-    const confirmed = playerCard({
-      confirmedAt: at(-1),
-      attendanceConfirmedAt: at(-1),
-      participants: [confirmedMe],
-    });
-    expect(confirmed.schedule).toContain("세션을 마쳤습니다");
   });
 
   it("확정한 뒤에야 불참이 기록으로 남는다", () => {

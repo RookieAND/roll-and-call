@@ -32,14 +32,14 @@ export function GameKindField({ value, onChange, locked = false }: GameKindField
       </Field.Root>
       {value === GAME_KIND.briefing && (
         <Text typography="body4" foreground="muted">
-          롤앤콜이 무엇인지 설명하는 모집이에요
+          롤앤콜이 무엇인지 설명하는 모집입니다.
         </Text>
       )}
       {locked && (
         <HStack align="center" gap="075">
           <Lock size={15} strokeWidth={2.2} aria-hidden className="flex-none text-hint" />
           <Text typography="body3" foreground="muted">
-            신청자가 생겨 구분을 바꿀 수 없어요
+            신청자가 생겨 구분을 바꿀 수 없습니다.
           </Text>
         </HStack>
       )}
