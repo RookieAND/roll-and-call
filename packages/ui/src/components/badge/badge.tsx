@@ -18,8 +18,13 @@ const badge = cva(
         danger: "bg-danger-50 text-danger-600",
         discord: "bg-discord text-white",
       },
+      // solid는 끝난 이유처럼 먼저 읽혀야 하는 상태에만 쓴다. 지금은 danger만 있다.
+      variant: { soft: "", solid: "" },
     },
-    defaultVariants: { colorPalette: "gray" },
+    compoundVariants: [
+      { variant: "solid", colorPalette: "danger", className: "bg-danger-solid text-on-primary" },
+    ],
+    defaultVariants: { colorPalette: "gray", variant: "soft" },
   },
 );
 
@@ -29,13 +34,14 @@ export interface BadgeProps extends StateComponentProps<"span", BadgeState>, Bad
 
 export function Badge({
   colorPalette = "gray",
+  variant = "soft",
   className,
   style,
   render,
   ref,
   ...props
 }: BadgeProps) {
-  const state = { colorPalette };
+  const state = { colorPalette, variant };
   return useRender({
     ref,
     defaultTagName: "span",
@@ -44,7 +50,7 @@ export function Badge({
     stateAttributesMapping: { colorPalette: (value) => ({ "data-color-palette": String(value) }) },
     props: {
       "data-slot": "badge",
-      className: cn(badge({ colorPalette }), resolveStateProp({ prop: className, state })),
+      className: cn(badge({ colorPalette, variant }), resolveStateProp({ prop: className, state })),
       style: resolveStateProp({ prop: style, state }),
       ...props,
     },

@@ -41,7 +41,7 @@ export function SessionCard({ model }: SessionCardProps) {
   const titleForeground = sessionTitleForeground(model);
   // 취소됨·불참은 붉은 카드와 꽉 찬 붉은 배지로 끝난 이유를 먼저 보인다.
   const dangerCard = model.urgent || model.titleDanger;
-  const solidBadge = model.titleDanger;
+  const badgeVariant = model.titleDanger ? "solid" : "soft";
 
   const captionForeground = model.caption?.strong ? "primary" : "hint";
   const captionWeight = model.caption?.strong ? "bold" : "regular";
@@ -86,7 +86,8 @@ export function SessionCard({ model }: SessionCardProps) {
             </Text>
             <Badge
               colorPalette={model.badgeColor}
-              className={cn("desktop:order-1", solidBadge && "bg-danger-solid text-on-primary")}
+              variant={badgeVariant}
+              className="desktop:order-1"
             >
               {model.badge}
             </Badge>
