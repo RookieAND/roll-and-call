@@ -33,7 +33,6 @@ describe("진행 중 칩과 건수", () => {
   it("운영 탭에는 모집 중 칩이 없다", () => {
     expect(SESSION_CHIPS[SESSION_ROLE.host].map((chip) => chip.label)).toEqual([
       "진행 중",
-      "조율 중",
       "확정",
       "종료",
     ]);

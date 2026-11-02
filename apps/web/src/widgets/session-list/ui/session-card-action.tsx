@@ -1,4 +1,4 @@
-import { Button } from "@roll-and-call/ui";
+import { Badge, Button } from "@roll-and-call/ui";
 
 import { CancelWaitlistButton } from "@/features/join-game";
 import { ServerLink } from "@/shared/ui";
@@ -19,6 +19,12 @@ const ACTION_LOOK: Partial<Record<SessionActionKind, ActionLook>> = {
   [SESSION_ACTION_KIND.confirmTime]: { variant: "solid", colorPalette: "success" },
   [SESSION_ACTION_KIND.writeReview]: { variant: "solid", colorPalette: "primary" },
   [SESSION_ACTION_KIND.viewReview]: { variant: "outline", colorPalette: "gray" },
+};
+// 꽉 찬 버튼 위에서는 반투명 흰 알약, 나머지 버튼 위에서는 회색 알약이다.
+const ACTION_BADGE_CLASS: Record<ActionLook["variant"], string> = {
+  solid: "bg-white/20 text-current",
+  outline: "bg-secondary text-current",
+  tinted: "bg-secondary text-current",
 };
 const DEFAULT_LOOK: ActionLook = { variant: "tinted", colorPalette: "primary" };
 
@@ -51,6 +57,11 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
       className="mt-050 w-full"
     >
       {action.label}
+      {action.badge && (
+        <Badge colorPalette="gray" className={ACTION_BADGE_CLASS[look.variant]}>
+          {action.badge}
+        </Badge>
+      )}
     </Button>
   );
 }

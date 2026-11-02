@@ -18,14 +18,12 @@ export const SESSION_CHIPS: Record<
 > = {
   [SESSION_ROLE.player]: [
     { key: ONGOING_CHIP, label: "진행 중" },
-    { key: SESSION_CHIP.scheduling, label: "조율 중" },
     { key: SESSION_CHIP.confirmed, label: "확정" },
     { key: SESSION_CHIP.waiting, label: "대기" },
     { key: SESSION_CHIP.ended, label: "종료" },
   ],
   [SESSION_ROLE.host]: [
     { key: ONGOING_CHIP, label: "진행 중" },
-    { key: SESSION_CHIP.scheduling, label: "조율 중" },
     { key: SESSION_CHIP.confirmed, label: "확정" },
     { key: SESSION_CHIP.ended, label: "종료" },
   ],

@@ -8,9 +8,9 @@ import {
   type SessionContext,
 } from "./session-card-model";
 
-type ReviewNote = Pick<SessionCardModel, "caption" | "action">;
+type ReviewNote = Pick<SessionCardModel, "caption" | "action" | "scheduleNote">;
 
-const NONE: ReviewNote = { caption: null, action: null };
+const NONE: ReviewNote = { caption: null, action: null, scheduleNote: null };
 
 export function reviewNote({
   game,
@@ -27,22 +27,28 @@ export function reviewNote({
     const editDeadline = reviewEditDeadline(review.createdAt);
     if (review.removedAt || editDeadline.getTime() <= now.getTime()) return NONE;
     return {
-      caption: { text: `수정 가능 · ${formatDday(ddayKst(editDeadline, now))}`, strong: false },
-      action: { kind: SESSION_ACTION_KIND.viewReview, label: "내 후기 보기", href: "/me/reviews" },
+      ...NONE,
+      action: {
+        kind: SESSION_ACTION_KIND.viewReview,
+        label: "내 후기 보기",
+        href: "/me/reviews",
+        badge: `수정 ${formatDday(ddayKst(editDeadline, now))}`,
+      },
     };
   }
 
   const writeDeadline = reviewWriteDeadline(game);
   if (!writeDeadline) return NONE;
   if (writeDeadline.getTime() <= now.getTime()) {
-    return { ...NONE, caption: { text: "작성 기간 지남", strong: false } };
+    return { ...NONE, scheduleNote: "후기 작성 기간이 지났습니다" };
   }
   return {
-    caption: { text: `후기 마감 ${formatDday(ddayKst(writeDeadline, now))}`, strong: true },
+    ...NONE,
     action: {
       kind: SESSION_ACTION_KIND.writeReview,
       label: "후기 쓰기",
       href: `/games/${game.id}/review`,
+      badge: formatDday(ddayKst(writeDeadline, now)),
     },
   };
 }

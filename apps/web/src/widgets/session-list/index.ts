@@ -12,6 +12,7 @@ export {
 } from "./model/session-tabs";
 export { SESSION_CHIP } from "./model/session-card-model";
 export { isOngoingCard } from "./model/is-ongoing-card";
+export { isInSessionChip } from "./model/is-in-session-chip";
 export { countableCards } from "./model/countable-cards";
 export { SessionCountStats } from "./ui/session-count-stats";
 export { type TodoList } from "./model/list-todos";

@@ -137,18 +137,18 @@ describe("취소된 구인", () => {
   const cancelled = (partial: Partial<SessionGame>) =>
     ({ cancelledAt: at(-2), participants: [confirmedMe], ...partial }) as Partial<SessionGame>;
 
-  it("두 탭 모두 흐린 취소됨 카드로 종료 칩에 남는다", () => {
+  it("두 탭 모두 붉은 취소됨 카드로 종료 칩에 남는다", () => {
     for (const card of [
       playerCard(cancelled({ cancelKind: "gm", cancelReason: "GM 사정" })),
       hostCard(cancelled({ cancelKind: "gm", cancelReason: "GM 사정" })),
     ]) {
       expect(card.chip).toBe(SESSION_CHIP.ended);
       expect(card.badge).toBe("취소됨");
-      expect(card.badgeColor).toBe("gray");
+      expect(card.badgeColor).toBe("danger");
       expect(card.cancelled).toBe(true);
       expect(card.action).toBeNull();
       expect(card.todo).toBeNull();
-      expect(card).toMatchObject({ schedule: "9월 13일", scheduleNote: "GM 사정" });
+      expect(card).toMatchObject({ schedule: "9/13", scheduleNote: "GM 사정" });
     }
   });
 
@@ -167,17 +167,20 @@ describe("취소된 구인", () => {
     expect(sessions[SESSION_ROLE.player].map((card) => card.badge)).toEqual(["취소됨"]);
   });
 
-  it("운영진·자동 취소 문구, 사유 없는 GM 취소는 날짜만", () => {
+  it("운영진·자동 취소 문구, 사유 없는 GM 취소는 기본 문장", () => {
     expect(playerCard(cancelled({ cancelKind: "staff" })).scheduleNote).toBe(
-      "운영진이 취소한 구인입니다",
+      "운영진이 구인을 취소했습니다",
     );
     expect(playerCard(cancelled({ cancelKind: "auto" })).scheduleNote).toBe(
       "GM이 서버를 나가 취소되었습니다",
     );
     expect(hostCard(cancelled({ cancelKind: "gm", cancelReason: null }))).toMatchObject({
-      schedule: "9월 13일",
-      scheduleNote: null,
+      schedule: "9/13",
+      scheduleNote: "GM이 구인을 취소했습니다",
     });
+    expect(
+      hostCard(cancelled({ cancelKind: "gm", cancelReason: null, confirmedAt: at(1) })).schedule,
+    ).toMatch(/ 예정$/);
   });
 });
 

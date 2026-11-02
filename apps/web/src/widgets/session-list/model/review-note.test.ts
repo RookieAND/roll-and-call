@@ -23,19 +23,20 @@ describe("reviewNote", () => {
       game: { ...game, attendanceConfirmedAt: null },
       context: context(),
     });
-    expect(note.caption?.text).toBe("후기 마감 D-2");
-    expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
+    expect(note.action).toMatchObject({ kind: SESSION_ACTION_KIND.writeReview, badge: "D-2" });
   });
 
   it("아직 안 썼으면 마감 D-n과 후기 쓰기를 단다", () => {
     const note = reviewNote({ game, context: context() });
-    expect(note.caption).toEqual({ text: "후기 마감 D-2", strong: true });
-    expect(note.action?.kind).toBe(SESSION_ACTION_KIND.writeReview);
+    expect(note.caption).toBeNull();
+    expect(note.action).toMatchObject({ kind: SESSION_ACTION_KIND.writeReview, badge: "D-2" });
   });
 
   it("마감은 종료 판정 + 7일이라 출석 확정 시각과 무관하다", () => {
     const old = { ...game, confirmedAt: new Date(NOW.getTime() - 9 * DAY) };
-    expect(reviewNote({ game: old, context: context() }).caption?.text).toBe("작성 기간 지남");
+    expect(reviewNote({ game: old, context: context() }).scheduleNote).toBe(
+      "후기 작성 기간이 지났습니다",
+    );
   });
 
   it("썼으면 수정 기한과 내 후기 보기를 단다", () => {
@@ -45,8 +46,7 @@ describe("reviewNote", () => {
         ["game", { createdAt: new Date(NOW.getTime() - 5 * DAY), removedAt: null }],
       ]),
     });
-    expect(note.caption?.text).toBe("수정 가능 · D-2");
-    expect(note.action?.kind).toBe(SESSION_ACTION_KIND.viewReview);
+    expect(note.action).toMatchObject({ kind: SESSION_ACTION_KIND.viewReview, badge: "수정 D-2" });
   });
 
   it("기한이 지났거나 남의 프로필이면 버튼이 없다", () => {
@@ -55,7 +55,7 @@ describe("reviewNote", () => {
       confirmedAt: new Date(NOW.getTime() - 20 * DAY),
       attendanceConfirmedAt: new Date(NOW.getTime() - 20 * DAY),
     };
-    expect(reviewNote({ game: late, context: context() }).caption?.text).toBe("작성 기간 지남");
-    expect(reviewNote({ game, context: { ...context(), readOnly: true } }).caption).toBeNull();
+    expect(reviewNote({ game: late, context: context() }).action).toBeNull();
+    expect(reviewNote({ game, context: { ...context(), readOnly: true } }).action).toBeNull();
   });
 });

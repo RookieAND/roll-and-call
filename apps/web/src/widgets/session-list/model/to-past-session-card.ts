@@ -1,7 +1,7 @@
 import { isNull } from "es-toolkit";
 
 import { SESSION_ROLE, SESSION_STATE, splitRoster, type SessionGame } from "@/entities/game";
-import { formatDateTime } from "@/shared/lib";
+import { formatMonthDayTime } from "@/shared/lib";
 
 import { confirmAttendanceTodo } from "./confirm-attendance-todo";
 import type { SessionFacts } from "./derive-session-facts";
@@ -38,7 +38,7 @@ export function toPastSessionCard({
   // 남의 세션 기록에서는 불참·내보냄도 다른 끝난 세션처럼 보인다(R13).
   const absent = player && !context.readOnly && viewerAbsent && Boolean(game.confirmedAt);
 
-  const when = game.confirmedAt ? formatDateTime(game.confirmedAt) : null;
+  const when = game.confirmedAt ? formatMonthDayTime(game.confirmedAt) : null;
   const ending = pastEnding({
     waitlistRank,
     absent,
@@ -55,11 +55,10 @@ export function toPastSessionCard({
   const review =
     player && finished && !absent && !waitlistRank
       ? reviewNote({ game, context })
-      : { caption: null, action: null };
+      : { caption: null, action: null, scheduleNote: null };
   const hostAction = context.readOnly
     ? null
     : (hostPastAction({ game, finished: Boolean(finished) }) ?? hostMenuAction(game.id));
-  const absentCaption = absent && !context.readOnly ? { text: "불참 처리됨", strong: false } : null;
 
   return {
     ...base,
@@ -68,12 +67,14 @@ export function toPastSessionCard({
     badgeColor: absent ? "danger" : "gray",
     titleDanger: absent,
     schedule: ending.schedule,
-    scheduleNote: attendanceTodo ? "출석 확인이 남아 있습니다" : ending.note,
+    scheduleNote: attendanceTodo
+      ? "출석 확인이 남아 있습니다"
+      : (review.scheduleNote ?? ending.note),
     scheduleTone: pastScheduleTone({ absent, attendancePending: Boolean(attendanceTodo) }),
     scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,
     action: player ? review.action : hostAction,
-    caption: review.caption ?? absentCaption,
+    caption: review.caption,
     todo: attendanceTodo,
     waitingCount: facts.waitingCount,
     // 부호를 뒤집어 최근에 끝난 것부터 온다.

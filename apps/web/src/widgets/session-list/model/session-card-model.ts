@@ -48,6 +48,8 @@ export type SessionAction = {
   kind: SessionActionKind;
   label: string;
   href: string;
+  // 버튼 안 오른쪽 알약(후기 마감 D-n 등)
+  badge?: string;
 };
 
 // sortAt은 같은 종류 안에서 가까운 순으로 세울 때 쓰는 시각(ISO)이다.

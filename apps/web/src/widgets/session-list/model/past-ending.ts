@@ -1,5 +1,5 @@
 import type { SessionGame } from "@/entities/game";
-import { formatDate } from "@/shared/lib";
+import { formatMonthDay } from "@/shared/lib";
 
 export function pastEnding({
   waitlistRank,
@@ -19,5 +19,5 @@ export function pastEnding({
   }
   if (absent) return { badge: "불참", schedule: when ?? "", note: "참석하지 않았습니다" };
   if (finished) return { badge: "완료", schedule: when ?? "", note: null };
-  return { badge: "무산", schedule: formatDate(endDate), note: "일정을 정하지 못했습니다" };
+  return { badge: "무산", schedule: formatMonthDay(endDate), note: "일정을 정하지 못했습니다" };
 }

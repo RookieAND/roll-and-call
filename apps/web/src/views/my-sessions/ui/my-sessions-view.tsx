@@ -7,10 +7,11 @@ import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import {
   countableCards,
-  isOngoingCard,
+  isInSessionChip,
   ONGOING_CHIP,
   SESSION_CHIPS,
   SESSION_TABS,
+  type SessionChipKey,
   SessionList,
   SessionTabs,
   sessionsHref,
@@ -47,8 +48,8 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
   const chips = SESSION_CHIPS[activeTab];
   const activeChip = chips.find((chip) => chip.key === status)?.key ?? ONGOING_CHIP;
   const list = sessions[activeTab];
-  const inChip = (chip: string) => (card: (typeof list)[number]) =>
-    chip === ONGOING_CHIP ? isOngoingCard(card) : card.chip === chip;
+  const inChip = (chip: SessionChipKey) => (card: (typeof list)[number]) =>
+    isInSessionChip({ card, chip });
   const items = list.filter(inChip(activeChip));
   const roleTabs = SESSION_TABS.map((item) => ({
     key: item.key,

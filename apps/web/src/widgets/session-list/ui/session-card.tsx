@@ -38,8 +38,10 @@ export function SessionCard({ model }: SessionCardProps) {
   if (model.hidden) return <HiddenSessionCard />;
 
   const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
-  const titleForeground =
-    model.cancelled && !model.titleDanger ? "muted" : sessionTitleForeground(model);
+  const titleForeground = sessionTitleForeground(model);
+  // 취소됨·불참은 붉은 카드와 꽉 찬 붉은 배지로 끝난 이유를 먼저 보인다.
+  const dangerCard = model.urgent || model.titleDanger;
+  const solidBadge = model.titleDanger;
 
   const captionForeground = model.caption?.strong ? "primary" : "hint";
   const captionWeight = model.caption?.strong ? "bold" : "regular";
@@ -51,7 +53,7 @@ export function SessionCard({ model }: SessionCardProps) {
       background="none"
       className={cn(
         "desktop:flex desktop:h-full desktop:flex-col desktop:overflow-hidden desktop:p-0",
-        model.urgent ? "border-danger-200 bg-danger-50" : "bg-surface",
+        dangerCard ? "border-danger-200 bg-danger-50" : "bg-surface",
       )}
     >
       {/* 1100px 이상: 위 16:9 썸네일. 끝났거나 취소된 세션은 흑백이고, 스포일러는 회색 칸이다. */}
@@ -82,7 +84,10 @@ export function SessionCard({ model }: SessionCardProps) {
             >
               {model.title}
             </Text>
-            <Badge colorPalette={model.badgeColor} className="desktop:order-1">
+            <Badge
+              colorPalette={model.badgeColor}
+              className={cn("desktop:order-1", solidBadge && "bg-danger-solid text-on-primary")}
+            >
               {model.badge}
             </Badge>
           </HStack>
@@ -90,10 +95,7 @@ export function SessionCard({ model }: SessionCardProps) {
             typography="body4"
             foreground="inherit"
             render={<p />}
-            className={cn(
-              "flex items-center gap-075",
-              model.cancelled ? "text-gray-600" : TONE_CLASS[model.scheduleTone],
-            )}
+            className={cn("flex items-center gap-075", TONE_CLASS[model.scheduleTone])}
           >
             <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className="shrink-0" />
             <span className="min-w-0 truncate">{model.schedule}</span>

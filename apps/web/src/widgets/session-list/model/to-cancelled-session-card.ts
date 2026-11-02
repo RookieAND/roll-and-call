@@ -1,5 +1,5 @@
 import { SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/game";
-import { formatDate } from "@/shared/lib";
+import { formatMonthDay, formatMonthDayTime } from "@/shared/lib";
 
 import { cancelSentence } from "./cancel-sentence";
 import {
@@ -25,13 +25,16 @@ export function toCancelledSessionCard({
     role,
     chip: SESSION_CHIP.ended,
     badge: "취소됨",
-    badgeColor: "gray",
-    schedule: formatDate(cancelledAt),
+    badgeColor: "danger",
+    // 정해진 세션 시각이 있으면 그 시각에 「예정」을 붙이고, 없으면 취소한 날이다(D53).
+    schedule: game.confirmedAt
+      ? `${formatMonthDayTime(game.confirmedAt)} 예정`
+      : formatMonthDay(cancelledAt),
     scheduleNote: cancelSentence(game),
-    scheduleTone: SESSION_TONE.muted,
+    scheduleTone: SESSION_TONE.danger,
     scheduleIcon: SESSION_ICON.calendar,
     gm: role === SESSION_ROLE.player ? (game.gm ?? null) : null,
-    titleDanger: false,
+    titleDanger: true,
     urgent: false,
     cancelled: true,
     hidden: false,

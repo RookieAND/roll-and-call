@@ -6,6 +6,8 @@ export { formatDateWeekday } from "./format-date-weekday";
 export { formatDateClock } from "@roll-and-call/app-kit/date";
 export { ddayKst } from "./dday-kst";
 export { formatDday } from "./format-dday";
+export { formatMonthDay } from "./format-month-day";
+export { formatMonthDayTime } from "./format-month-day-time";
 export { formatGameSchedule } from "@roll-and-call/app-kit/date";
 export { SLOT_MINUTES } from "./slot-window";
 export { buildDayColumns, type DayColumn } from "./build-day-columns";
