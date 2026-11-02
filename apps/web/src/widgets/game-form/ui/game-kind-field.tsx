@@ -3,7 +3,7 @@
 import { Field, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 import { Lock } from "lucide-react";
 
-import { GAME_KINDS, gameKindLabel, isGameKind, type GameKind } from "@/entities/game";
+import { GAME_KIND, GAME_KINDS, gameKindLabel, isGameKind, type GameKind } from "@/entities/game";
 
 interface GameKindFieldProps {
   value: GameKind;
@@ -30,6 +30,11 @@ export function GameKindField({ value, onChange, locked = false }: GameKindField
           ))}
         </SegmentedControl.Root>
       </Field.Root>
+      {value === GAME_KIND.briefing && (
+        <Text typography="body4" foreground="muted">
+          롤앤콜이 무엇인지 설명하는 모집이에요
+        </Text>
+      )}
       {locked && (
         <HStack align="center" gap="075">
           <Lock size={15} strokeWidth={2.2} aria-hidden className="flex-none text-hint" />

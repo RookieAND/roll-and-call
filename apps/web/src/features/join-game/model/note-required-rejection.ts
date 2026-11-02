@@ -6,4 +6,6 @@ export const NOTE_REQUIRED_MESSAGE = "이 구인은 신청글이 필요합니다
 export type NoteRequiredRejection = {
   error: string;
   reason: typeof NOTE_REQUIRED_REASON;
+  // 글쓰기 창 맨 위에 보일 GM의 질문
+  question: string;
 };

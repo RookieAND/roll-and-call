@@ -34,6 +34,7 @@ interface RosterQueuesProps {
   maxPlayers: number;
   summary: RosterSummary;
   isCoordinate: boolean;
+  applicationQuestion: string | null;
 }
 
 // 뽑기 전에는 대기 자리에 순번 없는 신청자가 선다. 먼저 신청한 사람이 유리해 보이지 않게 한다.
@@ -46,6 +47,7 @@ export function RosterQueues({
   maxPlayers,
   summary,
   isCoordinate,
+  applicationQuestion,
 }: RosterQueuesProps) {
   const [menuMember, setMenuMember] = useState<ManagedMember | null>(null);
   const [noteMember, setNoteMember] = useState<ManagedMember | null>(null);
@@ -146,7 +148,11 @@ export function RosterQueues({
         </RosterQueue>
       )}
 
-      <ApplicationNoteDialog member={noteMember} onClose={() => setNoteMember(null)} />
+      <ApplicationNoteDialog
+        member={noteMember}
+        question={applicationQuestion}
+        onClose={() => setNoteMember(null)}
+      />
 
       <MemberSheet
         roster={{

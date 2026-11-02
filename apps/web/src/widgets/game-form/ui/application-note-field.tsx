@@ -2,17 +2,24 @@
 
 import { HStack, Switch, Text, VStack } from "@roll-and-call/ui";
 
+import { ApplicationQuestionField } from "./application-question-field";
 import { LockedModeNotice } from "./locked-mode-notice";
 
 interface ApplicationNoteFieldProps {
   value: boolean;
   onChange: (enabled: boolean) => void;
+  question: string;
+  onQuestionChange: (question: string) => void;
+  questionError?: string;
   locked?: boolean;
 }
 
 export function ApplicationNoteField({
   value,
   onChange,
+  question,
+  onQuestionChange,
+  questionError,
   locked = false,
 }: ApplicationNoteFieldProps) {
   return (
@@ -41,6 +48,14 @@ export function ApplicationNoteField({
           <Switch.Control />
         </Switch.Root>
       </HStack>
+      {value && (
+        <ApplicationQuestionField
+          value={question}
+          onChange={onQuestionChange}
+          locked={locked}
+          error={questionError}
+        />
+      )}
       {locked && <LockedModeNotice label="신청글 받기" particle="는" />}
     </VStack>
   );

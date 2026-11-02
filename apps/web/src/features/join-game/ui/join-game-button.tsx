@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, cn } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState, type ReactNode } from "react";
 
 import { TRIAL_HANDLER, useTrialGuard, useTrialHandler } from "@/shared/trial";
@@ -18,14 +19,15 @@ type Rejected = { error: string; reason?: string; overlapGameId?: string };
 interface JoinGameButtonProps {
   gameId: string;
   children: ReactNode;
-  applicationNote?: boolean;
+  // 신청글 받기 구인이면 GM의 질문. null이면 신청글 없이 바로 신청한다.
+  applicationQuestion?: string | null;
   className?: string;
 }
 
 export function JoinGameButton({
   gameId,
   children,
-  applicationNote = false,
+  applicationQuestion = null,
   className,
 }: JoinGameButtonProps) {
   const { pending, run } = useAction();
@@ -60,7 +62,7 @@ export function JoinGameButton({
 
   // 신청글 받기 구인은 막힘 검사를 먼저 거치고, 통과하면 글쓰기 시트를 연다.
   function start() {
-    if (!applicationNote) return submit();
+    if (isNull(applicationQuestion)) return submit();
     run(() => checkJoin(gameId), { onSuccess: () => setSheetOpen(true), onError: reject });
   }
 
@@ -77,6 +79,7 @@ export function JoinGameButton({
       <ApplicationNoteSheet
         open={sheetOpen}
         onOpenChange={setSheetOpen}
+        question={applicationQuestion ?? ""}
         submitLabel={String(children)}
         pending={pending}
         failed={failed}

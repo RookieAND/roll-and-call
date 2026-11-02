@@ -25,7 +25,7 @@ export async function handleApplyButton(
       gameId: customId.slice(APPLY_BUTTON_PREFIX.length),
     });
     return "askNote" in result
-      ? applyNoteModalResponse(customId)
+      ? applyNoteModalResponse({ customId, question: result.question })
       : ephemeralResponse(result.message);
   } catch (error) {
     console.error("디스코드 버튼 신청 실패", { customId, error });

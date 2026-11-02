@@ -28,6 +28,7 @@ const base = {
   adultOnly: false,
   waitlistEnabled: true,
   applicationNoteEnabled: false,
+  applicationQuestion: "",
   minRulePlays: null,
   requireRulebookCert: false,
   preConfirmed: [],

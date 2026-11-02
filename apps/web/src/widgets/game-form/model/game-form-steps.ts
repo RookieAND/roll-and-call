@@ -45,6 +45,7 @@ export const SECTION_FIELDS = {
     "preConfirmed",
     "recruitMethod",
     "applicationNoteEnabled",
+    "applicationQuestion",
     "waitlistEnabled",
   ],
   [FORM_SECTION.schedule]: [

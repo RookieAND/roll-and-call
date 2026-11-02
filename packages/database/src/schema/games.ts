@@ -104,6 +104,8 @@ export const games = pgTable(
     waitlistEnabled: boolean("waitlist_enabled").notNull().default(true),
     // true면 신청할 때 신청글을 필수로 받는다. 신청자가 한 명이라도 있으면 바꿀 수 없다.
     applicationNoteEnabled: boolean("application_note_enabled").notNull().default(false),
+    // 신청글 시트 맨 위에 보일 GM의 질문(50자까지). null이면 기본 문구를 보인다.
+    applicationQuestion: text("application_question"),
     // 이 룰을 이 횟수 이상 플레이한 사람만 신청할 수 있다. null이면 제한 없음. 새로 신청하는 사람부터 적용한다.
     minRulePlays: integer("min_rule_plays"),
     // true면 이 구인의 룰북을 인증한 사람만 신청할 수 있다.
@@ -190,6 +192,10 @@ export const games = pgTable(
       sql`${table.visibility} = 'public' or ${table.scheduleMode} = 'fixed'`,
     ),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
+    check(
+      "games_application_question_length",
+      sql`char_length(${table.applicationQuestion}) <= 50`,
+    ),
     check(
       "games_min_players_range",
       sql`${table.minPlayers} is null or (${table.minPlayers} >= 1 and ${table.minPlayers} <= ${table.maxPlayers})`,

@@ -1,3 +1,5 @@
+import { normalizeApplicationQuestion } from "@roll-and-call/database/games/model";
+
 import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
 import { fromKstDateTimeInput } from "@/shared/lib";
 
@@ -29,6 +31,9 @@ export function toGameColumns(values: GameFormValues) {
     waitlistEnabled:
       values.recruitMethod === RECRUIT_METHOD.firstCome ? values.waitlistEnabled : true,
     applicationNoteEnabled: values.applicationNoteEnabled,
+    applicationQuestion: values.applicationNoteEnabled
+      ? normalizeApplicationQuestion(values.applicationQuestion)
+      : null,
     minRulePlays: values.minRulePlays,
     requireRulebookCert: values.requireRulebookCert,
     scheduleMode: values.scheduleMode,

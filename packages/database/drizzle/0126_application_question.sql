@@ -1,0 +1,2 @@
+ALTER TABLE "games" ADD COLUMN "application_question" text;--> statement-breakpoint
+ALTER TABLE "games" ADD CONSTRAINT "games_application_question_length" CHECK (char_length("games"."application_question") <= 50);

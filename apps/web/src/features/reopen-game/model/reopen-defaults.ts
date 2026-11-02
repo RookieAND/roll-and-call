@@ -36,6 +36,7 @@ const CARRIED_COLUMNS = [
   "scheduleMode",
   "waitlistEnabled",
   "applicationNoteEnabled",
+  "applicationQuestion",
   "minRulePlays",
   "requireRulebookCert",
   "thumbnailUrl",

@@ -8,7 +8,14 @@ const PARAGRAPH_STYLE = 2;
 
 export const APPLY_NOTE_FIELD_ID = "note";
 
-export function applyNoteModalResponse(customId: string): DiscordInteractionResponse {
+// 질문은 50자까지라 label(45자)이 아니라 description(100자)에 싣는다.
+export function applyNoteModalResponse({
+  customId,
+  question,
+}: {
+  customId: string;
+  question: string;
+}): DiscordInteractionResponse {
   return {
     type: MODAL_RESPONSE,
     data: {
@@ -18,6 +25,7 @@ export function applyNoteModalResponse(customId: string): DiscordInteractionResp
         {
           type: COMPONENT_TYPE.label,
           label: "신청글",
+          description: question,
           component: {
             type: COMPONENT_TYPE.textInput,
             custom_id: APPLY_NOTE_FIELD_ID,
@@ -25,7 +33,7 @@ export function applyNoteModalResponse(customId: string): DiscordInteractionResp
             min_length: 1,
             max_length: APPLICATION_NOTE_MAX_LENGTH,
             required: true,
-            placeholder: "GM에게 전할 내용을 적어 주세요.",
+            placeholder: "질문에 대한 답을 적어 주세요.",
           },
         },
       ],

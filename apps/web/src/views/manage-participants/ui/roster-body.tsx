@@ -11,6 +11,8 @@ interface RosterBodyProps {
   maxPlayers: number;
   summary: RosterSummary;
   isCoordinate: boolean;
+  // 신청글 받기 구인이면 GM의 질문. 신청글 창 맨 위에 보인다.
+  applicationQuestion: string | null;
 }
 
 export function RosterBody({
@@ -21,6 +23,7 @@ export function RosterBody({
   maxPlayers,
   summary,
   isCoordinate,
+  applicationQuestion,
 }: RosterBodyProps) {
   if (confirmedRows.length + waiting.length === 0)
     return (
@@ -40,6 +43,7 @@ export function RosterBody({
       maxPlayers={maxPlayers}
       summary={summary}
       isCoordinate={isCoordinate}
+      applicationQuestion={applicationQuestion}
     />
   );
 }

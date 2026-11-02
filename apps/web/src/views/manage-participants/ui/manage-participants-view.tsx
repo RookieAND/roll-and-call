@@ -1,4 +1,5 @@
 import { getApplicationNotes, getGameParticipants } from "@roll-and-call/database/games";
+import { applicationQuestionOf } from "@roll-and-call/database/games/model";
 import { Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
@@ -93,6 +94,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       waiting={waiting}
       summary={summary}
       isCoordinate={isCoordinate}
+      applicationQuestion={applicationQuestionOf(game)}
       nextRoundBaseDate={nextRoundBaseDate({
         confirmedAt: game.confirmedAt,
         rangeEnd: game.rangeEnd,

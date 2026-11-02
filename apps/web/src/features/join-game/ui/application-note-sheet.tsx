@@ -4,8 +4,11 @@ import { APPLICATION_NOTE_MAX_LENGTH } from "@roll-and-call/database/games/model
 import { Button, Callout, Field, HStack, Sheet, Text, Textarea } from "@roll-and-call/ui";
 import { useState } from "react";
 
+import { GmQuestion } from "./gm-question";
+
 interface ApplicationNoteSheetProps {
   open: boolean;
+  question: string;
   onOpenChange: (open: boolean) => void;
   submitLabel: string;
   pending: boolean;
@@ -15,6 +18,7 @@ interface ApplicationNoteSheetProps {
 
 export function ApplicationNoteSheet({
   open,
+  question,
   onOpenChange,
   submitLabel,
   pending,
@@ -36,6 +40,7 @@ export function ApplicationNoteSheet({
         <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
           신청글 쓰기
         </Sheet.Title>
+        <GmQuestion question={question} />
         <Field.Root
           htmlFor="applicationNote"
           counter={`${note.length} / ${APPLICATION_NOTE_MAX_LENGTH}`}
@@ -46,7 +51,7 @@ export function ApplicationNoteSheet({
             autoComplete="off"
             value={note}
             onChange={(event) => setNote(event.target.value)}
-            placeholder="GM에게 전할 내용을 적어 주세요."
+            placeholder="질문에 대한 답을 적어 주세요."
             maxLength={APPLICATION_NOTE_MAX_LENGTH}
             rows={5}
             disabled={pending}

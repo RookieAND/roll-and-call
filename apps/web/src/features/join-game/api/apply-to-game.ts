@@ -1,7 +1,10 @@
 import type { Game } from "@roll-and-call/database";
 import "server-only";
 import { insertParticipant } from "@roll-and-call/database/games";
-import { normalizeApplicationNote } from "@roll-and-call/database/games/model";
+import {
+  APPLICATION_QUESTION_DEFAULT,
+  normalizeApplicationNote,
+} from "@roll-and-call/database/games/model";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { isUndefined } from "es-toolkit";
 
@@ -47,7 +50,11 @@ export async function applyToGame({
         note = normalizeApplicationNote(applicationNote);
         if (!note) {
           return isUndefined(applicationNote)
-            ? { error: NOTE_REQUIRED_MESSAGE, reason: NOTE_REQUIRED_REASON }
+            ? {
+                error: NOTE_REQUIRED_MESSAGE,
+                reason: NOTE_REQUIRED_REASON,
+                question: game.applicationQuestion ?? APPLICATION_QUESTION_DEFAULT,
+              }
             : { error: NOTE_LENGTH_MESSAGE };
         }
       }

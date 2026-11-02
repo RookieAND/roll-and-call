@@ -13,7 +13,7 @@ import { NOTE_REQUIRED_REASON } from "../model/note-required-rejection";
 import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
 
-export type DiscordApplyResult = { message: string } | { askNote: true };
+export type DiscordApplyResult = { message: string } | { askNote: true; question: string };
 
 // 디스코드 버튼으로 온 신청. discordId는 서명을 확인한 인터랙션에서 온 값이라 그대로 믿는다.
 export async function applyFromDiscord({
@@ -46,7 +46,7 @@ export async function applyFromDiscord({
   if ("error" in application) {
     // 막힘 검사를 모두 통과했지만 신청글이 필요하면 글쓰기 모달을 열도록 알린다.
     if ("reason" in application && application.reason === NOTE_REQUIRED_REASON) {
-      return { askNote: true };
+      return { askNote: true, question: application.question };
     }
     if (application.error === NOTE_LENGTH_MESSAGE) {
       return { message: discordNoteMessage(applicationNote) };

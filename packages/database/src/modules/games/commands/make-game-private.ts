@@ -50,6 +50,7 @@ export async function makeGamePrivate({
       recruitMethod: RECRUIT_METHOD.firstCome,
       minPlayers: null,
       applicationNoteEnabled: false,
+      applicationQuestion: null,
       waitlistEnabled: false,
       endDate: game.confirmedAt ?? game.endDate,
       discordThreadId: null,

@@ -22,6 +22,7 @@ const game: LockedGame = {
   scheduleMode: SCHEDULE_MODE.fixed,
   recruitMethod: RECRUIT_METHOD.firstCome,
   applicationNoteEnabled: false,
+  applicationQuestion: null,
   windowStartHour: 12,
   windowEndHour: 0,
   drawnAt: null,
@@ -51,6 +52,7 @@ const form: GameFormValues = {
   adultOnly: false,
   waitlistEnabled: true,
   applicationNoteEnabled: false,
+  applicationQuestion: "",
   minRulePlays: null,
   requireRulebookCert: false,
   preConfirmed: [],
@@ -163,6 +165,15 @@ describe("editBlockReason", () => {
       })?.field,
     ).toBe("applicationNoteEnabled");
     expect(reason(turnOn)).toBeNull();
+  });
+
+  it("신청자가 있으면 신청자에게 물을 질문을 바꿀 수 없다", () => {
+    const edited = {
+      overrides: { applicationNoteEnabled: true },
+      values: { applicationNoteEnabled: true, applicationQuestion: "피하고 싶은 소재는?" },
+    };
+    expect(reason({ ...edited, rosterCount: 1 })?.field).toBe("applicationQuestion");
+    expect(reason(edited)).toBeNull();
   });
 
   it("신청자가 있어도 플레이 유형은 바꿀 수 있다", () => {

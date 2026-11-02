@@ -9,6 +9,7 @@ export function toPrivateColumns(columns: ReturnType<typeof toGameColumns>) {
     recruitMethod: RECRUIT_METHOD.firstCome,
     minPlayers: null,
     applicationNoteEnabled: false,
+    applicationQuestion: null,
     waitlistEnabled: false,
     endDate: columns.confirmedAt ?? columns.endDate,
   };

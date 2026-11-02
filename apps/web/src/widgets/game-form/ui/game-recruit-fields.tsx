@@ -135,6 +135,11 @@ export function GameRecruitFields({
             onChange={(enabled) =>
               setValue("applicationNoteEnabled", enabled, { shouldDirty: true })
             }
+            question={watch("applicationQuestion")}
+            onQuestionChange={(question) =>
+              setValue("applicationQuestion", question, { shouldDirty: true, shouldValidate: true })
+            }
+            questionError={errors.applicationQuestion?.message}
           />
 
           <VStack gap="100">

@@ -8,14 +8,19 @@ interface JoinableActionsProps {
   gameId: string;
   hint: string;
   label: string;
-  applicationNote: boolean;
+  applicationQuestion: string | null;
 }
 
-export function JoinableActions({ gameId, hint, label, applicationNote }: JoinableActionsProps) {
+export function JoinableActions({
+  gameId,
+  hint,
+  label,
+  applicationQuestion,
+}: JoinableActionsProps) {
   return (
     <VStack gap="125">
       <JoinHint>{hint}</JoinHint>
-      <JoinGameButton gameId={gameId} applicationNote={applicationNote} className="w-full">
+      <JoinGameButton gameId={gameId} applicationQuestion={applicationQuestion} className="w-full">
         {label}
       </JoinGameButton>
     </VStack>

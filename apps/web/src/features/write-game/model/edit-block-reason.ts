@@ -22,6 +22,7 @@ type LockedGame = Pick<
   | "scheduleMode"
   | "recruitMethod"
   | "applicationNoteEnabled"
+  | "applicationQuestion"
   | "windowStartHour"
   | "windowEndHour"
   | "drawnAt"
@@ -86,6 +87,12 @@ export function editBlockReason(
       return {
         error: "신청자가 있어 신청글 받기는 바꿀 수 없습니다.",
         field: "applicationNoteEnabled",
+      };
+    }
+    if (columns.applicationQuestion !== game.applicationQuestion) {
+      return {
+        error: "신청자가 있어 신청자에게 물을 질문은 바꿀 수 없습니다.",
+        field: "applicationQuestion",
       };
     }
     if (

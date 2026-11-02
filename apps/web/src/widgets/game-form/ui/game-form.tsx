@@ -1,6 +1,9 @@
 "use client";
 
-import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
+import {
+  APPLICATION_QUESTION_DEFAULT,
+  DEFAULT_PLAY_MINUTES,
+} from "@roll-and-call/database/games/model";
 import { use } from "react";
 import { useForm } from "react-hook-form";
 
@@ -104,6 +107,7 @@ export function GameForm({
       images: defaultGame?.images ?? [],
       waitlistEnabled: defaultGame?.waitlistEnabled ?? true,
       applicationNoteEnabled: defaultGame?.applicationNoteEnabled ?? false,
+      applicationQuestion: defaultGame?.applicationQuestion ?? APPLICATION_QUESTION_DEFAULT,
       minRulePlays: defaultGame?.minRulePlays ?? null,
       requireRulebookCert: defaultGame?.requireRulebookCert ?? false,
       preConfirmed: [],

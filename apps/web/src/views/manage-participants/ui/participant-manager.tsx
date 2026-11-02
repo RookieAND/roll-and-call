@@ -18,6 +18,8 @@ interface ParticipantManagerProps {
   waiting: ManagedMember[];
   summary: RosterSummary;
   isCoordinate: boolean;
+  // 신청글 받기 구인이면 GM의 질문. 신청글 창 맨 위에 보인다.
+  applicationQuestion: string | null;
   nextRoundBaseDate: string;
 }
 
@@ -28,6 +30,7 @@ export function ParticipantManager({
   waiting,
   summary,
   isCoordinate,
+  applicationQuestion,
   nextRoundBaseDate,
 }: ParticipantManagerProps) {
   const showNextRound = waiting.length > 0 && !summary.beforeDraw;
@@ -68,6 +71,7 @@ export function ParticipantManager({
             maxPlayers={game.maxPlayers}
             summary={summary}
             isCoordinate={isCoordinate}
+            applicationQuestion={applicationQuestion}
           />
 
           {showNextRound && (

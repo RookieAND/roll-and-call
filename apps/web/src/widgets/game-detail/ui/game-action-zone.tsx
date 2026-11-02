@@ -1,4 +1,5 @@
 import type { GameDetailData } from "@roll-and-call/database/games";
+import { applicationQuestionOf } from "@roll-and-call/database/games/model";
 
 import { RECRUIT_METHOD } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
@@ -80,7 +81,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return (
         <JoinableActions
           gameId={game.id}
-          applicationNote={game.applicationNoteEnabled}
+          applicationQuestion={applicationQuestionOf(game)}
           hint={`지금 신청하면 대기 ${view.nextRank}번입니다.`}
           label="대기로 신청하기"
         />
@@ -89,7 +90,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return (
         <JoinableActions
           gameId={game.id}
-          applicationNote={game.applicationNoteEnabled}
+          applicationQuestion={applicationQuestionOf(game)}
           hint="지금 신청하면 바로 확정됩니다."
           label="신청하기"
         />
@@ -98,7 +99,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return (
         <JoinableActions
           gameId={game.id}
-          applicationNote={game.applicationNoteEnabled}
+          applicationQuestion={applicationQuestionOf(game)}
           hint={`${formatDateClock(view.endDate)} 마감 때 추첨합니다.`}
           label="신청하기"
         />
@@ -107,7 +108,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
       return (
         <JoinableActions
           gameId={game.id}
-          applicationNote={game.applicationNoteEnabled}
+          applicationQuestion={applicationQuestionOf(game)}
           hint={`${formatDateClock(view.endDate)} 모집이 끝나면 GM이 선발합니다.`}
           label="신청하기"
         />
