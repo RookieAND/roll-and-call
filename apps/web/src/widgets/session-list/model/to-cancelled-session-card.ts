@@ -2,7 +2,6 @@ import { SESSION_ROLE, type SessionRole, type SessionGame } from "@/entities/gam
 import { formatDate } from "@/shared/lib";
 
 import { cancelSentence } from "./cancel-sentence";
-import { joinParts } from "./join-parts";
 import {
   SESSION_CHIP,
   SESSION_ICON,
@@ -27,7 +26,8 @@ export function toCancelledSessionCard({
     chip: SESSION_CHIP.ended,
     badge: "취소됨",
     badgeColor: "gray",
-    schedule: joinParts(formatDate(cancelledAt), cancelSentence(game)),
+    schedule: formatDate(cancelledAt),
+    scheduleNote: cancelSentence(game),
     scheduleTone: SESSION_TONE.muted,
     scheduleIcon: SESSION_ICON.calendar,
     gm: role === SESSION_ROLE.player ? (game.gm ?? null) : null,

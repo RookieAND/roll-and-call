@@ -73,6 +73,8 @@ export type SessionCardModel = {
   badge: string;
   badgeColor: "primary" | "success" | "warning" | "danger" | "gray";
   schedule: string;
+  // 끝난 카드에서 날짜 줄 아래에 따로 적는 끝난 사유. 정상으로 마친 세션은 null이다.
+  scheduleNote?: string | null;
   scheduleTone: SessionTone;
   scheduleIcon: SessionIcon;
   gm: { username: string; avatarUrl: string | null } | null;

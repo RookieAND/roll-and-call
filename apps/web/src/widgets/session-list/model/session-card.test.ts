@@ -148,7 +148,7 @@ describe("취소된 구인", () => {
       expect(card.cancelled).toBe(true);
       expect(card.action).toBeNull();
       expect(card.todo).toBeNull();
-      expect(card.schedule).toBe("9월 13일 · GM 사정");
+      expect(card).toMatchObject({ schedule: "9월 13일", scheduleNote: "GM 사정" });
     }
   });
 
@@ -168,13 +168,16 @@ describe("취소된 구인", () => {
   });
 
   it("운영진·자동 취소 문구, 사유 없는 GM 취소는 날짜만", () => {
-    expect(playerCard(cancelled({ cancelKind: "staff" })).schedule).toBe(
-      "9월 13일 · 운영진이 취소한 구인입니다",
+    expect(playerCard(cancelled({ cancelKind: "staff" })).scheduleNote).toBe(
+      "운영진이 취소한 구인입니다",
     );
-    expect(playerCard(cancelled({ cancelKind: "auto" })).schedule).toBe(
-      "9월 13일 · GM이 서버를 나가 취소되었습니다",
+    expect(playerCard(cancelled({ cancelKind: "auto" })).scheduleNote).toBe(
+      "GM이 서버를 나가 취소되었습니다",
     );
-    expect(hostCard(cancelled({ cancelKind: "gm", cancelReason: null })).schedule).toBe("9월 13일");
+    expect(hostCard(cancelled({ cancelKind: "gm", cancelReason: null }))).toMatchObject({
+      schedule: "9월 13일",
+      scheduleNote: null,
+    });
   });
 });
 
@@ -274,7 +277,7 @@ describe("종료 카드", () => {
     expect(card.badge).toBe("불참");
     expect(card.titleDanger).toBe(true);
     expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
-    expect(card.schedule).toMatch(/ · 참석하지 않았습니다/);
+    expect(card.scheduleNote).toBe("참석하지 않았습니다");
   });
 
   it("시작했어도 플레이타임이 남아 있으면 종료가 아니다", () => {
@@ -396,7 +399,7 @@ describe("남의 세션 기록 카드(readOnly)", () => {
   const readOnlyCard = (partial: Partial<SessionGame>, role: SessionRole = SESSION_ROLE.player) =>
     toSessionCard({ game: game(partial), role, context: readOnlyContext });
 
-  it("불참으로 끝난 세션도 회색 완료와 세션을 마쳤다는 줄이다", () => {
+  it("불참으로 끝난 세션도 회색 완료이고 끝난 사유 줄이 없다", () => {
     const card = readOnlyCard({
       confirmedAt: at(-1),
       attendanceConfirmedAt: at(-1),
@@ -405,7 +408,7 @@ describe("남의 세션 기록 카드(readOnly)", () => {
     expect(card.badge).toBe("완료");
     expect(card.badgeColor).toBe("gray");
     expect(card.titleDanger).toBe(false);
-    expect(card.schedule).toMatch(/ · 세션을 마쳤습니다/);
+    expect(card.scheduleNote).toBeNull();
     expect(card.scheduleTone).not.toBe(SESSION_TONE.danger);
   });
 

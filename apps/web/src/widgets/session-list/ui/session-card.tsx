@@ -98,6 +98,16 @@ export function SessionCard({ model }: SessionCardProps) {
             <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className="shrink-0" />
             <span className="min-w-0 truncate">{model.schedule}</span>
           </Text>
+          {model.scheduleNote && (
+            <Text
+              typography="body4"
+              foreground="muted"
+              render={<p />}
+              className="-mt-050 pl-[calc(13px+var(--spacing-075))] break-keep"
+            >
+              {model.scheduleNote}
+            </Text>
+          )}
           {(model.gm || model.isPrivate) && (
             <HStack align="center" gap="100" className="flex-wrap">
               {model.gm && (

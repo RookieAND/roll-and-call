@@ -1,16 +1,14 @@
 import { isNull } from "es-toolkit";
 
 import { SESSION_ROLE, SESSION_STATE, splitRoster, type SessionGame } from "@/entities/game";
-import { ddayKst, formatDateTime } from "@/shared/lib";
+import { formatDateTime } from "@/shared/lib";
 
 import { confirmAttendanceTodo } from "./confirm-attendance-todo";
 import type { SessionFacts } from "./derive-session-facts";
 import { hostMenuAction } from "./host-menu-action";
 import { hostPastAction } from "./host-past-action";
-import { joinParts } from "./join-parts";
 import { pastEnding } from "./past-ending";
 import { pastScheduleTone } from "./past-schedule-tone";
-import { relativeDay } from "./relative-day";
 import { reviewNote } from "./review-note";
 import {
   SESSION_CHIP,
@@ -41,15 +39,11 @@ export function toPastSessionCard({
   const absent = player && !context.readOnly && viewerAbsent && Boolean(game.confirmedAt);
 
   const when = game.confirmedAt ? formatDateTime(game.confirmedAt) : null;
-  const ago = game.confirmedAt
-    ? relativeDay(ddayKst(game.confirmedAt, context.now ?? new Date()))
-    : null;
   const ending = pastEnding({
     waitlistRank,
     absent,
     finished: Boolean(finished),
     when,
-    ago,
     endDate: game.endDate,
   });
 
@@ -73,7 +67,8 @@ export function toPastSessionCard({
     badge: ending.badge,
     badgeColor: absent ? "danger" : "gray",
     titleDanger: absent,
-    schedule: attendanceTodo ? joinParts(when, "출석 확인이 남아 있습니다") : ending.schedule,
+    schedule: ending.schedule,
+    scheduleNote: attendanceTodo ? "출석 확인이 남아 있습니다" : ending.note,
     scheduleTone: pastScheduleTone({ absent, attendancePending: Boolean(attendanceTodo) }),
     scheduleIcon: attendanceTodo ? SESSION_ICON.alert : SESSION_ICON.calendar,
     gm: player ? (game.gm ?? null) : null,

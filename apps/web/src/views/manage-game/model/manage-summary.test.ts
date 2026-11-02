@@ -87,7 +87,7 @@ describe("manageSummary", () => {
   it("조율 중과 기한 지남", () => {
     expect(summary().stage).toBe(MANAGE_STAGE.coordinating);
     expect(values({})).toEqual([
-      "조율 마감 9월 22일",
+      "조율 기한 9월 22일",
       "가능 시간 제출 1 / 2명",
       "확정 인원 2 / 4명",
     ]);

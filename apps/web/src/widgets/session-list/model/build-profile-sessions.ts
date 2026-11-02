@@ -50,7 +50,9 @@ export function buildProfileSessions({
   // 가린 카드는 제목·일정·GM을 비워 화면 데이터에도 남기지 않는다.
   const marked = (role: SessionRole) =>
     sessions[role].map((card) =>
-      hiddenIds.has(card.id) ? { ...card, hidden: true, title: "", schedule: "", gm: null } : card,
+      hiddenIds.has(card.id)
+        ? { ...card, hidden: true, title: "", schedule: "", scheduleNote: null, gm: null }
+        : card,
     );
 
   return {

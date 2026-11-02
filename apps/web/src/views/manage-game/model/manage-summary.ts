@@ -84,7 +84,7 @@ export function manageSummary({
       stage: overdue ? MANAGE_STAGE.overdue : MANAGE_STAGE.coordinating,
       stats: [
         {
-          label: "조율 마감",
+          label: "조율 기한",
           value: `${formatDate(game.endDate)}${overdue ? " 지남" : ""}`,
           danger: overdue,
         },
