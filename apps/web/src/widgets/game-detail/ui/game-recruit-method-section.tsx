@@ -6,7 +6,6 @@ import { Dice5, UserCheck, Zap } from "lucide-react";
 import { PARTICIPANT_STATUS, RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
 
 import { methodLines } from "../model/method-lines";
-import { minPlayersLine } from "../model/min-players-line";
 
 const METHOD_ICON = {
   [RECRUIT_METHOD.firstCome]: Zap,
@@ -16,10 +15,9 @@ const METHOD_ICON = {
 
 interface GameRecruitMethodSectionProps {
   game: GameDetailData;
-  now: Date;
 }
 
-export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSectionProps) {
+export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps) {
   const Icon = METHOD_ICON[game.recruitMethod];
   // 등록 때 직접 확정한 사람은 추첨 순위가 없고, 그만큼 뽑을 자리가 줄어든다.
   const preConfirmedCount = game.participants.filter(
@@ -29,13 +27,6 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
   const lines = methodLines({
     game,
     drawCount: Math.max(game.maxPlayers - preConfirmedCount, 0),
-  });
-
-  const minPlayersText = minPlayersLine({
-    minPlayers: game.minPlayers,
-    endDate: game.endDate,
-    now,
-    recruitMethod: game.recruitMethod,
   });
 
   return (
@@ -61,12 +52,6 @@ export function GameRecruitMethodSection({ game, now }: GameRecruitMethodSection
               {lines[0]}
               <br />
               {lines[1]}
-              {minPlayersText && (
-                <>
-                  <br />
-                  {minPlayersText}
-                </>
-              )}
             </Text>
           </VStack>
         </HStack>

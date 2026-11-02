@@ -18,6 +18,7 @@ interface GameRosterSectionProps {
   confirmed: DetailRosterMember[];
   waiting: DetailRosterMember[];
   maxPlayers: number;
+  minPlayers?: number;
   awaitingResult: boolean;
   selection: boolean;
   viewerId: string | null;
@@ -28,6 +29,7 @@ export function GameRosterSection({
   confirmed,
   waiting,
   maxPlayers,
+  minPlayers,
   awaitingResult,
   selection,
   viewerId,
@@ -53,6 +55,7 @@ export function GameRosterSection({
           gauge={ROSTER_GAUGE.capacity}
           members={confirmed}
           capacity={maxPlayers}
+          minPlayers={minPlayers}
           action={
             confirmed.length > 0 && (
               <RosterSheetButton onClick={() => setOpenSheet(ROSTER_SHEET.confirmed)} />

@@ -88,6 +88,7 @@ export function GameDetail({
   const sessionDays = game.confirmedAt ? ddayKst(game.confirmedAt, now) : null;
   const showSessionDday = !game.cancelledAt && !ended && !isNull(sessionDays) && sessionDays >= 0;
   const sessionBadge = showSessionDday ? formatDday(sessionDays) : null;
+  const minPlayersBadge = ended || isNull(game.minPlayers) ? undefined : game.minPlayers;
 
   const conditions = participationConditions({ game, standing });
   const unmet = conditions.filter((condition) => condition.met === false);
@@ -114,7 +115,7 @@ export function GameDetail({
   // 모집 방식·명단·신청 막대는 모바일에서는 본문 안에, 1100px 이상에서는 우측 패널에 둔다. 같은 요소를 두 자리에 그리고 폭으로 한쪽을 숨긴다.
   const recruitMethod = isPrivate ? null : (
     <VStack gap="200">
-      <GameRecruitMethodSection game={game} now={now} />
+      <GameRecruitMethodSection game={game} />
       <GameConditionsSection conditions={conditions} />
     </VStack>
   );
@@ -124,6 +125,7 @@ export function GameDetail({
       confirmed={confirmed}
       waiting={waiting}
       maxPlayers={game.maxPlayers}
+      minPlayers={minPlayersBadge}
       awaitingResult={isAwaitingResult(game)}
       selection={game.recruitMethod === RECRUIT_METHOD.selection}
       viewerId={viewerId}

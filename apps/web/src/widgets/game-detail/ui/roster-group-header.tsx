@@ -6,10 +6,17 @@ interface RosterGroupHeaderProps {
   label: string;
   count: number;
   capacity?: number;
+  minPlayers?: number;
   action?: ReactNode;
 }
 
-export function RosterGroupHeader({ label, count, capacity, action }: RosterGroupHeaderProps) {
+export function RosterGroupHeader({
+  label,
+  count,
+  capacity,
+  minPlayers,
+  action,
+}: RosterGroupHeaderProps) {
   return (
     <HStack align="baseline" gap="075">
       <Text typography="subtitle2" foreground="muted" render={<h2 />}>
@@ -19,6 +26,7 @@ export function RosterGroupHeader({ label, count, capacity, action }: RosterGrou
         {count}명
       </Text>
       {!isUndefined(capacity) && <Badge className="tabular-nums">정원 {capacity}명</Badge>}
+      {!isUndefined(minPlayers) && <Badge className="tabular-nums">최소 {minPlayers}명</Badge>}
       <span className="flex-1" />
       {action}
     </HStack>

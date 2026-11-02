@@ -13,6 +13,7 @@ interface RosterGroupSectionProps {
   gauge: RosterGauge;
   members: DetailRosterMember[];
   capacity?: number;
+  minPlayers?: number;
   action?: ReactNode;
   emptyText?: string;
 }
@@ -22,12 +23,19 @@ export function RosterGroupSection({
   gauge,
   members,
   capacity,
+  minPlayers,
   action,
   emptyText,
 }: RosterGroupSectionProps) {
   return (
     <VStack gap="125" render={<section />}>
-      <RosterGroupHeader label={label} count={members.length} capacity={capacity} action={action} />
+      <RosterGroupHeader
+        label={label}
+        count={members.length}
+        capacity={capacity}
+        minPlayers={minPlayers}
+        action={action}
+      />
       <Progress
         {...rosterProgress({ gauge, count: members.length, capacity })}
         aria-label={label}
