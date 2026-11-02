@@ -13,7 +13,6 @@ import {
   GAME_VISIBILITY,
   isGameGm,
   isSessionEnded,
-  RECRUIT_METHOD,
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
@@ -83,10 +82,12 @@ export function GameDetail({
   // 마감 배지는 신청을 받는 동안(모집 중·대기 접수 중)에만 보인다.
   const accepting = status === GAME_STATUS.recruiting || status === GAME_STATUS.confirmed;
   const showDeadline = accepting && !ended && !isApplicationClosed(game, now);
-  const statusLine = scheduleLine(game, now);
+  const statusLine = { ...scheduleLine(game, now), finished: ended };
   const deadlineBadge = showDeadline ? statusLine.deadlineShort : null;
   const sessionDays = game.confirmedAt ? ddayKst(game.confirmedAt, now) : null;
-  const showSessionDday = !game.cancelledAt && !ended && !isNull(sessionDays) && sessionDays >= 0;
+  // 신청을 받는 동안에는 마감 배지만 보인다. 세션 배지는 모집이 끝난 뒤에 나온다.
+  const showSessionDday =
+    !game.cancelledAt && !ended && !showDeadline && !isNull(sessionDays) && sessionDays >= 0;
   const sessionBadge = showSessionDday ? formatDday(sessionDays) : null;
   const minPlayersBadge = ended || isNull(game.minPlayers) ? undefined : game.minPlayers;
 
@@ -127,7 +128,6 @@ export function GameDetail({
       maxPlayers={game.maxPlayers}
       minPlayers={minPlayersBadge}
       awaitingResult={isAwaitingResult(game)}
-      selection={game.recruitMethod === RECRUIT_METHOD.selection}
       viewerId={viewerId}
     />
   );
@@ -166,6 +166,7 @@ export function GameDetail({
               ended={ended}
               adultOnly={game.adultOnly}
               statusLine={statusLine}
+              deadlineBadge={deadlineBadge}
             />
 
             <GameInfoTable

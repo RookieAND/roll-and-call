@@ -16,6 +16,7 @@ interface GameDetailHeaderProps {
   ended: boolean;
   adultOnly: boolean;
   statusLine: ScheduleLine;
+  deadlineBadge: string | null;
 }
 
 // 끝난 세션은 목록 카드처럼 「종료」로 덮는다. deriveGameStatus는 다른 화면도 써서 여기서만 바꾼다.
@@ -26,6 +27,7 @@ export function GameDetailHeader({
   ended,
   adultOnly,
   statusLine,
+  deadlineBadge,
 }: GameDetailHeaderProps) {
   return (
     <VStack gap="100">
@@ -38,6 +40,7 @@ export function GameDetailHeader({
             설명회
           </Badge>
         )}
+        {deadlineBadge && <Badge className="mt-025 tabular-nums">{deadlineBadge}</Badge>}
         <span className="mt-025">
           {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
         </span>

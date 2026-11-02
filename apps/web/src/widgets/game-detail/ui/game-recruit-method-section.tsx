@@ -31,7 +31,7 @@ export function GameRecruitMethodSection({ game }: GameRecruitMethodSectionProps
 
   return (
     <VStack gap="100" render={<section />}>
-      <Text typography="subtitle2" render={<h2 />}>
+      <Text typography="subtitle1" render={<h2 />}>
         모집 방식
       </Text>
       <Card.Root radius={500} padding="none" className="px-175 py-150">

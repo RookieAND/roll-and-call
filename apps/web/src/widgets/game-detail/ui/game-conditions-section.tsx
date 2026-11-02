@@ -10,7 +10,7 @@ export function GameConditionsSection({ conditions }: GameConditionsSectionProps
   if (conditions.length === 0) return null;
   return (
     <VStack gap="100" render={<section />}>
-      <Text typography="subtitle2" render={<h2 />}>
+      <Text typography="subtitle1" render={<h2 />}>
         참여 조건
       </Text>
       <Card.Root radius={500} padding="none" className="overflow-hidden">

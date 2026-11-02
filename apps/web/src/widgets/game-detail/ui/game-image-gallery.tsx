@@ -22,7 +22,7 @@ export function GameImageGallery({ images }: GameImageGalleryProps) {
   return (
     <VStack gap="100">
       <HStack align="baseline" gap="100">
-        <Text typography="subtitle2" render={<h2 />}>
+        <Text typography="subtitle1" render={<h2 />}>
           첨부 이미지
         </Text>
         <Text typography="body4" foreground="hint" numeric>

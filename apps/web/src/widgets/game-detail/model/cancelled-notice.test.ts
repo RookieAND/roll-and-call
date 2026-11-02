@@ -27,11 +27,11 @@ describe("cancelledNotice", () => {
       }),
     ).toEqual({
       title: "구인이 취소되었습니다",
-      line: "신청자가 최소 인원에 못 미쳐 취소되었습니다.",
+      line: "선발된 인원이 최소 인원에 미치지 못해 취소되었습니다.",
     });
   });
 
-  it("다른 방식의 인원 미달 취소와 GM 취소는 기존 문구를 쓴다", () => {
+  it("다른 방식의 인원 미달 취소는 최소 인원 사유를, GM 취소는 사유를 보인다", () => {
     expect(
       cancelledNotice({
         cancelKind: GAME_CANCEL_KIND.minPlayersUnmet,
@@ -39,8 +39,8 @@ describe("cancelledNotice", () => {
         reason: null,
       }),
     ).toEqual({
-      title: "최소 인원이 모이지 않아 취소되었습니다",
-      line: "비슷한 조건의 다른 구인글을 찾아보세요.",
+      title: "구인이 취소되었습니다",
+      line: "최소 인원이 모이지 않아 취소되었습니다.",
     });
     expect(
       cancelledNotice({ cancelKind: GAME_CANCEL_KIND.gm, selection: false, reason: "일정 변경" })

@@ -8,7 +8,7 @@ interface GameSynopsisProps {
 export function GameSynopsis({ synopsis }: GameSynopsisProps) {
   return (
     <VStack gap="075">
-      <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
+      <Text typography="subtitle1" render={<h2 />}>
         시놉시스
       </Text>
       <Text

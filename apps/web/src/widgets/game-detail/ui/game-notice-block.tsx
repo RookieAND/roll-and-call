@@ -9,7 +9,7 @@ interface GameNoticeBlockProps {
 export function GameNoticeBlock({ notice, linkLabels }: GameNoticeBlockProps) {
   return (
     <VStack gap="075">
-      <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
+      <Text typography="subtitle1" render={<h2 />}>
         주의 사항
       </Text>
       <Text

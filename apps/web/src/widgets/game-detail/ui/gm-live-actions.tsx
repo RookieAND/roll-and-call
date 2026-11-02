@@ -9,7 +9,7 @@ interface GmLiveActionsProps {
   attendanceRecorded: boolean;
 }
 
-const ATTENDANCE_LINES = ["불참한 참여자가 있으면 운영 관리에서 출석을 입력해 주세요."];
+const ATTENDANCE_LINES = ["끝나면 운영 관리에서 출석을 확인하세요."];
 const RECORDED_LINES = ["출석 확인을 마쳤습니다."];
 
 // 출석은 시작 시각부터 입력할 수 있다. 진행 중에는 운영 관리의 출석 확인 줄이 입구다.

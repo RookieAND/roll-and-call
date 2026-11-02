@@ -10,7 +10,7 @@ export function methodLines({
   drawCount: number;
 }): string[] {
   if (game.recruitMethod === RECRUIT_METHOD.selection) {
-    return ["마감 뒤 GM이 직접 고릅니다.", "남은 신청자는 신청 순서대로 대기합니다."];
+    return ["마감 뒤 GM이 직접 고릅니다.", "고르지 않은 신청자는 신청 순서대로 대기합니다."];
   }
   if (game.recruitMethod === RECRUIT_METHOD.lottery) {
     return [

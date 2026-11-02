@@ -11,7 +11,7 @@ interface ReopenGameLinkProps {
 
 export function ReopenGameLink({
   gameId,
-  variant = "outline",
+  variant = "solid",
   size = "lg",
   label = "다시 열기",
 }: ReopenGameLinkProps) {

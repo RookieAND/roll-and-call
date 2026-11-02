@@ -20,6 +20,15 @@ export function WaitingRosterSheet({
   waiting,
   viewerId,
 }: WaitingRosterSheetProps) {
+  // 데스크톱 Dialog는 자리가 넉넉해 접지 않고 모두 보인다.
+  const rows = waiting.map((member) => (
+    <RosterSheetRow
+      key={member.userId}
+      member={member}
+      viewerId={viewerId}
+      rankTag={`대기 ${member.waitlistRank}번`}
+    />
+  ));
   return (
     <Sheet.Root open={open} onOpenChange={onOpenChange}>
       <Sheet.Popup>
@@ -28,16 +37,10 @@ export function WaitingRosterSheet({
 
         <div className="max-h-[23rem] overflow-y-auto">
           <RosterGroup>
-            <ExpandableRows previewCount={2}>
-              {waiting.map((member) => (
-                <RosterSheetRow
-                  key={member.userId}
-                  member={member}
-                  viewerId={viewerId}
-                  rankTag={`대기 ${member.waitlistRank}번`}
-                />
-              ))}
-            </ExpandableRows>
+            <div className="desktop:hidden">
+              <ExpandableRows previewCount={2}>{rows}</ExpandableRows>
+            </div>
+            <div className="hidden desktop:block">{rows}</div>
           </RosterGroup>
         </div>
       </Sheet.Popup>

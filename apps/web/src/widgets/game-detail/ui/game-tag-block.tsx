@@ -12,7 +12,7 @@ interface GameTagBlockProps {
 export function GameTagBlock({ label, tags, noteLines, tone = "outline" }: GameTagBlockProps) {
   return (
     <VStack gap="100">
-      <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
+      <Text typography="subtitle1" render={<h2 />}>
         {label}
       </Text>
       <HStack gap="075" wrap>

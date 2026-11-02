@@ -28,7 +28,11 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
         value: (
           <HStack align="center" gap="100" wrap className="min-w-0">
             <span>{formatDateTime(game.endDate)}</span>
-            {deadlineBadge && <Badge className="tabular-nums">{deadlineBadge}</Badge>}
+            {deadlineBadge && (
+              <Badge colorPalette="primary" className="tabular-nums">
+                {deadlineBadge}
+              </Badge>
+            )}
           </HStack>
         ),
       };
@@ -66,7 +70,11 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
       value: (
         <HStack align="center" gap="100" wrap className="min-w-0">
           <span>{formatGameSchedule(game)}</span>
-          {sessionBadge && <Badge className="tabular-nums">{sessionBadge}</Badge>}
+          {sessionBadge && (
+            <Badge colorPalette="primary" className="tabular-nums">
+              {sessionBadge}
+            </Badge>
+          )}
         </HStack>
       ),
     },
