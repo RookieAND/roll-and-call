@@ -1,7 +1,11 @@
 import { formatDateTime } from "@roll-and-call/app-kit/date";
 import { formatGameSchedule } from "@roll-and-call/app-kit/date";
 import type { Game } from "@roll-and-call/database";
-import { formatPlayRange, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/games/model";
+import {
+  formatPlayRange,
+  PLAY_TYPE_LABEL,
+  RECRUIT_METHOD_LABEL,
+} from "@roll-and-call/database/games/model";
 import { richTextToMarkdown } from "@roll-and-call/tiptap/markdown";
 
 import { formatRecruitHeadcount } from "../lib/format-recruit-headcount";
@@ -73,7 +77,7 @@ export function recruitPlainText({
     section(
       "### 🎯 플레이 정보",
       list([
-        item("진행 방식", game.playType === "text" ? "텍스트" : "보이스"),
+        item("진행 방식", PLAY_TYPE_LABEL[game.playType]),
         tagItem("장르", game.genres),
         tagItem("플랫폼", game.platforms),
         tagItem("AI 이미지", [game.aiImage ? "사용" : "사용 안 함"]),

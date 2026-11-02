@@ -1,5 +1,5 @@
-import { PLAY_TYPE, type PlayType } from "./play-type";
+import { PLAY_TYPE_LABEL, type PlayType } from "@roll-and-call/database/games/model";
 
 export function playTypeLabel(playType: PlayType) {
-  return playType === PLAY_TYPE.text ? "텍스트" : "보이스";
+  return PLAY_TYPE_LABEL[playType];
 }

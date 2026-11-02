@@ -834,6 +834,13 @@
       "when": 1799500000015,
       "tag": "0124_game_trigger_limit_15",
       "breakpoints": true
+    },
+    {
+      "idx": 125,
+      "version": "7",
+      "when": 1799500000016,
+      "tag": "0125_play_type_both",
+      "breakpoints": true
     }
   ]
 }

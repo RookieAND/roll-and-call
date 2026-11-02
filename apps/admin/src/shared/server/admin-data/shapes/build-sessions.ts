@@ -6,6 +6,7 @@ import {
   gameCancelledRecipients,
   isAutoConfirmedAttendance,
   isSessionStarted,
+  PLAY_TYPE_LABEL,
   RECRUIT_METHOD_LABEL,
   sessionEndAt,
 } from "@roll-and-call/database/games/model";
@@ -64,7 +65,7 @@ export function buildSessions({
       platforms: game.platforms,
       aiImage: game.aiImage,
       kindLabel: game.kind === "briefing" ? "설명회" : "세션",
-      playTypeLabel: game.playType === "text" ? "텍스트" : "보이스",
+      playTypeLabel: PLAY_TYPE_LABEL[game.playType],
       joinedAt: new Map(roster.map((row) => [row.userId, row.joinedAt])),
       applicationNoteEnabled: game.applicationNoteEnabled,
       minRulePlays: game.minRulePlays,

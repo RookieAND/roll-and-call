@@ -21,11 +21,11 @@ const session = { kind: "session", playType: "voice" } as const;
 
 it("취소는 취소됨 태그를 쓰고, 연결하지 않았으면 마감 태그로 둔다", () => {
   const args = { closed: true, cancelled: true, categoryId: "cat", ...session };
-  expect(recruitStatusTagIds({ target: target("x"), ...args })).toEqual(["x", "k", "v", "s"]);
-  expect(recruitStatusTagIds({ target: target(), ...args })).toEqual(["c", "k", "v", "s"]);
+  expect(recruitStatusTagIds({ target: target("x"), ...args })).toEqual(["x", "k", "s", "v"]);
+  expect(recruitStatusTagIds({ target: target(), ...args })).toEqual(["c", "k", "s", "v"]);
   expect(
     recruitStatusTagIds({ target: target("x"), closed: false, categoryId: null, ...session }),
-  ).toEqual(["o", "v", "s"]);
+  ).toEqual(["o", "s", "v"]);
 });
 
 it("플레이 유형 태그와 구분 태그(설명회·세션)를 붙인다", () => {
@@ -33,14 +33,26 @@ it("플레이 유형 태그와 구분 태그(설명회·세션)를 붙인다", (
   expect(recruitStatusTagIds({ ...args, kind: "session", playType: "text" })).toEqual([
     "o",
     "k",
-    "t",
     "s",
+    "t",
   ]);
   expect(recruitStatusTagIds({ ...args, kind: "briefing", playType: "voice" })).toEqual([
     "o",
     "k",
-    "v",
     "b",
+    "v",
+  ]);
+});
+
+it("보이스·텍스트는 두 태그를 모두 달고, 5개를 넘으면 뒤에서 자른다", () => {
+  const args = { target: target(), closed: false, kind: "session", playType: "both" } as const;
+  expect(recruitStatusTagIds({ ...args, categoryId: null })).toEqual(["o", "s", "v", "t"]);
+  expect(recruitStatusTagIds({ ...args, categoryId: "cat", adultOnly: true })).toEqual([
+    "o",
+    "k",
+    "s",
+    "a",
+    "v",
   ]);
 });
 
@@ -61,6 +73,6 @@ it("연결하지 않은 태그는 빼고 붙인다", () => {
 
 it("성인 전용 구인에만 성인 전용 태그를 붙인다", () => {
   const args = { target: target(), closed: false, categoryId: null, ...session };
-  expect(recruitStatusTagIds({ ...args, adultOnly: true })).toEqual(["o", "v", "s", "a"]);
-  expect(recruitStatusTagIds({ ...args, adultOnly: false })).toEqual(["o", "v", "s"]);
+  expect(recruitStatusTagIds({ ...args, adultOnly: true })).toEqual(["o", "s", "a", "v"]);
+  expect(recruitStatusTagIds({ ...args, adultOnly: false })).toEqual(["o", "s", "v"]);
 });

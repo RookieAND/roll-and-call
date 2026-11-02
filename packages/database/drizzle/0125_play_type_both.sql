@@ -1,0 +1,1 @@
+ALTER TYPE "public"."play_type" ADD VALUE 'both';

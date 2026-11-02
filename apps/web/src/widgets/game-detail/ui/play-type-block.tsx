@@ -8,7 +8,11 @@ interface PlayTypeBlockProps {
 }
 
 export function PlayTypeBlock({ playType }: PlayTypeBlockProps) {
-  const Icon = playType === PLAY_TYPE.voice ? Mic : MessageSquare;
+  const icons = {
+    [PLAY_TYPE.voice]: [Mic],
+    [PLAY_TYPE.text]: [MessageSquare],
+    [PLAY_TYPE.both]: [Mic, MessageSquare],
+  }[playType];
   return (
     <VStack gap="100">
       <Text typography="subtitle2" className="desktop:text-heading2" render={<h2 />}>
@@ -16,7 +20,9 @@ export function PlayTypeBlock({ playType }: PlayTypeBlockProps) {
       </Text>
       <HStack>
         <Chip tone="outline" render={<span />} className="gap-050">
-          <Icon size={14} strokeWidth={2} aria-hidden />
+          {icons.map((Icon, index) => (
+            <Icon key={index} size={14} strokeWidth={2} aria-hidden />
+          ))}
           {playTypeLabel(playType)}
         </Chip>
       </HStack>

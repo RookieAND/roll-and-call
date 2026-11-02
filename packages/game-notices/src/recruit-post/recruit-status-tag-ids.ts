@@ -27,7 +27,10 @@ export function recruitStatusTagIds({
   const statusTag = closed ? endedTag : open;
   const kindTag = kind === "briefing" ? target.tags.briefing : target.tags.session;
   const adultTag = adultOnly ? target.tags.adult : undefined;
-  return [statusTag, categoryTag, target.tags.playTypes[playType], kindTag, adultTag].flatMap(
-    (id) => id ?? [],
-  );
+  const { voice, text } = target.tags.playTypes;
+  const playTypeTags = playType === "both" ? [voice, text] : [target.tags.playTypes[playType]];
+  // 디스코드 포럼 글은 태그를 5개까지만 단다. 넘치면 뒤쪽 플레이 유형 태그가 빠진다.
+  return [statusTag, categoryTag, kindTag, adultTag, ...playTypeTags]
+    .flatMap((id) => id ?? [])
+    .slice(0, 5);
 }

@@ -44,7 +44,7 @@ export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery", 
 export const gameKind = pgEnum("game_kind", ["briefing", "session"]);
 
 // 설명회는 voice로 고정한다.
-export const playType = pgEnum("play_type", ["voice", "text"]);
+export const playType = pgEnum("play_type", ["voice", "text", "both"]);
 
 export const participantStatus = pgEnum("participant_status", ["confirmed", "waiting", "removed"]);
 
