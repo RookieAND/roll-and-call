@@ -1,9 +1,10 @@
 "use client";
 
-import { RadioCard, RadioGroup } from "@roll-and-call/ui";
+import { cn, RadioCard, RadioGroup } from "@roll-and-call/ui";
 
 import type { SessionWindow } from "@/entities/availability";
 
+import { abbreviatedNames } from "../model/abbreviated-names";
 import { sessionWindowLabel } from "../model/session-window-label";
 
 interface SessionCandidateListProps {
@@ -32,14 +33,21 @@ export function SessionCandidateList({
         const absent = respondents.filter((name) => !candidate.members.includes(name));
         const everyone = absent.length === 0;
         return (
-          <RadioCard.Root key={candidate.iso} value={candidate.iso} indicator="radio">
-            <RadioCard.Title>
+          <RadioCard.Root
+            key={candidate.iso}
+            value={candidate.iso}
+            indicator="radio"
+            className="data-checked:border-primary-600 data-checked:bg-tinted-bg"
+          >
+            <RadioCard.Title className="in-data-checked:text-tinted-ink">
               {sessionWindowLabel({ iso: candidate.iso, playMinutes })}
             </RadioCard.Title>
-            <RadioCard.Description className={everyone ? "text-success-700" : undefined}>
+            <RadioCard.Description
+              className={cn(everyone && "text-success-700", "in-data-checked:text-tinted-ink")}
+            >
               {everyone
                 ? `${candidate.members.length}명 전원 가능`
-                : `${candidate.members.length}명 가능 · ${absent.join(", ")} 불가`}
+                : `${candidate.members.length}명 가능 · ${abbreviatedNames(absent)} 불가`}
             </RadioCard.Description>
             <RadioCard.Indicator />
           </RadioCard.Root>

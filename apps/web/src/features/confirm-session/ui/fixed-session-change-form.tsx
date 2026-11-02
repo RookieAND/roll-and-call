@@ -1,10 +1,10 @@
 "use client";
 
-import { Button, FloatingBar, Text, VStack } from "@roll-and-call/ui";
-import { useState } from "react";
+import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { useState, type ReactNode } from "react";
 
 import { formatDateTime, toKst } from "@/shared/lib";
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, PageShell, toast, useAction } from "@/shared/ui";
 
 import { confirmSession } from "../api/confirm-session";
 import { confirmDialogContent } from "../model/confirm-dialog-content";
@@ -21,6 +21,7 @@ interface FixedSessionChangeFormProps {
   confirmedAt: Date;
   confirmedCount: number;
   playMinutes: number;
+  appBar: ReactNode;
 }
 
 export function FixedSessionChangeForm({
@@ -29,6 +30,7 @@ export function FixedSessionChangeForm({
   confirmedAt,
   confirmedCount,
   playMinutes,
+  appBar,
 }: FixedSessionChangeFormProps) {
   const [now] = useState(() => new Date());
   const dates = fixedSessionDates({ endDate, now });
@@ -37,7 +39,7 @@ export function FixedSessionChangeForm({
     return { date: kst.format("YYYY-MM-DD"), minutes: kst.hour() * 60 + kst.minute() };
   });
   const [confirming, setConfirming] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
   const { pending, run } = useAction();
 
   const startIso = sessionStartIso(start);
@@ -49,66 +51,74 @@ export function FixedSessionChangeForm({
     confirmedCount,
     maxPlayers: confirmedCount,
   });
-  const failure = error ? ["시간을 바꾸지 못했습니다.", error] : null;
+  const failure = failed ? ["시간을 바꾸지 못했습니다.", "잠시 뒤 다시 시도해 주세요."] : null;
   const hintForeground = afterDeadline ? "hint" : "warning";
 
   function openConfirm() {
-    setError(null);
+    setFailed(false);
     setConfirming(true);
   }
 
   function submit() {
-    setError(null);
+    setFailed(false);
     run(() => confirmSession({ gameId, slotIso: startIso }), {
       onSuccess: () => {
         setConfirming(false);
         toast.success("세션 시간을 바꿨습니다");
       },
-      onError: (result) => setError(result.error),
+      onError: () => setFailed(true),
     });
   }
 
+  const changeButton = (
+    <Button
+      variant="solid"
+      colorPalette="success"
+      size="lg"
+      className="w-full"
+      disabled={!afterDeadline}
+      onClick={openConfirm}
+    >
+      세션 시간 바꾸기
+    </Button>
+  );
+
   return (
-    <VStack gap="250">
-      <VStack gap="125" render={<section />}>
-        <Text typography="subtitle2" render={<h2 />}>
-          새 세션 시간
-        </Text>
-        <FixedSessionTimeFields dates={dates} start={start} onChange={setStart} />
-        <Text typography="body4" foreground={hintForeground} render={<p />}>
-          모집 마감 뒤의 시각만 고를 수 있습니다.
-          <br />
-          마감은 {formatDateTime(endDate)}입니다.
-        </Text>
-      </VStack>
+    <PageShell readable appBar={appBar} panel={changeButton}>
+      <Container size="sm" className="desktop:px-0">
+        <VStack gap="250" className="pt-200 pb-200 desktop:pt-0 desktop:pb-0">
+          <VStack gap="125" render={<section />}>
+            <Text typography="subtitle1" render={<h2 />}>
+              새 세션 시간
+            </Text>
+            <FixedSessionTimeFields dates={dates} start={start} onChange={setStart} />
+            <Text typography="body4" foreground={hintForeground} render={<p />}>
+              모집 마감 뒤의 시각만 고를 수 있습니다.
+              <br />
+              마감은 {formatDateTime(endDate)}입니다.
+            </Text>
+          </VStack>
 
-      <FloatingBar.Root elevated={false}>
-        <FloatingBar.Content>
-          <Button
-            variant="solid"
-            colorPalette="success"
-            size="lg"
-            className="w-full"
-            disabled={!afterDeadline}
-            onClick={openConfirm}
+          <div className="desktop:hidden">
+            <FloatingBar.Root elevated={false}>
+              <FloatingBar.Content>{changeButton}</FloatingBar.Content>
+              <FloatingBar.Spacer />
+            </FloatingBar.Root>
+          </div>
+
+          <ConfirmDialog
+            open={confirming}
+            onOpenChange={setConfirming}
+            title="세션 시간을 바꿀까요?"
+            confirmLabel={failed ? "다시 시도" : "바꾸기"}
+            confirmColorPalette="success"
+            pending={pending}
+            onConfirm={submit}
           >
-            세션 시간 바꾸기
-          </Button>
-        </FloatingBar.Content>
-        <FloatingBar.Spacer />
-      </FloatingBar.Root>
-
-      <ConfirmDialog
-        open={confirming}
-        onOpenChange={setConfirming}
-        title="세션 시간을 바꿀까요?"
-        confirmLabel={error ? "다시 시도" : "바꾸기"}
-        confirmColorPalette="success"
-        pending={pending}
-        onConfirm={submit}
-      >
-        <ConfirmSessionDialogBody content={dialogContent} failure={failure} />
-      </ConfirmDialog>
-    </VStack>
+            <ConfirmSessionDialogBody content={dialogContent} failure={failure} />
+          </ConfirmDialog>
+        </VStack>
+      </Container>
+    </PageShell>
   );
 }

@@ -10,7 +10,7 @@ import { availabilityQuery, type ScheduleAvailability } from "@/entities/availab
 import { AvailabilityGrid } from "@/features/coordinate-session";
 import { toKstDateInput, type DayColumn, type TimeRow } from "@/shared/lib";
 
-import { DAYS_PER_PAGE } from "../model/days-per-page";
+import { DAYS_PER_PAGE, DAYS_PER_PAGE_DESKTOP } from "../model/days-per-page";
 import { isScheduleTab } from "../model/is-schedule-tab";
 import { pageIndexOf } from "../model/page-index-of";
 import { SCHEDULE_BODY_MODE, type ScheduleBodyMode } from "../model/schedule-body-mode";
@@ -23,6 +23,7 @@ import { ScheduleNotice } from "./schedule-notice";
 import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
+import { useIsDesktop } from "./use-is-desktop";
 
 interface ScheduleBodyProps {
   gameId: string;
@@ -52,9 +53,13 @@ export function ScheduleBody({
   const { aggregate, blocked } = data;
 
   const confirmedAt = mode.kind === SCHEDULE_BODY_MODE.confirmed ? mode.confirmedAt : null;
-  const pages = chunk(days, DAYS_PER_PAGE);
+  const isDesktop = useIsDesktop();
+  const pages = chunk(days, isDesktop ? DAYS_PER_PAGE_DESKTOP : DAYS_PER_PAGE);
   const confirmedDate = isNull(confirmedAt) ? null : toKstDateInput(confirmedAt);
-  const [pageIndex, setPageIndex] = useState(() => pageIndexOf({ pages, date: confirmedDate }));
+  // 화면 폭이 바뀌면 한 쪽의 날 수도 바뀌므로 쪽 번호 대신 보던 날짜를 기억한다.
+  const [anchorDate, setAnchorDate] = useState(confirmedDate);
+  const pageIndex = pageIndexOf({ pages, date: anchorDate });
+  const changePage = (index: number) => setAnchorDate(pages[index]?.[0]?.date ?? null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
@@ -67,7 +72,7 @@ export function ScheduleBody({
     window.history.replaceState(null, "", `${pathname}?${params}`);
   };
   const pageDays = pages[pageIndex] ?? days;
-  const pager = <DayPager pages={pages} index={pageIndex} onChange={setPageIndex} />;
+  const pager = <DayPager pages={pages} index={pageIndex} onChange={changePage} />;
 
   const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
@@ -109,26 +114,26 @@ export function ScheduleBody({
       );
     case SCHEDULE_BODY_MODE.paint:
       return (
-        <VStack gap="250">
-          {mode.showDeadlineNotice && <ScheduleNotice {...SCHEDULE_NOTICE.deadlinePassed} />}
-          <VStack gap="150">
-            {pager}
-            <ScheduleTabs
-              value={tab}
-              onValueChange={setTab}
-              respondentCount={respondentCount}
-              mine={
-                <AvailabilityGrid
-                  gameId={gameId}
-                  days={pageDays}
-                  timeRows={timeRows}
-                  savedMine={aggregate.mine}
-                  blocked={blocked}
-                />
-              }
-              overlap={overlap}
-            />
-          </VStack>
+        <VStack gap="150">
+          {pager}
+          <ScheduleTabs
+            value={tab}
+            onValueChange={setTab}
+            respondentCount={respondentCount}
+            mine={
+              <AvailabilityGrid
+                gameId={gameId}
+                days={pageDays}
+                timeRows={timeRows}
+                savedMine={aggregate.mine}
+                blocked={blocked}
+                notice={
+                  mode.showDeadlineNotice && <ScheduleNotice {...SCHEDULE_NOTICE.deadlinePassed} />
+                }
+              />
+            }
+            overlap={overlap}
+          />
         </VStack>
       );
     case SCHEDULE_BODY_MODE.viewOnly:

@@ -15,6 +15,14 @@ export function DayPager({ pages, index, onChange }: DayPagerProps) {
   const last = page.at(-1)!;
   const rangeLabel = `${first.md}(${first.dow}) – ${last.md}(${last.dow})`;
 
+  if (pages.length === 1) {
+    return (
+      <Text typography="subtitle2" numeric render={<p />} className="text-center">
+        {rangeLabel}
+      </Text>
+    );
+  }
+
   return (
     <HStack align="center" gap="050">
       <IconButton

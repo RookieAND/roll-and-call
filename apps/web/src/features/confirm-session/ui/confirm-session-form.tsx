@@ -27,6 +27,7 @@ import { SessionWindowSummary } from "./session-window-summary";
 import { UnavailableWarning } from "./unavailable-warning";
 
 const CANDIDATE_LIMIT = 3;
+const RETRY_LINE = "잠시 뒤 다시 시도해 주세요.";
 
 interface ConfirmSessionFormProps {
   game: ConfirmSessionGame;
@@ -63,7 +64,7 @@ export function ConfirmSessionForm({
     }),
   );
   const [confirming, setConfirming] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
   const { pending, run } = useAction();
 
   const startIso = sessionStartIso(start);
@@ -73,22 +74,22 @@ export function ConfirmSessionForm({
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
 
   function openConfirm() {
-    setError(null);
+    setFailed(false);
     setConfirming(true);
   }
 
   function submit() {
-    setError(null);
+    setFailed(false);
     run(() => confirmSession({ gameId, slotIso: startIso }), {
       onSuccess: () => {
         setConfirming(false);
         toast.success(changing ? "확정 시간을 바꿨습니다" : "세션이 확정되었습니다");
       },
-      onError: (result) => setError(result.error),
+      onError: () => setFailed(true),
     });
   }
 
-  const windowLabel = sessionWindowLabel({ iso: startIso, playMinutes });
+  const windowLabel = sessionWindowLabel({ iso: startIso, playMinutes, withDate: false });
   const dialogContent = confirmDialogContent({
     previousLabel: confirmedAt
       ? sessionDialogLabel({ iso: confirmedAt.toISOString(), playMinutes })
@@ -97,10 +98,10 @@ export function ConfirmSessionForm({
     confirmedCount: game.confirmedCount,
     maxPlayers: game.maxPlayers,
   });
-  const failure = error
-    ? [changing ? "시간을 바꾸지 못했습니다." : "확정하지 못했습니다.", error]
+  const failure = failed
+    ? [changing ? "시간을 바꾸지 못했습니다." : "확정하지 못했습니다.", RETRY_LINE]
     : null;
-  const confirmLabel = confirmButtonLabel({ failed: !!error, changing });
+  const confirmLabel = confirmButtonLabel({ failed, changing });
   const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
 
   const confirmButton = (
@@ -124,6 +125,8 @@ export function ConfirmSessionForm({
     />
   );
 
+  const unavailableWarning = absentNames.length > 0 && <UnavailableWarning names={absentNames} />;
+
   return (
     <PageShell
       readable
@@ -132,6 +135,7 @@ export function ConfirmSessionForm({
         <>
           {panelStats}
           {windowSummary}
+          {unavailableWarning}
           {confirmButton}
         </>
       }
@@ -141,7 +145,7 @@ export function ConfirmSessionForm({
           <div className="desktop:hidden">{summary}</div>
           <VStack gap="250">
             <VStack gap="125" render={<section />}>
-              <Text typography="subtitle2" render={<h2 />}>
+              <Text typography="subtitle1" render={<h2 />}>
                 세션 시간
               </Text>
               <SessionTimeFields days={days} window={window} start={start} onChange={setStart} />
@@ -149,15 +153,15 @@ export function ConfirmSessionForm({
                 시작 시각부터 {playLabel}이 끊기지 않고 비는 시간만 셉니다.
               </Text>
               <div className="desktop:hidden">{windowSummary}</div>
-              {absentNames.length > 0 && <UnavailableWarning names={absentNames} />}
+              {unavailableWarning && <div className="desktop:hidden">{unavailableWarning}</div>}
             </VStack>
 
             <VStack gap="125" render={<section />}>
               <HStack align="baseline" gap="075">
-                <Text typography="subtitle2" render={<h2 />}>
+                <Text typography="subtitle1" render={<h2 />}>
                   추천 후보
                 </Text>
-                <Text numeric typography="subtitle2" foreground="muted" render={<span />}>
+                <Text numeric typography="subtitle1" foreground="muted" render={<span />}>
                   {candidates.length}개
                 </Text>
                 <span className="flex-1" />

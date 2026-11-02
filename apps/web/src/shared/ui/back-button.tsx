@@ -13,9 +13,10 @@ interface BackButtonProps {
   fallback: string;
   // false면 이동 기록과 상관없이 항상 fallback 경로로 간다.
   useHistory?: boolean;
+  label?: string;
 }
 
-export function BackButton({ fallback, useHistory = true }: BackButtonProps) {
+export function BackButton({ fallback, useHistory = true, label = "뒤로" }: BackButtonProps) {
   const router = useRouter();
 
   return (
@@ -31,7 +32,7 @@ export function BackButton({ fallback, useHistory = true }: BackButtonProps) {
         />
       }
       variant="ghost"
-      aria-label="뒤로"
+      aria-label={label}
       className={BACK_BUTTON_CLASS}
     >
       <ChevronLeft size={22} />

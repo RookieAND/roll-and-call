@@ -3,6 +3,7 @@
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import type { ReactNode } from "react";
 
 import { availabilityQuery } from "@/entities/availability";
 import { AppError } from "@/shared/api";
@@ -22,6 +23,8 @@ interface AvailabilityGridProps {
   timeRows: TimeRow[];
   savedMine: string[];
   blocked: string[];
+  // 도움말과 격자 사이에 끼우는 안내(모집 기한 지남 등).
+  notice?: ReactNode;
 }
 
 const CELL =
@@ -33,6 +36,7 @@ export function AvailabilityGrid({
   timeRows,
   savedMine,
   blocked,
+  notice,
 }: AvailabilityGridProps) {
   const painter = useSlotPainter({ initial: savedMine, saved: savedMine, blocked });
   const focus = useSlotFocus({ days, timeRows, isBlocked: painter.isBlocked });
@@ -95,8 +99,11 @@ export function AvailabilityGrid({
   return (
     <VStack gap="150">
       <Text typography="body4" foreground="hint" render={<p />}>
-        누르거나 드래그해서 가능한 시간대를 칠해 주세요. 다시 누르면 지워집니다.
+        누르거나 드래그해서 가능한 시간대를 칠해 주세요.
+        <br />
+        다시 누르면 지워집니다.
       </Text>
+      {notice}
 
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
 

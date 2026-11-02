@@ -26,6 +26,8 @@ interface AppBarProps {
   backHistory?: boolean;
   onBack?: () => void;
   backIcon?: "back" | "close";
+  // 뒤로 버튼의 스크린리더 이름. 돌아갈 화면이 정해져 있으면 그 이름을 준다.
+  backLabel?: string;
   action?: ReactNode;
   className?: string;
 }
@@ -41,12 +43,13 @@ export function AppBar({
   backHistory = true,
   onBack,
   backIcon = "back",
+  backLabel: backLabelProp,
   action,
   className,
 }: AppBarProps) {
   const hasBack = !isUndefined(back) || !isUndefined(onBack);
   const BackIcon = backIcon === "close" ? X : ChevronLeft;
-  const backLabel = backIcon === "close" ? "닫기" : "뒤로";
+  const backLabel = backLabelProp ?? (backIcon === "close" ? "닫기" : "뒤로");
   const titleElement = heading ? <h1 /> : <span />;
 
   return (
@@ -70,7 +73,7 @@ export function AppBar({
           <BackIcon size={22} />
         </IconButton>
       ) : (
-        back && <BackButton fallback={back} useHistory={backHistory} />
+        back && <BackButton fallback={back} useHistory={backHistory} label={backLabel} />
       )}
       {brand ? (
         <>

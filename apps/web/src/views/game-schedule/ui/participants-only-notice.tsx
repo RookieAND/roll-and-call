@@ -13,6 +13,7 @@ export function ParticipantsOnlyNotice({ gameId, isSignedIn }: ParticipantsOnlyN
   const toServerPath = useServerPath();
   return (
     <EmptyState
+      image="empty-forbidden"
       title="참여자만 가능 시간을 낼 수 있습니다"
       description="겹침은 누구나 볼 수 있습니다."
       action={

@@ -5,7 +5,7 @@ import {
   formatPlayMinutes,
   formatPlayRange,
 } from "@roll-and-call/database/games/model";
-import { Badge, Container, VStack } from "@roll-and-call/ui";
+import { Badge, Container } from "@roll-and-call/ui";
 import { pick } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
@@ -24,6 +24,8 @@ import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 
 import { ConfirmPanelStats } from "./confirm-panel-stats";
 import { ConfirmSummary } from "./confirm-summary";
+
+const MANAGE_BACK_LABEL = "운영 관리로";
 
 interface GameConfirmViewProps {
   id: string;
@@ -52,35 +54,31 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
     if (!game.confirmedAt || game.cancelledAt)
       redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
     return (
-      <PageShell
-        readable
+      <FixedSessionChangeForm
+        gameId={id}
+        endDate={game.endDate}
+        confirmedAt={game.confirmedAt}
+        confirmedCount={countConfirmed(game.participants)}
+        playMinutes={effectivePlayMinutes(game.playMinutes)}
         appBar={
           <AppBar
             back={`/games/${id}/manage`}
+            backLabel={MANAGE_BACK_LABEL}
             title="세션 시간 바꾸기"
             action={<Badge colorPalette="primary">GM</Badge>}
           />
         }
-      >
-        <Container size="sm" className="desktop:px-0">
-          <VStack gap="200" className="pt-200 pb-200 desktop:pt-0 desktop:pb-0">
-            <FixedSessionChangeForm
-              gameId={id}
-              endDate={game.endDate}
-              confirmedAt={game.confirmedAt}
-              confirmedCount={countConfirmed(game.participants)}
-              playMinutes={effectivePlayMinutes(game.playMinutes)}
-            />
-          </VStack>
-        </Container>
-      </PageShell>
+      />
     );
   }
 
+  // 첫 확정은 「세션 시간 결정」, 이미 확정한 시간을 고칠 때는 「세션 시간 바꾸기」다.
+  const changing = !!game.confirmedAt;
   const appBar = (
     <AppBar
       back={`/games/${id}/manage`}
-      title="세션 시간 결정"
+      backLabel={changing ? MANAGE_BACK_LABEL : undefined}
+      title={changing ? "세션 시간 바꾸기" : "세션 시간 결정"}
       action={<Badge colorPalette="primary">GM</Badge>}
     />
   );
@@ -93,6 +91,7 @@ export async function GameConfirmView({ id }: GameConfirmViewProps) {
         <Container size="sm" className="py-200 desktop:px-0 desktop:py-0">
           <EmptyState
             size="section"
+            image="empty-schedule"
             title={`${AWAITING_RESULT_PHRASE[awaitingResult]} 세션 시간을 정할 수 있습니다`}
             description={
               isLottery

@@ -15,7 +15,7 @@ import {
 import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
-import { AppBar, DESKTOP_CARD_CLASS, EmptyState, PageShell } from "@/shared/ui";
+import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
 import { scheduleBodyModeOf } from "../model/schedule-body-mode-of";
@@ -48,26 +48,25 @@ export async function GameScheduleView({ id }: GameScheduleViewProps) {
     if (!isGm) redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
     return (
       <PageShell readable appBar={appBar}>
-        <div className={DESKTOP_CARD_CLASS}>
-          <Container size="sm">
-            <div className="py-300">
-              <EmptyState
-                title="조율 기간을 먼저 정해 주세요"
-                description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
-                action={
-                  <Button
-                    render={
-                      <Link href={serverPath({ slug: server.slug, path: `/games/${id}/edit` })} />
-                    }
-                    className="mt-100 w-full"
-                  >
-                    구인 수정
-                  </Button>
-                }
-              />
-            </div>
-          </Container>
-        </div>
+        <Container size="sm" className="desktop:px-0">
+          <div className="py-300 desktop:py-0">
+            <EmptyState
+              image="empty-schedule"
+              title="조율 기간을 먼저 정해 주세요"
+              description="조율 기간이 있어야 참여자가 가능 시간을 낼 수 있습니다."
+              action={
+                <Button
+                  render={
+                    <Link href={serverPath({ slug: server.slug, path: `/games/${id}/edit` })} />
+                  }
+                  className="mt-100 w-full"
+                >
+                  구인 수정
+                </Button>
+              }
+            />
+          </div>
+        </Container>
       </PageShell>
     );
   }
@@ -94,25 +93,23 @@ export async function GameScheduleView({ id }: GameScheduleViewProps) {
   const initialAvailability = await getScheduleAvailability({ gameId: id, userId: viewerId });
 
   return (
-    <PageShell appBar={appBar}>
-      <div className={DESKTOP_CARD_CLASS}>
-        <Container>
-          <VStack className="pt-175 pb-200">
-            <ErrorBoundary>
-              <ScheduleBody
-                gameId={id}
-                days={days}
-                timeRows={timeRows}
-                initialAvailability={initialAvailability}
-                mode={mode}
-                // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
-                capacity={game.maxPlayers + 1}
-                gmName={game.gm?.username}
-              />
-            </ErrorBoundary>
-          </VStack>
-        </Container>
-      </div>
+    <PageShell readable appBar={appBar}>
+      <Container size="sm" className="desktop:px-0">
+        <VStack className="pt-175 pb-200 desktop:pt-0">
+          <ErrorBoundary>
+            <ScheduleBody
+              gameId={id}
+              days={days}
+              timeRows={timeRows}
+              initialAvailability={initialAvailability}
+              mode={mode}
+              // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
+              capacity={game.maxPlayers + 1}
+              gmName={game.gm?.username}
+            />
+          </ErrorBoundary>
+        </VStack>
+      </Container>
     </PageShell>
   );
 }
