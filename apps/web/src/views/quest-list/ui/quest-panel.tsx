@@ -13,9 +13,10 @@ interface QuestPanelProps {
 }
 
 // 1100px 이상 오른쪽 패널. 진행 상황·서비스 한눈에 보기(늘 펼침)·보상을 모아, 왼쪽 열에는 퀘스트 카드만 남긴다.
+// 윗면을 왼쪽 첫 섹션 라벨(「참여하기」) 줄에 맞추려고 본문 위 여백(pt-200 + pt-050)만큼 내린다. sticky top은 PageShell 값 그대로다.
 export function QuestPanel({ clearedCount, allCleared }: QuestPanelProps) {
   return (
-    <VStack gap="200">
+    <VStack gap="200" className="mt-250">
       <QuestPanelProgress clearedCount={clearedCount} />
       <Card.Root padding="md" radius={600} render={<section />}>
         <VStack gap="200">

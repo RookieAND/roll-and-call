@@ -9,7 +9,7 @@ export function QuestListSkeleton() {
     <PageShell
       readable
       appBar={<AppBar title="튜토리얼 퀘스트" />}
-      panel={<Skeleton width="100%" height={480} rounded={600} />}
+      panel={<Skeleton width="100%" height={480} rounded={600} className="mt-250" />}
     >
       <Container size="sm">
         <VStack gap="150" aria-busy className="px-050 pt-200 pb-250">
