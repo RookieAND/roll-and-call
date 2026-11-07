@@ -13,6 +13,8 @@ interface ScheduleOverlapProps {
   confirmedAt: Date | null;
   capacity: number;
   gmName?: string;
+  picked: string | null;
+  onPickedChange: (slotIso: string | null) => void;
 }
 
 export function ScheduleOverlap({
@@ -23,6 +25,8 @@ export function ScheduleOverlap({
   confirmedAt,
   capacity,
   gmName,
+  picked,
+  onPickedChange,
 }: ScheduleOverlapProps) {
   return (
     <VStack gap="150">
@@ -37,6 +41,8 @@ export function ScheduleOverlap({
         confirmedAt={confirmedAt}
         capacity={capacity}
         gmName={gmName}
+        picked={picked}
+        onPickedChange={onPickedChange}
       />
     </VStack>
   );

@@ -1,5 +1,5 @@
 import { awaitingResultMethod } from "@roll-and-call/database/games/model";
-import { Badge, Button, Container, VStack } from "@roll-and-call/ui";
+import { Badge, Button, Container } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -12,7 +12,6 @@ import {
   PARTICIPANT_STATUS,
   SCHEDULE_MODE,
 } from "@/entities/game";
-import { ErrorBoundary } from "@/shared/error-boundary";
 import { buildDayColumns, buildTimeRows, serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, EmptyState, PageShell } from "@/shared/ui";
@@ -92,24 +91,25 @@ export async function GameScheduleView({ id }: GameScheduleViewProps) {
 
   const initialAvailability = await getScheduleAvailability({ gameId: id, userId: viewerId });
 
+  const members = [
+    ...(game.gm ? [{ name: game.gm.username, isGm: true }] : []),
+    ...game.participants
+      .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
+      .map((participant) => ({ name: participant.user?.username ?? "?", isGm: false })),
+  ];
+
   return (
-    <PageShell readable appBar={appBar}>
-      <Container size="sm" className="desktop:px-0">
-        <VStack className="pt-175 pb-200 desktop:pt-0">
-          <ErrorBoundary>
-            <ScheduleBody
-              gameId={id}
-              days={days}
-              timeRows={timeRows}
-              initialAvailability={initialAvailability}
-              mode={mode}
-              // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
-              capacity={game.maxPlayers + 1}
-              gmName={game.gm?.username}
-            />
-          </ErrorBoundary>
-        </VStack>
-      </Container>
-    </PageShell>
+    <ScheduleBody
+      appBar={appBar}
+      gameId={id}
+      days={days}
+      timeRows={timeRows}
+      initialAvailability={initialAvailability}
+      mode={mode}
+      // GM도 가능 시간을 내므로 겹침 단계는 정원 + GM 기준으로 나눈다.
+      capacity={game.maxPlayers + 1}
+      gmName={game.gm?.username}
+      members={members}
+    />
   );
 }

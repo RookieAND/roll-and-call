@@ -1,8 +1,7 @@
 "use client";
 
-import { Text, VStack } from "@roll-and-call/ui";
+import { VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
-import { useState } from "react";
 
 import { formatDateTime, type DayColumn, type TimeRow } from "@/shared/lib";
 import { SlotGrid } from "@/shared/ui";
@@ -11,7 +10,7 @@ import { heatStep } from "../model/heat-step";
 import { HeatCell } from "./heat-cell";
 import { HeatLegend } from "./heat-legend";
 import { heatRing } from "./heat-ring";
-import { PickedSlotCard } from "./picked-slot-card";
+import { PickedSlot } from "./picked-slot";
 
 interface HeatmapProps {
   days: DayColumn[];
@@ -21,6 +20,8 @@ interface HeatmapProps {
   confirmedAt?: Date | null;
   capacity: number;
   gmName?: string;
+  picked: string | null;
+  onPickedChange: (slotIso: string | null) => void;
 }
 
 export function Heatmap({
@@ -31,10 +32,11 @@ export function Heatmap({
   confirmedAt,
   capacity,
   gmName,
+  picked,
+  onPickedChange,
 }: HeatmapProps) {
   const confirmedIso = confirmedAt ? new Date(confirmedAt).toISOString() : null;
   const interactive = isNull(confirmedIso);
-  const [picked, setPicked] = useState<string | null>(null);
 
   function renderCell(key: string) {
     const count = counts[key] ?? 0;
@@ -48,7 +50,7 @@ export function Heatmap({
         step={heatStep({ count, capacity })}
         ring={ring}
         interactive={interactive}
-        onPick={() => setPicked(count > 0 ? key : null)}
+        onPick={() => onPickedChange(count > 0 ? key : null)}
       />
     );
   }
@@ -56,15 +58,11 @@ export function Heatmap({
   return (
     <VStack gap="125">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
-      <HeatLegend capacity={capacity} />
-      {interactive &&
-        (picked ? (
-          <PickedSlotCard slotIso={picked} names={names[picked] ?? []} gmName={gmName} />
-        ) : (
-          <Text typography="body4" foreground="hint" render={<p />}>
-            칸을 누르면 그 시간에 가능한 사람이 보입니다.
-          </Text>
-        ))}
+      {/* 1100px 이상에서는 범례와 고른 칸이 오른쪽 패널로 간다. */}
+      <VStack gap="125" className="desktop:hidden">
+        <HeatLegend capacity={capacity} />
+        {interactive && <PickedSlot picked={picked} names={names} gmName={gmName} />}
+      </VStack>
     </VStack>
   );
 }

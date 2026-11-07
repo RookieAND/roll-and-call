@@ -6,11 +6,12 @@ import { heatTextColor } from "../model/heat-text-color";
 
 interface HeatLegendProps {
   capacity: number;
+  className?: string;
 }
 
-export function HeatLegend({ capacity }: HeatLegendProps) {
+export function HeatLegend({ capacity, className }: HeatLegendProps) {
   return (
-    <HStack align="center" gap="075">
+    <HStack align="center" gap="075" wrap className={className}>
       <Text typography="body4" foreground="hint" render={<span />}>
         겹침
       </Text>
@@ -26,7 +27,7 @@ export function HeatLegend({ capacity }: HeatLegendProps) {
         </span>
       ))}
       <span className="flex-1" />
-      <Text typography="body4" foreground="hint" render={<span />}>
+      <Text typography="body4" foreground="hint" className="whitespace-nowrap" render={<span />}>
         GM 포함 {capacity}명
       </Text>
     </HStack>

@@ -1,28 +1,21 @@
 "use client";
 
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { availabilityQuery } from "@/entities/availability";
-import { AppError } from "@/shared/api";
 import { type DayColumn, formatDateTime, type TimeRow } from "@/shared/lib";
-import { SLOT_ROW_PX, SlotGrid, toast, useBeforeUnloadWarning } from "@/shared/ui";
+import { SLOT_ROW_PX, SlotGrid } from "@/shared/ui";
 
-import { saveAvailability } from "../api/save-availability";
+import type { AvailabilityEditor } from "../model/use-availability-editor";
 import { useSlotFocus } from "../model/use-slot-focus";
-import { useSlotPainter } from "../model/use-slot-painter";
 import { AvailabilitySaveBar } from "./availability-save-bar";
 import { BLOCKED_STRIPES, cellTone, UNSAVED_SELECTED_TONE } from "./cell-tone";
 import { Legend } from "./legend";
 
 interface AvailabilityGridProps {
-  gameId: string;
+  editor: AvailabilityEditor;
   days: DayColumn[];
   timeRows: TimeRow[];
-  savedMine: string[];
-  blocked: string[];
   // 도움말과 격자 사이에 끼우는 안내(모집 기한 지남 등).
   notice?: ReactNode;
 }
@@ -30,36 +23,9 @@ interface AvailabilityGridProps {
 const CELL =
   "touch-none rounded-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus";
 
-export function AvailabilityGrid({
-  gameId,
-  days,
-  timeRows,
-  savedMine,
-  blocked,
-  notice,
-}: AvailabilityGridProps) {
-  const painter = useSlotPainter({ initial: savedMine, saved: savedMine, blocked });
+export function AvailabilityGrid({ editor, days, timeRows, notice }: AvailabilityGridProps) {
+  const { painter, pending, save } = editor;
   const focus = useSlotFocus({ days, timeRows, isBlocked: painter.isBlocked });
-  const queryClient = useQueryClient();
-  const { server } = useParams<{ server: string }>();
-  const { mutate, isPending: pending } = useMutation({
-    mutationFn: async (keys: string[]) => {
-      const result = await saveAvailability({ gameId, slotIsos: keys });
-      if (result.error) throw new AppError(result.error, result.errorDisplay);
-      return keys;
-    },
-    meta: { errorMessage: "가능 시간을 저장하지 못했습니다" },
-    onSuccess: (keys) => {
-      painter.markSaved(keys);
-      toast.success("가능 시간을 저장했습니다");
-      // 전체 겹침·확정 후보가 같은 캐시를 읽으므로 저장 결과를 다시 받아 반영한다.
-      return queryClient.invalidateQueries({
-        queryKey: availabilityQuery({ slug: server, gameId }).queryKey,
-      });
-    },
-  });
-
-  useBeforeUnloadWarning(painter.dirty);
 
   function renderCell(key: string) {
     if (painter.isBlocked(key)) {
@@ -113,14 +79,17 @@ export function AvailabilityGrid({
         <Legend swatchStyle={{ backgroundImage: BLOCKED_STRIPES }} label="다른 확정 세션" />
       </HStack>
 
-      <AvailabilitySaveBar
-        selectedCount={painter.selected.size}
-        unsavedCount={painter.unsavedCount}
-        dirty={painter.dirty}
-        pending={pending}
-        onReset={painter.reset}
-        onSave={() => mutate([...painter.selected])}
-      />
+      {/* 1100px 이상에서는 요약 패널이 저장·되돌리기를 맡는다. */}
+      <div className="desktop:hidden">
+        <AvailabilitySaveBar
+          selectedCount={painter.selected.size}
+          unsavedCount={painter.unsavedCount}
+          dirty={painter.dirty}
+          pending={pending}
+          onReset={painter.reset}
+          onSave={save}
+        />
+      </div>
     </VStack>
   );
 }

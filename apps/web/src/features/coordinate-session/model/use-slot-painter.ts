@@ -70,6 +70,7 @@ export function useSlotPainter({
 
   return {
     selected,
+    saved: saved as ReadonlySet<string>,
     dirty: unsavedCount > 0,
     unsavedCount,
     isSaved: (key: string) => saved.has(key),

@@ -1,24 +1,33 @@
 "use client";
 
-import { VStack } from "@roll-and-call/ui";
+import { Container, VStack } from "@roll-and-call/ui";
 import { useQuery } from "@tanstack/react-query";
 import { chunk, isNull, uniq } from "es-toolkit";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 
 import { availabilityQuery, type ScheduleAvailability } from "@/entities/availability";
-import { AvailabilityGrid } from "@/features/coordinate-session";
+import {
+  AvailabilityGrid,
+  AvailabilitySummaryPanel,
+  useAvailabilityEditor,
+} from "@/features/coordinate-session";
+import { ErrorBoundary } from "@/shared/error-boundary";
 import { toKstDateInput, type DayColumn, type TimeRow } from "@/shared/lib";
+import { PageShell } from "@/shared/ui";
 
 import { DAYS_PER_PAGE, DAYS_PER_PAGE_DESKTOP } from "../model/days-per-page";
 import { isScheduleTab } from "../model/is-schedule-tab";
 import { pageIndexOf } from "../model/page-index-of";
+import type { ScheduleMember } from "../model/response-statuses";
 import { SCHEDULE_BODY_MODE, type ScheduleBodyMode } from "../model/schedule-body-mode";
 import { SCHEDULE_NOTICE } from "../model/schedule-notices";
 import { SCHEDULE_TAB, type ScheduleTab } from "../model/schedule-tab";
 import { ConfirmedSessionNotice } from "./confirmed-session-notice";
 import { DayPager } from "./day-pager";
 import { ParticipantsOnlyNotice } from "./participants-only-notice";
+import { PickedSlotPanel } from "./picked-slot-panel";
+import { ResponseStatusPanel } from "./response-status-panel";
 import { ScheduleNotice } from "./schedule-notice";
 import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
@@ -26,6 +35,7 @@ import { ScheduleTabs } from "./schedule-tabs";
 import { useIsDesktop } from "./use-is-desktop";
 
 interface ScheduleBodyProps {
+  appBar: ReactNode;
   gameId: string;
   days: DayColumn[];
   timeRows: TimeRow[];
@@ -34,9 +44,12 @@ interface ScheduleBodyProps {
   mode: ScheduleBodyMode;
   capacity: number;
   gmName?: string;
+  // 응답 현황에 늘어놓을 GM과 확정 참여자.
+  members: ScheduleMember[];
 }
 
 export function ScheduleBody({
+  appBar,
   gameId,
   days,
   timeRows,
@@ -44,6 +57,7 @@ export function ScheduleBody({
   mode,
   capacity,
   gmName,
+  members,
 }: ScheduleBodyProps) {
   const { server } = useParams<{ server: string }>();
   const { data } = useQuery({
@@ -76,8 +90,19 @@ export function ScheduleBody({
 
   const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
-  const overlapProps = { days: pageDays, timeRows, aggregate, confirmedAt, capacity, gmName };
+  const [picked, setPicked] = useState<string | null>(null);
+  const overlapProps = {
+    days: pageDays,
+    timeRows,
+    aggregate,
+    confirmedAt,
+    capacity,
+    gmName,
+    picked,
+    onPickedChange: setPicked,
+  };
   const paintable = mode.kind === SCHEDULE_BODY_MODE.paint;
+  const editor = useAvailabilityEditor({ gameId, savedMine: aggregate.mine, blocked });
   const overlap = hasResponses ? (
     <ScheduleOverlap hint="색이 진할수록 그 시간에 가능한 사람이 많습니다." {...overlapProps} />
   ) : (
@@ -95,56 +120,88 @@ export function ScheduleBody({
     />
   );
 
-  switch (mode.kind) {
-    case SCHEDULE_BODY_MODE.confirmed:
-      return (
-        <VStack gap="150">
-          {pager}
-          <ConfirmedSessionNotice confirmedAt={mode.confirmedAt} />
-          {lockedTabs}
-        </VStack>
-      );
-    case SCHEDULE_BODY_MODE.closed:
-      return (
-        <VStack gap="150">
-          <ScheduleNotice {...mode.notice} />
-          {pager}
-          {lockedTabs}
-        </VStack>
-      );
-    case SCHEDULE_BODY_MODE.paint:
-      return (
-        <VStack gap="150">
-          {pager}
-          <ScheduleTabs
-            value={tab}
-            onValueChange={setTab}
-            respondentCount={respondentCount}
-            mine={
-              <AvailabilityGrid
-                gameId={gameId}
-                days={pageDays}
-                timeRows={timeRows}
-                savedMine={aggregate.mine}
-                blocked={blocked}
-                notice={
-                  mode.showDeadlineNotice && <ScheduleNotice {...SCHEDULE_NOTICE.deadlinePassed} />
-                }
-              />
-            }
-            overlap={overlap}
+  const showsMine = paintable && tab === SCHEDULE_TAB.mine;
+  const panel = (
+    <>
+      {showsMine ? (
+        <AvailabilitySummaryPanel editor={editor} days={days} timeRows={timeRows} />
+      ) : (
+        hasResponses && (
+          <PickedSlotPanel
+            picked={picked}
+            names={aggregate.names}
+            capacity={capacity}
+            gmName={gmName}
+            interactive={isNull(confirmedAt)}
           />
+        )
+      )}
+      <ResponseStatusPanel members={members} names={aggregate.names} />
+    </>
+  );
+
+  return (
+    <PageShell readable appBar={appBar} panel={panel}>
+      <Container size="sm" className="desktop:px-0">
+        <VStack className="pt-175 pb-200 desktop:pt-0">
+          <ErrorBoundary>{renderBody()}</ErrorBoundary>
         </VStack>
-      );
-    case SCHEDULE_BODY_MODE.viewOnly:
-      return (
-        <VStack gap="200">
-          <ParticipantsOnlyNotice gameId={gameId} isSignedIn={mode.isSignedIn} />
+      </Container>
+    </PageShell>
+  );
+
+  function renderBody() {
+    switch (mode.kind) {
+      case SCHEDULE_BODY_MODE.confirmed:
+        return (
           <VStack gap="150">
             {pager}
-            {overlap}
+            <ConfirmedSessionNotice confirmedAt={mode.confirmedAt} />
+            {lockedTabs}
           </VStack>
-        </VStack>
-      );
+        );
+      case SCHEDULE_BODY_MODE.closed:
+        return (
+          <VStack gap="150">
+            <ScheduleNotice {...mode.notice} />
+            {pager}
+            {lockedTabs}
+          </VStack>
+        );
+      case SCHEDULE_BODY_MODE.paint:
+        return (
+          <VStack gap="150">
+            {pager}
+            <ScheduleTabs
+              value={tab}
+              onValueChange={setTab}
+              respondentCount={respondentCount}
+              mine={
+                <AvailabilityGrid
+                  editor={editor}
+                  days={pageDays}
+                  timeRows={timeRows}
+                  notice={
+                    mode.showDeadlineNotice && (
+                      <ScheduleNotice {...SCHEDULE_NOTICE.deadlinePassed} />
+                    )
+                  }
+                />
+              }
+              overlap={overlap}
+            />
+          </VStack>
+        );
+      case SCHEDULE_BODY_MODE.viewOnly:
+        return (
+          <VStack gap="200">
+            <ParticipantsOnlyNotice gameId={gameId} isSignedIn={mode.isSignedIn} />
+            <VStack gap="150">
+              {pager}
+              {overlap}
+            </VStack>
+          </VStack>
+        );
+    }
   }
 }
