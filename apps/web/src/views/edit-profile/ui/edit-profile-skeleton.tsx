@@ -1,10 +1,29 @@
-import { Container, FloatingBar, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { Container, FloatingBar, HStack, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 export function EditProfileSkeleton() {
   return (
-    <PageShell readable appBar={<AppBar back="/me" title="프로필 편집" />}>
+    <PageShell
+      readable
+      appBar={<AppBar back="/me" title="프로필 편집" />}
+      panel={
+        <VStack
+          gap="150"
+          className="rounded-700 border border-dashed border-gray-300 bg-surface p-200"
+        >
+          <Text typography="subtitle2">미리보기</Text>
+          <Skeleton width="100%" rounded={400} className="aspect-[3/1]" />
+          <HStack align="center" gap="125">
+            <Skeleton width={52} height={52} rounded="full" />
+            <VStack gap="050">
+              <Skeleton width={96} height={20} />
+              <Skeleton width={140} height={16} />
+            </VStack>
+          </HStack>
+        </VStack>
+      }
+    >
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="md">
           <VStack gap="250" className="pt-300 pb-500">

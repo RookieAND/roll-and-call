@@ -26,11 +26,15 @@ import { ConfirmDialog, LineBreaks, TagInput, toast, useAction } from "@/shared/
 
 import { updateProfile } from "../api/update-profile";
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
-import { PROFILE_PREVIEW_SLOT_ID } from "../model/profile-preview-slot";
+import {
+  PROFILE_PREVIEW_PANEL_SLOT_ID,
+  PROFILE_PREVIEW_SLOT_ID,
+} from "../model/profile-preview-slot";
 import { AccentColorField } from "./accent-color-field";
 import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
+import { ProfilePreviewPanel } from "./profile-preview-panel";
 import { ProfilePreviewSheet } from "./profile-preview-sheet";
 
 interface EditProfileFormProps {
@@ -97,9 +101,13 @@ export function EditProfileForm({
     );
   }
 
-  // 미리보기 버튼은 앱바 오른쪽에 있다. 입력값은 이 폼이 쥐고 있어서 앱바 자리에 끼워 그린다.
+  // 미리보기는 모바일 앱바 버튼과 데스크톱 오른쪽 패널에 있다. 입력값은 이 폼이 쥐고 있어서 그 자리에 끼워 그린다.
   const [previewSlot, setPreviewSlot] = useState<HTMLElement | null>(null);
-  useEffect(() => setPreviewSlot(document.getElementById(PROFILE_PREVIEW_SLOT_ID)), []);
+  const [previewPanelSlot, setPreviewPanelSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setPreviewSlot(document.getElementById(PROFILE_PREVIEW_SLOT_ID));
+    setPreviewPanelSlot(document.getElementById(PROFILE_PREVIEW_PANEL_SLOT_ID));
+  }, []);
 
   function requestLeave() {
     if (dirty) setConfirmingLeave(true);
@@ -127,6 +135,17 @@ export function EditProfileForm({
   return (
     <form onSubmit={submit} className="flex flex-col">
       {previewSlot && createPortal(preview, previewSlot)}
+      {previewPanelSlot &&
+        createPortal(
+          <ProfilePreviewPanel
+            name={username}
+            avatarUrl={avatarUrl}
+            bio={bio}
+            bannerUrl={bannerUrl}
+            accentColor={accentColor}
+          />,
+          previewPanelSlot,
+        )}
       <VStack gap="250" className="pb-200">
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 

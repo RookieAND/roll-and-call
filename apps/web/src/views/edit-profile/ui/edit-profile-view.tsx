@@ -2,7 +2,7 @@ import { Container, VStack } from "@roll-and-call/ui";
 
 import { profileDisplay } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
-import { PROFILE_PREVIEW_SLOT_ID } from "@/features/edit-profile";
+import { PROFILE_PREVIEW_PANEL_SLOT_ID, PROFILE_PREVIEW_SLOT_ID } from "@/features/edit-profile";
 import { getProfile, getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
@@ -18,8 +18,13 @@ export async function EditProfileView() {
     <PageShell
       readable
       appBar={
-        <AppBar back="/me" title="프로필 편집" action={<div id={PROFILE_PREVIEW_SLOT_ID} />} />
+        <AppBar
+          back="/me"
+          title="프로필 편집"
+          action={<div id={PROFILE_PREVIEW_SLOT_ID} className="desktop:hidden" />}
+        />
       }
+      panel={user && <div id={PROFILE_PREVIEW_PANEL_SLOT_ID} />}
     >
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm" className="desktop:max-w-none">
