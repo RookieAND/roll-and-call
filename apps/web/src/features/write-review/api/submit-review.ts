@@ -88,9 +88,8 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
   let reviewId = target.review?.id;
   if (target.review) {
     await updateReview({ serverId: server.id, reviewId: target.review.id, ...values });
-    await removeUnusedReviewPhotos(
-      target.review.photoUrls.filter((url) => !form.photoUrls.includes(url)),
-    );
+    const removedPhotos = target.review.photoUrls.filter((url) => !form.photoUrls.includes(url));
+    after(() => removeUnusedReviewPhotos(removedPhotos));
   } else {
     try {
       reviewId = await insertReview({

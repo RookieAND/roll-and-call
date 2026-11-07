@@ -18,10 +18,12 @@ export async function finishLotteryDraw({
   server,
   gameId,
   result,
+  syncMonthly = true,
 }: {
   server: Server;
   gameId: string;
   result: DrawLotteryResult;
+  syncMonthly?: boolean;
 }) {
   const step = async (label: string, work: () => Promise<unknown>) => {
     try {
@@ -55,7 +57,7 @@ export async function finishLotteryDraw({
       await step("모집 완료", () => announceRecruitmentComplete({ server, gameId }));
     }
     if (result.kind === DRAW_RESULT_KIND.drawn) {
-      await step("칭호", () => evaluateGameBadges({ serverId: server.id, gameId }));
+      await step("칭호", () => evaluateGameBadges({ serverId: server.id, gameId, syncMonthly }));
     }
   }
   if (result.kind !== DRAW_RESULT_KIND.rejected) {

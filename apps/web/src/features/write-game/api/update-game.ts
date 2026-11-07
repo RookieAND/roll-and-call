@@ -178,10 +178,10 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
   });
 
   const kept = new Set<string>([values.thumbnailUrl ?? "", ...values.images]);
-  await removeUnusedGameFiles({
-    serverId: server.id,
-    urls: [before.thumbnailUrl, ...before.images].filter((url) => !isNull(url) && !kept.has(url)),
-  });
+  const removedFiles = [before.thumbnailUrl, ...before.images].filter(
+    (url) => !isNull(url) && !kept.has(url),
+  );
+  after(() => removeUnusedGameFiles({ serverId: server.id, urls: removedFiles }));
 
   redirect(serverPath({ slug: server.slug, path: `/games/${id}` }));
 }

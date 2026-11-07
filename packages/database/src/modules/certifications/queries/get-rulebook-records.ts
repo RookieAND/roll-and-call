@@ -32,7 +32,7 @@ export async function getRulebookRecords({
   userId: string | null;
   includeRulebookId?: string | null;
 }) {
-  const catalog = await db
+  const catalogQuery = db
     .select({
       id: rulebooks.id,
       name: rulebooks.name,
@@ -63,15 +63,18 @@ export async function getRulebookRecords({
       ),
     )
     .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition);
-  const [server] = await db
-    .select({ certEnforcementDate: servers.certEnforcementDate })
-    .from(servers)
-    .where(eq(servers.id, serverId));
+  const [catalog, [server], pendingRequestNames] = await Promise.all([
+    catalogQuery,
+    db
+      .select({ certEnforcementDate: servers.certEnforcementDate })
+      .from(servers)
+      .where(eq(servers.id, serverId)),
+    db
+      .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })
+      .from(rulebookRequests)
+      .where(and(eq(rulebookRequests.serverId, serverId), isNull(rulebookRequests.outcome))),
+  ]);
   const enforcementDate = server?.certEnforcementDate ?? null;
-  const pendingRequestNames = await db
-    .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })
-    .from(rulebookRequests)
-    .where(and(eq(rulebookRequests.serverId, serverId), isNull(rulebookRequests.outcome)));
   if (!userId) {
     return {
       catalog,

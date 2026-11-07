@@ -1,4 +1,4 @@
-import { and, asc, eq, isNull, lte, sql } from "drizzle-orm";
+import { and, asc, eq, isNotNull, isNull, lte, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
@@ -22,6 +22,7 @@ export async function notifyReviewAvailable({
     .from(games)
     .where(
       and(
+        isNotNull(games.confirmedAt),
         isNull(games.reviewNotifiedAt),
         isNull(games.cancelledAt),
         isNull(games.hiddenAt),

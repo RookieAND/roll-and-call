@@ -37,6 +37,8 @@ const client =
   globalForClient.databaseClient ??
   postgres(process.env.DATABASE_URL!, {
     prepare: false,
+    // 연결마다 배열 타입을 다시 읽는 쿼리(pg_type)가 가장 잦은 쿼리였다. enum 배열이 없고 text[]는 drizzle이 직접 푼다.
+    fetch_types: false,
     max: Number(process.env.DATABASE_POOL_MAX ?? 6),
     idle_timeout: 5,
   });
