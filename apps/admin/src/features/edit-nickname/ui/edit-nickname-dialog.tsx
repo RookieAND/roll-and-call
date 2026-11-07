@@ -88,7 +88,7 @@ export function EditNicknameDialog({
     }
     onOpenChange(false);
     router.refresh();
-    toast.info(
+    toast.warning(
       conflictToastText({ conflict: result.conflict, self: result.self, target: "닉네임" }),
     );
   };

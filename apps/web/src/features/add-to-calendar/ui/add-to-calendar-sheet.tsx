@@ -84,10 +84,9 @@ export function AddToCalendarSheet({
           {failed && (
             <Callout.Root colorPalette="danger" size="sm">
               <Callout.Icon />
-              <div>
-                <Callout.Title>캘린더 파일을 만들지 못했습니다.</Callout.Title>
-                <Callout.Description>잠시 뒤 다시 시도해 주세요.</Callout.Description>
-              </div>
+              <Callout.Description>
+                캘린더 파일을 만들지 못했습니다. 잠시 뒤 다시 시도해 주세요.
+              </Callout.Description>
             </Callout.Root>
           )}
           <Card.Root

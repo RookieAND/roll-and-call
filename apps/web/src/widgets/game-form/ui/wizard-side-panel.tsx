@@ -2,6 +2,7 @@ import { Badge, Callout, Card, Text, VStack } from "@roll-and-call/ui";
 
 import { GameStatusBadge, PrivateMark, type GameStatus } from "@/entities/game";
 
+import { GAME_FORM_STEP_COUNT } from "../model/game-form-steps";
 import { isWizardStepSelectable, wizardStepState } from "../model/wizard-step-state";
 import { WizardStepRow } from "./wizard-step-row";
 
@@ -86,12 +87,13 @@ export function WizardSidePanel({
       </VStack>
 
       <Callout.Root colorPalette="gray" size="sm">
+        <Callout.Icon />
         <Callout.Description>
           {editing ? (
             "수정 후 저장하면 디스코드 공지와 스레드에도 바로 반영됩니다."
           ) : (
             <>
-              구인은 {steps.length}단계에서 등록하면 만들어집니다.
+              구인은 {GAME_FORM_STEP_COUNT}단계에서 등록하면 만들어집니다.
               <br />그 전에 닫으면 쓴 내용은 저장되지 않습니다.
             </>
           )}

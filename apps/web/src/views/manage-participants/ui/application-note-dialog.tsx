@@ -36,7 +36,7 @@ export function ApplicationNoteDialog({ member, question, onClose }: Application
                 </Text>
               </VStack>
             )}
-            <Dialog.Body className="max-h-[260px] rounded-500 border border-gray-200 bg-gray-50 px-150 py-125">
+            <Dialog.Body className="mt-250 max-h-[260px] rounded-500 border border-gray-200 bg-gray-50 px-150 py-125">
               <Text typography="body2" className="whitespace-pre-wrap">
                 {member.applicationNote}
               </Text>

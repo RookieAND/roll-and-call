@@ -193,7 +193,7 @@ describe("editBlockReason", () => {
     };
     expect(reason({ ...coordinate, rosterCount: 1 })).toEqual({
       error:
-        "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 참여자 관리에서 명단을 비우면 바꿀 수 있습니다.",
+        "신청자가 있어 조율 시간대는 바꿀 수 없습니다. 변경하려면 참여자 관리에서 「내보내기」로 모두 내보내야 합니다.",
       field: "windowStartHour",
     });
     expect(reason(coordinate)).toBeNull();

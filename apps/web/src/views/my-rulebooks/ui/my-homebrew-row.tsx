@@ -31,6 +31,11 @@ export function MyHomebrewRow({ application }: MyHomebrewRowProps) {
         <Text typography="body4" foreground="muted" truncate>
           {application.summary}
         </Text>
+        {application.hidden && (
+          <Text typography="body4" foreground="hint">
+            숨김
+          </Text>
+        )}
       </VStack>
       {badge && (
         <Badge colorPalette={badge.palette} className="flex-none">

@@ -141,7 +141,9 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
       return;
     }
     const { conflict } = result;
-    toast.info(conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "룰북" }));
+    toast.warning(
+      conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "룰북" }),
+    );
     router.refresh();
   };
 

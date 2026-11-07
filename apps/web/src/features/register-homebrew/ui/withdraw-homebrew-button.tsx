@@ -3,7 +3,7 @@
 import { Button } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, useAction } from "@/shared/ui";
+import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, toast, useAction } from "@/shared/ui";
 
 import { withdrawHomebrew } from "../api/withdraw-homebrew";
 
@@ -43,7 +43,11 @@ export function WithdrawHomebrewButton({ applicationId, className }: WithdrawHom
         confirmLabel="거두기"
         danger
         pending={pending}
-        onConfirm={() => run(() => withdrawHomebrew(applicationId))}
+        onConfirm={() =>
+          run(() => withdrawHomebrew(applicationId), {
+            onSuccess: () => toast.success("신청을 거두었습니다"),
+          })
+        }
       />
     </>
   );

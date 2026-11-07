@@ -4,7 +4,7 @@ import { useRouter, unstable_rethrow } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { useServerPath } from "@/shared/lib";
-import { handleActionResult, toast } from "@/shared/ui";
+import { handleActionResult, toast, toastActionError } from "@/shared/ui";
 
 import { endSession } from "../api/end-session";
 import type { EndSessionResult } from "../model/end-session-result";
@@ -52,9 +52,9 @@ export function EndSessionDialog({
           router.push(attendancePath);
           toast.success("세션을 마쳤습니다");
         },
-        onError: ({ error, goToAttendance }) => {
-          toast.danger(error);
-          if (goToAttendance) router.push(attendancePath);
+        onError: (rejected) => {
+          toastActionError(rejected);
+          if (rejected.goToAttendance) router.push(attendancePath);
         },
       });
     });

@@ -74,7 +74,7 @@ export function ReviewTemplateEditor({
       try {
         const result = await saveReviewTemplateAction({ title, body, expectedUpdatedAt: savedAt });
         if (!result.ok && "conflict" in result) {
-          toast.info(
+          toast.warning(
             conflictToastText({
               conflict: result.conflict.at
                 ? { by: result.conflict.by, at: result.conflict.at }

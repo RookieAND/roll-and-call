@@ -29,7 +29,6 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
   const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
   const visibleNotice = set ? null : ruleNotice;
   const noticeBelow = visibleNotice?.kind === RULE_NOTICE.homebrewUnavailable;
-  const calloutPalette = gate?.type === RULE_GATE.blocked ? "danger" : "warning";
   const hint = rulebooks
     ? "구인을 열 룰과 판본을 고릅니다."
     : "룰북을 잘못 골랐다면 구인을 취소하고 새로 열어 주세요.";
@@ -103,7 +102,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
         </HStack>
       )}
       {gate && gate.type !== RULE_GATE.open && (
-        <Callout.Root colorPalette={calloutPalette}>
+        <Callout.Root colorPalette="warning">
           <Callout.Icon />
           <Callout.Title className="break-keep">{gate.title}</Callout.Title>
           <Callout.Description className="break-keep">
@@ -111,7 +110,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
           </Callout.Description>
           {gate.action && (
             <Callout.Action>
-              <Button render={<ServerLink path={gate.action.href} />} size="sm" variant="solid">
+              <Button render={<ServerLink path={gate.action.href} />} size="sm" variant="ghost">
                 {gate.action.label}
               </Button>
             </Callout.Action>
@@ -141,7 +140,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
             // 서플리먼트는 판본마다 다르므로 룰을 바꾸면 비운다.
             if (picked.key !== set?.key) {
               if (form.getValues("supplements").length > 0) {
-                toast.info("룰이 바뀌어 고른 서플리먼트를 비웠습니다");
+                toast.warning("룰이 바뀌어 고른 서플리먼트를 비웠습니다");
               }
               setValue("supplements", [], { shouldDirty: true });
             }

@@ -2,7 +2,7 @@ import {
   HOMEBREW_SCOPE_LABEL,
   type HomebrewRuleScope,
 } from "@roll-and-call/database/homebrew/model";
-import { Button, toast } from "@roll-and-call/ui";
+import { toast } from "@roll-and-call/ui";
 import { unstable_rethrow } from "next/navigation";
 
 import { conflictToastText } from "@/shared/lib";
@@ -29,19 +29,15 @@ export async function runHomebrewScopeChange(options: RunHomebrewScopeChangeOpti
         void runHomebrewScopeChange({ ...options, from: to, to: from });
       };
       toast.success(message, {
-        action: (
-          <Button variant="tinted" size="sm" onClick={undo}>
-            되돌리기
-          </Button>
-        ),
+        action: { label: "되돌리기", onClick: undo },
       });
       return;
     }
     if ("blocked" in result) {
-      toast.info(result.blocked);
+      toast.warning(result.blocked);
     } else {
       const { conflict } = result;
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "자작 룰" }),
       );
     }

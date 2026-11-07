@@ -62,7 +62,7 @@ export function ReviewActionDialog({
   const conflictToast = (outcome: Exclude<ReviewModerationOutcome, { ok: true }> | null) => {
     const conflict = outcome && !outcome.gone ? outcome.conflict : null;
     const self = conflict?.byId === viewerId;
-    toast.info(conflictToastText({ conflict, self, target: CONFLICT_TARGET }));
+    toast.warning(conflictToastText({ conflict, self, target: CONFLICT_TARGET }));
     return conflict;
   };
   const settle = (outcome: ReviewModerationOutcome) => {

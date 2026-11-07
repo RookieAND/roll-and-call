@@ -15,6 +15,10 @@ describe("legacyServerRedirect", () => {
     expect(redirectOf("/me")).toEqual({ path: "/trpia/me", permanent: true });
   });
 
+  it("옛 소개 슬라이드 /onboarding은 기본 서버의 튜토리얼 퀘스트 목록으로 간다", () => {
+    expect(redirectOf("/onboarding")).toEqual({ path: "/trpia/onboarding", permanent: true });
+  });
+
   it("옛 프로필 주소 /u를 /users로 옮긴다", () => {
     expect(redirectOf("/u/abc")).toEqual({ path: "/trpia/users/abc", permanent: true });
     expect(redirectOf("/u")).toEqual({ path: "/trpia/users", permanent: true });
@@ -34,7 +38,6 @@ describe("legacyServerRedirect", () => {
     for (const pathname of [
       "/",
       "/help",
-      "/onboarding",
       "/trpia/games",
       "/gamesx",
       "/api/me",

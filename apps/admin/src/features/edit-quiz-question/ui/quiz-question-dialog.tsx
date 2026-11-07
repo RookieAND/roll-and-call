@@ -54,7 +54,7 @@ export function QuizQuestionDialog({
         active,
       });
       if (!result.ok) {
-        toast.danger(result.error);
+        toast.warning(result.error);
         return;
       }
       toast.success(message);

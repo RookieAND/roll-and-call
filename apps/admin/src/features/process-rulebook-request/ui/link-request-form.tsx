@@ -68,7 +68,7 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
     if (isUndefined(result)) return;
     if (!result.ok) {
       const { conflict } = result;
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "요청" }),
       );
       onDone();

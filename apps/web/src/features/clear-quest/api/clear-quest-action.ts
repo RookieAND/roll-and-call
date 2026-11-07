@@ -25,6 +25,6 @@ export async function clearQuestAction(
     return { allCleared: result.allCleared, badgeGranted: result.badgeGranted };
   } catch (error) {
     console.error("clearQuest failed:", error);
-    return { error: SAVE_FAILED };
+    return { error: SAVE_FAILED, failed: true };
   }
 }

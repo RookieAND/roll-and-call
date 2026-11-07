@@ -25,11 +25,11 @@ export function NextRoundBanner({ game, waitingCount, baseDate }: NextRoundBanne
           <br />
           대기 {waitingCount}명이 새 회차의 확정으로 넘어갑니다.
         </Callout.Description>
-        <div className="col-span-full mt-150">
-          <Button className="w-full" onClick={() => setOpen(true)}>
+        <Callout.Action>
+          <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
             다음 회차 만들기
           </Button>
-        </div>
+        </Callout.Action>
       </Callout.Root>
       <NextRoundSheet
         open={open}

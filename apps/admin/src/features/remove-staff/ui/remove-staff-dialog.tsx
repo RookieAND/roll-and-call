@@ -49,7 +49,7 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
       toast.success(`${staff.nickname}님을 운영진에서 해제했습니다`);
       return;
     }
-    toast.info("이미 해제됐거나 소유자인 사람입니다");
+    toast.warning("이미 해제됐거나 소유자인 사람입니다");
     router.refresh();
   };
 

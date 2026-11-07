@@ -5,7 +5,14 @@ import { Button, Callout } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useState } from "react";
 
-import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, toast, useAction } from "@/shared/ui";
+import {
+  ConfirmDialog,
+  LARGE_DIALOG_TITLE_CLASS,
+  LineBreaks,
+  toast,
+  toastActionError,
+  useAction,
+} from "@/shared/ui";
 
 import { finishSelection } from "../api/finish-selection";
 import { finishSelectionLines } from "../model/finish-selection-lines";
@@ -52,7 +59,7 @@ export function FinishSelectionCard({
       },
       onError: (result) => {
         setConfirming(false);
-        toast.danger(result.error);
+        toastActionError(result);
       },
     });
   }
@@ -65,16 +72,16 @@ export function FinishSelectionCard({
         <Callout.Description>
           <LineBreaks lines={lines} />
         </Callout.Description>
-        <div className="col-span-full mt-150">
+        <Callout.Action>
           <Button
-            size="lg"
-            className="w-full"
+            variant="ghost"
+            size="sm"
             disabled={!isNull(block)}
             onClick={() => setConfirming(true)}
           >
             선발 마치기
           </Button>
-        </div>
+        </Callout.Action>
       </Callout.Root>
 
       <ConfirmDialog

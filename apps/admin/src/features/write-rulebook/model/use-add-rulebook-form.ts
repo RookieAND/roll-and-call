@@ -87,7 +87,9 @@ export function useAddRulebookForm({
       return;
     }
     const conflict = result.conflict;
-    toast.info(conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "요청" }));
+    toast.warning(
+      conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "요청" }),
+    );
     router.push(toServerPath(backHref));
   };
 

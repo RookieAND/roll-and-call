@@ -19,6 +19,7 @@ describe("homebrewDetailState", () => {
     expect(state.dateLabel).toBe("2026년 11월 5일 신청");
     expect(state.action).toBe(HOMEBREW_DETAIL_ACTION.withdraw);
     expect(state.editable).toBe(false);
+    expect(state.guide).toBeNull();
   });
 
   it("반려 사유는 적은 사유를 먼저, 없으면 태그를 쓰고 다시 낸 신청엔 버튼이 없다", () => {
@@ -29,7 +30,11 @@ describe("homebrewDetailState", () => {
         ?.lines,
     ).toEqual(["사유: 링크 문서를 열어 볼 수 없습니다."]);
     expect(homebrewDetailState(rejected).action).toBe(HOMEBREW_DETAIL_ACTION.reapply);
-    expect(homebrewDetailState({ ...rejected, reapplied: true }).action).toBeNull();
+    expect(homebrewDetailState(rejected).guide).toBeNull();
+    expect(homebrewDetailState({ ...rejected, reapplied: true })).toMatchObject({
+      action: null,
+      guide: "이 신청은 고쳐서 다시 신청했습니다.",
+    });
   });
 
   it("승인되면 소개를 고칠 수 있고 숨긴 룰은 못 고친다", () => {
@@ -43,9 +48,11 @@ describe("homebrewDetailState", () => {
       editable: true,
       callout: null,
       action: null,
+      guide: "심사 자료를 바꾸려면 운영진에게 문의해 주세요.",
     });
     const hidden = homebrewDetailState({ ...approved, hidden: true });
     expect(hidden.editable).toBe(false);
     expect(hidden.callout?.colorPalette).toBe("warning");
+    expect(hidden.guide).toBe("심사 자료를 바꾸려면 운영진에게 문의해 주세요.");
   });
 });

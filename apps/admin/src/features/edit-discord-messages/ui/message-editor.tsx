@@ -130,7 +130,7 @@ export function MessageEditor({
         ]);
         const conflict = results.find((result) => !result.ok && "conflict" in result);
         if (conflict && !conflict.ok && "conflict" in conflict) {
-          toast.info(
+          toast.warning(
             conflictToastText({
               conflict: conflict.conflict.at
                 ? { by: conflict.conflict.by, at: conflict.conflict.at }

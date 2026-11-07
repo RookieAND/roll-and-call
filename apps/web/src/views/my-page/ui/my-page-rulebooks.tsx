@@ -1,5 +1,5 @@
 import { Button, Callout, HStack, Text, VStack, cn } from "@roll-and-call/ui";
-import { CalendarDays, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
 import { formatDate } from "@/shared/lib";
@@ -36,11 +36,9 @@ export function MyPageRulebooks({
       </HStack>
 
       {showBand && (
-        <Callout.Root colorPalette="notice" role="note" className="border-notice-border">
-          <Callout.Icon>
-            <CalendarDays size={16} />
-          </Callout.Icon>
-          <Callout.Description className="font-semibold">
+        <Callout.Root colorPalette="notice" role="note">
+          <Callout.Icon />
+          <Callout.Description>
             {formatDate(enforcementDate!)}부터 구인을 열려면 룰북 인증이 필요합니다.
             <br />
             미리 인증해 두세요.

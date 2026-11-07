@@ -9,6 +9,7 @@ interface RecruitMethodNoteProps {
 export function RecruitMethodNote({ method }: RecruitMethodNoteProps) {
   return (
     <Callout.Root colorPalette="gray" size="sm">
+      <Callout.Icon />
       <Callout.Description>{NOTE_LINES[method]}</Callout.Description>
     </Callout.Root>
   );

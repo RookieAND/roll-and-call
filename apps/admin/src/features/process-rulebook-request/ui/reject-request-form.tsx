@@ -43,7 +43,7 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
     if (isUndefined(result)) return;
     if (!result.ok) {
       const { conflict } = result;
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "요청" }),
       );
       onDone();

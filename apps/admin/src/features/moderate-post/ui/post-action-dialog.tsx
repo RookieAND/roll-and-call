@@ -48,13 +48,13 @@ export function PostActionDialog({
     }
     if (outcome.gone) {
       router.push(toServerPath("/posts"));
-      toast.info(conflictToastText({ conflict: null, self: false, target: CONFLICT_TARGET }));
+      toast.warning(conflictToastText({ conflict: null, self: false, target: CONFLICT_TARGET }));
       return;
     }
     close();
     router.refresh();
     const self = outcome.conflict?.byId === viewerId;
-    toast.info(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
+    toast.warning(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
   };
   const removing = shownAction === POST_ACTION.remove;
   const Root = removing ? ResponsiveDialog.Root : ResponsiveDialog.Root;

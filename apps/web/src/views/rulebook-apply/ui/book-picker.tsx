@@ -147,6 +147,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
               </VStack>
             ) : (
               <Callout.Root colorPalette="gray">
+                <Callout.Icon />
                 <Callout.Title>찾는 룰북이 목록에 없나요?</Callout.Title>
                 <Callout.Description className="break-keep">
                   추가 요청을 보내 주세요.
@@ -154,7 +155,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
                   추가되면 알림 탭으로 알립니다.
                 </Callout.Description>
                 <Callout.Action>
-                  <Button render={<Link href={requestHref} />} variant="outline" size="sm">
+                  <Button render={<Link href={requestHref} />} variant="ghost" size="sm">
                     <Plus size={14} strokeWidth={2.4} aria-hidden />
                     추가 요청
                   </Button>

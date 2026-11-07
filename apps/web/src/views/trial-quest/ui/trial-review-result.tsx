@@ -57,14 +57,36 @@ export function TrialReviewResult({ kind, review, onBack, onOpenSession }: Trial
         <FloatingBar.Root elevated={false}>
           <FloatingBar.Content>
             <Container size="sm">
-              <HStack gap="100">
-                <Button variant="outline" size="lg" className="flex-1" onClick={onOpenSession}>
-                  후기 보기
-                </Button>
-                <ClearQuestButton quest="first_review" className="flex-1">
-                  다음
+              <VStack gap="100">
+                <HStack gap="100">
+                  <Button
+                    variant="outline"
+                    colorPalette="gray"
+                    size="lg"
+                    className="flex-1"
+                    onClick={onOpenSession}
+                  >
+                    후기 보기
+                  </Button>
+                  <ClearQuestButton
+                    quest="first_review"
+                    to="/games"
+                    variant="outline"
+                    colorPalette="primary"
+                    className="flex-1"
+                  >
+                    실제 구인 보러 가기
+                  </ClearQuestButton>
+                </HStack>
+                <ClearQuestButton
+                  quest="first_review"
+                  variant="ghost"
+                  colorPalette="gray"
+                  className="w-full"
+                >
+                  목록으로
                 </ClearQuestButton>
-              </HStack>
+              </VStack>
             </Container>
           </FloatingBar.Content>
           <FloatingBar.Spacer />

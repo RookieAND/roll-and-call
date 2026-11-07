@@ -61,7 +61,7 @@ export function useGrantCertification({ options, backHref }: UseGrantCertificati
         ? `부여할 룰북이 없는 유저 ${userIds.length - keptUserIds.length}명을 선택에서 뺐습니다`
         : null,
     ]);
-    if (title) toast.info(title, { description });
+    if (title) toast.warning(title, { description });
   };
 
   const confirm = async () => {
@@ -73,12 +73,12 @@ export function useGrantCertification({ options, backHref }: UseGrantCertificati
     });
     if (isUndefined(result)) return;
     if (!result.ok) {
-      toast.danger(result.error);
+      toast.warning(result.error);
       return;
     }
     const outcome = grantResultToast(result);
     if (!outcome.success) {
-      toast.info(outcome.title);
+      toast.warning(outcome.title);
       router.refresh();
       return;
     }

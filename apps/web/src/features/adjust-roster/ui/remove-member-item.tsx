@@ -75,6 +75,7 @@ export function RemoveMemberItem({
             )}
             {notifies && (
               <Callout.Root colorPalette="gray" size="sm">
+                <Callout.Icon />
                 <Callout.Description>
                   {member.username}님에게 알림 탭으로 알립니다.
                 </Callout.Description>

@@ -67,7 +67,7 @@ export function ApplicationNoteSheet({
             </Callout.Description>
             <Callout.Action>
               <Button
-                variant="outline"
+                variant="ghost"
                 colorPalette="danger"
                 size="sm"
                 className="min-h-[44px]"

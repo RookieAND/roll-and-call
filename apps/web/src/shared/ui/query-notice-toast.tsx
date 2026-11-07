@@ -21,7 +21,7 @@ export function QueryNoticeToast({ messages }: QueryNoticeToastProps) {
     if (!notice) return;
     const message = isQueryNotice(notice) ? messages[notice] : undefined;
     // toast id가 문구라 StrictMode에서 두 번 불려도 한 번만 보인다.
-    if (message) toast.info(message);
+    if (message) toast.warning(message);
     const rest = new URLSearchParams(searchParams);
     rest.delete(QUERY_NOTICE_PARAM);
     const query = rest.toString();

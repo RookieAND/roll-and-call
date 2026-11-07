@@ -24,7 +24,7 @@ export function ServerInfoMobileForm({
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(joinUrl);
-      toast.success("가입 링크를 복사했습니다");
+      toast.info("가입 링크를 복사했습니다");
     } catch {
       toast.danger("가입 링크를 복사하지 못했습니다");
     }

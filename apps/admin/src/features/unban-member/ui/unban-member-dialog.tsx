@@ -51,7 +51,7 @@ export function UnbanMemberDialog({
     onOpenChange(false);
     router.refresh();
     if (!result.ok) {
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict: result.conflict, self: result.self, target: "차단 해제" }),
       );
       return;

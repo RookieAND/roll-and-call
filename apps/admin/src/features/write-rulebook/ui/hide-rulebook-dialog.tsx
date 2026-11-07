@@ -58,7 +58,7 @@ export function HideRulebookDialog({
       toast.success(`「${rulebookLabel}」 룰북을 숨겼습니다`);
     } else {
       const { conflict } = result;
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "룰북" }),
       );
       router.refresh();

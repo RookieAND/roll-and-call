@@ -70,6 +70,7 @@ export function ScheduleModeField({
       )}
       {!locked && !coordinateDisabled && (
         <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon />
           <Callout.Description>{HINT[value]}</Callout.Description>
         </Callout.Root>
       )}

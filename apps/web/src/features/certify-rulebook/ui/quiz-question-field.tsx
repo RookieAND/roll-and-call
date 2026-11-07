@@ -1,4 +1,4 @@
-import { Callout, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Callout, Field, Text, TextInput, VStack } from "@roll-and-call/ui";
 import { BookOpen } from "lucide-react";
 
 interface QuizQuestionFieldProps {
@@ -23,14 +23,14 @@ export function QuizQuestionField({
   return (
     <VStack gap="150">
       <Callout.Root>
+        <Callout.Icon>
+          <BookOpen size={14} strokeWidth={2.2} />
+        </Callout.Icon>
         <Callout.Description>
-          <HStack align="center" gap="075" render={<span />}>
-            <BookOpen size={16} strokeWidth={2.1} aria-hidden className="flex-none" />
-            <Text typography="body3" weight="bold" foreground="inherit">
-              {bookTitle}
-            </Text>
-          </HStack>
-          <Text typography="body4" foreground="muted" className="pl-300">
+          <Text typography="body3" weight="bold" foreground="inherit">
+            {bookTitle}
+          </Text>
+          <Text typography="body4" foreground="muted">
             {bookSub}
           </Text>
         </Callout.Description>

@@ -91,11 +91,12 @@ export function GameRecruitFields({
           />
         </Field.Root>
         {confirmedCount > 1 && (
-          <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Root colorPalette="warning" size="sm">
+            <Callout.Icon />
             <Callout.Description>
               {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
               <br />
-              줄이려면 참여자 관리에서 확정을 먼저 풀어 주세요.
+              줄이려면 참여자 관리에서 확정 참여자를 「대기로 이동」해야 합니다.
             </Callout.Description>
           </Callout.Root>
         )}

@@ -205,10 +205,11 @@ export function ReviewForm({
             <ReviewSpoilerField value={spoiler} onChange={changeSpoiler} />
 
             {submitFailed && (
-              <Callout.Root colorPalette="danger">
+              <Callout.Root colorPalette="danger" size="sm">
                 <Callout.Icon />
-                <Callout.Title>등록하지 못했습니다</Callout.Title>
-                <Callout.Description>쓴 내용은 저장되어 있습니다.</Callout.Description>
+                <Callout.Description>
+                  등록하지 못했습니다. 쓴 내용은 저장되어 있습니다.
+                </Callout.Description>
               </Callout.Root>
             )}
           </VStack>
@@ -248,7 +249,7 @@ export function ReviewForm({
                 ? "고친 내용과 새로 올린 사진은 지워집니다."
                 : "글은 저장되고 사진은 지워집니다."
             }
-            cancelLabel="계속 쓰기"
+            cancelLabel={editing ? "이어서 고치기" : "이어서 쓰기"}
             confirmLabel="나가기"
             onConfirm={leave}
           />

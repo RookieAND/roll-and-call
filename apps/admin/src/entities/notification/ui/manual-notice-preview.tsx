@@ -12,7 +12,7 @@ export function ManualNoticePreview({ text }: ManualNoticePreviewProps) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("문구를 복사했습니다");
+      toast.info("문구를 복사했습니다");
     } catch {
       toast.danger("문구를 복사하지 못했습니다");
     }

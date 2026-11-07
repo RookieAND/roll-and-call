@@ -59,7 +59,7 @@ export function KickMemberDialog({
     onOpenChange(false);
     router.refresh();
     if (!result.ok) {
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict: result.conflict, self: result.self, target: "추방" }),
       );
       return;

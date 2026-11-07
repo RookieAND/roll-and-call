@@ -57,7 +57,7 @@ export function NoShowReasonForm({
     if (result.ok) {
       toast.success(copy.successMessage);
     } else {
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict: result.conflict, self: result.self, target: "불참 기록" }),
       );
     }

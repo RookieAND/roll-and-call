@@ -29,7 +29,7 @@ export function DeleteMemoDialog({ memoId, open, onOpenChange }: DeleteMemoDialo
     const result = await submit({ memoId });
     if (isUndefined(result)) return;
     if (result.ok) toast.success("메모를 지웠습니다");
-    else toast.info(conflictToastText({ conflict: null, self: false, target: "메모" }));
+    else toast.warning(conflictToastText({ conflict: null, self: false, target: "메모" }));
     onOpenChange(false);
     router.refresh();
   };

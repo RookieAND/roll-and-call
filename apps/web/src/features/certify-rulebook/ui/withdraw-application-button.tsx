@@ -51,7 +51,7 @@ export function WithdrawApplicationButton({
         onOpenChange={setOpen}
         title="신청을 취소할까요?"
         description={description}
-        cancelLabel="돌아가기"
+        cancelLabel="취소"
         confirmLabel="신청 취소"
         danger
         pending={pending}
