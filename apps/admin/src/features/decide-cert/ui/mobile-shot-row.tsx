@@ -13,6 +13,7 @@ interface MobileShotRowProps {
   checked: boolean;
   flagged: boolean;
   flaggable: boolean;
+  flagLocked: boolean;
   rejecting: boolean;
   disabled: boolean;
   onFlagToggle: () => void;
@@ -27,6 +28,7 @@ export function MobileShotRow({
   checked,
   flagged,
   flaggable,
+  flagLocked,
   rejecting,
   disabled,
   onFlagToggle,
@@ -67,7 +69,12 @@ export function MobileShotRow({
           variant={flagged ? "tinted" : "outline"}
           colorPalette={flagged ? "danger" : "gray"}
           aria-pressed={flagged}
-          disabled={disabled}
+          disabled={disabled || flagLocked}
+          title={
+            flagLocked
+              ? "체크한 사진은 문제로 지정할 수 없습니다. 체크를 풀면 지정할 수 있습니다"
+              : undefined
+          }
           onClick={onFlagToggle}
           className="mr-100 min-h-10 shrink-0"
         >

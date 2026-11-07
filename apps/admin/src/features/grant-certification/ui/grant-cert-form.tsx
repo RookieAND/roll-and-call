@@ -29,6 +29,7 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
     chosenBooks,
     chosen,
     receiving,
+    blockedReason,
     grantCount,
     approving,
     approvingNames,
@@ -130,8 +131,8 @@ export function GrantCertForm({ options, staffChannel, backHref }: GrantCertForm
         data-full-bleed
         className="sticky bottom-0 z-(--rc-z-sticky) border-t border-gray-200 bg-surface px-page py-150"
       >
-        <Text typography="body4" foreground="hint">
-          처리 내역은 활동 기록에 남습니다.
+        <Text typography="body4" foreground={blockedReason ? "danger" : "hint"}>
+          {blockedReason ?? "처리 내역은 활동 기록에 남습니다."}
         </Text>
         <HStack gap="100" className="ml-auto">
           <Button

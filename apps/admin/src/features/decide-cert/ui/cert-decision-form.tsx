@@ -1,6 +1,7 @@
 "use client";
 
 import { VStack } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { useRef, type ReactNode } from "react";
 
 import type { CertFormat } from "@/shared/server";
@@ -66,13 +67,14 @@ export function CertDecisionForm({
     )
     .map((book) => book.label);
   const groupNote = footerNote({
-    reviewable: decision.reviewable,
+    state,
     checkedCount: decision.checkedShots.length,
     checkableCount: decision.checkableShots.length,
+    reasonPicked: decision.reasonPicked,
+    userReasonFilled: decision.userReasonFilled,
     group: {
       approveCount: decision.approveBookCount,
       rejectCount: decision.rejectBookCount,
-      reasonReady: decision.reasonReady,
     },
   });
   const groupLabel = groupConfirmLabel({
@@ -179,6 +181,7 @@ export function CertDecisionForm({
           networkError={decision.approvalNetworkError || decision.rejectionNetworkError}
           showEnterHint={groupApproveOnly}
           approveRef={approveRef}
+          skipDisabled={isUndefined(nextHref)}
           onSkip={decision.skip}
           onNoteClick={moveToNoteTarget}
           onSubmit={() => void decision.approve()}
@@ -187,7 +190,6 @@ export function CertDecisionForm({
         <CertDecisionFooter
           state={state}
           rejecting={decision.rejecting}
-          reviewable={decision.reviewable}
           checkedCount={decision.checkedShots.length}
           checkableCount={decision.checkableShots.length}
           canApprove={decision.canApprove}
@@ -197,6 +199,8 @@ export function CertDecisionForm({
           approvalNetworkError={decision.approvalNetworkError}
           rejectionNetworkError={decision.rejectionNetworkError}
           reason={decision.reason}
+          reasonPicked={decision.reasonPicked}
+          userReasonFilled={decision.userReasonFilled}
           flaggedLabels={decision.flaggedLabels}
           canStartReject={decision.canStartReject}
           nextHref={nextHref}

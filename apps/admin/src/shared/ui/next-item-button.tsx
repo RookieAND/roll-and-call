@@ -1,6 +1,7 @@
 import { Button } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 
+import { DisabledTooltip } from "./disabled-tooltip";
 import { ServerLink } from "./server-link";
 
 interface NextItemButtonProps {
@@ -11,9 +12,11 @@ interface NextItemButtonProps {
 export function NextItemButton({ href }: NextItemButtonProps) {
   if (isUndefined(href)) {
     return (
-      <Button variant="outline" size="sm" disabled>
-        다음 건
-      </Button>
+      <DisabledTooltip note="마지막 건이라 이동할 다음 건이 없습니다">
+        <Button variant="outline" size="sm" disabled>
+          다음 건
+        </Button>
+      </DisabledTooltip>
     );
   }
   return (

@@ -17,6 +17,7 @@ interface GroupDecisionFooterProps {
   networkError: boolean;
   showEnterHint: boolean;
   approveRef: RefObject<HTMLButtonElement | null>;
+  skipDisabled: boolean;
   onSkip: () => void;
   onNoteClick: (note: FooterNote) => void;
   onSubmit: () => void;
@@ -32,6 +33,7 @@ export function GroupDecisionFooter({
   networkError,
   showEnterHint,
   approveRef,
+  skipDisabled,
   onSkip,
   onNoteClick,
   onSubmit,
@@ -40,7 +42,14 @@ export function GroupDecisionFooter({
   return (
     <DecisionFooter
       notice={networkError ? <ActionNetworkError /> : null}
-      status={<SkipStatus note={note} onSkip={onSkip} onNoteClick={onNoteClick} />}
+      status={
+        <SkipStatus
+          note={note}
+          skipDisabled={skipDisabled}
+          onSkip={onSkip}
+          onNoteClick={onNoteClick}
+        />
+      }
     >
       <Button
         ref={approveRef}

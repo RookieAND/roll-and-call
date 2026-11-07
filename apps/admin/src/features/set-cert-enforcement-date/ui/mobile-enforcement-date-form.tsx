@@ -103,7 +103,15 @@ export function MobileEnforcementDateForm({ enforcementDate }: MobileEnforcement
           <EnforcementScope />
         </VStack>
       </VStack>
-      <VStack className="sticky bottom-0 z-(--rc-z-sticky) mt-auto border-t border-gray-200 bg-surface px-150 pt-125 pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]">
+      <VStack
+        gap="075"
+        className="sticky bottom-0 z-(--rc-z-sticky) mt-auto border-t border-gray-200 bg-surface px-150 pt-125 pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]"
+      >
+        {picked ? null : (
+          <Text typography="body4" foreground="muted" className="text-center">
+            날짜를 고르면 변경할 수 있습니다.
+          </Text>
+        )}
         <Button
           disabled={!picked || pending}
           loading={pending}

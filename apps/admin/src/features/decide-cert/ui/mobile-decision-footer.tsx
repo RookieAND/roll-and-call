@@ -1,4 +1,5 @@
 import { Button, HStack, Text } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 
 import { OTHER_REASON } from "@/shared/lib";
@@ -13,7 +14,6 @@ import { MobileNextButton } from "./mobile-next-button";
 interface MobileDecisionFooterProps {
   state: CertReviewState;
   rejecting: boolean;
-  reviewable: boolean;
   checkedCount: number;
   checkableCount: number;
   canApprove: boolean;
@@ -23,6 +23,8 @@ interface MobileDecisionFooterProps {
   approvalNetworkError: boolean;
   rejectionNetworkError: boolean;
   reason: string;
+  reasonPicked: boolean;
+  userReasonFilled: boolean;
   flaggedLabels: string[];
   canStartReject: boolean;
   nextHref?: string;
@@ -38,7 +40,6 @@ interface MobileDecisionFooterProps {
 export function MobileDecisionFooter({
   state,
   rejecting,
-  reviewable,
   checkedCount,
   checkableCount,
   canApprove,
@@ -48,6 +49,8 @@ export function MobileDecisionFooter({
   approvalNetworkError,
   rejectionNetworkError,
   reason,
+  reasonPicked,
+  userReasonFilled,
   flaggedLabels,
   canStartReject,
   nextHref,
@@ -59,7 +62,14 @@ export function MobileDecisionFooter({
   onReject,
 }: MobileDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
-  const note = footerNote({ reviewable, checkedCount, checkableCount });
+  const note = footerNote({
+    state,
+    checkedCount,
+    checkableCount,
+    rejecting,
+    reasonPicked,
+    userReasonFilled,
+  });
   const footerLine = networkError ? (
     <ActionNetworkLine />
   ) : (
@@ -75,12 +85,13 @@ export function MobileDecisionFooter({
   }
   if (rejecting) {
     const flagged = Boolean(reason && flaggedLabels.length);
+    const blockedNote = note && !canReject ? note : undefined;
     const picked = reason === OTHER_REASON ? "기타 사유를 입력했고" : "사유 1개를 골랐고";
     return (
       <MobileActionBar elevated={false}>
-        {networkError ? (
-          <ActionNetworkLine />
-        ) : (
+        {networkError ? <ActionNetworkLine /> : null}
+        {blockedNote ? <FooterLine note={blockedNote} onNoteClick={onNoteClick} /> : null}
+        {networkError || blockedNote ? null : (
           <Text
             typography="body4"
             weight={flagged ? "bold" : undefined}
@@ -94,6 +105,7 @@ export function MobileDecisionFooter({
           <Button
             variant="ghost"
             colorPalette="gray"
+            disabled={rejectingPending}
             onClick={onCancelReject}
             className="min-h-12 flex-1"
           >
@@ -130,7 +142,13 @@ export function MobileDecisionFooter({
       {footerLine}
       <HStack gap="100">
         <MobileMoreSheet title="다른 처리" description="이 신청은 대기열에 그대로 남습니다.">
-          <Button variant="outline" colorPalette="gray" onClick={onSkip}>
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            disabled={isUndefined(nextHref)}
+            title={isUndefined(nextHref) ? "마지막 건이라 건너뛸 다음 건이 없습니다" : undefined}
+            onClick={onSkip}
+          >
             건너뛰기
           </Button>
         </MobileMoreSheet>

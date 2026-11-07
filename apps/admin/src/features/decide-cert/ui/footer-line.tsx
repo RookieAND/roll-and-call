@@ -10,10 +10,10 @@ interface FooterLineProps {
 
 // 버튼 위 한 줄: 막힌 이유(누르면 그 자리로 이동)가 없으면 알림 안내다.
 export function FooterLine({ note, onNoteClick }: FooterLineProps) {
-  if (!note) {
+  if (!note?.target) {
     return (
       <Text typography="body4" foreground="hint" className="text-center">
-        {NOTIFY_NOTE}
+        {note?.text ?? NOTIFY_NOTE}
       </Text>
     );
   }

@@ -77,7 +77,8 @@ export function ShotSection({
               checked={checked}
               disabled={!reviewable || pending}
               flagged={flagged}
-              flaggable={rejecting && !ebook && !grouped && (!checked || flagged)}
+              flaggable={rejecting && !ebook && !grouped}
+              flagLocked={checked && !flagged}
               onCheckedChange={() => onToggleCheck(shot.key)}
               onFlagToggle={() => isShotKey(shot.key) && onToggleFlag(shot.key)}
               onZoom={() => onZoom(shot.key)}

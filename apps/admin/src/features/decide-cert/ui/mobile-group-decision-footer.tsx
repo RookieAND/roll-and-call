@@ -13,6 +13,7 @@ interface MobileGroupDecisionFooterProps {
   canSubmit: boolean;
   submitting: boolean;
   networkError: boolean;
+  skipDisabled: boolean;
   onSkip: () => void;
   onNoteClick: (note: FooterNote) => void;
   onSubmit: () => void;
@@ -26,6 +27,7 @@ export function MobileGroupDecisionFooter({
   canSubmit,
   submitting,
   networkError,
+  skipDisabled,
   onSkip,
   onNoteClick,
   onSubmit,
@@ -35,7 +37,13 @@ export function MobileGroupDecisionFooter({
       {networkError ? <ActionNetworkLine /> : <FooterLine note={note} onNoteClick={onNoteClick} />}
       <HStack gap="100">
         <MobileMoreSheet title="다른 처리" description="이 신청은 대기열에 그대로 남습니다.">
-          <Button variant="outline" colorPalette="gray" onClick={onSkip}>
+          <Button
+            variant="outline"
+            colorPalette="gray"
+            disabled={skipDisabled}
+            title={skipDisabled ? "마지막 건이라 건너뛸 다음 건이 없습니다" : undefined}
+            onClick={onSkip}
+          >
             건너뛰기
           </Button>
         </MobileMoreSheet>

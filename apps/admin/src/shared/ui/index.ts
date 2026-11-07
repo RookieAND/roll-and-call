@@ -32,6 +32,7 @@ export { ChoiceRowList, type ChoiceRow } from "./choice-row-list";
 export { OPEN_PALETTE_EVENT, openPalette } from "./open-palette";
 export { ListPager } from "./list-pager";
 export { OutcomePanel } from "./outcome-panel";
+export { DisabledTooltip } from "./disabled-tooltip";
 export { NextItemButton } from "./next-item-button";
 export { ReasonChips } from "./reason-chips";
 export { Panel } from "./panel";

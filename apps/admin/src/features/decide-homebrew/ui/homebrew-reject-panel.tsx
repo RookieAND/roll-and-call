@@ -99,6 +99,11 @@ export function HomebrewRejectPanel({ decision, ruleLabel }: HomebrewRejectPanel
         </Callout.Description>
       </Callout.Root>
       {decision.rejectFailed ? <ActionNetworkError /> : null}
+      {form.blockedReason ? (
+        <Text typography="body4" foreground="muted" className="text-right">
+          {form.blockedReason}
+        </Text>
+      ) : null}
       <HStack gap="100">
         <Button
           variant="outline"

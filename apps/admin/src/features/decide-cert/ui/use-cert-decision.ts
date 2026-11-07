@@ -22,6 +22,7 @@ import type { GroupBook } from "../model/group-book";
 import { groupDoneMessage } from "../model/group-done-message";
 import { groupApproveIds, groupRejectIds, pendingGroupBooks } from "../model/group-selection";
 import { isReviewShotKey } from "../model/is-review-shot-key";
+import { nextUncheckedShot } from "../model/next-unchecked-shot";
 import { rejectMessage } from "../model/reject-message";
 import { reviewShots } from "../model/review-shots";
 import { shotLabels } from "../model/shot-labels";
@@ -258,17 +259,15 @@ export function useCertDecision({
     setCheckedShots(xor(checkedShots, [key]));
   };
 
-  // 확대 창에서 체크하면 다음 사진으로, 마지막 체크 뒤에는 창을 닫고 [승인]에 포커스를 둔다(finalFocus).
+  // 확대 창에서 체크하면 다음 미확인 사진으로, 모두 확인했으면 창을 닫고 [승인]에 포커스를 둔다(finalFocus).
   const checkInViewer = (key: ReviewShotKey) => {
     const nextChecked = xor(checkedShots, [key]);
     setCheckedShots(nextChecked);
     if (!nextChecked.includes(key)) return;
-    if (checkableShots.every((shot) => nextChecked.includes(shot))) {
-      setParam("photo", null);
-      return;
-    }
-    const index = shots.findIndex((shot) => shot.key === key);
-    setParam("photo", shots[(index + 1) % shots.length]!.key);
+    setParam(
+      "photo",
+      nextUncheckedShot({ order: checkableShots, checked: nextChecked, from: key }) ?? null,
+    );
   };
 
   return {
@@ -289,6 +288,8 @@ export function useCertDecision({
     rejectBookCount: rejectBookIds.length,
     showRejectPanel,
     reasonReady,
+    reasonPicked: Boolean(reason),
+    userReasonFilled: Boolean(userReason.trim()),
     canStartReject,
     setBookRejected,
     setAllBooksRejected,

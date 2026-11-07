@@ -15,6 +15,7 @@ import { useState, type RefObject } from "react";
 
 import { Kbd } from "@/shared/ui";
 
+import { nextUncheckedShot } from "../model/next-unchecked-shot";
 import type { ReviewShot, ReviewShotKey } from "../model/shots";
 import { ZoomPane, type ZoomView } from "./zoom-pane";
 
@@ -48,13 +49,26 @@ export function ShotViewer({
   onCheck,
 }: ShotViewerProps) {
   const [view, setView] = useState(RESET_VIEW);
-  const index = shots.findIndex((candidate) => candidate.key === shot);
-  const current = shots[index];
+  // 올리지 않은 칸은 화살표와 하단 목록에서 뺀다.
+  const stops = shots.filter((candidate) => photoUrls[candidate.key]);
+  const navigable = stops.length > 0 ? stops : shots;
+  const index = navigable.findIndex((candidate) => candidate.key === shot);
+  const current = navigable[index];
+  const shotNumber = shots.findIndex((candidate) => candidate.key === shot) + 1;
   const previousUrl = current ? previousUrls[current.key] : undefined;
   const checkable = Boolean(current && checkableShots.includes(current.key));
   const checked = Boolean(current && checkedShots.includes(current.key));
-  const lastToCheck =
-    checkableShots.filter((key) => !checkedShots.includes(key)).length === 1 && !checked;
+  const remaining = checkableShots.filter((key) => !checkedShots.includes(key)).length;
+  const checkedCount = checkableShots.length - remaining;
+  const nextUnchecked = current
+    ? nextUncheckedShot({ order: checkableShots, checked: checkedShots, from: current.key })
+    : undefined;
+
+  let checkNote = `확인하지 않은 사진이 ${remaining}장 남았습니다`;
+  if (remaining === 0) checkNote = "모든 사진을 확인했습니다";
+  else if (remaining === 1 && !checked) {
+    checkNote = "이 사진을 체크하면 모두 확인한 것이어서 창이 닫히고 [승인]으로 이동합니다";
+  }
 
   const zoomTo = (zoom: number, point = { x: 0, y: 0 }) => {
     const next = Math.min(ZOOM_MAX, Math.max(1, zoom));
@@ -74,7 +88,7 @@ export function ShotViewer({
 
   const move = (step: number) => {
     setView(RESET_VIEW);
-    onShotChange(shots[(index + step + shots.length) % shots.length]!.key);
+    onShotChange(navigable[(index + step + navigable.length) % navigable.length]!.key);
   };
 
   const tools: { label: string; icon: LucideIcon; onClick: () => void; disabled?: boolean }[] = [
@@ -133,8 +147,13 @@ export function ShotViewer({
                 {current.label} · {current.note}
               </Dialog.Title>
               <Text typography="body4" foreground="muted" numeric>
-                {index + 1} / {shots.length}
+                {index + 1} / {navigable.length}
               </Text>
+              {checkableShots.length > 0 ? (
+                <Text typography="body4" weight="bold" numeric>
+                  {`확인 ${checkedCount} / ${checkableShots.length}`}
+                </Text>
+              ) : null}
               <Text typography="body4" foreground="muted">
                 누른 지점을 기준으로 확대하고, 끌어서 옮길 수 있습니다
               </Text>
@@ -214,16 +233,30 @@ export function ShotViewer({
                   </Checkbox.Root>
                   <Checkbox.Label>{current.question}</Checkbox.Label>
                 </Checkbox.Field>
-                <Kbd>{index + 1}</Kbd>
+                <Kbd>{shotNumber}</Kbd>
                 <Text typography="body4" foreground="muted" className="ml-auto">
-                  {lastToCheck
-                    ? "마지막 체크 뒤에는 창이 닫히고 [승인]으로 이동합니다"
-                    : "체크하면 다음 사진으로 넘어갑니다"}
+                  {checkNote}
                 </Text>
+                {checked && remaining === 0 ? (
+                  <Button size="sm" onClick={() => onShotChange(null)}>
+                    확인 완료
+                  </Button>
+                ) : null}
+                {checked && remaining > 0 && nextUnchecked ? (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setView(RESET_VIEW);
+                      onShotChange(nextUnchecked);
+                    }}
+                  >
+                    남은 사진 보기
+                  </Button>
+                ) : null}
               </HStack>
             ) : null}
             <HStack gap="100" justify="center" className="mt-150">
-              {shots.map((candidate, candidateIndex) => (
+              {navigable.map((candidate, candidateIndex) => (
                 <Button
                   key={candidate.key}
                   variant="outline"

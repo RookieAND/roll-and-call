@@ -78,7 +78,8 @@ export function MobileShotSection({
               url={proofDeleted ? undefined : photoUrls[shot.key]}
               checked={checked}
               flagged={flagged}
-              flaggable={rejecting && !ebook && !grouped && (!checked || flagged)}
+              flaggable={rejecting && !ebook && !grouped}
+              flagLocked={checked && !flagged}
               rejecting={rejecting}
               disabled={!reviewable || pending}
               onFlagToggle={() => isShotKey(shot.key) && onToggleFlag(shot.key)}

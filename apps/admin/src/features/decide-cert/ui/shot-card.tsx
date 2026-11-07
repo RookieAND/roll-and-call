@@ -4,6 +4,7 @@ import { ZoomIn } from "lucide-react";
 
 import { Kbd, Tag } from "@/shared/ui";
 
+import { FlagButton } from "./flag-button";
 import { PhotoSlot } from "./photo-slot";
 
 const card = cva("min-w-0 overflow-hidden rounded-600 border bg-surface", {
@@ -29,8 +30,9 @@ interface ShotCardProps {
   checked: boolean;
   disabled: boolean;
   flagged: boolean;
-  // 반려 중 실물 사진에서 확인 항목을 체크하지 않았을 때만 [문제 지정]을 둔다.
+  // 반려 중 실물 사진에는 [문제 지정]을 두고, 확인 항목을 체크한 사진은 비활성으로 이유를 알린다.
   flaggable: boolean;
+  flagLocked: boolean;
   onCheckedChange: () => void;
   onFlagToggle: () => void;
   onZoom: () => void;
@@ -48,6 +50,7 @@ export function ShotCard({
   disabled,
   flagged,
   flaggable,
+  flagLocked,
   onCheckedChange,
   onFlagToggle,
   onZoom,
@@ -64,15 +67,12 @@ export function ShotCard({
         <HStack align="center" gap="075" className="shrink-0">
           {fresh ? <Tag>{fresh}</Tag> : null}
           {flaggable ? (
-            <Button
-              size="sm"
-              variant={flagged ? "tinted" : "outline"}
-              colorPalette={flagged ? "danger" : "gray"}
-              aria-pressed={flagged}
-              onClick={onFlagToggle}
-            >
-              문제 지정
-            </Button>
+            <FlagButton
+              flagged={flagged}
+              locked={flagLocked}
+              lockedNote="체크한 사진은 문제로 지정할 수 없습니다. 체크를 풀면 지정할 수 있습니다"
+              onToggle={onFlagToggle}
+            />
           ) : null}
         </HStack>
       </HStack>

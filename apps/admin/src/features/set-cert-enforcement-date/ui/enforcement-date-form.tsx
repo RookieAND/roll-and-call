@@ -84,6 +84,11 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
                   변경
                 </Button>
               </HStack>
+              {picked ? null : (
+                <Text typography="body4" foreground="muted" weight="regular">
+                  날짜를 고르면 변경할 수 있습니다.
+                </Text>
+              )}
               <Text typography="body4" foreground="hint" weight="regular">
                 오늘 이후 날짜만 고를 수 있습니다.
               </Text>

@@ -8,7 +8,6 @@ import type { GrantOptions } from "@/entities/cert/server";
 import { NotificationPreview } from "@/entities/notification";
 import { ActionNetworkLine, KeyValueList, RetryableLabel, ServerLink, Tag } from "@/shared/ui";
 
-import { grantBlockedReason } from "../model/grant-blocked-reason";
 import { GrantSelectedChips } from "./grant-selected-chips";
 import { MobileGrantBookSheet } from "./mobile-grant-book-sheet";
 import { MobileGrantFold } from "./mobile-grant-fold";
@@ -34,11 +33,7 @@ export function MobileGrantCertForm({ options, staffChannel, backHref }: MobileG
     ...(several ? [{ label: "새로 부여되는 인증", value: `${grant.grantCount}건` }] : []),
     { label: "승인으로 처리되는 심사", value: `${grant.approving.length}건` },
   ];
-  const blockedReason = grantBlockedReason({
-    bookCount: chosenBooks.length,
-    userCount: chosen.length,
-    evidence: grant.evidence,
-  });
+  const { blockedReason } = grant;
 
   return (
     <>

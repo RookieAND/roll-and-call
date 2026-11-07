@@ -4,6 +4,7 @@ import { Button, Checkbox, Dialog, HStack, IconButton, Text, VStack } from "@rol
 import { X } from "lucide-react";
 import { useState } from "react";
 
+import { nextUncheckedShot } from "../model/next-unchecked-shot";
 import type { ReviewShot, ReviewShotKey } from "../model/shots";
 import { ZoomPane, type ZoomView } from "./zoom-pane";
 
@@ -22,7 +23,7 @@ interface MobileShotViewerProps {
   onCheck: (shot: ReviewShotKey) => void;
 }
 
-// 화면 전체로 사진을 보고, 확인 항목은 사진 아래에서 바로 체크한다. 처음과 끝에서는 넘기기 버튼이 비활성이다.
+// 화면 전체로 사진을 보고, 확인 항목은 사진 아래에서 바로 체크한다. 처음에서는 「이전」이 비활성이고, 마지막 사진의 「다음」 자리는 확인 상태에 맞는 버튼이 된다.
 // 재신청의 이전 사진은 옆으로 넘겨 비교한다.
 export function MobileShotViewer({
   shots,
@@ -35,16 +36,37 @@ export function MobileShotViewer({
   onCheck,
 }: MobileShotViewerProps) {
   const [view, setView] = useState(RESET_VIEW);
-  const index = shots.findIndex((candidate) => candidate.key === shot);
-  const current = shots[index];
+  const stops = shots.filter((candidate) => photoUrls[candidate.key]);
+  const navigable = stops.length > 0 ? stops : shots;
+  const index = navigable.findIndex((candidate) => candidate.key === shot);
+  const current = navigable[index];
   const previousUrl = current ? previousUrls[current.key] : undefined;
   const checkable = Boolean(current && checkableShots.includes(current.key));
   const checked = Boolean(current && checkedShots.includes(current.key));
+  const remaining = checkableShots.filter((key) => !checkedShots.includes(key)).length;
+  const last = index === navigable.length - 1;
+  const nextUnchecked = current
+    ? nextUncheckedShot({ order: checkableShots, checked: checkedShots, from: current.key })
+    : undefined;
 
   const move = (step: number) => {
     setView(RESET_VIEW);
-    onShotChange(shots[index + step]!.key);
+    onShotChange(navigable[index + step]!.key);
   };
+  // 마지막 사진에서는 「다음」 자리가 확인 상태에 맞는 버튼이 된다.
+  let nextAction = { label: "다음", run: () => move(1) };
+  if (last && checkable && checked && remaining > 0 && nextUnchecked) {
+    nextAction = {
+      label: "남은 사진 보기",
+      run: () => {
+        setView(RESET_VIEW);
+        onShotChange(nextUnchecked);
+      },
+    };
+  } else if (last) {
+    const done = checkable && checked && remaining === 0;
+    nextAction = { label: done ? "확인 완료" : "닫기", run: () => onShotChange(null) };
+  }
   const paneProps = {
     view,
     onZoomAt: (point: { x: number; y: number }) => {
@@ -92,7 +114,7 @@ export function MobileShotViewer({
               <VStack className="min-w-0 flex-1">
                 <Dialog.Title className="text-subtitle1">{current.label}</Dialog.Title>
                 <Text typography="body4" foreground="hint" numeric>
-                  {`${current.note} · ${index + 1} / ${shots.length}`}
+                  {`${current.note} · ${index + 1} / ${navigable.length}${checkableShots.length > 0 ? ` · 확인 ${checkableShots.length - remaining} / ${checkableShots.length}` : ""}`}
                 </Text>
               </VStack>
             </HStack>
@@ -146,12 +168,8 @@ export function MobileShotViewer({
                 >
                   이전
                 </Button>
-                <Button
-                  disabled={index === shots.length - 1}
-                  onClick={() => move(1)}
-                  className="min-h-12 flex-1"
-                >
-                  다음
+                <Button onClick={nextAction.run} className="min-h-12 flex-1">
+                  {nextAction.label}
                 </Button>
               </HStack>
             </VStack>

@@ -10,6 +10,7 @@ import { useActionSubmit } from "@/shared/lib";
 import { useServerPath } from "@/shared/ui";
 
 import { grantUserCertifications } from "../api/grant-user-certifications";
+import { grantBlockedReason } from "../model/grant-blocked-reason";
 import { pruneBookSelection } from "../model/grant-book-selection";
 import { grantMemberPlan } from "../model/grant-candidate-status";
 import { grantResultToast } from "../model/grant-result-toast";
@@ -42,6 +43,13 @@ export function useGrantCertification({ options, backHref }: UseGrantCertificati
   const approvingNames = uniq(approving.map((row) => row.nickname));
   const canConfirm =
     chosenBooks.length > 0 && receiving.length > 0 && Boolean(evidence.trim()) && !pending;
+
+  const blockedReason = grantBlockedReason({
+    bookCount: chosenBooks.length,
+    userCount: chosen.length,
+    receivingCount: receiving.length,
+    evidence,
+  });
 
   const changeBooks = (nextIds: string[]) => {
     const keptIds = pruneBookSelection({ selectedIds: nextIds, books: options.books });
@@ -95,6 +103,7 @@ export function useGrantCertification({ options, backHref }: UseGrantCertificati
     chosenBooks,
     chosen,
     receiving,
+    blockedReason,
     grantCount,
     approving,
     approvingNames,

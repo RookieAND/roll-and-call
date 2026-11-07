@@ -1,4 +1,5 @@
 import { Button } from "@roll-and-call/ui";
+import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import type { RefObject } from "react";
 
@@ -8,12 +9,12 @@ import { CERT_REVIEW_STATE, type CertReviewState } from "../model/cert-review-st
 import { footerNote, type FooterNote } from "../model/footer-note";
 import { DecisionFooter } from "./decision-footer";
 import { FlaggedStatus } from "./flagged-status";
+import { FooterNoteStatus } from "./footer-note-status";
 import { SkipStatus } from "./skip-status";
 
 interface CertDecisionFooterProps {
   state: CertReviewState;
   rejecting: boolean;
-  reviewable: boolean;
   checkedCount: number;
   checkableCount: number;
   canApprove: boolean;
@@ -23,6 +24,8 @@ interface CertDecisionFooterProps {
   approvalNetworkError: boolean;
   rejectionNetworkError: boolean;
   reason: string;
+  reasonPicked: boolean;
+  userReasonFilled: boolean;
   flaggedLabels: string[];
   canStartReject: boolean;
   nextHref?: string;
@@ -38,7 +41,6 @@ interface CertDecisionFooterProps {
 export function CertDecisionFooter({
   state,
   rejecting,
-  reviewable,
   checkedCount,
   checkableCount,
   canApprove,
@@ -48,6 +50,8 @@ export function CertDecisionFooter({
   approvalNetworkError,
   rejectionNetworkError,
   reason,
+  reasonPicked,
+  userReasonFilled,
   flaggedLabels,
   canStartReject,
   nextHref,
@@ -61,7 +65,14 @@ export function CertDecisionFooter({
 }: CertDecisionFooterProps) {
   const networkError = approvalNetworkError || rejectionNetworkError;
   const footerNotice = networkError ? <ActionNetworkError /> : null;
-  const note = footerNote({ reviewable, checkedCount, checkableCount });
+  const note = footerNote({
+    state,
+    checkedCount,
+    checkableCount,
+    rejecting,
+    reasonPicked,
+    userReasonFilled,
+  });
 
   if (state === CERT_REVIEW_STATE.withdrawn) {
     return (
@@ -74,9 +85,20 @@ export function CertDecisionFooter({
     return (
       <DecisionFooter
         notice={footerNotice}
-        status={<FlaggedStatus reason={reason} flaggedLabels={flaggedLabels} />}
+        status={
+          note && !canReject ? (
+            <FooterNoteStatus note={note} onNoteClick={onNoteClick} />
+          ) : (
+            <FlaggedStatus reason={reason} flaggedLabels={flaggedLabels} />
+          )
+        }
       >
-        <Button variant="ghost" colorPalette="gray" onClick={onCancelReject}>
+        <Button
+          variant="ghost"
+          colorPalette="gray"
+          disabled={rejectingPending}
+          onClick={onCancelReject}
+        >
           취소
           <KeyHint keyLabel="Esc" />
         </Button>
@@ -96,7 +118,14 @@ export function CertDecisionFooter({
   return (
     <DecisionFooter
       notice={footerNotice}
-      status={<SkipStatus note={note} onSkip={onSkip} onNoteClick={onNoteClick} />}
+      status={
+        <SkipStatus
+          note={note}
+          skipDisabled={isUndefined(nextHref)}
+          onSkip={onSkip}
+          onNoteClick={onNoteClick}
+        />
+      }
     >
       <Button
         variant="outline"
