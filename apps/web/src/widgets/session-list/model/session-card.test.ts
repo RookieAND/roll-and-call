@@ -92,7 +92,7 @@ describe("참여 카드", () => {
     const card = playerCard({ confirmedAt: at(2), endDate: at(-1), participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
     expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
-    expect(card.schedule).toMatch(/ · D-2$/);
+    expect(card.schedule).toMatch(/ · 모레$/);
   });
 });
 

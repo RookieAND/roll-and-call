@@ -18,6 +18,7 @@ import {
 } from "@/widgets/session-list";
 import { loadMySessions } from "@/widgets/session-list/server";
 
+import { MySessionsPanel } from "./my-sessions-panel";
 import { SessionStatusChips } from "./session-status-chips";
 import { SessionsEmpty } from "./sessions-empty";
 
@@ -62,7 +63,10 @@ export async function MySessionsView({ tab, status }: MySessionsViewProps) {
   );
 
   return (
-    <PageShell appBar={<AppBar back="/me" title="내 세션" />}>
+    <PageShell
+      appBar={<AppBar back="/me" title="내 세션" />}
+      panel={<MySessionsPanel role={activeTab} cards={list} />}
+    >
       <div className={DESKTOP_CARD_CLASS}>
         <div className="sticky top-(--rc-size-appbar) z-(--rc-z-sticky) border-b border-gray-200 bg-surface pb-150 desktop:static">
           <SessionTabs label="역할" tabs={roleTabs} activeKey={activeTab} />

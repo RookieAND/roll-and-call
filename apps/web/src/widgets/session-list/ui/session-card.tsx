@@ -143,6 +143,7 @@ export function SessionCard({ model }: SessionCardProps) {
               <ReopenGameLink
                 gameId={model.id}
                 variant={model.action ? "outline" : "solid"}
+                colorPalette={model.action ? "gray" : "primary"}
                 size="md"
               />
             )}

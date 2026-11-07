@@ -10,10 +10,11 @@ export {
   SESSION_TABS,
   type SessionChipKey,
 } from "./model/session-tabs";
-export { SESSION_CHIP } from "./model/session-card-model";
+export { SESSION_CHIP, type SessionCardModel } from "./model/session-card-model";
 export { isOngoingCard } from "./model/is-ongoing-card";
 export { isInSessionChip } from "./model/is-in-session-chip";
 export { countableCards } from "./model/countable-cards";
+export { sessionWhen } from "./model/session-when";
 export { SessionCountStats } from "./ui/session-count-stats";
 export { type TodoList } from "./model/list-todos";
 export { TODO_ITEM_TYPE, type CertTodoItem, type SessionTodoItem } from "./model/todo-item";
