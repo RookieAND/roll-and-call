@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
-import { useEffect } from "react";
+import { useEffect, useEffectEvent } from "react";
 
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
@@ -23,11 +23,13 @@ const APPROVE_DELAY_MS = 1500;
 export function TrialMyRulebooks({ cert, onBack, onOpenDetail, onApprove }: TrialMyRulebooksProps) {
   const pending = cert.status === TRIAL_CERT_STATUS.pending;
 
+  // 부모가 onApprove를 렌더마다 새로 넘겨도 타이머가 다시 시작되지 않게 effect 의존성에서 뺀다.
+  const approve = useEffectEvent(onApprove);
   useEffect(() => {
     if (!pending) return;
-    const timer = setTimeout(onApprove, APPROVE_DELAY_MS);
+    const timer = setTimeout(approve, APPROVE_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [pending, onApprove]);
+  }, [pending]);
 
   return (
     <PageShell readable appBar={<AppBar title="내 룰북" onBack={onBack} />}>

@@ -54,7 +54,7 @@ export function useHomebrewDecision({ applicationId, name }: UseHomebrewDecision
       return;
     }
     const text = homebrewFailureText(result);
-    if (!isNull(text)) toast.info(text);
+    if (!isNull(text)) toast.warning(text);
     if ("blocked" in result || isNull(text)) {
       router.refresh();
       return;

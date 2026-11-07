@@ -39,7 +39,7 @@ export function WizardFooter({
         <Container size="md" className="desktop:max-w-160 desktop:px-0">
           <VStack gap="150">
             {isLastStep && error && (
-              <Callout.Root colorPalette="danger" size="sm">
+              <Callout.Root colorPalette="warning" size="sm">
                 <Callout.Icon />
                 <Callout.Description>
                   <LineBreaks lines={error.split("\n")} />

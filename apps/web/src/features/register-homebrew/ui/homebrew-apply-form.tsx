@@ -82,7 +82,6 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
     previous ? `/me/rulebooks/maker/${previous.id}` : "/me/rulebooks/apply",
   );
   const title = previous ? "고쳐서 다시 신청" : "자작 룰 등록 신청";
-  const failureLines = failure ? ["신청하지 못했습니다.", failure] : [];
 
   useBeforeUnloadWarning(dirty && !pending);
 
@@ -209,7 +208,8 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
               />
             </VStack>
             {materialMissing && (
-              <Callout.Root colorPalette="danger">
+              <Callout.Root colorPalette="warning" size="sm">
+                <Callout.Icon />
                 <Callout.Description>{HOMEBREW_ERROR.materialRequired}</Callout.Description>
               </Callout.Root>
             )}
@@ -219,10 +219,9 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
             <FloatingBar.Content>
               <VStack gap="100">
                 {failure && (
-                  <Callout.Root colorPalette="danger">
-                    <Callout.Description>
-                      <LineBreaks lines={failureLines} />
-                    </Callout.Description>
+                  <Callout.Root colorPalette="danger" size="sm">
+                    <Callout.Icon />
+                    <Callout.Description>{`신청하지 못했습니다. ${failure}`}</Callout.Description>
                   </Callout.Root>
                 )}
                 <Button
@@ -244,7 +243,7 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
             onOpenChange={setConfirmingLeave}
             title="작성 중인 내용이 사라집니다."
             titleClassName={LARGE_DIALOG_TITLE_CLASS}
-            cancelLabel="계속 쓰기"
+            cancelLabel="이어서 쓰기"
             confirmLabel="나가기"
             danger
             onConfirm={() => router.push(leaveHref)}

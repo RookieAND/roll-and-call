@@ -69,7 +69,7 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
         </>
       }
       confirmLabel={failed ? "다시 시도" : "불참으로 내보내기"}
-      cancelLabel="닫기"
+      cancelLabel="취소"
       danger
       pending={pending}
       onConfirm={markAbsent}
@@ -101,6 +101,7 @@ export function MarkAbsentDialog({ gameId, member, onClose }: MarkAbsentDialogPr
           </Callout.Root>
         ) : (
           <Callout.Root colorPalette="gray" size="sm">
+            <Callout.Icon />
             <Callout.Description>
               {member?.username}님에게 알림 탭으로 알립니다.
             </Callout.Description>

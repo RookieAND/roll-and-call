@@ -17,7 +17,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   await requireMembership();
   const { date } = await searchParams;
   const [user, server] = await Promise.all([getCurrentSessionUser(), getCurrentServer()]);
-  // 서비스 소개는 계정당 한 번, 서버 홈에 처음 닿을 때 그리기 전에 보낸다(R6·R17·D48).
+  // 온보딩을 마치지 않은 계정은 서버 홈에 처음 닿을 때 튜토리얼 퀘스트 목록으로 한 번 보낸다. 목록에 들어온 순간 마친 것으로 친다.
   if (user && !(await hasOnboarded(user.id))) {
     redirect(serverPath({ slug: server.slug, path: "/onboarding" }));
   }

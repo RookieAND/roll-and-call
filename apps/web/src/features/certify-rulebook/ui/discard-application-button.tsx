@@ -53,7 +53,7 @@ export function DiscardApplicationButton({
             인증이 필요하면 처음부터 다시 신청해야 합니다.
           </>
         }
-        cancelLabel="돌아가기"
+        cancelLabel="취소"
         confirmLabel="기록 지우기"
         danger
         pending={pending}

@@ -52,3 +52,4 @@ export { authFailurePath } from "./auth-failure-path";
 export { isValueOf } from "@roll-and-call/app-kit/lib";
 export { parseJson } from "@roll-and-call/app-kit/lib";
 export { isSupabaseUrl } from "./is-supabase-url";
+export { QUEST_LIST_PATH, QUEST_PATH } from "./quest-path";

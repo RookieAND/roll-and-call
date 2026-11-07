@@ -1,13 +1,14 @@
 import { Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
-import { ChevronRight, PlayCircle } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 
 import { BrandMark } from "@/entities/profile";
 import { AppBar } from "@/shared/ui";
 
+import { HELP_QUEST_FALLBACK_HREF } from "../api/load-help-quest-entry";
 import { HELP_CATEGORIES, HELP_DOCS } from "../model/help-docs";
 import { HelpDocRow } from "./help-doc-row";
+import { HelpQuestCard } from "./help-quest-card";
+import { HelpQuestEntry } from "./help-quest-entry";
 import { HelpServerButton } from "./help-server-button";
 
 interface HelpListViewProps {
@@ -20,27 +21,9 @@ export function HelpListView({ from }: HelpListViewProps) {
       <AppBar back="/" title="도움말" />
       <Container size="sm">
         <VStack gap="250" className="py-200 break-keep">
-          <Card.Root
-            padding="sm"
-            interactive
-            render={<Link href="/onboarding?from=help" />}
-            className="border-tinted-border bg-tinted-bg hover:bg-tinted-bg-hover"
-          >
-            <HStack align="center" gap="150" className="px-050 py-025">
-              <span className="flex size-9.5 flex-none items-center justify-center rounded-500 bg-primary-600 text-white">
-                <PlayCircle size={19} aria-hidden />
-              </span>
-              <VStack gap="025" className="min-w-0 flex-1">
-                <Text typography="subtitle1" weight="extrabold" render={<span />}>
-                  서비스 둘러보기
-                </Text>
-                <Text typography="body4" foreground="muted" render={<span />}>
-                  처음 봤던 소개 5장을 다시 봅니다
-                </Text>
-              </VStack>
-              <ChevronRight size={18} className="flex-none text-hint" aria-hidden />
-            </HStack>
-          </Card.Root>
+          <Suspense fallback={<HelpQuestCard href={HELP_QUEST_FALLBACK_HREF} progress={null} />}>
+            <HelpQuestEntry from={from} />
+          </Suspense>
 
           <Card.Root padding="none" className="overflow-hidden">
             <HelpDocRow

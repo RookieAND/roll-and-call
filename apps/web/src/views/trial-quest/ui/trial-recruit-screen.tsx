@@ -16,7 +16,6 @@ interface TrialRecruitScreenProps {
   applied: Partial<Record<TrialKind, true>>;
   now: Date;
   onOpen: (screen: TrialRecruitScreenName) => void;
-  onLeave: () => void;
 }
 
 export function TrialRecruitScreen({

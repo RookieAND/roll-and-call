@@ -60,7 +60,7 @@ export function ReleaseSanctionDialog({
     onOpenChange(false);
     router.refresh();
     if (result.ok) toast.success(`${nickname}님의 제재를 해제했습니다`);
-    else toast.info("이미 해제된 제재입니다");
+    else toast.warning("이미 해제된 제재입니다");
   };
 
   return (

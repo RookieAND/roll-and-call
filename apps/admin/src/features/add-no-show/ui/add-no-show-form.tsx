@@ -79,7 +79,7 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
       onAdded(result.id);
       return;
     }
-    toast.info(
+    toast.warning(
       conflictToastText({ conflict: result.conflict, self: result.self, target: "불참 기록" }),
     );
     onClose();

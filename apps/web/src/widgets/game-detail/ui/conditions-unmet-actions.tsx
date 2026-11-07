@@ -12,7 +12,7 @@ interface ConditionsUnmetActionsProps {
 export function ConditionsUnmetActions({ lines, certUnmet }: ConditionsUnmetActionsProps) {
   return (
     <VStack gap="125">
-      <ActionNotice title="신청 조건을 채우지 못했습니다" lines={lines} colorPalette="danger" />
+      <ActionNotice title="신청 조건을 채우지 못했습니다" lines={lines} colorPalette="warning" />
       {certUnmet && (
         <Button
           render={<ServerLink path="/me/rulebooks/apply?step=books" />}

@@ -5,6 +5,7 @@ export { BoundaryFallback } from "./boundary-fallback";
 export { InlineRetry } from "./inline-retry";
 export { handleActionResult } from "./handle-action-result";
 export { reportError } from "./report-error";
+export { toastActionError } from "./toast-action-error";
 export { useAction } from "./use-action";
 export { useDebouncedValue } from "./use-debounced-value";
 export { NavigationTracker } from "./navigation-tracker";

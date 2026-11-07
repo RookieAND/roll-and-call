@@ -11,8 +11,8 @@ interface AppFrameProps {
   bottomNav?: boolean;
 }
 
-// 서버 화면·도움말·온보딩이 쓰는 모바일 폭 틀. 인덱스(/)만 전체 폭이라 이 틀 밖에 있다.
-// 1100px 이상의 서버 화면은 좌측 내비(224px)를 뺀 자리를 모두 화면(PageShell)이 짠다. 서버 밖(도움말·온보딩)은 모바일 폭 열 그대로다.
+// 서버 화면·도움말이 쓰는 모바일 폭 틀. 인덱스(/)만 전체 폭이라 이 틀 밖에 있다.
+// 1100px 이상의 서버 화면은 좌측 내비(224px)를 뺀 자리를 모두 화면(PageShell)이 짠다. 서버 밖(도움말)은 모바일 폭 열 그대로다.
 export function AppFrame({ children, bottomNav = true }: AppFrameProps) {
   const { server } = useParams<{ server?: string }>();
   const inServer = !!server;

@@ -70,7 +70,7 @@ export function TrialManage({ recruit, onBack }: TrialManageProps) {
               <HStack
                 align="center"
                 gap="100"
-                render={<button type="button" onClick={() => toast.info(BLOCKED_MESSAGE)} />}
+                render={<button type="button" onClick={() => toast.warning(BLOCKED_MESSAGE)} />}
                 className="min-h-[62px] w-full cursor-pointer px-175 py-100 text-left"
               >
                 <VStack className="min-w-0 flex-1">

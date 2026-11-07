@@ -1,3 +1,4 @@
+import { ONBOARDING_QUESTS } from "@roll-and-call/database/onboarding/model";
 import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
@@ -34,7 +35,7 @@ export function MyPageSettings({ handleLabel, questProgress }: MyPageSettingsPro
             튜토리얼 퀘스트
           </Text>
           <Text typography="body3" foreground="hint" numeric>
-            {questProgress} / 4
+            {questProgress} / {ONBOARDING_QUESTS.length}
           </Text>
           <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
         </HStack>

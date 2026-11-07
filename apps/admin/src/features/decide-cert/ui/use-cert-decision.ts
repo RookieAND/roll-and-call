@@ -147,7 +147,7 @@ export function useCertDecision({
 
   const fail = (failure: Extract<CertDecisionResult, { ok: false }>) => {
     const text = decisionToastText({ failure, viewerId });
-    if (!isNull(text)) toast.info(text);
+    if (!isNull(text)) toast.warning(text);
     router.refresh();
   };
 

@@ -56,7 +56,7 @@ export function CancelGameDialog({
       title="구인 취소"
       description={<LineBreaks lines={descriptionLines} />}
       confirmLabel={confirmLabel}
-      cancelLabel="닫기"
+      cancelLabel="취소"
       danger
       pending={pending}
       confirmDisabled={reason.trim().length === 0}

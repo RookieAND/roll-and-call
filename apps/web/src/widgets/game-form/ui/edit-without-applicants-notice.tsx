@@ -3,6 +3,7 @@ import { Callout } from "@roll-and-call/ui";
 export function EditWithoutApplicantsNotice() {
   return (
     <Callout.Root>
+      <Callout.Icon />
       <Callout.Description>
         아직 신청자가 없습니다.
         <br />

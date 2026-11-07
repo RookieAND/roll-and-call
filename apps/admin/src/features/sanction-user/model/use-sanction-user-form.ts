@@ -91,7 +91,7 @@ export function useSanctionUserForm({
     setConfirming(false);
     router.push(toServerPath(backHref));
     if (!result.ok) {
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict: result.conflict, self: result.self, target: "제재" }),
       );
       return;

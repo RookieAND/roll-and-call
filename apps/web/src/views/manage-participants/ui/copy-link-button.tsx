@@ -17,7 +17,7 @@ export function CopyLinkButton({ gameId }: CopyLinkButtonProps) {
       await navigator.clipboard.writeText(
         `${window.location.origin}${toServerPath(`/games/${gameId}`)}`,
       );
-      toast.success("구인글 링크를 복사했습니다");
+      toast.info("구인글 링크를 복사했습니다");
     } catch {
       toast.danger("링크를 복사하지 못했습니다");
     }

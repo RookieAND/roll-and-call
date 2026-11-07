@@ -35,7 +35,7 @@ export function TrialLinkGuard<Screen>({
     const screen = path ? resolve(path) : null;
     if (screen) onNavigate(screen);
     else if (onBlocked) onBlocked();
-    else toast.info(BLOCKED_MESSAGE);
+    else toast.warning(BLOCKED_MESSAGE);
   }
 
   return <div onClickCapture={guard}>{children}</div>;

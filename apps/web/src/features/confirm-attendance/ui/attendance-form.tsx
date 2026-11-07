@@ -3,7 +3,7 @@
 import { Button, Card, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, toastActionError, useAction } from "@/shared/ui";
 
 import { confirmAttendance } from "../api/confirm-attendance";
 import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
@@ -92,10 +92,10 @@ export function AttendanceForm({
         onConfirmed();
         toast.success("출석을 확정했습니다");
       },
-      onError: ({ error }) => {
+      onError: (result) => {
         setConfirming(false);
-        if (error === ATTENDANCE_PAST_DEADLINE_MESSAGE) onExpired();
-        else toast.danger(error);
+        if (result.error === ATTENDANCE_PAST_DEADLINE_MESSAGE) onExpired();
+        else toastActionError(result);
       },
     });
   }

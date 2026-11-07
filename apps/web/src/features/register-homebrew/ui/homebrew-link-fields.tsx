@@ -34,7 +34,7 @@ export function HomebrewLinkFields({ links, error, onChange }: HomebrewLinkField
                 type="url"
                 inputMode="url"
                 placeholder="https://"
-                aria-label="링크"
+                aria-label={`링크 ${index + 1}`}
                 value={link}
                 invalid={index === errorRow}
                 onChange={(event) => onChange(links.with(index, event.target.value))}
@@ -60,12 +60,12 @@ export function HomebrewLinkFields({ links, error, onChange }: HomebrewLinkField
         ))}
         {addable && (
           <Button
-            variant="outline"
-            size="md"
-            className="w-full"
+            variant="ghost"
+            size="sm"
+            className="self-start"
             onClick={() => onChange([...links, ""])}
           >
-            <Plus size={18} aria-hidden />
+            <Plus size={16} aria-hidden />
             링크 추가
           </Button>
         )}

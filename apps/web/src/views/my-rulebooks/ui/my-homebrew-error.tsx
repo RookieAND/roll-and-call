@@ -8,14 +8,13 @@ import { MyHomebrewFrame } from "./my-homebrew-frame";
 export function MyHomebrewError(_props: object, { retry }: ErrorInfo) {
   return (
     <MyHomebrewFrame>
-      <Callout.Root colorPalette="danger">
+      <Callout.Root colorPalette="danger" size="sm">
+        <Callout.Icon />
         <Callout.Description className="break-keep">
-          내가 만든 룰을 불러오지 못했습니다.
-          <br />
-          다시 시도해 주세요.
+          내가 만든 룰을 불러오지 못했습니다. 다시 시도해 주세요.
         </Callout.Description>
         <Callout.Action>
-          <Button size="sm" variant="outline" onClick={() => retry()}>
+          <Button size="sm" variant="ghost" colorPalette="danger" onClick={() => retry()}>
             다시 시도
           </Button>
         </Callout.Action>

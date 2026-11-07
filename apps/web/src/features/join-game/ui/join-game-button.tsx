@@ -5,7 +5,7 @@ import { isNull } from "es-toolkit";
 import { useState, type ReactNode } from "react";
 
 import { TRIAL_HANDLER, useTrialGuard, useTrialHandler } from "@/shared/trial";
-import { toast, useAction } from "@/shared/ui";
+import { toast, toastActionError, useAction } from "@/shared/ui";
 
 import { checkJoin } from "../api/check-join";
 import { joinGame } from "../api/join-game";
@@ -14,7 +14,7 @@ import { OVERLAP_REASON } from "../model/overlap-rejection";
 import { ApplicationNoteSheet } from "./application-note-sheet";
 import { OverlapNoticeDialog } from "./overlap-notice-dialog";
 
-type Rejected = { error: string; reason?: string; overlapGameId?: string };
+type Rejected = { error: string; failed?: true; reason?: string; overlapGameId?: string };
 
 interface JoinGameButtonProps {
   gameId: string;
@@ -39,10 +39,11 @@ export function JoinGameButton({
   const [failed, setFailed] = useState(false);
 
   // 시간이 겹치면 토스트 대신 안내 창을 띄운다. 그 밖의 실패는 기존대로 토스트다.
-  function reject({ error, reason, overlapGameId: overlapId }: Rejected) {
+  function reject(rejected: Rejected) {
+    const { reason, overlapGameId: overlapId } = rejected;
     setSheetOpen(false);
     if (reason === OVERLAP_REASON && overlapId) setOverlapGameId(overlapId);
-    else toast.danger(error);
+    else toastActionError(rejected);
   }
 
   function submit(note?: string) {
@@ -55,7 +56,7 @@ export function JoinGameButton({
       onError: (result) => {
         if (!sheetOpen || result.reason === OVERLAP_REASON) return reject(result);
         setFailed(true);
-        toast.danger(result.error);
+        toastActionError(result);
       },
     });
   }

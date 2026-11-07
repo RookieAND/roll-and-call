@@ -1,5 +1,6 @@
 "use client";
 
+import { ONBOARDING_QUESTS } from "@roll-and-call/database/onboarding/model";
 import { Button, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
@@ -46,7 +47,7 @@ export function AchievementSheet({ open }: AchievementSheetProps) {
             foreground="muted"
             className="inline-flex min-h-9 items-center rounded-full bg-gray-50 px-150"
           >
-            튜토리얼 퀘스트 · 4 / 4 클리어
+            튜토리얼 퀘스트 · {ONBOARDING_QUESTS.length} / {ONBOARDING_QUESTS.length} 클리어
           </Text>
         </VStack>
         <HStack gap="100" className="pt-250">

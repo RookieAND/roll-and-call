@@ -1,6 +1,8 @@
 import { GAME_TAG } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 
+export const GAME_FORM_STEP_COUNT = 5;
+
 export type SectionKey = "basics" | "preflight" | "media" | "recruit" | "schedule";
 
 export const FORM_SECTION = {

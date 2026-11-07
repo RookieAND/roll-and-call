@@ -74,6 +74,7 @@
     "server-only": "catalog:"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
     "@roll-and-call/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "dotenv": "^17.4.2",

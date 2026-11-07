@@ -5,10 +5,9 @@ import type { ReopenContext } from "../model/reopen-context";
 export function ReopenNotice({ reopen }: { reopen: ReopenContext }) {
   if (reopen.failed) {
     return (
-      <Callout.Root colorPalette="danger">
+      <Callout.Root colorPalette="danger" size="sm">
         <Callout.Icon />
-        <Callout.Title>불러오지 못했습니다.</Callout.Title>
-        <Callout.Description>내용을 직접 입력해 주세요.</Callout.Description>
+        <Callout.Description>불러오지 못했습니다. 내용을 직접 입력해 주세요.</Callout.Description>
       </Callout.Root>
     );
   }

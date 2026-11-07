@@ -74,6 +74,7 @@ export function CoordinationWindowField({ form, locked }: CoordinationWindowFiel
       </Text>
       {locked && (
         <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon />
           <Callout.Description>신청자가 있어 조율 시간대는 바꿀 수 없습니다.</Callout.Description>
         </Callout.Root>
       )}

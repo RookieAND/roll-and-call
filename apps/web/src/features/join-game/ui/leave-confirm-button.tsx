@@ -4,7 +4,7 @@ import { Button, type ButtonProps } from "@roll-and-call/ui";
 import { Fragment, useState } from "react";
 
 import { TRIAL_HANDLER, useTrialHandler } from "@/shared/trial";
-import { ConfirmDialog, toast, useAction } from "@/shared/ui";
+import { ConfirmDialog, toast, toastActionError, useAction } from "@/shared/ui";
 
 import { leaveGame } from "../api/leave-game";
 import { leaveDialogCopy } from "../model/leave-dialog-copy";
@@ -39,9 +39,9 @@ export function LeaveConfirmButton({
         setConfirming(false);
         toast.success(copy.successMessage);
       },
-      onError: ({ error }) => {
+      onError: (result) => {
         setConfirming(false);
-        toast.danger(error);
+        toastActionError(result);
       },
     });
   }
@@ -66,7 +66,7 @@ export function LeaveConfirmButton({
             {line}
           </Fragment>
         ))}
-        cancelLabel="돌아가기"
+        cancelLabel="취소"
         confirmLabel={copy.confirmLabel}
         danger
         pending={pending}

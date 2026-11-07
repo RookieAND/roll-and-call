@@ -30,7 +30,7 @@ export function ShareButton({ gameId, title }: ShareButtonProps) {
     }
     try {
       await navigator.clipboard.writeText(url);
-      toast.success("구인글 링크를 복사했습니다");
+      toast.info("구인글 링크를 복사했습니다");
     } catch {
       toast.danger("링크를 복사하지 못했습니다");
     }

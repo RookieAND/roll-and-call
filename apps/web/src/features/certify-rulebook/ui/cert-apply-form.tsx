@@ -7,7 +7,14 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
 import { TRIAL_HANDLER, useIsTrial, useTrialHandler } from "@/shared/trial";
-import { AppBar, DESKTOP_CARD_CLASS, LineBreaks, PageShell, toast, useAction } from "@/shared/ui";
+import {
+  AppBar,
+  DESKTOP_CARD_CLASS,
+  LineBreaks,
+  PageShell,
+  toastActionError,
+  useAction,
+} from "@/shared/ui";
 
 import { submitCertification } from "../api/submit-certification";
 import { toCertEntry } from "../model/cert-entry";
@@ -78,7 +85,7 @@ export function CertApplyForm({
         onError: (result) =>
           result.field === QUIZ_ANSWER_FIELD
             ? setQuizError(result.error)
-            : toast.danger(result.error),
+            : toastActionError(result),
       },
     );
 
@@ -122,7 +129,7 @@ export function CertApplyForm({
         )}
         {rejection && !onQuiz && (
           <div className="sticky top-(--rc-size-appbar) desktop:top-0 z-(--rc-z-sticky) border-b border-gray-100 bg-surface px-200 py-150">
-            <Callout.Root colorPalette="danger">
+            <Callout.Root colorPalette="warning">
               <Callout.Icon />
               <Callout.Title>{rejection.title}</Callout.Title>
               {rejection.lines.length > 0 && (

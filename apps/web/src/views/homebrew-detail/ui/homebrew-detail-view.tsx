@@ -114,6 +114,7 @@ export async function HomebrewDetailView({ applicationId }: HomebrewDetailViewPr
           >
             <HomebrewInfoRow
               label="한 줄 소개"
+              stacked
               action={
                 state.editable && (
                   <EditHomebrewSummaryButton
@@ -148,6 +149,11 @@ export async function HomebrewDetailView({ applicationId }: HomebrewDetailViewPr
             )}
           </Card.Root>
 
+          {state.guide && (
+            <Text typography="body4" foreground="hint" render={<p />}>
+              {state.guide}
+            </Text>
+          )}
           {state.action === HOMEBREW_DETAIL_ACTION.withdraw && (
             <Text typography="body4" foreground="hint" render={<p />}>
               <LineBreaks lines={PENDING_GUIDE} />

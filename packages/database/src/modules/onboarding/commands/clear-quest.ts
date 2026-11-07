@@ -2,11 +2,7 @@ import { and, eq, isNull } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { grantApprenticeBadge } from "#db/modules/badges";
-import {
-  isAllQuestsCleared,
-  ONBOARDING_QUEST,
-  type OnboardingQuest,
-} from "#db/modules/onboarding/model/quests";
+import { isAllQuestsCleared, type OnboardingQuest } from "#db/modules/onboarding/model/quests";
 import { getQuestClears } from "#db/modules/onboarding/queries/get-quest-clears";
 import { onboardingQuestClears, serverMembers } from "#db/schema";
 
@@ -42,20 +38,7 @@ export async function clearQuest({
       .values({ serverId, userId, quest, clearedAt: now })
       .onConflictDoNothing()
       .returning({ quest: onboardingQuestClears.quest });
-    if (inserted.length === 0) return false;
-    if (quest === ONBOARDING_QUEST.firstApply) {
-      await transaction
-        .update(serverMembers)
-        .set({ onboardedAt: now })
-        .where(
-          and(
-            eq(serverMembers.serverId, serverId),
-            eq(serverMembers.userId, userId),
-            isNull(serverMembers.onboardedAt),
-          ),
-        );
-    }
-    return true;
+    return inserted.length > 0;
   });
   const cleared = await getQuestClears({ serverId, userId });
   const allCleared = isAllQuestsCleared(cleared);

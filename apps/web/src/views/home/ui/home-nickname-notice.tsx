@@ -21,11 +21,11 @@ export function HomeNicknameNotice({ nickname }: HomeNicknameNoticeProps) {
           ]}
         />
       </Callout.Description>
-      <div className="col-start-2 mt-125">
-        <Button variant="outline" size="sm" render={<ServerLink path="/me/edit" />}>
+      <Callout.Action>
+        <Button variant="ghost" size="sm" render={<ServerLink path="/me/edit" />}>
           닉네임 바꾸기
         </Button>
-      </div>
+      </Callout.Action>
     </Callout.Root>
   );
 }

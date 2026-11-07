@@ -28,7 +28,11 @@ export async function GamesJoinCallout({ page, filter }: GamesJoinCalloutProps) 
         이 서버 멤버가 되면 구인에 신청할 수 있습니다.
       </Callout.Description>
       <Callout.Action>
-        <Button render={<Link href={serverJoinPath({ slug: server.slug, next })} />} size="sm">
+        <Button
+          render={<Link href={serverJoinPath({ slug: server.slug, next })} />}
+          variant="ghost"
+          size="sm"
+        >
           가입하기
         </Button>
       </Callout.Action>

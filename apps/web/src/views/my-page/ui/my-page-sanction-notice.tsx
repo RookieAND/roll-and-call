@@ -11,7 +11,7 @@ interface MyPageSanctionNoticeProps {
 
 export function MyPageSanctionNotice({ reason, until }: MyPageSanctionNoticeProps) {
   return (
-    <Callout.Root colorPalette="danger">
+    <Callout.Root colorPalette="warning">
       <Callout.Icon />
       <Callout.Title>활동이 정지된 상태입니다</Callout.Title>
       <Callout.Description>

@@ -57,7 +57,7 @@ export async function MyRulebooksView() {
           <VStack gap="250" className="pt-200 pb-250">
             {home.banner && <EnforcementBanner title={home.banner.title} dday={home.banner.dday} />}
             {home.suspension && (
-              <Callout.Root colorPalette="danger">
+              <Callout.Root colorPalette="warning">
                 <Callout.Icon />
                 <Callout.Title className="break-keep">
                   활동 정지 기간에는 인증을 신청할 수 없습니다.
@@ -120,6 +120,7 @@ export async function MyRulebooksView() {
                             href={serverPath({ slug: server.slug, path: home.suggestion.href })}
                           />
                         }
+                        variant="ghost"
                         size="sm"
                       >
                         신청하기

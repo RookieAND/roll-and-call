@@ -36,13 +36,14 @@ export function DeleteReviewDialog({
       onOpenChange={onOpenChange}
       title="후기를 삭제할까요?"
       description={subject}
-      cancelLabel="그만두기"
+      cancelLabel="취소"
       confirmLabel="삭제하기"
       danger
       pending={pending}
       onConfirm={remove}
     >
-      <Callout.Root colorPalette="danger" className="break-keep">
+      <Callout.Root colorPalette="danger" size="sm" className="break-keep">
+        <Callout.Icon />
         <Callout.Description>
           같은 세션에 다시 쓸 수 없습니다.
           <br />

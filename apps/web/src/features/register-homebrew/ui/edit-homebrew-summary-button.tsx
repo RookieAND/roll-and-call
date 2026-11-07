@@ -1,11 +1,10 @@
 "use client";
 
 import { HOMEBREW_LIMIT } from "@roll-and-call/database/homebrew/model";
-import { Button, Field, Grid, IconButton, Sheet, TextInput } from "@roll-and-call/ui";
-import { PenLine } from "lucide-react";
+import { Button, Field, Grid, Sheet, TextInput } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { useAction } from "@/shared/ui";
+import { toast, useAction } from "@/shared/ui";
 
 import { saveHomebrewSummary } from "../api/save-homebrew-summary";
 
@@ -32,16 +31,26 @@ export function EditHomebrewSummaryButton({
   function save(event: React.FormEvent) {
     event.preventDefault();
     run(() => saveHomebrewSummary({ applicationId, summary: draft }), {
-      onSuccess: () => setOpen(false),
+      onSuccess: () => {
+        setOpen(false);
+        toast.success("소개를 저장했습니다");
+      },
       onError: (result) => setError(result.error),
     });
   }
 
   return (
     <>
-      <IconButton variant="ghost" size="lg" aria-label="한 줄 소개 수정" onClick={openSheet}>
-        <PenLine size={20} aria-hidden />
-      </IconButton>
+      <Button
+        variant="ghost"
+        colorPalette="primary"
+        size="md"
+        className="h-11 flex-none"
+        aria-label="한 줄 소개 수정"
+        onClick={openSheet}
+      >
+        수정
+      </Button>
       <Sheet.Root open={open} onOpenChange={(next) => !pending && setOpen(next)}>
         <Sheet.Popup aria-label="한 줄 소개 수정">
           <Sheet.Handle />

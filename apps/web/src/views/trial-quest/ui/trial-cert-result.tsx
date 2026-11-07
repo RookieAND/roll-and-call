@@ -10,7 +10,7 @@ import {
 } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 
-import { ClearQuestButton } from "@/features/clear-quest";
+import { CLEAR_TARGET, ClearQuestButton } from "@/features/clear-quest";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell, ServerLink } from "@/shared/ui";
 
 import { TRIAL_RULEBOOK_TITLE } from "../model/trial-rulebook";
@@ -80,6 +80,15 @@ export function TrialCertResult({ onBack, onOpenMine }: TrialCertResultProps) {
             <Text typography="body4" foreground="muted" render={<p />}>
               체험이라 실제 인증은 되지 않았습니다.
             </Text>
+            <Button
+              variant="ghost"
+              colorPalette="primary"
+              size="md"
+              className="min-h-11 self-start"
+              render={<ServerLink path="/me/rulebooks/apply?step=books" data-trial-exit />}
+            >
+              실제로 인증 신청하기
+            </Button>
           </VStack>
         </Container>
         <FloatingBar.Root elevated={false}>
@@ -87,21 +96,27 @@ export function TrialCertResult({ onBack, onOpenMine }: TrialCertResultProps) {
             <Container size="sm">
               <VStack gap="100">
                 <HStack gap="100">
-                  <Button variant="outline" size="lg" className="flex-1" onClick={onOpenMine}>
+                  <Button
+                    variant="outline"
+                    colorPalette="gray"
+                    size="lg"
+                    className="flex-1"
+                    onClick={onOpenMine}
+                  >
                     내 룰북 보기
                   </Button>
-                  <ClearQuestButton quest="rulebook_cert" className="flex-1">
-                    다음
+                  <ClearQuestButton quest="rulebook_cert" to={CLEAR_TARGET.next} className="flex-1">
+                    다음 퀘스트로
                   </ClearQuestButton>
                 </HStack>
-                <Button
-                  variant="outline"
-                  size="lg"
+                <ClearQuestButton
+                  quest="rulebook_cert"
+                  variant="ghost"
+                  colorPalette="gray"
                   className="w-full"
-                  render={<ServerLink path="/me/rulebooks/apply?step=books" data-trial-exit />}
                 >
-                  실제로 인증 신청하기
-                </Button>
+                  목록으로
+                </ClearQuestButton>
               </VStack>
             </Container>
           </FloatingBar.Content>

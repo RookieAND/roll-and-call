@@ -10,7 +10,7 @@ import {
 } from "@roll-and-call/ui";
 import { BookOpen } from "lucide-react";
 
-import { ClearQuestButton } from "@/features/clear-quest";
+import { CLEAR_TARGET, ClearQuestButton } from "@/features/clear-quest";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 import {
@@ -93,8 +93,8 @@ export function TrialApplyResult({ kind, applied, onBack, onTryOther }: TrialApp
                 >
                   다른 방식도 해 보기
                 </Button>
-                <ClearQuestButton quest="first_apply" className="flex-1">
-                  다음
+                <ClearQuestButton quest="first_apply" to={CLEAR_TARGET.next} className="flex-1">
+                  다음 퀘스트로
                 </ClearQuestButton>
               </HStack>
             </Container>

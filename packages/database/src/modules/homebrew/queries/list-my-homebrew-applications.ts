@@ -29,6 +29,4 @@ export async function listMyHomebrewApplications({
   return rows.filter((row) => !row.reapplied);
 }
 
-export type MyHomebrewApplication = Awaited<
-  ReturnType<typeof listMyHomebrewApplications>
->[number];
+export type MyHomebrewApplication = Awaited<ReturnType<typeof listMyHomebrewApplications>>[number];

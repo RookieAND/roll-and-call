@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useServerPath } from "@/shared/lib";
-import { ConfirmDialog, LARGE_DIALOG_TITLE_CLASS, LineBreaks, toast, useAction } from "@/shared/ui";
+import {
+  ConfirmDialog,
+  LARGE_DIALOG_TITLE_CLASS,
+  LineBreaks,
+  toastActionError,
+  useAction,
+} from "@/shared/ui";
 
 import { drawLottery } from "../api/draw-lottery";
 
@@ -51,7 +57,7 @@ export function DrawLotteryCard({
     run(() => drawLottery(gameId), {
       onSuccess: () => setConfirming(false),
       onError: (result) => {
-        toast.danger(result.error);
+        toastActionError(result);
         if (!result.alreadyDrawn) return;
         setConfirming(false);
         router.push(toServerPath(`/games/${gameId}/draw`));
@@ -67,23 +73,23 @@ export function DrawLotteryCard({
         <Callout.Description>
           <LineBreaks lines={lines} />
         </Callout.Description>
-        <div className="col-span-full mt-150">
+        {!isNull(blockedMinPlayers) && (
+          <Text typography="body4" foreground="muted" render={<p />} className="col-start-2 mt-100">
+            <LineBreaks
+              lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}
+            />
+          </Text>
+        )}
+        <Callout.Action>
           <Button
-            size="lg"
-            className="w-full"
+            variant="ghost"
+            size="sm"
             disabled={!isNull(blockedMinPlayers)}
             onClick={() => setConfirming(true)}
           >
             지금 추첨하기
           </Button>
-          {!isNull(blockedMinPlayers) && (
-            <Text typography="body4" foreground="muted" render={<p />} className="mt-100">
-              <LineBreaks
-                lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}
-              />
-            </Text>
-          )}
-        </div>
+        </Callout.Action>
       </Callout.Root>
 
       <ConfirmDialog

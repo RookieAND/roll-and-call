@@ -77,3 +77,4 @@ Roll & Call(ORPG 세션 모집·일정 조율) 앱의 디자인 시스템. React
 - 컴포넌트별 문서: `packages/ui/docs/<이름>.md`
 - 앱 쪽 규칙(FSD·레이어): `apps/web/docs/frontend-conventions.md`
 - 2차 개편 마이그레이션: `packages/ui/docs/migration-v2.md`
+- 쓰임이 좁은 색 토큰(순위, 토스트 아이콘): `packages/ui/docs/color-tokens.md`

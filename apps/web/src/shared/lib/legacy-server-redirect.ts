@@ -2,7 +2,8 @@ import { isServerSlug } from "@roll-and-call/database/servers/model";
 
 import { isUuid } from "./is-uuid";
 
-const LEGACY_PREFIXES = ["/games", "/me"] as const;
+// /onboarding은 서버 밖 소개 슬라이드였다. 지금은 서버마다 있는 튜토리얼 퀘스트 목록이다.
+const LEGACY_PREFIXES = ["/games", "/me", "/onboarding"] as const;
 const LEGACY_PROFILE = "u";
 
 // 서버 주소(/{slug})가 생기기 전의 경로를 기본 서버로, 옛 프로필 주소(…/u/…)를 …/users/…로 옮긴다.

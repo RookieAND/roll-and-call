@@ -75,7 +75,7 @@ export function RevokeCertDialog({ target, staffChannel, onClose }: RevokeCertDi
     onClose();
     router.refresh();
     if (!result.ok) {
-      toast.info(
+      toast.warning(
         conflictToastText({ conflict: result.conflict, self: result.self, target: "인증" }),
       );
       return;

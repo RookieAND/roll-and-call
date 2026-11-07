@@ -1,6 +1,6 @@
-import { toast } from "@roll-and-call/ui";
-
 import { AppError, ERROR_DISPLAY, type ActionResult } from "@/shared/api";
+
+import { toastActionError } from "./toast-action-error";
 
 export type ActionHandlers<Result extends ActionResult> = {
   onSuccess?: (result: Result) => void;
@@ -21,6 +21,6 @@ export function handleActionResult<Result extends ActionResult>({
     throw new AppError(result.error, ERROR_DISPLAY.page);
   }
   if (onError) onError({ ...result, error: result.error });
-  else toast.danger(result.error);
+  else toastActionError({ ...result, error: result.error });
   return false;
 }

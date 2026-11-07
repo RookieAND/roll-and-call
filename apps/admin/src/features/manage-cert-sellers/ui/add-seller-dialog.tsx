@@ -25,7 +25,7 @@ export function AddSellerDialog({ trigger, children }: AddSellerDialogProps) {
     startTransition(async () => {
       const result = await saveSeller(name);
       if (!result.ok) {
-        if ("error" in result) toast.danger(result.error);
+        if ("error" in result) toast.warning(result.error);
         else setDuplicate(true);
         return;
       }

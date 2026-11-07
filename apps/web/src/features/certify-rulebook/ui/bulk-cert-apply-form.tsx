@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { certApplyHref, type MyRulebook } from "@/entities/rulebook";
 import { useServerPath } from "@/shared/lib";
-import { AppBar, DESKTOP_CARD_CLASS, PageShell, toast, useAction } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell, toastActionError, useAction } from "@/shared/ui";
 
 import { submitCertificationGroup } from "../api/submit-certification-group";
 import { bulkDraftMissing } from "../model/bulk-draft-missing";
@@ -70,7 +70,7 @@ export function BulkCertApplyForm({
         onError: (result) => {
           const wrongBookId = bulkQuizFieldRulebookId(result.field);
           if (wrongBookId) setQuizErrors({ [wrongBookId]: result.error });
-          else toast.danger(result.error);
+          else toastActionError(result);
         },
       },
     );

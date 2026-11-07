@@ -47,7 +47,7 @@ export function AddStaffDialog({ candidates, searched, open, onOpenChange }: Add
       toast.success(`${selected.nickname}님을 운영진으로 추가했습니다`);
       return;
     }
-    toast.info(conflictToastText({ conflict: null, self: false, target: "운영진" }));
+    toast.warning(conflictToastText({ conflict: null, self: false, target: "운영진" }));
     router.refresh();
   };
 

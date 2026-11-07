@@ -33,7 +33,6 @@ export function TrialFirstRecruit({ form }: TrialFirstRecruitProps) {
   const toServerPath = useServerPath();
   const [screen, setScreen] = useState<TrialRecruitScreenName>(TRIAL_RECRUIT_SCREEN.wizard);
   const [now] = useState(() => new Date());
-  const leave = () => router.push(toServerPath("/onboarding"));
 
   const runtime = useMemo<TrialRuntime>(
     () => ({
@@ -77,7 +76,6 @@ export function TrialFirstRecruit({ form }: TrialFirstRecruitProps) {
           now={now}
           applied={store.applied}
           onOpen={setScreen}
-          onLeave={leave}
         />
       </TrialLinkGuard>
     </TrialContext>
