@@ -104,7 +104,7 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
               </Table.Cell>
               <Table.Cell>
                 <HStack align="baseline" gap="075" className="min-w-0">
-                  <Text typography="body3" truncate>
+                  <Text typography="body3" truncate title={row.rulebook}>
                     {row.rulebook}
                   </Text>
                   <Text typography="body4" foreground="hint" className="flex-none">

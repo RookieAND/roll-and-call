@@ -84,7 +84,7 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
               </Text>
             </Table.Cell>
             <Table.Cell>
-              <Text typography="body3" foreground="muted">
+              <Text typography="body3" foreground="muted" title={row.rulebook}>
                 {row.rulebook}
               </Text>
             </Table.Cell>

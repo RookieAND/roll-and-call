@@ -118,7 +118,7 @@ export function ActivityPanel({
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="muted">
+                <Text typography="body3" foreground="muted" title={activity.rulebook}>
                   {activity.rulebook}
                 </Text>
               </Table.Cell>

@@ -18,7 +18,7 @@ interface FactRowsProps {
 export function FactRows({ items, wide = false }: FactRowsProps) {
   return (
     <div className="overflow-hidden">
-      <dl className="m-0 -mb-px grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-300">
+      <dl className="m-0 -mb-px grid grid-cols-[repeat(auto-fit,minmax(max(260px,calc((100%_-_var(--spacing-300))/2)),1fr))] gap-x-300">
         {items.map(({ label, value, nowrap }) => (
           <div
             key={label}

@@ -81,7 +81,7 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
               {row.gmNickname}
             </Table.Cell>
             <Table.Cell>
-              <Text typography="body3" foreground="muted">
+              <Text typography="body3" foreground="muted" title={row.rulebook}>
                 {row.rulebook}
               </Text>
             </Table.Cell>
