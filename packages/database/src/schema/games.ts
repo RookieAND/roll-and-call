@@ -170,6 +170,24 @@ export const games = pgTable(
       .where(
         sql`visibility = 'private' and cancelled_at is null and (notified_at is null or start_notified_at is null)`,
       ),
+    // 공개 구인의 1시간 전 리마인더(session-reminders)가 집는 글
+    index("games_reminder_due_idx")
+      .on(table.confirmedAt)
+      .where(sql`confirmed_at is not null and notified_at is null and cancelled_at is null`),
+    // 공개 구인의 시작 알림(session-reminders)이 집는 글
+    index("games_start_notice_due_idx")
+      .on(table.confirmedAt)
+      .where(sql`confirmed_at is not null and start_notified_at is null and cancelled_at is null`),
+    // 종료 뒤 후기 알림 크론(session-ended)이 집는 글
+    index("games_review_notice_due_idx")
+      .on(table.confirmedAt)
+      .where(sql`confirmed_at is not null and review_notified_at is null and cancelled_at is null`),
+    // 출석 자동 확정 크론(attendance)이 집는 글
+    index("games_attendance_due_idx")
+      .on(table.confirmedAt)
+      .where(
+        sql`confirmed_at is not null and attendance_confirmed_at is null and attendance_first_confirmed_at is null and cancelled_at is null`,
+      ),
     // 마감 때 추첨 크론이 집는 글
     index("games_lottery_due_idx")
       .on(table.endDate)

@@ -19,6 +19,7 @@ export { revokeCertifications, type RevokeResult } from "./commands/revoke-certi
 export { withdrawPendingApplications } from "./commands/withdraw-pending-applications";
 export { findCertFileUrlsInUse } from "./queries/find-cert-file-urls-in-use";
 export { findLatestCertApplication } from "./queries/find-latest-cert-application";
+export { hasRejectedCertRecord } from "./queries/has-rejected-cert-record";
 export {
   getRulebookRecords,
   type HomebrewOwnership,
