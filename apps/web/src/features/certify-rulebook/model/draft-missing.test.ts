@@ -24,7 +24,7 @@ describe("draftMissing", () => {
       "뒷면 사진을 올려야 합니다",
     );
     expect(draftMissing(draft({ shots: { front: empty, back: empty } }))).toBe(
-      "사진 2장을 올려야 합니다",
+      "앞면·뒷면 사진을 올려야 합니다",
     );
     expect(draftMissing(draft({}))).toBeNull();
   });

@@ -25,8 +25,7 @@ export function QuestGlanceCard({ defaultOpen }: QuestGlanceCardProps) {
           <Button
             variant="ghost"
             colorPalette="gray"
-            size="md"
-            className="h-11"
+            size="lg"
             aria-expanded={open}
             onClick={() => setOpen(!open)}
           >

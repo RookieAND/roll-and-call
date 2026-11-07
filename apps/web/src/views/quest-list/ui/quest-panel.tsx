@@ -37,10 +37,7 @@ export function QuestPanel({ clearedCount, allCleared }: QuestPanelProps) {
       </Card.Root>
       <VStack gap="100" render={<section />}>
         <QuestSectionLabel>보상</QuestSectionLabel>
-        <QuestAchievementPreview
-          earned={allCleared}
-          lockedCaption="튜토리얼 퀘스트를 모두 마치면 받습니다."
-        />
+        <QuestAchievementPreview earned={allCleared} />
       </VStack>
     </VStack>
   );

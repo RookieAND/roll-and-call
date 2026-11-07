@@ -39,9 +39,7 @@ export function TrialApplyResult({ kind, applied, onBack, onTryOther }: TrialApp
   return (
     <PageShell readable appBar={<AppBar title="신청 결과" onBack={onBack} heading={false} />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <TrialBanner>
-          <Badge colorPalette="gray">메인 퀘스트</Badge>
-        </TrialBanner>
+        <TrialBanner />
         <Container size="sm">
           <VStack gap="250" className="px-050 py-300">
             <VStack gap="075">

@@ -20,11 +20,7 @@ export function draftMissing(draft: BookDraft): string | null {
   if (slots.some(([, slot]) => slot.status === PHOTO_SLOT.uploading))
     return "사진을 올리는 중입니다";
   const empty = slots.filter(([, slot]) => !slotKey(slot)).map(([label]) => label);
-  if (empty.length > 0) {
-    return empty.length === slots.length
-      ? `사진 ${slots.length}장을 올려야 합니다`
-      : `${empty.join("·")} 사진을 올려야 합니다`;
-  }
+  if (empty.length > 0) return `${empty.join("·")} 사진을 올려야 합니다`;
   if (!ebook) return null;
   const seller = draft.seller === OTHER_SELLER ? draft.sellerOther.trim() : draft.seller;
   if (!seller) return "판매처를 골라야 합니다";

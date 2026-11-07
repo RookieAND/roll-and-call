@@ -34,7 +34,7 @@ export function MyPageSettings({ handleLabel, questProgress }: MyPageSettingsPro
           <Text typography="subtitle1" className="min-w-0 flex-1 whitespace-nowrap">
             튜토리얼 퀘스트
           </Text>
-          <Text typography="body3" foreground="hint" numeric>
+          <Text typography="subtitle2" foreground="primary" numeric>
             {questProgress} / {ONBOARDING_QUESTS.length}
           </Text>
           <ChevronRight size={16} aria-hidden className="flex-none text-hint" />

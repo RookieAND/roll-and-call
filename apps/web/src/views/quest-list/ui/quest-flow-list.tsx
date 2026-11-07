@@ -12,10 +12,10 @@ interface QuestFlowListProps {
 export function QuestFlowList({ label, steps }: QuestFlowListProps) {
   return (
     <VStack gap="100">
-      <Text typography="body4" foreground="hint">
+      <Text typography="body3" weight="bold" foreground="muted">
         {label}
       </Text>
-      <VStack gap="075" render={<ol />}>
+      <VStack gap="050" render={<ol />}>
         {steps.map((step) => {
           const Icon = FLOW_STEP_ICON[step.icon];
           return (
