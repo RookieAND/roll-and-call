@@ -1,4 +1,5 @@
 import { Button, HStack, VStack } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 
 import { NO_SHOW_STATUS_LABEL, type NoShowRow, type NoShowSortColumn } from "@/entities/no-show";
 import { type NoShowDetail, type NoShowSessionSearch } from "@/entities/no-show/server";
@@ -71,6 +72,7 @@ export function NoShowsView({
             colorPalette="gray"
             render={<ServerLink path={addHref} scroll={false} />}
           >
+            <Plus size={14} aria-hidden />
             불참 기록 추가
           </Button>
         }

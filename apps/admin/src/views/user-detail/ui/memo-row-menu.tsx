@@ -22,7 +22,7 @@ export function MemoRowMenu({ userId, nickname, memo }: MemoRowMenuProps) {
   return (
     <>
       <MoreMenu
-        label="메모 더 보기"
+        label={`${nickname} 메모 더 보기`}
         widthClassName="w-[130px]"
         items={[
           {

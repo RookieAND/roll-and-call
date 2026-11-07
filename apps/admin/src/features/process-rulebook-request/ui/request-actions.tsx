@@ -23,7 +23,7 @@ export function RequestActions({ label, similar, actionHrefs }: RequestActionsPr
   return (
     <HStack align="center" justify="end">
       <MoreMenu
-        label={`${label} 처리`}
+        label={`${label} 더 보기`}
         items={actions.map((action) => ({
           label: REQUEST_ACTION_LABEL[action],
           href: actionHrefs[action],

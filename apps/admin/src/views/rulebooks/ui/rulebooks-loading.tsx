@@ -43,7 +43,7 @@ export function RulebooksLoading() {
             />
           </HStack>
           <Button disabled className="ml-auto gap-050">
-            <Plus size={16} aria-hidden />
+            <Plus size={14} aria-hidden />
             룰북 추가
           </Button>
         </HStack>

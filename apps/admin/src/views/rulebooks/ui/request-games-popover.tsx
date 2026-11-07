@@ -17,7 +17,7 @@ export function RequestGamesPopover({ games }: RequestGamesPopoverProps) {
           <Button variant="ghost" colorPalette="primary" size="sm" className="-ml-150 underline" />
         }
       >
-        구인 {games.length}건
+        구인 {games.length}건 보기
       </Popover.Trigger>
       <Popover.Popup align="start" className="w-[300px] p-075">
         <Text typography="body4" weight="bold" foreground="muted" className="px-100 pb-050">

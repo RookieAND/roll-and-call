@@ -1,5 +1,5 @@
 import { Button, HStack, TextInput } from "@roll-and-call/ui";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 
 import {
   AdminHeader,
@@ -17,6 +17,7 @@ export function NoShowsLoading() {
         title="불참 기록"
         actions={
           <Button variant="outline" colorPalette="gray" disabled>
+            <Plus size={14} aria-hidden />
             불참 기록 추가
           </Button>
         }

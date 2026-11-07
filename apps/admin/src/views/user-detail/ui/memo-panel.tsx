@@ -1,4 +1,5 @@
 import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Plus } from "lucide-react";
 
 import type { UserDetail } from "@/entities/user/server";
 import { formatFullDateTime } from "@/shared/lib";
@@ -35,6 +36,7 @@ export function MemoPanel({ userId, nickname, memos, viewer }: MemoPanelProps) {
             />
           }
         >
+          <Plus size={14} aria-hidden />
           메모 추가
         </Button>
       }

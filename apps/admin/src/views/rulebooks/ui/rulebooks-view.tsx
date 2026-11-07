@@ -116,7 +116,7 @@ export function RulebooksView({
             <HStack align="center" gap="100">
               <UrlSearchInput placeholder="이름, 판본, 카테고리, 다른 이름" className="w-[300px]" />
               <Button render={<ServerLink path="/rules/new" />} className="ml-auto gap-050">
-                <Plus size={16} aria-hidden />
+                <Plus size={14} aria-hidden />
                 룰북 추가
               </Button>
             </HStack>

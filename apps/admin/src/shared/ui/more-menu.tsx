@@ -17,6 +17,10 @@ export interface MoreMenuItem {
   onSelect?: () => void;
 }
 
+// 파괴적 항목은 맨 아래에 둔다.
+const dangerLast = (items: MoreMenuItem[]) =>
+  items.toSorted((a, b) => Number(Boolean(a.danger)) - Number(Boolean(b.danger)));
+
 interface MoreMenuProps {
   label: string;
   items: MoreMenuItem[];
@@ -40,13 +44,22 @@ export function MoreMenu({
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger
         disabled={disabled}
-        render={<IconButton variant="outline" size="sm" aria-label={label} />}
+        render={
+          <IconButton
+            variant="outline"
+            size="sm"
+            aria-label={label}
+            title={label}
+            aria-haspopup="menu"
+            aria-expanded={open}
+          />
+        }
       >
         <Ellipsis size={16} aria-hidden />
       </Popover.Trigger>
       <Popover.Popup align="end" className={cn(widthClassName, "p-075")}>
         <VStack>
-          {items.map((item) => {
+          {dangerLast(items).map((item) => {
             const { label: itemLabel, icon: Icon, danger, onSelect } = item;
             return (
               <Button

@@ -14,7 +14,7 @@ interface PostMoreMenuProps {
 export function PostMoreMenu({ userAppHref, gmId, postId, logHref }: PostMoreMenuProps) {
   return (
     <MoreMenu
-      label="구인 메뉴"
+      label="더 보기"
       items={[
         ...(userAppHref
           ? [{ label: "사용자 화면으로 보기", icon: Eye, externalHref: userAppHref }]

@@ -15,7 +15,7 @@ interface ReviewMoreMenuProps {
 export function ReviewMoreMenu({ gameId, authorId, logHref }: ReviewMoreMenuProps) {
   return (
     <MoreMenu
-      label="이동 메뉴"
+      label="더 보기"
       disabled={!gameId}
       items={[
         { label: "구인 상세 열기", icon: FileText, href: `/posts/${gameId}` },

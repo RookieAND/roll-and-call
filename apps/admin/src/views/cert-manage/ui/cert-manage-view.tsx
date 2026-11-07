@@ -93,7 +93,7 @@ export function CertManageView({
             ) : null,
           )}
           <Button render={<ServerLink path="/cert/manage/grant" />} className="ml-auto gap-075">
-            <Plus size={16} aria-hidden />
+            <Plus size={14} aria-hidden />
             인증 부여
           </Button>
         </HStack>

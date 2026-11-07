@@ -79,9 +79,10 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
                     variant="outline"
                     colorPalette="danger"
                     size="sm"
+                    aria-label={`${row.nickname} 해제하기`}
                     render={<ServerLink path={removeHref} scroll={false} />}
                   >
-                    해제
+                    해제하기
                   </Button>
                 )}
               </Table.Cell>

@@ -15,7 +15,18 @@ export function EntryMoveSheet({ items }: EntryMoveSheetProps) {
   const [open, setOpen] = useState(false);
   return (
     <Sheet.Root open={open} onOpenChange={setOpen}>
-      <Sheet.Trigger render={<IconButton variant="outline" size="lg" aria-label="더 보기" />}>
+      <Sheet.Trigger
+        render={
+          <IconButton
+            variant="outline"
+            size="lg"
+            aria-label="더 보기"
+            title="더 보기"
+            aria-haspopup="menu"
+            aria-expanded={open}
+          />
+        }
+      >
         <Ellipsis size={20} aria-hidden />
       </Sheet.Trigger>
       <Sheet.Popup>

@@ -41,7 +41,7 @@ export function CertManageLoading() {
             </Chip>
           ))}
           <Button disabled className="ml-auto gap-075">
-            <Plus size={16} aria-hidden />
+            <Plus size={14} aria-hidden />
             인증 부여
           </Button>
         </HStack>
