@@ -19,7 +19,10 @@ export async function HomebrewApplyView({ from }: HomebrewApplyViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <PageShell readable appBar={<AppBar back="/me/rulebooks/apply" title="자작 룰 등록 신청" />}>
+      <PageShell
+        readable
+        appBar={<AppBar back="/me/rulebooks/apply" title="내가 만든 룰 등록 신청" />}
+      >
         <div className={DESKTOP_CARD_CLASS}>
           <Container size="sm">
             <VStack className="py-300">

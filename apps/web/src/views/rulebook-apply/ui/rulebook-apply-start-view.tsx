@@ -66,14 +66,14 @@ export async function RulebookApplyStartView() {
               <VStack gap="100">
                 <ApplyKindCard
                   icon={PenLine}
-                  title="자작 룰 등록"
+                  title="내가 만든 룰 등록"
                   lines={["직접 만든 룰을 심사받습니다.", "승인되면 서버 룰북으로 등록됩니다."]}
                   path="/me/rulebooks/maker/new"
                   disabled={homebrewLimitReached}
                 />
                 {homebrewLimitReached && (
                   <Text typography="body4" foreground="hint" className="break-keep" render={<p />}>
-                    {`심사 중인 자작 룰 신청은 최대 ${HOMEBREW_LIMIT.pendingPerUser}건까지 낼 수 있습니다.`}
+                    {`심사 중인 내가 만든 룰 신청은 최대 ${HOMEBREW_LIMIT.pendingPerUser}건까지 낼 수 있습니다.`}
                   </Text>
                 )}
               </VStack>

@@ -81,7 +81,7 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
   const leaveHref = toServerPath(
     previous ? `/me/rulebooks/maker/${previous.id}` : "/me/rulebooks/apply",
   );
-  const title = previous ? "고쳐서 다시 신청" : "자작 룰 등록 신청";
+  const title = previous ? "고쳐서 다시 신청" : "내가 만든 룰 등록 신청";
 
   useBeforeUnloadWarning(dirty && !pending);
 

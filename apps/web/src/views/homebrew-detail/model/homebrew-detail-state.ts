@@ -41,7 +41,7 @@ export function homebrewDetailState(application: Application): HomebrewDetailSta
       dateLabel: appliedLabel,
       callout: {
         colorPalette: "warning",
-        title: "자작 룰 신청이 반려되었습니다.",
+        title: "내가 만든 룰 신청이 반려되었습니다.",
         lines: reason ? [`사유: ${reason}`] : [],
       },
       editable: false,

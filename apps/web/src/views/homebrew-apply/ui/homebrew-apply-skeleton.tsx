@@ -7,7 +7,10 @@ const TEXT_FIELD_COUNT = 3;
 
 export function HomebrewApplySkeleton() {
   return (
-    <PageShell readable appBar={<AppBar back="/me/rulebooks/apply" title="자작 룰 등록 신청" />}>
+    <PageShell
+      readable
+      appBar={<AppBar back="/me/rulebooks/apply" title="내가 만든 룰 등록 신청" />}
+    >
       <div className={DESKTOP_CARD_CLASS}>
         <VStack aria-busy gap="250" className="px-200 pt-200 pb-250">
           {range(TEXT_FIELD_COUNT).map((index) => (

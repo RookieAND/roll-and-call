@@ -9,7 +9,7 @@ export const REQUEST_KIND_CARDS = [
   {
     value: "core",
     title: "기본 룰북",
-    description: "같은 판본의 기본 룰북을 모두 인증하면 GM이 될 수 있습니다",
+    description: "한 판본의 기본 룰북을 모두 인증하면 그 판본의 GM이 될 수 있습니다",
   },
   {
     value: "supplement",

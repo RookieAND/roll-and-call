@@ -38,7 +38,7 @@ interface HomebrewDetailViewProps {
 
 export async function HomebrewDetailView({ applicationId }: HomebrewDetailViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
-  const appBar = <AppBar back="/me/rulebooks" title="자작 룰" />;
+  const appBar = <AppBar back="/me/rulebooks" title="내가 만든 룰" />;
   if (!user) {
     return (
       <PageShell readable appBar={appBar}>

@@ -4,8 +4,8 @@ import type { EditionSet, MyRulebook } from "@/entities/rulebook";
 
 import { ownedCategorySub } from "./owned-category-sub";
 
-const nearest = (label: string) => ({
-  set: { label } as EditionSet,
+const nearest = (edition: string) => ({
+  set: { edition } as EditionSet,
   missing: [{} as MyRulebook],
 });
 
@@ -19,12 +19,12 @@ describe("ownedCategorySub", () => {
     );
   });
 
-  it("남은 권수와 카테고리·판본을 보인다", () => {
-    expect(
-      ownedCategorySub({ hasEarned: false, editions: [], nearest: nearest("더블크로스 3rd") }),
-    ).toBe("1권만 더 인증하면 더블크로스 3rd GM이 될 수 있습니다");
-    expect(ownedCategorySub({ hasEarned: false, editions: [], nearest: nearest("인세인") })).toBe(
-      "1권만 더 인증하면 인세인 GM이 될 수 있습니다",
+  it("남은 기본 룰북 권수와 판본을 보인다", () => {
+    expect(ownedCategorySub({ hasEarned: false, editions: [], nearest: nearest("3rd") })).toBe(
+      "기본 룰북 1권을 더 인증하면 3rd 구인을 열 수 있습니다",
+    );
+    expect(ownedCategorySub({ hasEarned: false, editions: [], nearest: nearest("") })).toBe(
+      "기본 룰북 1권을 더 인증하면 구인을 열 수 있습니다",
     );
     expect(ownedCategorySub({ hasEarned: false, editions: [], nearest: undefined })).toBe(
       "기본 룰북을 인증하면 GM이 될 수 있습니다",

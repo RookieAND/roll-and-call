@@ -6,7 +6,7 @@ const ROW_WIDTHS = [220, 160, 200] as const;
 
 export function HomebrewDetailSkeleton() {
   return (
-    <PageShell readable appBar={<AppBar back="/me/rulebooks" title="자작 룰" />}>
+    <PageShell readable appBar={<AppBar back="/me/rulebooks" title="내가 만든 룰" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <VStack aria-busy gap="200" className="px-200 pt-200 pb-250">
           <VStack gap="100">

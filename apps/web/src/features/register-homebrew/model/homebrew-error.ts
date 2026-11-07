@@ -7,9 +7,9 @@ export const HOMEBREW_ERROR = {
   imageInvalid: "이미지를 다시 올려 주세요.",
   imageFormat: "JPG 또는 PNG 파일만 올릴 수 있습니다.",
   materialRequired: "링크나 이미지를 하나 이상 넣어야 합니다.",
-  pendingLimit: "심사 중인 자작 룰 신청은 최대 3건까지 낼 수 있습니다.",
+  pendingLimit: "심사 중인 내가 만든 룰 신청은 최대 3건까지 낼 수 있습니다.",
   previousInvalid: "이미 다시 신청한 기록입니다. 화면을 새로 고쳐 주세요.",
-  sanctioned: "활동 정지 기간에는 자작 룰을 신청할 수 없습니다.",
+  sanctioned: "활동 정지 기간에는 내가 만든 룰을 신청할 수 없습니다.",
   alreadyProcessed: "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.",
   summaryLocked: "소개를 고칠 수 없는 룰입니다. 화면을 새로 고쳐 주세요.",
 } as const;
