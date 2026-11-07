@@ -5,6 +5,7 @@ import { AppBar } from "@/shared/ui";
 
 import { HELP_DOCS } from "../model/help-docs";
 import { HelpDocBlock } from "./help-doc-block";
+import { HELP_APP_BAR_CLASS, HELP_BODY_CLASS } from "./help-frame-class";
 import { HelpRelatedRow } from "./help-related-row";
 
 interface HelpDocViewProps {
@@ -22,8 +23,8 @@ export function HelpDocView({ slug }: HelpDocViewProps) {
 
   return (
     <>
-      <AppBar back="/help" title={doc.title} heading={false} />
-      <Container size="sm">
+      <AppBar back="/help" title={doc.title} heading={false} className={HELP_APP_BAR_CLASS} />
+      <Container size="sm" className={HELP_BODY_CLASS}>
         <VStack gap="250" className="py-250 break-keep">
           <VStack gap="100">
             <Text typography="body4" weight="extrabold" foreground="primary" render={<p />}>

@@ -7,6 +7,7 @@ import { AppBar } from "@/shared/ui";
 import { HELP_QUEST_FALLBACK_HREF } from "../api/load-help-quest-entry";
 import { HELP_CATEGORIES, HELP_DOCS } from "../model/help-docs";
 import { HelpDocRow } from "./help-doc-row";
+import { HELP_APP_BAR_CLASS, HELP_BODY_CLASS } from "./help-frame-class";
 import { HelpQuestCard } from "./help-quest-card";
 import { HelpQuestEntry } from "./help-quest-entry";
 import { HelpServerButton } from "./help-server-button";
@@ -18,8 +19,8 @@ interface HelpListViewProps {
 export function HelpListView({ from }: HelpListViewProps) {
   return (
     <>
-      <AppBar back="/" title="도움말" />
-      <Container size="sm">
+      <AppBar back="/" title="도움말" className={HELP_APP_BAR_CLASS} />
+      <Container size="sm" className={HELP_BODY_CLASS}>
         <VStack gap="250" className="py-200 break-keep">
           <Suspense fallback={<HelpQuestCard href={HELP_QUEST_FALLBACK_HREF} progress={null} />}>
             <HelpQuestEntry from={from} />
