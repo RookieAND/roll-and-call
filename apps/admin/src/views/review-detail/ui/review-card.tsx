@@ -1,4 +1,4 @@
-import { Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { ReviewDetail } from "@/entities/review";
 import { GmBadge } from "@/entities/user";
@@ -42,22 +42,16 @@ export function ReviewCard({ review, logHref }: ReviewCardProps) {
           <ReviewMoreMenu gameId={review.game.id} authorId={author.id} logHref={logHref} />
         </HStack>
       </HStack>
-      <Grid className="grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+      <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
         <FactRows
-          labelWidth={72}
           items={[
             { label: "구인", value: review.game.title },
-            { label: "작성 시각", value: formatFullDateTime(review.createdAt) },
-          ]}
-        />
-        <FactRows
-          labelWidth={72}
-          items={[
             { label: "GM", value: review.game.gmNickname },
-            { label: "수정 시각", value: editedValue },
+            { label: "작성 시각", value: formatFullDateTime(review.createdAt), nowrap: true },
+            { label: "수정 시각", value: editedValue, nowrap: true },
           ]}
         />
-      </Grid>
+      </div>
       <VStack className="border-t border-(--rc-color-border-subtle) px-200 py-175">
         <Text typography="body2" render={<p />} className="whitespace-pre-line">
           {review.body}

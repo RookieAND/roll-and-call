@@ -23,7 +23,6 @@ export function EbookInputPanel({ purchase, sellerRegistered, duplicate }: Ebook
       bodyClassName="p-175"
     >
       <FactRows
-        labelWidth={72}
         items={[
           {
             label: "판매처",

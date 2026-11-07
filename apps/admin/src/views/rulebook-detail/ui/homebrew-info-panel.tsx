@@ -34,7 +34,6 @@ export function HomebrewInfoPanel({ ruleLabel, info }: HomebrewInfoPanelProps) {
       bodyClassName="px-175"
     >
       <FactRows
-        labelWidth={120}
         items={[
           { label: "제작자", value: <HomebrewMaker info={info} /> },
           { label: "승인 일시", value: formatFullDateTime(info.approvedAt) },

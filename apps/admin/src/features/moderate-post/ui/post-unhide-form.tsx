@@ -55,7 +55,6 @@ export function PostUnhideForm({ post, onSettled }: PostUnhideFormProps) {
           {networkError ? <ActionNetworkError /> : null}
           {hidden ? (
             <FactBox
-              labelWidth={88}
               items={[
                 { label: "구인", value: post.title },
                 { label: "숨긴 일시", value: formatFullDateTime(hidden.at) },

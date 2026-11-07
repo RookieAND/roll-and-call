@@ -1,4 +1,4 @@
-import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
 import { formatFullDate, MEMBERSHIP_STATUS } from "@/shared/lib";
@@ -73,24 +73,13 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
             ) : null}
           </VStack>
         </HStack>
-        <Grid className="grid-cols-3 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+        <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
           <FactRows
-            labelWidth={72}
             items={[
-              { label: "가입일", value: formatFullDate(user.joinedAt) },
+              { label: "가입일", value: formatFullDate(user.joinedAt), nowrap: true },
               { label: "디스코드 ID", value: `@${user.discordHandle}` },
-            ]}
-          />
-          <FactRows
-            labelWidth={72}
-            items={[
-              { label: "연 세션", value: `${user.hostedCount}회` },
-              { label: "참여 세션", value: `${user.playedCount}회` },
-            ]}
-          />
-          <FactRows
-            labelWidth={104}
-            items={[
+              { label: "연 세션", value: `${user.hostedCount}회`, nowrap: true },
+              { label: "참여 세션", value: `${user.playedCount}회`, nowrap: true },
               {
                 label: "최근 30일 불참",
                 value: (
@@ -102,11 +91,12 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
                     {user.recentNoShowCount}회
                   </Text>
                 ),
+                nowrap: true,
               },
-              { label: "인증 룰북", value: `${user.certifications.length}개` },
+              { label: "인증 룰북", value: `${user.certifications.length}개`, nowrap: true },
             ]}
           />
-        </Grid>
+        </div>
       </section>
     </VStack>
   );

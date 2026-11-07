@@ -1,4 +1,4 @@
-import { Grid, HStack, Skeleton, VStack } from "@roll-and-call/ui";
+import { HStack, Skeleton, VStack } from "@roll-and-call/ui";
 import { ArrowRight } from "lucide-react";
 
 import { AdminHeader, FactRows, LoadingRegion, skeletonFact } from "@/shared/ui";
@@ -20,10 +20,9 @@ export function AuditEntryLoading() {
               <Skeleton width={40} height={40} rounded={400} />
               <Skeleton width={160} height={20} />
             </HStack>
-            <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
-              <FactRows labelWidth={80} items={["처리한 운영진", "처리 시각"].map(skeletonFact)} />
-              <FactRows labelWidth={80} items={["대상"].map(skeletonFact)} />
-            </Grid>
+            <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
+              <FactRows items={["처리한 운영진", "대상", "처리 시각"].map(skeletonFact)} />
+            </div>
           </section>
           <div className="divide-y divide-(--rc-color-border-subtle) rounded-600 border border-gray-200 bg-surface">
             <EntrySection title="조치 전후">
@@ -34,7 +33,7 @@ export function AuditEntryLoading() {
               </HStack>
             </EntrySection>
             <EntrySection title="사유">
-              <FactRows labelWidth={120} items={["사유", "운영진 메모"].map(skeletonFact)} />
+              <FactRows wide items={["사유", "운영진 메모"].map(skeletonFact)} />
             </EntrySection>
           </div>
         </VStack>

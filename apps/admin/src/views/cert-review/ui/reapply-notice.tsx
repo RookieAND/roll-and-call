@@ -34,7 +34,7 @@ export function ReapplyNotice({ latest, attempt }: ReapplyNoticeProps) {
       </HStack>
       <div className="px-200 py-100">
         <FactRows
-          labelWidth={140}
+          wide
           items={[
             {
               label: "지난번 반려 사유",

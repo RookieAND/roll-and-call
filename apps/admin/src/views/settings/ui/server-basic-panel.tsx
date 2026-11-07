@@ -21,7 +21,6 @@ export function ServerBasicPanel(props: ServerBasicPanelProps) {
         )}
         <div className="flex-1">
           <FactRows
-            labelWidth={72}
             items={[
               { label: "표시 이름", value: props.loading ? VALUE_SKELETON : props.name },
               { label: "slug", value: props.loading ? VALUE_SKELETON : `/${props.slug}` },

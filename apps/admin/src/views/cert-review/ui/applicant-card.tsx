@@ -1,4 +1,4 @@
-import { Grid, HStack, Text } from "@roll-and-call/ui";
+import { HStack, Text } from "@roll-and-call/ui";
 
 import type { CertReview } from "@/entities/cert/server";
 import { appliedRulebookLabel } from "@/entities/rulebook";
@@ -30,18 +30,12 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
           {review.format === "ebook" ? <Tag>전자책</Tag> : null}
         </HStack>
       </HStack>
-      <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+      <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
         <FactRows
-          labelWidth={72}
           items={[
             { label: "신청 룰북", value: rulebookLabel },
+            { label: "신청 일자", value: formatFullDate(review.appliedAt), nowrap: true },
             { label: "디스코드 ID", value: `@${applicant.discordHandle}` },
-          ]}
-        />
-        <FactRows
-          labelWidth={72}
-          items={[
-            { label: "신청 일자", value: formatFullDate(review.appliedAt) },
             {
               label: "대기",
               value: (
@@ -49,10 +43,11 @@ export function ApplicantCard({ review }: ApplicantCardProps) {
                   {review.waitedDays}일째
                 </Text>
               ),
+              nowrap: true,
             },
           ]}
         />
-      </Grid>
+      </div>
       {quiz ? (
         <Text
           typography="body3"

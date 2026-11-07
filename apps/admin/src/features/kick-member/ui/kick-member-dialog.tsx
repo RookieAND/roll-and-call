@@ -94,7 +94,6 @@ export function KickMemberDialog({
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
               <FactRows
-                labelWidth={72}
                 items={[
                   {
                     label: "대상",

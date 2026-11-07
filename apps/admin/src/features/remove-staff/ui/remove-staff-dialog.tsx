@@ -74,7 +74,6 @@ export function RemoveStaffDialog({ staff, open, onOpenChange }: RemoveStaffDial
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
               <FactRows
-                labelWidth={80}
                 items={[
                   { label: "역할", value: <Tag>{STAFF_ROLE_LABEL[staff.role]}</Tag> },
                   { label: "추가한 날", value: staff.since ? formatFullDate(staff.since) : "" },

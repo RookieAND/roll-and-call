@@ -11,10 +11,7 @@ export function CertGraceLoading() {
       <LoadingRegion label="유예 기간을 불러오는 중입니다" className="p-200">
         <VStack gap="150">
           <Panel title="유예 기간" bodyClassName="px-225">
-            <FactRows
-              labelWidth={120}
-              items={["현재 적용일", "적용일 변경", "영향 범위"].map(skeletonFact)}
-            />
+            <FactRows items={["현재 적용일", "적용일 변경", "영향 범위"].map(skeletonFact)} />
           </Panel>
         </VStack>
       </LoadingRegion>

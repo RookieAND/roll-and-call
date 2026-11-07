@@ -97,7 +97,7 @@ export function HideRulebookDialog({
               </VStack>
             ) : (
               <FactRows
-                labelWidth={200}
+                wide
                 items={[
                   { label: "인증된 GM", value: `${certifiedCount}명` },
                   { label: "함께 반려되는 심사 중 신청", value: `${pendingApplicationCount}건` },

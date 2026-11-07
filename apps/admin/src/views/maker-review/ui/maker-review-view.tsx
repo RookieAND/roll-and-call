@@ -37,7 +37,6 @@ export function MakerReviewView({ review }: MakerReviewViewProps) {
           ) : null}
           <Panel title="신청 정보" bodyClassName="px-175">
             <FactRows
-              labelWidth={120}
               items={[
                 {
                   label: "신청자",

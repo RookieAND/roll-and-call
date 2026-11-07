@@ -31,10 +31,11 @@ export function CertReviewLoading() {
               <Skeleton width={40} height={40} rounded="full" />
               <Skeleton width={120} height={20} />
             </HStack>
-            <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
-              <FactRows labelWidth={72} items={["신청 룰북", "디스코드 ID"].map(skeletonFact)} />
-              <FactRows labelWidth={72} items={["신청 일자", "대기"].map(skeletonFact)} />
-            </Grid>
+            <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
+              <FactRows
+                items={["신청 룰북", "신청 일자", "디스코드 ID", "대기"].map(skeletonFact)}
+              />
+            </div>
           </section>
           <VStack gap="125">
             <HStack align="center" gap="100">

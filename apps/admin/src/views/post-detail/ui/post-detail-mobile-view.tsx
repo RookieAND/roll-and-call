@@ -3,7 +3,7 @@ import { Button, Callout, VStack } from "@roll-and-call/ui";
 import { auditLogHref } from "@/entities/audit";
 import type { PostDetail } from "@/entities/post/server";
 import { POST_ACTION, type PostAction } from "@/features/moderate-post";
-import { formatFullDateTime, sessionTimeLabel, withQuery } from "@/shared/lib";
+import { formatFullDateTime, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
   KeyValueList,
@@ -15,6 +15,8 @@ import {
 } from "@/shared/ui";
 
 import { POST_DETAIL_TAB } from "../model/post-detail-tab";
+import { summaryRows } from "../model/summary-rows";
+import { GmValue } from "./gm-value";
 import { PostMobileTabs } from "./mobile/post-mobile-tabs";
 import { PostTabBody } from "./mobile/post-tab-body";
 
@@ -127,10 +129,8 @@ export function PostDetailMobileView({
         <MobileSection flush>
           <KeyValueList
             items={[
-              { label: "GM", value: post.gm.nickname },
+              ...summaryRows({ post, gmValue: <GmValue gm={post.gm} /> }),
               { label: "룰북", value: post.rulebook },
-              { label: "세션 일시", value: sessionTimeLabel(post.sessionAt) },
-              { label: "플레이타임", value: post.playTime ?? "—" },
               { label: "참여", value: `${post.memberCount}/${post.capacity}명` },
               {
                 label: "상태",

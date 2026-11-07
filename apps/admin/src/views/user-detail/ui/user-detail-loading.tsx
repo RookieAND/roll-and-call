@@ -1,4 +1,4 @@
-import { Button, Grid, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Skeleton, Tabs, Text, VStack } from "@roll-and-call/ui";
 import { Ban, Gavel, User } from "lucide-react";
 
 import {
@@ -37,14 +37,18 @@ export function UserDetailLoading() {
                 <Skeleton width={40} height={40} rounded="full" />
                 <Skeleton width={120} height={20} />
               </HStack>
-              <Grid className="grid-cols-3 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
-                <FactRows labelWidth={72} items={["가입일", "디스코드 ID"].map(skeletonFact)} />
-                <FactRows labelWidth={72} items={["연 세션", "참여 세션"].map(skeletonFact)} />
+              <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
                 <FactRows
-                  labelWidth={100}
-                  items={["최근 30일 불참", "인증 룰북"].map(skeletonFact)}
+                  items={[
+                    "가입일",
+                    "디스코드 ID",
+                    "연 세션",
+                    "참여 세션",
+                    "최근 30일 불참",
+                    "인증 룰북",
+                  ].map(skeletonFact)}
                 />
-              </Grid>
+              </div>
             </section>
           </div>
           <Tabs.Root value={USER_DETAIL_TAB.activity}>

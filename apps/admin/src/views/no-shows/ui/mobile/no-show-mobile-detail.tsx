@@ -79,19 +79,29 @@ export function NoShowMobileDetail({ record, query }: NoShowMobileDetailProps) {
             <Callout.Description>다시 불참으로 되돌릴 수 있습니다.</Callout.Description>
           </Callout.Root>
         ) : null}
-        <MobileSection flush>
+        <MobileSection title="불참 내용">
           <KeyValueList
             items={[
               { label: "불참 당사자", value: record.nickname },
-              { label: "세션", value: record.sessionTitle },
-              { label: "룰북", value: record.rulebook },
-              { label: "일시", value: formatFullSessionTime(record.startsAt) },
               { label: "처리한 사람", value: record.handler },
               reasonItem,
-              ...cancellationItems,
             ]}
           />
         </MobileSection>
+        <MobileSection title="세션">
+          <KeyValueList
+            items={[
+              { label: "세션", value: record.sessionTitle },
+              { label: "룰북", value: record.rulebook },
+              { label: "일시", value: formatFullSessionTime(record.startsAt) },
+            ]}
+          />
+        </MobileSection>
+        {cancellationItems.length > 0 ? (
+          <MobileSection title="취소 내용">
+            <KeyValueList items={cancellationItems} />
+          </MobileSection>
+        ) : null}
         {facts ? (
           <MobileSection title="최근 30일 불참">
             <KeyValueList

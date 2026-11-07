@@ -1,7 +1,8 @@
-import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { UserDetail } from "@/entities/user/server";
 import { formatFullDate, MEMBERSHIP_STATUS } from "@/shared/lib";
+import { KeyValueList } from "@/shared/ui";
 
 import { rejoinedNotice } from "../../model/rejoined-notice";
 import { UserStateTag } from "../user-state-tag";
@@ -18,10 +19,24 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
   const left = user.membership === MEMBERSHIP_STATUS.left;
   const frequentNoShow = user.recentNoShowCount >= NO_SHOW_WARNING_COUNT;
   const facts = [
+    { label: "가입일", value: formatFullDate(user.joinedAt) },
+    { label: "디스코드 ID", value: `@${user.discordHandle}` },
     { label: "연 세션", value: `${user.hostedCount}회` },
     { label: "참여 세션", value: `${user.playedCount}회` },
+    {
+      label: "최근 30일 불참",
+      value: (
+        <Text
+          typography="body3"
+          weight={frequentNoShow ? "bold" : "medium"}
+          foreground={frequentNoShow ? "danger" : "normal"}
+          render={<span />}
+        >
+          {user.recentNoShowCount}회
+        </Text>
+      ),
+    },
     { label: "인증 룰북", value: `${user.certifications.length}개` },
-    { label: "30일 불참", value: `${user.recentNoShowCount}회`, danger: frequentNoShow },
   ];
   return (
     <VStack
@@ -32,9 +47,6 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
       <VStack gap="050">
         <HStack align="center" gap="100" wrap>
           <UserStateTag user={user} discordBanFailed={discordBanFailed} />
-          <Text typography="body4" foreground="hint">
-            가입 {formatFullDate(user.joinedAt)}
-          </Text>
         </HStack>
         {ban ? (
           <Text typography="body4" foreground="danger">
@@ -57,28 +69,9 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
           </Text>
         ) : null}
       </VStack>
-      <Grid
-        render={<dl />}
-        className="m-0 grid-cols-4 gap-100 border-t border-(--rc-color-border-subtle) pt-150"
-      >
-        {facts.map((fact) => (
-          <VStack key={fact.label} gap="025" className="min-w-0">
-            <Text typography="body4" foreground="hint" render={<dt />}>
-              {fact.label}
-            </Text>
-            {/* 시안은 값이 라벨 위다. 읽는 순서는 라벨 → 값으로 둔다. */}
-            <Text
-              typography="subtitle1"
-              weight="bold"
-              foreground={fact.danger ? "danger" : "normal"}
-              render={<dd />}
-              className="m-0 -order-1"
-            >
-              {fact.value}
-            </Text>
-          </VStack>
-        ))}
-      </Grid>
+      <div className="border-t border-(--rc-color-border-subtle)">
+        <KeyValueList items={facts} />
+      </div>
     </VStack>
   );
 }

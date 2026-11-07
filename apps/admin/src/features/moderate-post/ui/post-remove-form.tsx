@@ -63,7 +63,6 @@ export function PostRemoveForm({ post, cancelRef, onSettled }: PostRemoveFormPro
         <VStack gap="150">
           {networkError ? <ActionNetworkError /> : null}
           <FactBox
-            labelWidth={88}
             items={[
               { label: "구인", value: post.title },
               { label: "GM", value: post.gm.nickname },

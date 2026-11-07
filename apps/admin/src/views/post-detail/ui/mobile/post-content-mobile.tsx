@@ -28,8 +28,8 @@ export function PostContentMobile({ post }: PostContentMobileProps) {
         <KeyValueList
           items={[
             { label: "유형", value: <Tag>{post.kindLabel}</Tag> },
-            { label: "룰", value: post.rulebook },
             { label: "진행 방식", value: <Tag>{post.playTypeLabel}</Tag> },
+            { label: "룰", value: post.rulebook },
             {
               label: "AI 이미지",
               value: post.aiImage ? <Tag tone="warning">사용</Tag> : <Tag>사용 안 함</Tag>,

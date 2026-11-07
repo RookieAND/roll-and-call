@@ -51,10 +51,7 @@ export function FreeImpactDialog({
         <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
-            <FactRows
-              labelWidth={160}
-              items={[{ label: "인증된 GM", value: `${certifiedCount}명` }]}
-            />
+            <FactRows items={[{ label: "인증된 GM", value: `${certifiedCount}명` }]} />
             <Text typography="body3">{`심사 중 신청 ${pendingApplicationCount}건은 대기열에 남습니다.`}</Text>
           </VStack>
         </ResponsiveDialog.Body>

@@ -1,5 +1,5 @@
 import { STAFF_CHANNEL_RELATED } from "@roll-and-call/database/audit/model";
-import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
+import { HStack, Text, VStack } from "@roll-and-call/ui";
 import { compact, isNull } from "es-toolkit";
 import { ArrowRight } from "lucide-react";
 
@@ -62,9 +62,8 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
               sameTargetHref={sameTargetHref}
             />
           </HStack>
-          <Grid className="grid-cols-2 items-start gap-x-300 border-t border-(--rc-color-border-subtle) px-200 py-100">
+          <div className="border-t border-(--rc-color-border-subtle) px-200 py-100">
             <FactRows
-              labelWidth={80}
               items={[
                 {
                   label: "처리한 운영진",
@@ -77,11 +76,12 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
                     </>
                   ),
                 },
-                { label: "처리 시각", value: formatFullDateTime(entry.at) },
+                ...compact([sideFacts[0]]),
+                { label: "처리 시각", value: formatFullDateTime(entry.at), nowrap: true },
+                ...sideFacts.slice(1),
               ]}
             />
-            {sideFacts.length ? <FactRows labelWidth={80} items={sideFacts} /> : null}
-          </Grid>
+          </div>
         </section>
         <div className="divide-y divide-(--rc-color-border-subtle) rounded-600 border border-gray-200 bg-surface">
           {changes.length > 0 ? <ChangesSection changes={changes} /> : null}
@@ -96,7 +96,7 @@ export function AuditEntryView({ entry, listHref }: AuditEntryViewProps) {
           ) : null}
           <EntrySection title="사유">
             <FactRows
-              labelWidth={120}
+              wide
               items={[
                 {
                   label: reasonTitle,

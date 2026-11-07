@@ -77,7 +77,6 @@ export function UnbanMemberDialog({
             {networkError ? <ActionNetworkError /> : null}
             <div className="rounded-400 border border-gray-200 bg-gray-50 px-175 py-050">
               <FactRows
-                labelWidth={88}
                 items={[
                   { label: "추방한 날", value: formatFullDate(ban.at) },
                   { label: "추방한 운영진", value: ban.by },

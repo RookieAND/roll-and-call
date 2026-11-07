@@ -34,9 +34,7 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
   const listHref = reviewListHref({ hidden: hiddenTab, query: listQuery });
   const actionHref = (action: ReviewAction) => withQuery(pathname, query, { action });
   const { author } = review;
-  const actionSummary = author.receivedActionCount
-    ? `받은 조치 ${author.receivedActionCount}회`
-    : "받은 조치 없음";
+  const receivedActions = author.receivedActionCount ? `${author.receivedActionCount}회` : "없음";
   const primary = review.hidden ? (
     <Button render={<ServerLink path={actionHref(REVIEW_ACTION.unhide)} scroll={false} />}>
       숨김 해제
@@ -58,6 +56,24 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
         render={<ServerLink path={`/users/${author.id}`} />}
       >
         작성자 유저 상세 열기
+      </Button>
+      <Button
+        variant="outline"
+        colorPalette="gray"
+        render={<ServerLink path={`/posts/${review.game.id}`} />}
+      >
+        구인 상세 열기
+      </Button>
+      <Button
+        variant="outline"
+        colorPalette="gray"
+        render={
+          <ServerLink
+            path={auditLogHref({ targetUserId: author.id, targetGameId: review.game.id })}
+          />
+        }
+      >
+        활동 기록에서 보기
       </Button>
       <Button
         variant="outline"
@@ -119,7 +135,8 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
                 label: "수정 시각",
                 value: review.editedAt ? formatFullDateTime(review.editedAt) : "수정하지 않음",
               },
-              { label: "쓴 후기 · 받은 조치", value: `${author.reviewCount}개 · ${actionSummary}` },
+              { label: "쓴 후기", value: `${author.reviewCount}개` },
+              { label: "받은 조치", value: receivedActions },
               ...(review.spoiler ? [{ label: "스포일러", value: <Tag>스포일러 포함</Tag> }] : []),
               ...(review.hidden?.editedAfterHidden
                 ? [{ label: "상태", value: <Tag>숨긴 뒤 수정됨</Tag> }]
@@ -127,26 +144,6 @@ export function ReviewDetailMobileView({ review, tab, listQuery }: ReviewDetailM
             ]}
           />
         </MobileSection>
-        <Button
-          variant="outline"
-          colorPalette="gray"
-          className="h-11"
-          render={<ServerLink path={`/posts/${review.game.id}`} />}
-        >
-          구인 상세 열기
-        </Button>
-        <Button
-          variant="outline"
-          colorPalette="gray"
-          className="h-11"
-          render={
-            <ServerLink
-              path={auditLogHref({ targetUserId: author.id, targetGameId: review.game.id })}
-            />
-          }
-        >
-          활동 기록에서 보기
-        </Button>
       </VStack>
       <MobileDetailBar primary={primary} more={{ title: author.nickname, items: moreItems }} />
     </>

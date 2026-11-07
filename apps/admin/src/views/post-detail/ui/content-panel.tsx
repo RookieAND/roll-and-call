@@ -32,32 +32,17 @@ export function ContentPanel({ post }: ContentPanelProps) {
   return (
     <VStack className="px-200">
       <ContentSection title="구인 설정">
-        <VStack>
-          <Grid className="grid-cols-2 items-start gap-x-400">
-            <FactRows
-              labelWidth={72}
-              items={[
-                { label: "유형", value: <Tag>{post.kindLabel}</Tag> },
-                { label: "룰", value: post.rulebook },
-              ]}
-            />
-            <FactRows
-              labelWidth={72}
-              items={[
-                { label: "진행 방식", value: <Tag>{post.playTypeLabel}</Tag> },
-                { label: "AI 이미지", value: aiImageBadge },
-              ]}
-            />
-          </Grid>
-          <FactRows
-            labelWidth={72}
-            items={[
-              { label: "장르", value: tagsOf(post.genres) },
-              { label: "트리거", value: tagsOf(post.triggers) },
-              { label: "사용 플랫폼", value: tagsOf(post.platforms) },
-            ]}
-          />
-        </VStack>
+        <FactRows
+          items={[
+            { label: "유형", value: <Tag>{post.kindLabel}</Tag> },
+            { label: "진행 방식", value: <Tag>{post.playTypeLabel}</Tag> },
+            { label: "룰", value: post.rulebook },
+            { label: "AI 이미지", value: aiImageBadge },
+            { label: "장르", value: tagsOf(post.genres) },
+            { label: "트리거", value: tagsOf(post.triggers) },
+            { label: "사용 플랫폼", value: tagsOf(post.platforms) },
+          ]}
+        />
       </ContentSection>
       <ContentSection
         title="시놉시스"

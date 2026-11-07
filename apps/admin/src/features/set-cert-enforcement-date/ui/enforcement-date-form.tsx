@@ -30,7 +30,6 @@ export function EnforcementDateForm({ enforcementDate }: EnforcementDateFormProp
 
   return (
     <FactRows
-      labelWidth={120}
       items={[
         {
           label: "현재 적용일",

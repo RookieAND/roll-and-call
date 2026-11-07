@@ -11,7 +11,6 @@ export function RequestSummary({ request }: RequestSummaryProps) {
   return (
     <Panel title="요청 내용" bodyClassName="px-175 py-050">
       <FactRows
-        labelWidth={120}
         items={[
           { label: "요청자", value: request.requesterNickname },
           { label: "요청일", value: formatFullDate(request.requestedAt) },
