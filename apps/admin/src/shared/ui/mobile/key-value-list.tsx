@@ -28,7 +28,12 @@ export function KeyValueList({ items, columns = 1, lead }: KeyValueListProps) {
             <Text typography="body4" foreground="hint" render={<dt />}>
               {item.label}
             </Text>
-            <Text typography="body2" weight="bold" render={<dd />} className="m-0">
+            <Text
+              typography="body2"
+              weight="bold"
+              render={<dd />}
+              className="m-0 flex flex-wrap items-baseline gap-x-075"
+            >
               {item.value}
             </Text>
           </VStack>
@@ -63,7 +68,8 @@ export function KeyValueList({ items, columns = 1, lead }: KeyValueListProps) {
               foreground={lead ? "muted" : undefined}
               render={<dd />}
               className={cn(
-                "m-0 min-w-0 flex-1 leading-[1.6] break-keep [overflow-wrap:anywhere]",
+                "m-0 flex min-w-0 flex-1 flex-wrap items-baseline gap-x-075 leading-[1.6] break-keep [overflow-wrap:anywhere]",
+                stacked ? "justify-start" : "justify-end",
                 lead ? "font-normal" : "font-medium",
                 stacked ? "text-left" : "text-right",
               )}
