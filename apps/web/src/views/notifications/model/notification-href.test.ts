@@ -14,6 +14,7 @@ const rulebook = { rulebookId: "r1", rulebookName: "인세인" };
 
 const CASES: [NotificationPayload, string | null][] = [
   [{ kind: NOTIFICATION_KIND.participationConfirmed, params: game }, "/games/g1"],
+  [{ kind: NOTIFICATION_KIND.newGameJoined, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.movedToWaitlist, params: { ...game, waitlistRank: 1 } }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.removedFromRoster, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.seatOpened, params: game }, "/games/g1"],

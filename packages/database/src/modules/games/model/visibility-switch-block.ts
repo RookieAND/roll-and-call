@@ -4,7 +4,6 @@ export const VISIBILITY_SWITCH_BLOCK = {
   cancelled: "cancelled",
   started: "started",
   hasApplicants: "hasApplicants",
-  coordinate: "coordinate",
 } as const;
 
 export type VisibilitySwitchBlock =
@@ -18,7 +17,6 @@ export function visibilitySwitchBlock({
   now = new Date(),
 }: {
   game: {
-    scheduleMode: "fixed" | "coordinate";
     confirmedAt: Date | string | null;
     cancelledAt: Date | string | null;
   };
@@ -27,7 +25,6 @@ export function visibilitySwitchBlock({
 }): VisibilitySwitchBlock | null {
   if (game.cancelledAt) return VISIBILITY_SWITCH_BLOCK.cancelled;
   if (isSessionStarted(game, now)) return VISIBILITY_SWITCH_BLOCK.started;
-  if (game.scheduleMode === "coordinate") return VISIBILITY_SWITCH_BLOCK.coordinate;
   if (participantCount > 0) return VISIBILITY_SWITCH_BLOCK.hasApplicants;
   return null;
 }

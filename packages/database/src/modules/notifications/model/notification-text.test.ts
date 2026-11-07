@@ -29,6 +29,11 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "구인 글에서 세션 정보를 확인해 주세요.",
   ],
   [
+    { kind: NOTIFICATION_KIND.newGameJoined, params: game },
+    "검은 산의 노래 구인에 참여되었습니다.",
+    null,
+  ],
+  [
     { kind: NOTIFICATION_KIND.movedToWaitlist, params: { ...game, waitlistRank: 2 } },
     "검은 산의 노래에서 대기로 옮겨졌습니다.",
     "현재 대기 2번입니다.",

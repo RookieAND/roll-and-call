@@ -31,7 +31,7 @@ export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 
 // first_come은 정원까지 신청 순서대로 확정하고, lottery는 정원과 무관하게 받아 마감 때 1d100 추첨으로 확정 인원을 정한다.
 // selection은 정원과 무관하게 받고 GM이 신청자 중에서 확정자를 직접 골라 [선발 마치기]로 끝낸다.
-// private은 모집 공지·신청 없이 GM이 참여자를 직접 지정하는 구인이다. 일시 지정형만 가능하다.
+// private은 모집 공지·신청 없이 GM이 참여자를 직접 지정하는 구인이다.
 export const gameVisibility = pgEnum("game_visibility", ["public", "private"]);
 
 export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery", "selection"]);

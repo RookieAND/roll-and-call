@@ -6,13 +6,13 @@ import { notFound, redirect } from "next/navigation";
 
 import { isSessionEnded, isSessionStarted, SCHEDULE_MODE, splitRoster } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
-import { nextRoundBaseDate } from "@/features/open-next-round";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
 import { AppBar, PageShell } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
+import { toSplitCandidate } from "../model/to-split-candidate";
 import { ParticipantManager } from "./participant-manager";
 
 interface ManageParticipantsViewProps {
@@ -66,6 +66,17 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     .toSorted((left, right) => left.applicationRank - right.applicationRank)
     .map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
+  const started = isSessionStarted(game);
+  const splitCandidates = started
+    ? []
+    : roster.waiting.map((participant) =>
+        toSplitCandidate({
+          userId: participant.userId,
+          username: participant.user?.username ?? "익명",
+          applicationNote: applicationNotes.get(participant.userId) ?? null,
+          bio: participant.user?.bio ?? null,
+        }),
+      );
   const summary = summarizeRoster({
     confirmed,
     waiting,
@@ -77,7 +88,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     selectionFinishedAt: game.selectionFinishedAt,
     hasRolls: game.participants.some((participant) => !isNull(participant.drawRoll)),
     isCoordinate,
-    started: isSessionStarted(game),
+    started,
     capacityRaised: !isNull(game.capacityRaisedAt),
   });
 
@@ -87,7 +98,6 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
         id: game.id,
         title: game.title,
         maxPlayers: game.maxPlayers,
-        scheduleMode: game.scheduleMode,
       }}
       confirmedRows={confirmedRows}
       confirmedCount={confirmed.length}
@@ -95,10 +105,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       summary={summary}
       isCoordinate={isCoordinate}
       applicationQuestion={applicationQuestionOf(game)}
-      nextRoundBaseDate={nextRoundBaseDate({
-        confirmedAt: game.confirmedAt,
-        rangeEnd: game.rangeEnd,
-      })}
+      splitCandidates={splitCandidates}
     />
   );
 }

@@ -59,7 +59,6 @@ export { hasSessionsBetween } from "./queries/has-sessions-between";
 export { getApplicationNote } from "./queries/get-application-note";
 export { getApplicationNotes } from "./queries/get-application-notes";
 export { isGameOwner } from "./queries/is-game-owner";
-export { isPublicGame } from "./queries/is-public-game";
 export { listAttendanceRows } from "./queries/list-attendance-rows";
 export { listParticipantUserIds } from "./queries/list-participant-user-ids";
 export { listWaitingParticipants } from "./queries/list-waiting-participants";

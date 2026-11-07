@@ -163,13 +163,6 @@ export const gameFormSchema = z
       });
     }
     const isPrivate = values.visibility === GAME_VISIBILITY.private;
-    if (isPrivate && values.scheduleMode !== SCHEDULE_MODE.fixed) {
-      context.addIssue({
-        code: "custom",
-        message: "지정 모집은 일시 지정형만 열 수 있습니다.",
-        path: ["scheduleMode"],
-      });
-    }
     if (!isPrivate && values.endDate === "") {
       context.addIssue({
         code: "custom",

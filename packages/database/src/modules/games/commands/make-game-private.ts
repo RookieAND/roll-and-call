@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { GAME_VISIBILITY } from "#db/modules/games/model/game-visibility";
-import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
+import { PRIVATE_GAME_COLUMNS, privateEndDate } from "#db/modules/games/model/private-game-columns";
 import {
   visibilitySwitchBlock,
   type VisibilitySwitchBlock,
@@ -47,12 +47,8 @@ export async function makeGamePrivate({
     .update(games)
     .set({
       visibility: GAME_VISIBILITY.private,
-      recruitMethod: RECRUIT_METHOD.firstCome,
-      minPlayers: null,
-      applicationNoteEnabled: false,
-      applicationQuestion: null,
-      waitlistEnabled: false,
-      endDate: game.confirmedAt ?? game.endDate,
+      ...PRIVATE_GAME_COLUMNS,
+      endDate: privateEndDate(game),
       discordThreadId: null,
     })
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));

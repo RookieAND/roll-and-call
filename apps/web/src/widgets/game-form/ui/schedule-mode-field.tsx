@@ -1,6 +1,6 @@
 "use client";
 
-import { Callout, Field, RadioCard, RadioGroup, Text, VStack } from "@roll-and-call/ui";
+import { Callout, Field, RadioCard, RadioGroup, VStack } from "@roll-and-call/ui";
 
 import { isScheduleMode, SCHEDULE_MODE, type ScheduleMode } from "@/entities/game";
 
@@ -26,15 +26,15 @@ interface ScheduleModeFieldProps {
   value: ScheduleMode;
   onChange: (mode: ScheduleMode) => void;
   locked?: boolean;
-  // 비공개 구인은 일시 지정형만 열 수 있다.
-  coordinateDisabled?: boolean;
+  // 팀 나누기 시트는 방식 설명 상자를 두지 않는다.
+  showHint?: boolean;
 }
 
 export function ScheduleModeField({
   value,
   onChange,
   locked = false,
-  coordinateDisabled = false,
+  showHint = true,
 }: ScheduleModeFieldProps) {
   return (
     <VStack gap="100">
@@ -49,12 +49,7 @@ export function ScheduleModeField({
           className="grid grid-cols-2 gap-100"
         >
           {OPTIONS.map((option) => (
-            <RadioCard.Root
-              key={option.value}
-              value={option.value}
-              indicator="radio"
-              disabled={coordinateDisabled && option.value === SCHEDULE_MODE.coordinate}
-            >
+            <RadioCard.Root key={option.value} value={option.value} indicator="radio">
               <RadioCard.Title>{option.label}</RadioCard.Title>
               <RadioCard.Description>{option.description}</RadioCard.Description>
               <RadioCard.Indicator />
@@ -63,12 +58,7 @@ export function ScheduleModeField({
         </RadioGroup>
       </Field.Root>
       {locked && <LockedModeNotice label="일정 방식" />}
-      {!locked && coordinateDisabled && (
-        <Text typography="body5" foreground="hint" render={<p />}>
-          지정 모집은 일시를 정해서 열 수 있습니다.
-        </Text>
-      )}
-      {!locked && !coordinateDisabled && (
+      {!locked && showHint && (
         <Callout.Root colorPalette="gray" size="sm">
           <Callout.Icon />
           <Callout.Description>{HINT[value]}</Callout.Description>

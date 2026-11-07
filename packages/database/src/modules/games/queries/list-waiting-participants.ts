@@ -20,6 +20,7 @@ export async function listWaitingParticipants({
       joinedAt: participants.joinedAt,
       drawRank: participants.drawRank,
       waitlistedAt: participants.waitlistedAt,
+      applicationNote: participants.applicationNote,
       departed: isNotNull(serverMembers.deletedAt).mapWith(Boolean),
     })
     .from(participants)

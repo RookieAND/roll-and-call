@@ -10,7 +10,7 @@ import { games, participants } from "#db/schema";
 export type EndedGame = { serverId: string; gameId: string };
 
 // 종료 판정 시각이 지난 구인의 확정 참여자에게 후기 작성 웹 알림을 한 번 보낸다.
-// 알림 표시를 같은 트랜잭션에서 먼저 가져가므로 크론이 겹쳐 돌아도, 실패해 롤백되면 다음 회차에 다시 집혀도 한 번만 남는다.
+// 알림 표시를 같은 트랜잭션에서 먼저 가져가므로 크론이 겹쳐 돌아도, 실패해 롤백되면 다음 실행에 다시 집혀도 한 번만 남는다.
 // 알림을 마친 구인은 돌려줘서, 종료 전에 확정된 출석이 이제 인정 세션이 된 사람들의 업적을 부르는 쪽이 다시 평가한다.
 // 이 시각에 불참으로 처리된 사람은 받지 않는다. 출석 확정 전에는 모두 참석으로 본다.
 export async function notifyReviewAvailable({

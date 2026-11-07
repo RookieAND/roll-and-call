@@ -130,6 +130,7 @@ export { replaceManualSupplement } from "./replace-manual-supplement";
 export { GAME_POST_PHASE, gamePostPhase, type GamePostPhase } from "./game-post-phase";
 export { isRecognizedPost } from "./is-recognized-post";
 export { GAME_VISIBILITY, GAME_VISIBILITIES, type GameVisibility } from "./game-visibility";
+export { PRIVATE_GAME_COLUMNS, privateEndDate } from "./private-game-columns";
 export {
   VISIBILITY_SWITCH_BLOCK,
   visibilitySwitchBlock,

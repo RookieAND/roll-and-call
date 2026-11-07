@@ -1,4 +1,5 @@
-import { isPublicGame } from "@roll-and-call/database/games";
+import { findGameGmId } from "@roll-and-call/database/games";
+import { isUndefined } from "es-toolkit";
 
 import { isUuid } from "@/shared/lib";
 import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
@@ -12,9 +13,9 @@ export async function GET(
   const { id } = await context.params;
   if (!isUuid(id)) return new Response(null, { status: 404 });
   const server = await getCurrentServer();
-  // 가능 시간은 조율형만 쓰고 비공개는 일시 지정형뿐이라, 비공개 구인은 없는 구인으로 답한다.
-  if (!(await isPublicGame({ serverId: server.id, gameId: id })))
+  if (isUndefined(await findGameGmId({ serverId: server.id, gameId: id }))) {
     return new Response(null, { status: 404 });
+  }
   const sessionUser = await getCurrentSessionUser();
   const body = await getScheduleAvailability({ gameId: id, userId: sessionUser?.id ?? null });
   return Response.json(body);

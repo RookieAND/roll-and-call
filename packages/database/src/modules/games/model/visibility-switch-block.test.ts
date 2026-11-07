@@ -4,7 +4,6 @@ import { visibilitySwitchBlock } from "./visibility-switch-block";
 
 const now = new Date("2026-11-01T00:00:00Z");
 const upcoming = {
-  scheduleMode: "fixed" as const,
   confirmedAt: new Date("2026-11-02T00:00:00Z"),
   cancelledAt: null,
 };
@@ -20,9 +19,9 @@ describe("visibilitySwitchBlock", () => {
     );
   });
 
-  it("조율형은 바꿀 수 없다", () => {
-    const game = { ...upcoming, scheduleMode: "coordinate" as const, confirmedAt: null };
-    expect(visibilitySwitchBlock({ game, participantCount: 0, now })).toBe("coordinate");
+  it("일시를 정하기 전의 조율형도 바꿀 수 있다", () => {
+    const game = { ...upcoming, confirmedAt: null };
+    expect(visibilitySwitchBlock({ game, participantCount: 0, now })).toBe(null);
   });
 
   it("세션이 시작했거나 취소된 구인은 바꿀 수 없다", () => {

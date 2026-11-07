@@ -40,7 +40,6 @@ export function GameScheduleFields({
       <ScheduleModeField
         value={mode}
         locked={modeLocked}
-        coordinateDisabled={isPrivate}
         onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
       />
 

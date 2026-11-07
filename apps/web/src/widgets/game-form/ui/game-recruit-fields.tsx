@@ -3,12 +3,7 @@
 import { Callout, Field, Stepper, VStack } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import {
-  GAME_VISIBILITY,
-  RECRUIT_METHOD,
-  SCHEDULE_MODE,
-  type GameVisibility,
-} from "@/entities/game";
+import { GAME_VISIBILITY, RECRUIT_METHOD, type GameVisibility } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
 import { ApplicationNoteField } from "./application-note-field";
@@ -54,10 +49,6 @@ export function GameRecruitFields({
 
   function changeVisibility(next: GameVisibility) {
     setValue("visibility", next, { shouldDirty: true, shouldValidate: true });
-    // 비공개 구인은 일시 지정형만 열 수 있다. 공개로 돌아와도 이전 모집 입력값은 그대로 둔다.
-    if (next === GAME_VISIBILITY.private) {
-      setValue("scheduleMode", SCHEDULE_MODE.fixed, { shouldDirty: true });
-    }
   }
 
   return (

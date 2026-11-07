@@ -7,6 +7,7 @@ import {
 export function notificationHref(payload: NotificationPayload): string | null {
   switch (payload.kind) {
     case NOTIFICATION_KIND.participationConfirmed:
+    case NOTIFICATION_KIND.newGameJoined:
     case NOTIFICATION_KIND.movedToWaitlist:
     case NOTIFICATION_KIND.removedFromRoster:
     case NOTIFICATION_KIND.seatOpened:

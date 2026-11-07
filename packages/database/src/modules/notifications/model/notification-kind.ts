@@ -3,6 +3,7 @@ import type { GameCancelKind } from "#db/modules/notifications/model/game-cancel
 
 export const NOTIFICATION_KIND = {
   participationConfirmed: "participation_confirmed",
+  newGameJoined: "new_game_joined",
   movedToWaitlist: "moved_to_waitlist",
   removedFromRoster: "removed_from_roster",
   seatOpened: "seat_opened",
@@ -64,6 +65,8 @@ type EmptyParams = Record<string, never>;
 // 날짜는 ISO 문자열이다. 구인 제목·룰북 이름·닉네임은 만들 때 값을 넣는다.
 export type NotificationParamsMap = {
   participation_confirmed: GameParams;
+  // 팀 나누기로 연 새 구인에 GM이 참여시킨 사람만 받는다. gameId는 새 구인이다.
+  new_game_joined: GameParams;
   moved_to_waitlist: WaitlistParams;
   removed_from_roster: GameParams;
   seat_opened: GameParams;

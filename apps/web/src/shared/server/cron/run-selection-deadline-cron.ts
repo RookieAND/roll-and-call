@@ -5,7 +5,7 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 import { notifyGameCancelled } from "@roll-and-call/game-notices";
 
 // pg_cron expire-selection-deadlines가 10분마다, 기한이 지난 선발 글이 있을 때만 부른다(0102). 선발을 마치지 못한 글을 취소한다.
-// 한 건이 실패해도 나머지를 이어 가고, 취소가 실패한 글은 다음 회차에 다시 집힌다.
+// 한 건이 실패해도 나머지를 이어 가고, 취소가 실패한 글은 다음 실행에 다시 집힌다.
 // 취소 알림은 취소가 커밋된 뒤라 실패해도 다시 보내지 않는다(로그만 남긴다).
 export async function runSelectionDeadlineCron() {
   const due = await listDueSelectionDeadlines({ now: new Date() });

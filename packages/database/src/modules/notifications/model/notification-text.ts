@@ -44,6 +44,8 @@ export function notificationText(payload: NotificationPayload): NotificationText
         " 참여가 확정되었습니다.",
         "구인 글에서 세션 정보를 확인해 주세요.",
       );
+    case NOTIFICATION_KIND.newGameJoined:
+      return bold(payload.params.gameTitle, " 구인에 참여되었습니다.");
     case NOTIFICATION_KIND.movedToWaitlist:
       return bold(
         payload.params.gameTitle,
