@@ -43,7 +43,7 @@ export function EndedGmActions({
           <Button render={<ServerLink path={attendancePath} />} size="lg" className="w-full">
             출석 확인하기
           </Button>
-          {reopenable && <ReopenGameLink gameId={gameId} />}
+          {reopenable && <ReopenGameLink gameId={gameId} variant="outline" />}
         </ActionPair>
       </VStack>
     );

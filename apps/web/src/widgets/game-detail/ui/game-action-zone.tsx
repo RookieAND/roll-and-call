@@ -72,9 +72,9 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
     case GAME_ACTION_VIEW.closed:
       return <ClosedActions title="모집이 끝났습니다" />;
     case GAME_ACTION_VIEW.closedPrivate:
-      return <ClosedActions title="GM이 지정한 참여자만 함께하는 구인입니다" />;
+      return <ClosedActions title="GM이 지정한 참여자만 함께하는 구인입니다" description={null} />;
     case GAME_ACTION_VIEW.sanctioned:
-      return <SanctionedActions reason={view.reason} until={view.until} />;
+      return <SanctionedActions />;
     case GAME_ACTION_VIEW.conditionsUnmet:
       return <ConditionsUnmetActions lines={view.lines} certUnmet={view.certUnmet} />;
     case GAME_ACTION_VIEW.joinWaitlist:
