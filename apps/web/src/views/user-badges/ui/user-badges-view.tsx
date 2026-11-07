@@ -18,6 +18,7 @@ import { roleGroups } from "../model/role-groups";
 import { userTabKey } from "../model/user-tab-key";
 import { UserBadgeGroup } from "./user-badge-group";
 import { UserBadgesEmpty } from "./user-badges-empty";
+import { UserBadgesSummary } from "./user-badges-summary";
 
 interface UserBadgesViewProps {
   id: string;
@@ -49,6 +50,7 @@ export async function UserBadgesView({ id, tab }: UserBadgesViewProps) {
 
   return (
     <PageShell
+      panel={<UserBadgesSummary name={profile.username} counts={counts} />}
       appBar={
         <AppBar
           back={back}

@@ -8,7 +8,11 @@ import {
   resolveFeaturedEntry,
 } from "@/entities/badge";
 import { LoginRequired } from "@/features/auth";
-import { FeaturedBadgePicker } from "@/features/pick-featured-badges";
+import {
+  FeaturedBadgePicker,
+  FeaturedPickProvider,
+  FeaturedPreviewPanel,
+} from "@/features/pick-featured-badges";
 import {
   getCurrentSessionUser,
   getProfile,
@@ -54,30 +58,45 @@ export async function FeaturedBadgesView() {
   );
 
   return (
-    <PageShell readable flush appBar={<AppBar back="/me/badges" title="대표 뱃지 설정" />}>
-      <div className={DESKTOP_CARD_CLASS}>
-        {choices.length > 0 ? (
-          <FeaturedBadgePicker choices={choices} initialKeys={initialKeys} />
-        ) : (
-          <VStack className="py-300">
-            <EmptyState
-              size="section"
-              image="empty-achievement"
-              title="아직 받은 뱃지가 없습니다"
-              description="첫 세션을 마치면 뱃지를 받습니다."
-              action={
-                <Button
-                  render={<ServerLink path="/me/badges" />}
-                  variant="outline"
-                  className="mt-100"
-                >
-                  뱃지 목록 보기
-                </Button>
-              }
+    <FeaturedPickProvider initialKeys={initialKeys}>
+      <PageShell
+        readable
+        flush
+        appBar={<AppBar back="/me/badges" title="대표 뱃지 설정" />}
+        panel={
+          choices.length > 0 ? (
+            <FeaturedPreviewPanel
+              choices={choices}
+              name={profile?.username ?? ""}
+              avatarUrl={profile?.avatarUrl ?? null}
             />
-          </VStack>
-        )}
-      </div>
-    </PageShell>
+          ) : null
+        }
+      >
+        <div className={DESKTOP_CARD_CLASS}>
+          {choices.length > 0 ? (
+            <FeaturedBadgePicker choices={choices} />
+          ) : (
+            <VStack className="py-300">
+              <EmptyState
+                size="section"
+                image="empty-achievement"
+                title="아직 받은 뱃지가 없습니다"
+                description="첫 세션을 마치면 뱃지를 받습니다."
+                action={
+                  <Button
+                    render={<ServerLink path="/me/badges" />}
+                    variant="outline"
+                    className="mt-100"
+                  >
+                    뱃지 목록 보기
+                  </Button>
+                }
+              />
+            </VStack>
+          )}
+        </div>
+      </PageShell>
+    </FeaturedPickProvider>
   );
 }

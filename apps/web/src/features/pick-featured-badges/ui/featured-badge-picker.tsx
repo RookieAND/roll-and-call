@@ -24,6 +24,7 @@ import { groupChoices } from "../model/group-choices";
 import { isBadgeRole } from "../model/is-badge-role";
 import { toggleFeatured } from "../model/toggle-featured";
 import { FeaturedGroupCard } from "./featured-group-card";
+import { useFeaturedPick } from "./use-featured-pick";
 
 const TABS = [
   { role: BADGE_ROLE.gm, label: "GM" },
@@ -33,11 +34,10 @@ const TABS = [
 
 interface FeaturedBadgePickerProps {
   choices: FeaturedChoice[];
-  initialKeys: string[];
 }
 
-export function FeaturedBadgePicker({ choices, initialKeys }: FeaturedBadgePickerProps) {
-  const [picked, setPicked] = useState(initialKeys);
+export function FeaturedBadgePicker({ choices }: FeaturedBadgePickerProps) {
+  const { picked, setPicked } = useFeaturedPick();
   const countByRole = (target: BadgeRole) =>
     choices.filter((choice) => choice.role === target).length;
   const [role, setRole] = useState<BadgeRole>(
