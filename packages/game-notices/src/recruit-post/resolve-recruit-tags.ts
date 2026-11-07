@@ -1,4 +1,5 @@
 import type { ForumTagMap } from "@roll-and-call/database";
+import { HOMEBREW_FORUM_TAG_KEY } from "@roll-and-call/database/homebrew/model";
 
 export const RECRUIT_TAG_NAME = { open: "모집중", closed: "마감", cancelled: "취소됨" } as const;
 
@@ -6,6 +7,7 @@ export type RecruitTags = {
   open?: string;
   closed?: string;
   cancelled?: string;
+  // 룰 분류 id마다 태그 하나. 자작 룰 태그는 HOMEBREW_FORUM_TAG_KEY 열쇠에 든다.
   categories: Record<string, string>;
   // 연결하지 않은 칸은 비어 있다. 이름으로는 찾지 않는다.
   playTypes: { voice?: string; text?: string };
@@ -37,7 +39,9 @@ export function resolveRecruitTags({
   const closed = idOf("closed");
   const cancelled = idOf("cancelled");
   const categories = Object.fromEntries(
-    Object.entries(saved?.categories ?? {}).filter(([, tagId]) => exists(tagId)),
+    Object.entries({ ...saved?.categories, [HOMEBREW_FORUM_TAG_KEY]: saved?.homebrew }).filter(
+      (entry): entry is [string, string] => exists(entry[1]),
+    ),
   );
   const playTypes = {
     voice: existing(saved?.playTypes?.voice),

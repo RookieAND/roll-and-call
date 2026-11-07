@@ -1,4 +1,4 @@
-import { and, asc, eq, isNotNull, or } from "drizzle-orm";
+import { and, asc, eq, isNotNull, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
 import { db } from "#db/client";
@@ -6,6 +6,7 @@ import { REVIEW_AUTHOR_ROLE } from "#db/modules/games/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import {
   games,
+  homebrewRules,
   participants,
   profiles,
   rulebookCategories,
@@ -37,6 +38,7 @@ export async function loadForumReview({
       gameHiddenAt: games.hiddenAt,
       rule: games.rule,
       category: rulebookCategories.name,
+      homebrew: sql<boolean>`exists (select 1 from ${homebrewRules} where ${homebrewRules.rulebookId} = ${rulebooks.id})`,
       gmName: memberNicknameSql(serverId, gm),
       gmDiscordId: gm.discordId,
       authorName: memberNicknameSql(serverId),

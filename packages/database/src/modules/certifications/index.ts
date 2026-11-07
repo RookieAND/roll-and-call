@@ -19,7 +19,11 @@ export { revokeCertifications, type RevokeResult } from "./commands/revoke-certi
 export { withdrawPendingApplications } from "./commands/withdraw-pending-applications";
 export { findCertFileUrlsInUse } from "./queries/find-cert-file-urls-in-use";
 export { findLatestCertApplication } from "./queries/find-latest-cert-application";
-export { getRulebookRecords, type RulebookRecords } from "./queries/get-rulebook-records";
+export {
+  getRulebookRecords,
+  type HomebrewOwnership,
+  type RulebookRecords,
+} from "./queries/get-rulebook-records";
 export { loadBulkQuizQuestions } from "./queries/load-bulk-quiz-questions";
 export { loadCertificationContext } from "./queries/load-certification-context";
 export { loadUnsyncedCertStaffMessages } from "./queries/load-unsynced-cert-staff-messages";

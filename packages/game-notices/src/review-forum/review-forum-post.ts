@@ -84,7 +84,7 @@ export function reviewForumPost({
   const tagNames = [
     review.spoiler ? TAG.spoiler : TAG.noSpoiler,
     TAG.trpg,
-    ruleTagName(review.category),
+    ruleTagName({ category: review.category, homebrew: review.homebrew }),
   ];
 
   return {

@@ -8,6 +8,7 @@ import {
   certifications,
   certSellers,
   games,
+  homebrewRules,
   participants,
   profiles,
   rulebookCategories,
@@ -62,9 +63,13 @@ const ADMIN_TABLE_LOADERS = {
         category: rulebookCategories.name,
         categoryAlias: rulebookCategories.alias,
         categoryMiniRule: rulebookCategories.miniRule,
+        homebrewMakerId: homebrewRules.makerId,
+        homebrewScope: homebrewRules.scope,
+        homebrewApprovedAt: homebrewRules.createdAt,
       })
       .from(rulebooks)
       .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+      .leftJoin(homebrewRules, eq(homebrewRules.rulebookId, rulebooks.id))
       .where(eq(rulebooks.serverId, serverId)),
   requestRows: (serverId: string) =>
     db.select().from(rulebookRequests).where(eq(rulebookRequests.serverId, serverId)),

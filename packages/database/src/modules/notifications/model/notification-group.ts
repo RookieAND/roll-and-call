@@ -16,6 +16,8 @@ const CERT_KINDS: readonly NotificationKind[] = [
   NOTIFICATION_KIND.certGranted,
   NOTIFICATION_KIND.rulebookRequestAdded,
   NOTIFICATION_KIND.rulebookRequestDeclined,
+  NOTIFICATION_KIND.homebrewApproved,
+  NOTIFICATION_KIND.homebrewRejected,
 ];
 
 const REVIEW_KINDS: readonly NotificationKind[] = [

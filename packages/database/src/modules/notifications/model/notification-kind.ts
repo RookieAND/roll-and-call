@@ -34,6 +34,8 @@ export const NOTIFICATION_KIND = {
   certGranted: "cert_granted",
   rulebookRequestAdded: "rulebook_request_added",
   rulebookRequestDeclined: "rulebook_request_declined",
+  homebrewApproved: "homebrew_approved",
+  homebrewRejected: "homebrew_rejected",
   reviewHidden: "review_hidden",
   reviewUnhidden: "review_unhidden",
   reviewDeleted: "review_deleted",
@@ -102,6 +104,9 @@ export type NotificationParamsMap = {
   cert_granted: { rulebookId: string; rulebookName: string; otherCount?: number };
   rulebook_request_added: { rulebookName: string };
   rulebook_request_declined: { rulebookName: string };
+  // 사유는 넣지 않는다. 누르면 자작 룰 상세(신청 id)로 간다.
+  homebrew_approved: { applicationId: string; ruleName: string };
+  homebrew_rejected: { applicationId: string; ruleName: string };
   review_hidden: ReasonedGameParams;
   review_unhidden: GameParams;
   review_deleted: ReasonedGameParams;

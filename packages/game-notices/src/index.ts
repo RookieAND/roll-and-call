@@ -23,6 +23,7 @@ export { gameUrl } from "./lib/game-url";
 export { postStaffNotice } from "./staff-notice/post-staff-notice";
 export { syncCertStaffNotices } from "./staff-notice/sync-cert-staff-notices";
 export { syncRulebookRequestStaffNotice } from "./staff-notice/sync-rulebook-request-staff-notice";
+export { syncHomebrewStaffNotice } from "./staff-notice/sync-homebrew-staff-notice";
 export { STAFF_NOTICE_KIND, type StaffNotice } from "./staff-notice/staff-notice-kind";
 export { gameHeadValues, messageHeadInput } from "./lib/message-head-input";
 export { messageText } from "./lib/message-text";

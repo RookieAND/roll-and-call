@@ -5,7 +5,7 @@ import { PARTICIPANT_STATUS } from "@roll-and-call/database/games/model";
 import { countConfirmed } from "@roll-and-call/database/games/model";
 import { GAME_CANCEL_KIND } from "@roll-and-call/database/notifications/model";
 import { getDiscordId, getMemberNickname } from "@roll-and-call/database/profiles";
-import { findGameCategoryId, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
+import { findGameRuleTagKey, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import {
   sendDiscordMessage,
   editDiscordMessage,
@@ -32,7 +32,7 @@ export async function notifyGameCancelled({ server, game }: { server: Server; ga
       getMemberNickname({ serverId: server.id, userId: game.gmId }),
       getGameForNotice({ serverId: server.id, gameId: game.id }),
       loadRecruitTarget(server),
-      findGameCategoryId({ serverId: server.id, gameId: game.id }),
+      findGameRuleTagKey({ serverId: server.id, gameId: game.id }),
       findGameCategoryLabel({ serverId: server.id, gameId: game.id }),
       listParticipantDiscordIds({
         serverId: server.id,

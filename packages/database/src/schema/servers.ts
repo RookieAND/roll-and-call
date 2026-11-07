@@ -21,6 +21,8 @@ export interface ForumTagMap {
   cancelled?: string;
   // 룰북 분류(rulebook_categories.id)마다 태그 하나.
   categories?: Record<string, string>;
+  // 자작 룰 구인이 모두 쓰는 룰 태그. 비면 룰 태그 없이 올린다.
+  homebrew?: string;
   // 플레이 유형(play_type)마다 태그 하나.
   playTypes?: { voice?: string; text?: string };
   // 구분(game_kind)마다 태그 하나.

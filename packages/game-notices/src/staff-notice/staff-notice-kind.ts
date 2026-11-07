@@ -4,6 +4,7 @@ export const STAFF_NOTICE_KIND = {
   sanctioned: "sanctioned",
   certRevoked: "certRevoked",
   certGranted: "certGranted",
+  homebrewApplied: "homebrewApplied",
 } as const;
 
 // 닉네임은 그 서버 닉네임(server_members.nickname)이다. 사유는 넣지 않는다(D302).
@@ -51,4 +52,11 @@ export type StaffNotice =
       // 한 번에 함께 부여한 나머지 룰북 수. 없거나 0이면 한 권이다.
       otherCount?: number;
       nicknames: string[];
+    }
+  | {
+      kind: typeof STAFF_NOTICE_KIND.homebrewApplied;
+      applicantNickname: string;
+      applicantAvatarUrl: string | null;
+      ruleLabel: string;
+      applicationId: string;
     };

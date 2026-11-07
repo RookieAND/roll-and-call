@@ -15,6 +15,7 @@ export function recruitStatusTagIds({
   target: RecruitTarget;
   closed: boolean;
   cancelled?: boolean;
+  // 룰 태그 열쇠(findGameRuleTagKey): 룰 분류 id, 자작 룰이면 HOMEBREW_FORUM_TAG_KEY.
   categoryId: string | null;
   kind: GameKind;
   playType: PlayType;

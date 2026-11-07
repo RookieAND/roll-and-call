@@ -14,6 +14,7 @@ export * from "./badges";
 export * from "./relations";
 export * from "./rulebooks";
 export * from "./certifications";
+export * from "./homebrew-rules";
 export * from "./moderation";
 export * from "./notifications";
 export * from "./onboarding";

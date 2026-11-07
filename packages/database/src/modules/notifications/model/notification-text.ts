@@ -221,6 +221,10 @@ export function notificationText(payload: NotificationPayload): NotificationText
         "자세한 내용은 운영진에게 문의해 주세요.",
         "요청한 ",
       );
+    case NOTIFICATION_KIND.homebrewApproved:
+      return bold(payload.params.ruleName, " 자작 룰이 승인되었습니다.");
+    case NOTIFICATION_KIND.homebrewRejected:
+      return bold(payload.params.ruleName, " 자작 룰 신청이 반려되었습니다.");
     case NOTIFICATION_KIND.reviewHidden:
       return bold(
         payload.params.gameTitle,

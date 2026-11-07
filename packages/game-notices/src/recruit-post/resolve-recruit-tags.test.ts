@@ -45,4 +45,12 @@ describe("resolveRecruitTags", () => {
     expect(tags.managed).toContain("3");
     expect(resolveRecruitTags({ saved: null, available }).playTypes).toEqual({});
   });
+
+  it("자작 룰 태그는 자작 룰 열쇠에 들고, 연결하지 않으면 없다", () => {
+    expect(resolveRecruitTags({ saved: { homebrew: "3" }, available }).categories).toEqual({
+      homebrew: "3",
+    });
+    expect(resolveRecruitTags({ saved: { homebrew: "gone" }, available }).categories).toEqual({});
+    expect(resolveRecruitTags({ saved: null, available }).categories).toEqual({});
+  });
 });

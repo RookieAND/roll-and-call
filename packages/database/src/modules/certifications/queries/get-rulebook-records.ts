@@ -2,27 +2,35 @@ import { and, desc, eq, gt, isNull, ne, or, sql } from "drizzle-orm";
 import { compact, uniq } from "es-toolkit";
 
 import { db } from "#db/client";
+import { homebrewUsableSql } from "#db/modules/homebrew/queries/homebrew-usable-sql";
 import { findActiveSanction } from "#db/modules/moderation";
 import {
   certApplications,
   certifications,
   games,
+  homebrewRules,
   rulebookCategories,
   rulebookRequests,
   rulebooks,
   servers,
 } from "#db/schema";
 
+export type HomebrewOwnership = "mine" | "shared";
+
 const RECENT_DAYS = 90;
 const REQUEST_RESULT_DAYS = 30;
 
+// 자작 룰은 쓸 수 있는 것(homebrewUsableSql)만 목록에 든다. includeRulebookId는 이미 열린 구인을 고치거나 이어 열 때 그 구인의 룰을 사용 범위와 상관없이 넣는다.
+// 사용 범위 값은 돌려주지 않고 homebrew(mine: 내가 만든 룰, shared: 다른 사람의 자작 룰)만 붙인다.
 // 거둔 신청과 사용자가 지운 기록은 없던 것으로 본다. 최근 연 구인의 룰북은 신청 추천에, 이미 대기 중인 추가 요청 이름은 중복 요청을 막는 데 쓴다.
 export async function getRulebookRecords({
   serverId,
   userId,
+  includeRulebookId = null,
 }: {
   serverId: string;
   userId: string | null;
+  includeRulebookId?: string | null;
 }) {
   const catalog = await db
     .select({
@@ -36,10 +44,24 @@ export async function getRulebookRecords({
       includedInId: rulebooks.includedInId,
       categoryId: rulebooks.categoryId,
       categoryName: rulebookCategories.name,
+      homebrew: sql<HomebrewOwnership | null>`case
+        when ${homebrewRules.rulebookId} is null then null
+        when ${homebrewRules.makerId} = ${userId} then 'mine'
+        else 'shared' end`,
     })
     .from(rulebooks)
     .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-    .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false)))
+    .leftJoin(homebrewRules, eq(homebrewRules.rulebookId, rulebooks.id))
+    .where(
+      and(
+        eq(rulebooks.serverId, serverId),
+        eq(rulebooks.hidden, false),
+        or(
+          homebrewUsableSql({ rulebookId: rulebooks.id, userId }),
+          includeRulebookId ? eq(rulebooks.id, includeRulebookId) : undefined,
+        ),
+      ),
+    )
     .orderBy(rulebookCategories.name, rulebooks.name, rulebooks.edition);
   const [server] = await db
     .select({ certEnforcementDate: servers.certEnforcementDate })

@@ -258,6 +258,22 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "자세한 내용은 운영진에게 문의해 주세요.",
   ],
   [
+    {
+      kind: NOTIFICATION_KIND.homebrewApproved,
+      params: { applicationId: "h1", ruleName: "달그림자 연대기" },
+    },
+    "달그림자 연대기 자작 룰이 승인되었습니다.",
+    null,
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.homebrewRejected,
+      params: { applicationId: "h1", ruleName: "달그림자 연대기" },
+    },
+    "달그림자 연대기 자작 룰 신청이 반려되었습니다.",
+    null,
+  ],
+  [
     { kind: NOTIFICATION_KIND.reviewHidden, params: { ...game, reason: "스포일러" } },
     "검은 산의 노래 후기를 운영진이 숨겼습니다.",
     "사유: 스포일러",

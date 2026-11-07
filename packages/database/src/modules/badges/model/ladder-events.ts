@@ -67,6 +67,7 @@ export function ladderEvents({
     case BADGE_LADDER.developer:
     case BADGE_LADDER.guildMaster:
     case BADGE_LADDER.apprentice:
+    case BADGE_LADDER.worldOwner:
       return [];
   }
 }

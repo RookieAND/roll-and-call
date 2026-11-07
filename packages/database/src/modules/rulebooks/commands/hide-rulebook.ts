@@ -8,7 +8,7 @@ import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import type { RulebookActionResult } from "#db/modules/rulebooks/model/rulebook-action-result";
 import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
-import { auditLog, certApplications, profiles, rulebooks } from "#db/schema";
+import { auditLog, certApplications, homebrewRules, profiles, rulebooks } from "#db/schema";
 
 const HIDDEN_TAG = "룰북 숨김";
 const HIDDEN_REASON = "운영진이 이 룰북을 목록에서 숨겨 신청이 반려되었습니다.";
@@ -33,6 +33,12 @@ export async function hideRulebook({
       .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
     const label = rulebookLabel(rulebook);
+    // 자작 룰도 같은 숨김을 쓰고 활동 기록 유형만 따로 남긴다. 열린 구인은 취소하지 않는다.
+    const [homebrew] = await tx
+      .select({ rulebookId: homebrewRules.rulebookId })
+      .from(homebrewRules)
+      .where(eq(homebrewRules.rulebookId, id));
+    const action = homebrew ? "자작 룰 숨김" : "룰북 숨김";
     const hidden = await tx
       .update(rulebooks)
       .set({ hidden: true })
@@ -50,7 +56,7 @@ export async function hideRulebook({
         .where(
           and(
             eq(auditLog.serverId, serverId),
-            eq(auditLog.action, "룰북 숨김"),
+            eq(auditLog.action, action),
             eq(auditLog.target, label),
           ),
         )
@@ -60,7 +66,7 @@ export async function hideRulebook({
         ok: false,
         conflict: latest
           ? {
-              action: "룰북 숨김",
+              action,
               by: latest.by ?? "알 수 없음",
               byId: latest.byId,
               at: latest.at,
@@ -104,7 +110,7 @@ export async function hideRulebook({
       serverId,
       actor,
       entry: {
-        action: "룰북 숨김",
+        action,
         target: label,
         reason,
         before: { label: "사용 중" },

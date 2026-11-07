@@ -83,6 +83,7 @@ export const BADGE_LADDER = {
   developer: "sp.dev",
   guildMaster: "sp.guild",
   apprentice: "sp.apprentice",
+  worldOwner: "sp.worldowner",
   ...RULEBOOK_LADDER,
   ...HIDDEN_LADDER,
 } as const;

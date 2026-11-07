@@ -29,6 +29,20 @@ describe("planBadgeNotices", () => {
     });
   });
 
+  it("세계의 주인은 업적 알림 한 줄이고 시트는 없다", () => {
+    expect(
+      planBadgeNotices({ grants: [grant({ badgeKey: "sp.worldowner", tier: 1 })], now }),
+    ).toEqual({
+      notifications: [
+        {
+          kind: "badge_earned",
+          params: { emoji: "🪐", name: "세계의 주인", criterion: "자작 룰 승인" },
+        },
+      ],
+      sheet: false,
+    });
+  });
+
   it("같은 단계나 이전 최고 이하로 다시 받으면 알리지 않는다", () => {
     expect(planBadgeNotices({ grants: [grant({ notifiedTier: 2 })], now }).notifications).toEqual(
       [],

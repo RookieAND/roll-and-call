@@ -13,6 +13,16 @@ const RULE_TAG_BY_CATEGORY: Record<string, string> = {
 
 export const OTHER_RULE_TAG = "기타";
 
-export function ruleTagName(category: string | null) {
+export const HOMEBREW_RULE_TAG = "자작 룰";
+
+// 자작 룰 구인은 룰마다 태그를 두지 않고 「자작 룰」 태그 하나를 쓴다. 포럼에 그 태그가 없으면 룰 태그 없이 올린다.
+export function ruleTagName({
+  category,
+  homebrew,
+}: {
+  category: string | null;
+  homebrew: boolean;
+}) {
+  if (homebrew) return HOMEBREW_RULE_TAG;
   return (category && RULE_TAG_BY_CATEGORY[category]) || OTHER_RULE_TAG;
 }

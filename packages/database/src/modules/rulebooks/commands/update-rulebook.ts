@@ -10,13 +10,17 @@ import { rulebookChanges } from "#db/modules/rulebooks/model/rulebook-audit-chan
 import type { RulebookFields } from "#db/modules/rulebooks/model/rulebook-fields";
 import { rulebookLabel } from "#db/modules/rulebooks/model/rulebook-label";
 import { describeRulebook } from "#db/modules/rulebooks/queries/describe-rulebook";
-import { rulebookCategories, rulebooks } from "#db/schema";
+import { homebrewRules, rulebookCategories, rulebooks } from "#db/schema";
 
+import { changesLockedHomebrewField } from "../model/changes-locked-homebrew-field";
 import { removeEmptyCategories } from "./remove-empty-categories";
 import { toRulebookValues } from "./rulebook-values";
 import { saveIncludedSupplements } from "./save-included-supplements";
 
-export type UpdateRulebookResult = { ok: true } | { ok: false; duplicate: true };
+export type UpdateRulebookResult =
+  | { ok: true }
+  | { ok: false; duplicate: true }
+  | { ok: false; locked: true };
 
 // 인증·신청·구인은 룰북을 id로 가리키므로 이름이 바뀌어도 따라 고칠 곳이 없다. 다른 이름만 구인에 다시 맞춘다.
 // 구인 서플리먼트만 이름을 함께 저장하므로 이름이 바뀌면 따라 고친다.
@@ -39,6 +43,17 @@ export async function updateRulebook({
       .from(rulebooks)
       .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
+    const [homebrew] = await tx
+      .select({ rulebookId: homebrewRules.rulebookId, category: rulebookCategories.name })
+      .from(homebrewRules)
+      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebook.categoryId))
+      .where(eq(homebrewRules.rulebookId, id));
+    if (
+      homebrew &&
+      changesLockedHomebrewField({ current: { ...rulebook, category: homebrew.category }, fields })
+    ) {
+      return { ok: false, locked: true };
+    }
     const [duplicate] = await tx
       .select({ id: rulebooks.id })
       .from(rulebooks)

@@ -25,6 +25,7 @@ const review = {
   gameHiddenAt: null,
   rule: "CoC 7th",
   category: "크툴루의 부름",
+  homebrew: false,
   gmName: "달빛토끼",
   gmDiscordId: "999",
   participantDiscordIds: ["123", "456"],
@@ -61,6 +62,20 @@ describe("reviewForumPost", () => {
       "||재미있었어요. 반전이 좋았습니다 | | 정말로||\n\n-# 작성자 <@123> · 룰 CoC 7th · GM 달빛토끼",
     );
     expect(post.photos.every((photo) => photo.name.startsWith("SPOILER_"))).toBe(true);
+  });
+
+  it("자작 룰 후기는 「자작 룰」 태그를 쓰고, 포럼에 없으면 룰 태그 없이 올린다", () => {
+    const homebrew = { ...review, category: "달그림자", homebrew: true };
+    expect(
+      reviewForumPost({
+        review: homebrew,
+        tagIds: new Map([...tags, ["자작 룰", "homebrew"]]),
+        reviewsUrl: undefined,
+      }).appliedTags,
+    ).toEqual(["no-spoiler", "trpg", "homebrew"]);
+    expect(
+      reviewForumPost({ review: homebrew, tagIds: tags, reviewsUrl: undefined }).appliedTags,
+    ).toEqual(["no-spoiler", "trpg"]);
   });
 
   it("글자 수가 넘치면 아래 한 줄을 뺀다", () => {

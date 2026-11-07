@@ -38,6 +38,22 @@ describe("staffNoticeMessage", () => {
     expect(result).not.toHaveProperty("userMentions");
   });
 
+  it("자작 룰 신청: 제목, 신청자 · 룰, 자작 룰 심사 링크", () => {
+    vi.stubEnv("ADMIN_APP_URL", "https://admin.example.app/");
+    const notice: StaffNotice = {
+      kind: STAFF_NOTICE_KIND.homebrewApplied,
+      applicantNickname: "하얀고래",
+      applicantAvatarUrl: null,
+      ruleLabel: "달그림자 연대기",
+      applicationId: "hb-1",
+    };
+    expect(embedOf(notice)?.title).toBe("새 자작 룰 등록 신청이 들어왔습니다");
+    expect(valuesOf(notice)).toEqual(["자작 룰 등록 신청", "하얀고래", "달그림자 연대기"]);
+    expect(message(notice).buttons).toEqual([
+      { label: "어드민에서 열기", url: "https://admin.example.app/trpia/cert/maker/hb-1" },
+    ]);
+  });
+
   it("추가 요청: 판본이 없으면 이름만 쓴다", () => {
     const base = {
       kind: STAFF_NOTICE_KIND.rulebookRequested,

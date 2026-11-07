@@ -53,6 +53,19 @@ export function staffNoticeParts(notice: StaffNotice): StaffNoticeParts {
         path: "/rules?tab=requests",
         color: DISCORD_COLOR.recruit,
       };
+    case STAFF_NOTICE_KIND.homebrewApplied:
+      return {
+        title: "새 자작 룰 등록 신청이 들어왔습니다",
+        fields: [
+          { name: "📋 항목", value: "자작 룰 등록 신청", inline: true },
+          { name: "🙋 신청자", value: notice.applicantNickname, inline: true },
+          { name: "📖 룰", value: notice.ruleLabel, inline: true },
+        ],
+        description: `${notice.applicantNickname}님이 ${notice.ruleLabel} 자작 룰 등록을 신청했습니다!\n심사 자료를 확인하고 승인할지 반려할지 결정해 주세요.`,
+        thumbnail: notice.applicantAvatarUrl ? { url: notice.applicantAvatarUrl } : undefined,
+        path: `/cert/maker/${notice.applicationId}`,
+        color: DISCORD_COLOR.recruit,
+      };
     case STAFF_NOTICE_KIND.sanctioned:
       return {
         title: `${notice.staffNickname}님이 활동 정지를 확정했습니다`,

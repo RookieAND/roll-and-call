@@ -1,7 +1,7 @@
 import { type Server } from "@roll-and-call/database";
 import { getGameForNotice } from "@roll-and-call/database/games";
 import { countConfirmed } from "@roll-and-call/database/games/model";
-import { findGameCategoryId, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
+import { findGameRuleTagKey, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import {
   editDiscordMessage,
   hasMessageAttachment,
@@ -31,7 +31,7 @@ export async function refreshRecruitPost({
 
   const [target, categoryId, ruleLabel] = await Promise.all([
     loadRecruitTarget(server),
-    findGameCategoryId({ serverId: server.id, gameId }),
+    findGameRuleTagKey({ serverId: server.id, gameId }),
     findGameCategoryLabel({ serverId: server.id, gameId }),
   ]);
   const confirmedCount = countConfirmed(game.participants);
