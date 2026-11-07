@@ -11,6 +11,7 @@ export const forumTagFormSchema = z.object({
   categories: z
     .record(z.string().max(100), tagId)
     .refine((categories) => Object.keys(categories).length <= 100),
+  homebrew: tagId,
   playTypes: z.object({ voice: tagId, text: tagId }),
   briefing: tagId,
   session: tagId,

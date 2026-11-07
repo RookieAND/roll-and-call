@@ -1,8 +1,8 @@
 import { Button, Chip, HStack, Skeleton, TextInput, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 
-import { CERT_TABS } from "@/entities/cert";
-import { AdminHeader, LoadingRegion, RouteTabs, SkeletonSelect } from "@/shared/ui";
+import { CertRouteTabs } from "@/entities/cert";
+import { AdminHeader, LoadingRegion, SkeletonSelect } from "@/shared/ui";
 
 const ROW_COUNT = 6;
 
@@ -10,7 +10,7 @@ export function CertManageMobileLoading() {
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/manage" />
+      <CertRouteTabs value="/cert/manage" />
       <LoadingRegion label="인증 기록을 불러오는 중입니다">
         <VStack gap="100" className="border-b border-gray-200 bg-surface px-200 py-150">
           <HStack align="center" className="relative">

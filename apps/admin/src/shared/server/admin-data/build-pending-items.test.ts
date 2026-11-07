@@ -40,4 +40,17 @@ describe("buildPendingItems", () => {
     });
     expect(cert).toEqual({ kind: "cert", count: 3, oldestDays: 6, oldestId: "core" });
   });
+
+  it("자작 룰 신청은 따로 세고 가장 오래된 신청을 연다", () => {
+    const items = buildPendingItems({
+      certs: [],
+      homebrews: [
+        { id: "h2", at: daysAgo(1) },
+        { id: "h1", at: daysAgo(5) },
+      ],
+      rulebookRequests: [],
+      now,
+    });
+    expect(items).toEqual([{ kind: "homebrew", count: 2, oldestDays: 5, oldestId: "h1" }]);
+  });
 });

@@ -1,0 +1,14 @@
+import { MakerReviewLoading, MakerReviewMobileLoading } from "@/views/maker-review";
+
+export default function Loading() {
+  return (
+    <>
+      <div data-view="desktop" className="contents max-lg:hidden">
+        <MakerReviewLoading />
+      </div>
+      <div data-view="mobile" className="contents lg:hidden">
+        <MakerReviewMobileLoading />
+      </div>
+    </>
+  );
+}

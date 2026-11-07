@@ -8,6 +8,7 @@ const empty: ForumTagForm = {
   closed: "",
   cancelled: "",
   categories: {},
+  homebrew: "",
   playTypes: { voice: "", text: "" },
   briefing: "",
   session: "",

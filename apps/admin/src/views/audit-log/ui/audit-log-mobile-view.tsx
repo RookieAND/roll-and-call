@@ -2,7 +2,7 @@ import { AUDIT_ACTION_GROUPS } from "@roll-and-call/database/audit/model";
 import { Button, Chip, Grid, VStack } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { ALL_AUDIT_PERIOD, defaultAuditPeriod } from "@/entities/audit";
+import { ALL_AUDIT_PERIOD, auditTargetParts, defaultAuditPeriod } from "@/entities/audit";
 import { type listAuditLog } from "@/entities/audit/server";
 import { SORT_DIR, withQuery, type TableSort } from "@/shared/lib";
 import {
@@ -45,16 +45,19 @@ export function AuditLogMobileView({ log, query, sort }: AuditLogMobileViewProps
   const allPeriodHref = withQuery("/log", query, { period: ALL_AUDIT_PERIOD, page: undefined });
   const listQuery = withQuery("", query, {});
   const now = new Date();
-  const rows = log.rows.map((row) => (
-    <ListRow
-      key={row.id}
-      path={`/log/${row.id}${listQuery}`}
-      title={row.action}
-      trailing={logRowTime(row.at, now)}
-      description={row.target}
-      meta={`${row.actor} 처리`}
-    />
-  ));
+  const rows = log.rows.map((row) => {
+    const target = auditTargetParts(row);
+    return (
+      <ListRow
+        key={row.id}
+        path={`/log/${row.id}${listQuery}`}
+        title={row.action}
+        trailing={logRowTime(row.at, now)}
+        description={target.detail ? `${target.name} · ${target.detail}` : target.name}
+        meta={`${row.actor} 처리`}
+      />
+    );
+  });
   const emptyTitle = periodLimited
     ? "선택한 기간에 맞는 기록이 없습니다"
     : "조건에 맞는 활동 기록이 없습니다";

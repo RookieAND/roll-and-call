@@ -1,6 +1,6 @@
-import { CERT_TABS } from "@/entities/cert";
+import { CertTabs } from "@/entities/cert/server";
 import { MobileEnforcementDateForm } from "@/features/set-cert-enforcement-date";
-import { AdminHeader, RouteTabs } from "@/shared/ui";
+import { AdminHeader } from "@/shared/ui";
 
 interface CertGraceMobileViewProps {
   enforcementDate: Date | null;
@@ -10,7 +10,7 @@ export function CertGraceMobileView({ enforcementDate }: CertGraceMobileViewProp
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/grace" />
+      <CertTabs value="/cert/grace" />
       <MobileEnforcementDateForm enforcementDate={enforcementDate} />
     </>
   );

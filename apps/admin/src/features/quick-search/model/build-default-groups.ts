@@ -24,7 +24,7 @@ export function buildDefaultGroups(
           title: copy.label,
           meta: copy.paletteMeta(item.count, item.oldestDays),
           href: copy.href(item.oldestId),
-          shortcut: copy.shortcut,
+          shortcut: copy.shortcut ?? undefined,
         };
       }),
     });

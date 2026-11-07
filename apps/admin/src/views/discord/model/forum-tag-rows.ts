@@ -15,3 +15,6 @@ export const STATUS_ROWS = [
   { key: "closed", label: "마감" },
   { key: "cancelled", label: "취소됨" },
 ] as const;
+
+// 룰 분류 표 맨 끝의 고정 행. 승인된 자작 룰 구인이 모두 이 태그 하나를 쓴다.
+export const HOMEBREW_ROW = { key: "homebrew", label: "자작 룰" } as const;

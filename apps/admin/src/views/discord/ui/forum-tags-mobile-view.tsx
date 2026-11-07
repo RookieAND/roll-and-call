@@ -7,7 +7,15 @@ import { useState, useTransition } from "react";
 import type { ForumTagForm, ForumTagOptions } from "@/features/edit-forum-tags";
 import { MobileActionBar } from "@/shared/ui";
 
-import { ADULT_ROWS, KIND_ROWS, PLAY_TYPE_ROWS, STATUS_ROWS } from "../model/forum-tag-rows";
+import {
+  ADULT_ROWS,
+  HOMEBREW_ROW,
+  KIND_ROWS,
+  PLAY_TYPE_ROWS,
+  STATUS_ROWS,
+} from "../model/forum-tag-rows";
+import { ruleTagRows } from "../model/rule-tag-rows";
+import { withRuleTag } from "../model/with-rule-tag";
 import { MobileDiscordFrame } from "./mobile/mobile-discord-frame";
 import { MobileForumTagSection } from "./mobile/mobile-forum-tag-section";
 
@@ -31,6 +39,7 @@ export function ForumTagsMobileView({
   const linkedRows = [
     ...STATUS_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
     ...categories.map(({ id, name }) => ({ label: name, id: form.categories[id] })),
+    { label: HOMEBREW_ROW.label, id: form.homebrew },
     ...PLAY_TYPE_ROWS.map(({ key, label }) => ({ label, id: form.playTypes[key] })),
     ...KIND_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
     ...ADULT_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
@@ -75,15 +84,8 @@ export function ForumTagsMobileView({
           <MobileForumTagSection
             title="룰 분류"
             tags={options.tags}
-            rows={categories.map((category) => ({
-              key: category.id,
-              label: category.name,
-              value: form.categories[category.id] ?? "",
-              savedValue: saved.categories[category.id] ?? "",
-            }))}
-            onChange={(id, tagId) =>
-              setForm({ ...form, categories: { ...form.categories, [id]: tagId } })
-            }
+            rows={ruleTagRows({ categories, form, saved })}
+            onChange={(key, tagId) => setForm(withRuleTag({ form, key, tagId }))}
           />
           <MobileForumTagSection
             title="플레이 유형"

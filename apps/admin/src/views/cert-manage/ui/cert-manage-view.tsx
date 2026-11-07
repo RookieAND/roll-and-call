@@ -4,23 +4,13 @@ import { Plus, X } from "lucide-react";
 import {
   CERT_MANAGE_STATUS,
   CERT_MANAGE_STATUS_LABEL,
-  CERT_TABS,
   type CertManageStatus,
   type CertManageFilter,
   type CertManageSortColumn,
 } from "@/entities/cert";
-import type { CertManageList, RevokeTarget } from "@/entities/cert/server";
+import { CertTabs, type CertManageList, type RevokeTarget } from "@/entities/cert/server";
 import { paginate, parsePageSize, withQuery, type TableSort } from "@/shared/lib";
-import {
-  AdminHeader,
-  ListPager,
-  Panel,
-  RouteTabs,
-  ServerLink,
-  TabCount,
-  UrlSearchInput,
-  UrlSelect,
-} from "@/shared/ui";
+import { AdminHeader, ListPager, Panel, ServerLink, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { CertManageTable } from "./cert-manage-table";
 import { RevokeDialogSlot } from "./revoke-dialog-slot";
@@ -52,19 +42,6 @@ export function CertManageView({
 }: CertManageViewProps) {
   const pageSize = parsePageSize(query.pageSize);
   const paged = paginate(list.rows, query.page, pageSize);
-  const tabs = CERT_TABS.map((tab) =>
-    tab.href === "/cert"
-      ? {
-          href: tab.href,
-          label: (
-            <HStack align="center" gap="075" render={<span />}>
-              {tab.label}
-              <TabCount count={list.pendingCount} selected={false} />
-            </HStack>
-          ),
-        }
-      : tab,
-  );
   const linkChips = [
     { param: "user", label: list.userLabel && `유저: ${list.userLabel}` },
     { param: "rulebook", label: list.rulebookLabel && `룰북: ${list.rulebookLabel}` },
@@ -73,7 +50,7 @@ export function CertManageView({
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert/manage" />
+      <CertTabs value="/cert/manage" />
       <VStack gap="150" className="flex-1 p-200">
         <HStack align="center" gap="100" wrap>
           <UrlSearchInput placeholder="닉네임 또는 디스코드 ID" className="w-[240px]" />

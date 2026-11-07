@@ -6,4 +6,5 @@ export const USER_VISIBLE_REASON_ACTIONS: readonly AuditAction[] = [
   "제재 해제",
   "구인 숨김",
   "추가 요청 반려",
+  "자작 룰 반려",
 ];

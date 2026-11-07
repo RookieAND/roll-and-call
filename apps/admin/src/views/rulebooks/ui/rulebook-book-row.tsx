@@ -5,6 +5,7 @@ import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import type { RulebookRow } from "@/entities/rulebook/server";
 import { ServerLink, Tag } from "@/shared/ui";
 
+import { homebrewMakerNote } from "../model/homebrew-maker-note";
 import { TreeGuide } from "./tree-guide";
 
 interface RulebookBookRowProps {
@@ -13,6 +14,7 @@ interface RulebookBookRowProps {
 }
 
 export function RulebookBookRow({ row, last }: RulebookBookRowProps) {
+  const freeTag = row.certRequired || row.homebrew ? null : <Tag>인증 불필요</Tag>;
   return (
     <Table.Row interactive className={cn("relative", row.hidden && "opacity-50")}>
       <Table.Cell>
@@ -28,7 +30,12 @@ export function RulebookBookRow({ row, last }: RulebookBookRowProps) {
             {row.name}
           </Text>
           {row.hidden ? <Tag>숨김</Tag> : null}
-          {row.certRequired ? null : <Tag>인증 불필요</Tag>}
+          {freeTag}
+          {row.homebrew ? (
+            <Text typography="body4" foreground="hint" truncate>
+              {homebrewMakerNote(row.homebrew)}
+            </Text>
+          ) : null}
         </HStack>
       </Table.Cell>
       <Table.Cell>

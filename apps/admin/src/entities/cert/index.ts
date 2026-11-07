@@ -22,7 +22,8 @@ export {
   REJECT_REASONS,
   type RejectReason,
 } from "./model/cert-reject-reasons";
-export { CERT_TABS } from "./model/cert-tabs";
+export { CERT_TABS, type CertTabCountKey } from "./model/cert-tabs";
+export { CertRouteTabs } from "./ui/cert-route-tabs";
 export { isCertManageStatus } from "./model/is-cert-manage-status";
 export { isCertQueueFilterKey } from "./model/is-cert-queue-filter-key";
 export { type OrderedCertManageRow } from "./model/order-cert-manage";

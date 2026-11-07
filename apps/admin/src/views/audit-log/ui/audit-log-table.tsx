@@ -2,12 +2,10 @@ import { Table, Text, Tooltip } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { actionTone } from "@/entities/audit";
+import { actionTone, auditTargetParts } from "@/entities/audit";
 import { formatFullDateTime, type TableSort } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
 import { ServerLink, SortableHead, TableColumns, Tag } from "@/shared/ui";
-
-import { splitTarget } from "../model/split-target";
 
 interface AuditLogTableProps {
   rows: AuditEntry[];
@@ -43,7 +41,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
       <Table.Body>
         {rows.length === 0 ? empty : null}
         {rows.map((row) => {
-          const target = splitTarget(row.target);
+          const target = auditTargetParts(row);
           const detailHref = `/log/${row.id}${listQuery}`;
           return (
             <Table.Row
@@ -76,8 +74,8 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                 ) : null}
               </Table.Cell>
               <Table.Cell>
-                {row.reason ? (
-                  <Tooltip content={row.reason} side="bottom">
+                {target.reason ? (
+                  <Tooltip content={target.reason} side="bottom">
                     <Text
                       typography="body3"
                       foreground="muted"
@@ -85,7 +83,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                       render={<ServerLink path={detailHref} tabIndex={-1} />}
                       className="relative z-10 block"
                     >
-                      {row.reason}
+                      {target.reason}
                     </Text>
                   </Tooltip>
                 ) : null}

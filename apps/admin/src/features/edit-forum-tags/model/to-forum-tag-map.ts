@@ -14,6 +14,7 @@ export function toForumTagMap(form: ForumTagForm): ForumTagMap | null {
     ...(form.closed ? { closed: form.closed } : {}),
     ...(form.cancelled ? { cancelled: form.cancelled } : {}),
     ...(Object.keys(categories).length > 0 ? { categories } : {}),
+    ...(form.homebrew ? { homebrew: form.homebrew } : {}),
     ...(Object.keys(playTypes).length > 0 ? { playTypes } : {}),
     ...(form.briefing ? { briefing: form.briefing } : {}),
     ...(form.session ? { session: form.session } : {}),

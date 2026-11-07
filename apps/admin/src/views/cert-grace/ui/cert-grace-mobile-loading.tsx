@@ -1,7 +1,7 @@
 import { Button, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
-import { CERT_TABS } from "@/entities/cert";
-import { AdminHeader, LoadingRegion, RouteTabs } from "@/shared/ui";
+import { CertRouteTabs } from "@/entities/cert";
+import { AdminHeader, LoadingRegion } from "@/shared/ui";
 
 const SECTIONS = [
   { title: "현재 적용일", height: 28 },
@@ -13,7 +13,7 @@ export function CertGraceMobileLoading() {
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={CERT_TABS} value="/cert/grace" />
+      <CertRouteTabs value="/cert/grace" />
       <LoadingRegion label="유예 기간을 불러오는 중입니다">
         <VStack gap="150" className="w-full flex-1 px-150 pt-150 pb-200">
           {SECTIONS.map((section) => (

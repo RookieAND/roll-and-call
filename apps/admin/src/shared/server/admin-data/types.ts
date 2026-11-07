@@ -1,6 +1,7 @@
 import type { RulebookKind } from "@roll-and-call/database";
 import type { AuditAction, AuditActorKind, AuditState } from "@roll-and-call/database/audit";
 import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
+import type { HomebrewRuleScope } from "@roll-and-call/database/homebrew/model";
 import type { Sanction, PhotoKey, ShotKey, StaffRole } from "@roll-and-call/database/moderation";
 
 import type { MembershipStatus, PostStatus } from "@/shared/lib";
@@ -46,6 +47,13 @@ export interface Rulebook {
   aliases: string[];
   certRequired: boolean;
   hidden: boolean;
+  // 자작 룰이면 제작자·사용 범위·승인 일시. 제작자가 지워졌으면 makerId·maker가 null이다.
+  homebrew: {
+    makerId: string | null;
+    maker: string | null;
+    scope: HomebrewRuleScope;
+    approvedAt: Date;
+  } | null;
 }
 
 export interface Certification {

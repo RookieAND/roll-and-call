@@ -37,7 +37,7 @@ export const SHAPE_REGISTRY: { [Key in keyof AdminShapes]: ShapeSpec<Key> } = {
   },
   staff: { tables: ["profileRows", "staffRows"], build: buildStaff },
   staffMemos: { tables: ["profileRows", "memoRows"], build: buildStaffMemos },
-  rulebooks: { tables: ["rulebookRows"], build: buildRulebooks },
+  rulebooks: { tables: ["profileRows", "rulebookRows"], build: buildRulebooks },
   certifications: {
     tables: ["profileRows", "rulebookRows", "certificationRows"],
     build: buildCertifications,

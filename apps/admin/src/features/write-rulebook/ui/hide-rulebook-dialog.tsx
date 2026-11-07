@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { EyeOff, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -28,6 +28,9 @@ interface HideRulebookDialogProps {
   rulebookLabel: string;
   certifiedCount: number;
   pendingApplicationCount: number;
+  // 자작 룰이면 영향 표를 열린 구인 두 줄로 바꾼다.
+  homebrew: boolean;
+  openGameCount: number;
   viewerId: string;
   onClose: () => void;
 }
@@ -38,6 +41,8 @@ export function HideRulebookDialog({
   rulebookLabel,
   certifiedCount,
   pendingApplicationCount,
+  homebrew,
+  openGameCount,
   viewerId,
   onClose,
 }: HideRulebookDialogProps) {
@@ -78,13 +83,27 @@ export function HideRulebookDialog({
         <ResponsiveDialog.Body>
           <VStack gap="150">
             {networkError ? <ActionNetworkError /> : null}
-            <FactRows
-              labelWidth={200}
-              items={[
-                { label: "인증된 GM", value: `${certifiedCount}명` },
-                { label: "함께 반려되는 심사 중 신청", value: `${pendingApplicationCount}건` },
-              ]}
-            />
+            {homebrew ? (
+              <VStack
+                render={<ul />}
+                className="divide-y divide-(--rc-color-border-subtle) rounded-400 border border-gray-200 px-175"
+              >
+                <Text typography="body3" render={<li />} className="py-100">
+                  {`열린 구인 ${openGameCount}건은 그대로 진행됩니다.`}
+                </Text>
+                <Text typography="body3" render={<li />} className="py-100">
+                  새 구인에서는 고를 수 없습니다.
+                </Text>
+              </VStack>
+            ) : (
+              <FactRows
+                labelWidth={200}
+                items={[
+                  { label: "인증된 GM", value: `${certifiedCount}명` },
+                  { label: "함께 반려되는 심사 중 신청", value: `${pendingApplicationCount}건` },
+                ]}
+              />
+            )}
             <Field.Root label="사유" htmlFor="hide-rulebook-reason" required>
               <Textarea
                 id="hide-rulebook-reason"

@@ -1,6 +1,8 @@
 // 서버에서만 부르는 진입점(스냅숏·DB를 읽는다). 클라이언트가 가져오는 index와 나눈다.
 export { decideCert } from "./api/decide-cert";
 export { decideCertGroup, type CertGroupDecisionResult } from "./api/decide-cert-group";
+export { getCertTabCounts } from "./api/get-cert-tab-counts";
+export { CertTabs } from "./ui/cert-tabs";
 export { getCertReview, type CertReview } from "./api/get-cert-review";
 export { getGrantOptions, type GrantOptions } from "./api/get-grant-options";
 export { getCertManageRow } from "./api/get-cert-manage-row";

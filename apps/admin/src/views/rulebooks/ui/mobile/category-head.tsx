@@ -2,6 +2,7 @@ import { HStack, Text } from "@roll-and-call/ui";
 import { BookOpen } from "lucide-react";
 
 import type { RulebookCategory } from "@/entities/rulebook/server";
+import { Tag } from "@/shared/ui";
 
 interface CategoryHeadProps {
   category: RulebookCategory;
@@ -21,6 +22,7 @@ export function CategoryHead({ category }: CategoryHeadProps) {
       <Text typography="body4" foreground="hint" className="shrink-0">
         {category.bookCount}권
       </Text>
+      {category.homebrew ? <Tag>자작</Tag> : null}
     </HStack>
   );
 }

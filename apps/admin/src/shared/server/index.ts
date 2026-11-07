@@ -25,6 +25,7 @@ export {
   refreshRecruitPost,
   STAFF_NOTICE_KIND,
   syncCertStaffNotices,
+  syncHomebrewStaffNotice,
   syncRulebookRequestStaffNotice,
   type StaffNotice,
 } from "@roll-and-call/game-notices";

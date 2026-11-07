@@ -2,6 +2,7 @@ import { isString } from "es-toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { getHomebrewRuleInfo } from "@/entities/homebrew/server";
 import { getRulebookDetail } from "@/entities/rulebook/server";
 import { parseSort } from "@/shared/lib";
 import { requireStaff } from "@/shared/server";
@@ -29,10 +30,14 @@ export default async function RulebookDetailPage({
   const { tab, page, pageSize } = query;
   const rulebook = await getRulebookDetail(id);
   if (!rulebook) notFound();
+  const homebrew = rulebook.homebrew ? await getHomebrewRuleInfo(id) : null;
+  // 자작 룰은 기본 정보 탭만 있다.
   const detailTab: RulebookDetailTab =
     Object.values(RULEBOOK_DETAIL_TAB).find(
       (candidate) =>
-        candidate === tab && (candidate !== RULEBOOK_DETAIL_TAB.quiz || rulebook.certRequired),
+        candidate === tab &&
+        !homebrew &&
+        (candidate !== RULEBOOK_DETAIL_TAB.quiz || rulebook.certRequired),
     ) ?? RULEBOOK_DETAIL_TAB.info;
   const gmSort = parseSort({
     searchParams: query,
@@ -44,6 +49,7 @@ export default async function RulebookDetailPage({
       <div data-view="desktop" className="contents max-lg:hidden">
         <RulebookDetailView
           rulebook={rulebook}
+          homebrew={homebrew}
           tab={detailTab}
           gmSort={gmSort}
           viewerId={staff.id}
@@ -54,6 +60,7 @@ export default async function RulebookDetailPage({
       <div data-view="mobile" className="contents lg:hidden">
         <RulebookDetailMobileView
           rulebook={rulebook}
+          homebrew={homebrew}
           tab={detailTab}
           gmSort={gmSort}
           viewerId={staff.id}

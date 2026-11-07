@@ -4,6 +4,7 @@ import { STAFF_CHANNEL_RELATED } from "@roll-and-call/database/audit/model";
 import { listStaff, loadAdminData } from "@/shared/server";
 
 import { auditSubject } from "../model/audit-subject";
+import { auditTargetParts } from "../model/audit-target-parts";
 
 const STAFF_CHANNEL_LINES: readonly string[] = Object.values(STAFF_CHANNEL_RELATED);
 
@@ -11,7 +12,7 @@ export async function getAuditEntry(id: string) {
   const [db, staff] = await Promise.all([loadAdminData(["auditLog"]), listStaff()]);
   const entry = db.auditLog.find((candidate) => candidate.id === id);
   if (!entry) return null;
-  const [targetName = entry.target, targetDetail] = entry.target.split(" · ");
+  const { name: targetName, detail: targetDetail } = auditTargetParts(entry);
   const related = entry.related ?? [];
   return {
     ...entry,

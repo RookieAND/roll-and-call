@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Field, HStack, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import type { ReactNode } from "react";
 
 import type { RulebookDetail } from "@/entities/rulebook/server";
 import { ActionNetworkError, MobileActionBar } from "@/shared/ui";
@@ -9,6 +10,7 @@ import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { CoveredBooksField } from "./covered-books-field";
+import { HomebrewLockedFields } from "./homebrew-locked-fields";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
@@ -19,17 +21,29 @@ const ID_PREFIX = "rulebook-mobile";
 interface MobileRulebookEditFormProps {
   rulebook: RulebookDetail;
   viewerId: string;
+  // 기본 정보 위에 두는 칸(자작 룰 정보·사용 범위)
+  lead?: ReactNode;
 }
 
 // 입력란은 한 줄에 하나씩 쌓고, 저장과 숨김은 화면 아래에 고정한다.
-export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEditFormProps) {
+export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRulebookEditFormProps) {
   const form = useRulebookEditForm({ rulebook, viewerId });
   const { draft, pending } = form;
+  const homebrew = Boolean(rulebook.homebrew);
+  const reasonDescription = homebrew
+    ? "사유는 활동 기록에 남습니다."
+    : "기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다.";
   return (
     <>
       <VStack gap="150" className="p-150 pb-200">
         {(form.saving.networkError && !form.dialogOpen) || form.unhiding.networkError ? (
           <ActionNetworkError />
+        ) : null}
+        {lead}
+        {homebrew ? (
+          <Text typography="body4" foreground="hint">
+            자작 룰은 별칭만 고칠 수 있습니다.
+          </Text>
         ) : null}
         <MobileFormSection title="기본 정보">
           <BasicInfoFields
@@ -41,36 +55,47 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
             categoryError={form.category.error}
             nameError={form.nameError}
             disabled={pending}
+            lockedFields={
+              homebrew ? (
+                <HomebrewLockedFields stacked rulebook={rulebook} idPrefix={ID_PREFIX} />
+              ) : undefined
+            }
             onChange={form.change}
           >
-            <Field.Root
-              label="종류"
-              description={form.certifiedCount > 0 ? form.kindDescription : undefined}
-            >
-              <KindCards
-                kind={draft.kind}
-                disabled={pending}
-                onChange={(kind) => form.change({ kind })}
-              />
-            </Field.Root>
+            {homebrew ? null : (
+              <Field.Root
+                label="종류"
+                description={form.certifiedCount > 0 ? form.kindDescription : undefined}
+              >
+                <KindCards
+                  kind={draft.kind}
+                  disabled={pending}
+                  onChange={(kind) => form.change({ kind })}
+                />
+              </Field.Root>
+            )}
           </BasicInfoFields>
         </MobileFormSection>
-        <MobileFormSection title="인증 정책">
-          <CertPolicyField
-            stacked
-            certRequired={draft.certRequired}
-            disabled={pending}
-            onChange={(certRequired) => form.change({ certRequired })}
-          />
-        </MobileFormSection>
-        <MobileFormSection title="함께 인증되는 책">
-          <CoveredBooksField
-            draft={draft}
-            category={form.category}
-            disabled={pending}
-            onChange={form.change}
-          />
-        </MobileFormSection>
+        {homebrew ? null : (
+          <>
+            <MobileFormSection title="인증 정책">
+              <CertPolicyField
+                stacked
+                certRequired={draft.certRequired}
+                disabled={pending}
+                onChange={(certRequired) => form.change({ certRequired })}
+              />
+            </MobileFormSection>
+            <MobileFormSection title="함께 인증되는 책">
+              <CoveredBooksField
+                draft={draft}
+                category={form.category}
+                disabled={pending}
+                onChange={form.change}
+              />
+            </MobileFormSection>
+          </>
+        )}
         <MobileFormSection title="미니룰">
           <MiniRuleField
             miniRule={form.miniRule}
@@ -83,7 +108,7 @@ export function MobileRulebookEditForm({ rulebook, viewerId }: MobileRulebookEdi
             label="사유"
             htmlFor={`${ID_PREFIX}-reason`}
             required
-            description="기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다."
+            description={reasonDescription}
           >
             <TextInput
               id={`${ID_PREFIX}-reason`}

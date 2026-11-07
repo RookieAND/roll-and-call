@@ -32,6 +32,7 @@ export async function saveForumTagsAction(rawForm: ForumTagForm): Promise<SaveFo
     map?.closed,
     map?.cancelled,
     ...Object.values(map?.categories ?? {}),
+    map?.homebrew,
     map?.playTypes?.voice,
     map?.playTypes?.text,
     map?.briefing,

@@ -1,7 +1,8 @@
 import "server-only";
+import { countOpenHomebrewGames } from "@roll-and-call/database/homebrew";
 import { rulebookLabel } from "@roll-and-call/database/rulebooks";
 
-import { loadAdminData } from "@/shared/server";
+import { getCurrentServer, loadAdminData } from "@/shared/server";
 
 import { categoryEditions } from "../model/category-editions";
 import { listRulebooks } from "./list-rulebooks";
@@ -46,6 +47,9 @@ export async function getRulebookDetail(id: string) {
   const { rows: allRulebooks } = await listRulebooks();
   const categoryBooks = allRulebooks.filter((row) => row.category === rulebook.category);
   const editions = categoryEditions(categoryBooks);
+  const openGameCount = rulebook.homebrew
+    ? await countOpenHomebrewGames({ serverId: (await getCurrentServer()).id, rulebookId: id })
+    : 0;
   return {
     ...rulebook,
     aliases: [...rulebook.aliases],
@@ -55,6 +59,8 @@ export async function getRulebookDetail(id: string) {
     pendingApplicationCount: db.certApplications.filter(
       (application) => application.rulebookId === id && application.status === "pending",
     ).length,
+    // 자작 룰을 숨겨도 그대로 진행되는 구인
+    openGameCount,
     quizQuestions: db.quizQuestions.filter((question) => question.rulebookId === id),
     allRulebooks,
     categoryBooks,

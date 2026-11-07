@@ -34,6 +34,7 @@ export function forumTagChanges({ before, after, categories, tags }: ForumTagCha
       before: before?.categories?.[id],
       after: after?.categories?.[id],
     })),
+    { label: "자작 룰", before: before?.homebrew, after: after?.homebrew },
     ...PLAY_TYPE_ROWS.map(({ key, label }) => ({
       label,
       before: before?.playTypes?.[key],

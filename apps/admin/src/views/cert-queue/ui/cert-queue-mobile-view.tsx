@@ -1,12 +1,7 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 
-import {
-  CERT_QUEUE_FILTERS,
-  CERT_TABS,
-  type CertQueueFilter,
-  type CertQueueFilterKey,
-} from "@/entities/cert";
-import { type listCertQueue } from "@/entities/cert/server";
+import { CERT_QUEUE_FILTERS, type CertQueueFilter, type CertQueueFilterKey } from "@/entities/cert";
+import { CertTabs, type listCertQueue } from "@/entities/cert/server";
 import { SORT_DIR, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
@@ -14,9 +9,7 @@ import {
   EmptyState,
   ListSortBar,
   InfiniteList,
-  RouteTabs,
   ServerLink,
-  TabCount,
   UrlSearchInput,
   UrlSelect,
 } from "@/shared/ui";
@@ -41,24 +34,11 @@ const SORT_OPTIONS = [{ label: "대기 오래된 순", column: "waited", dir: SO
 
 export function CertQueueMobileView({ queue, filter }: CertQueueMobileViewProps) {
   const query = { q: filter.query, rulebook: filter.rulebook, filter: filter.filter };
-  const tabs = CERT_TABS.map((tab) =>
-    tab.href === "/cert"
-      ? {
-          href: tab.href,
-          label: (
-            <HStack align="center" gap="075" render={<span />}>
-              {tab.label}
-              <TabCount count={queue.total} selected />
-            </HStack>
-          ),
-        }
-      : tab,
-  );
 
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert" />
+      <CertTabs value="/cert" />
       {queue.total === 0 ? (
         <EmptyState image={EMPTY_IMAGE.myGames} title="심사할 신청이 없습니다" className="h-90" />
       ) : (

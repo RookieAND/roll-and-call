@@ -21,6 +21,7 @@ export { Kbd } from "./kbd";
 export { KeyHint } from "./key-hint";
 export { ModalServerLabel } from "./modal-server-label";
 export { MODAL_FOOTER_CLASS } from "./modal-footer-class";
+export { PhotoViewer } from "./photo-viewer";
 export { ZoomablePhotos } from "./zoomable-photos";
 export { MoreMenu } from "./more-menu";
 export { RetryableLabel } from "./retryable-label";

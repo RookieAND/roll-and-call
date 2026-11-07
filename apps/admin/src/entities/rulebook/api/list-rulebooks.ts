@@ -3,7 +3,7 @@ import type { RulebookKind } from "@roll-and-call/database";
 import { RULEBOOK_KINDS, rulebookLabel } from "@roll-and-call/database/rulebooks";
 import { uniq } from "es-toolkit";
 
-import { loadAdminData } from "@/shared/server";
+import { loadAdminData, type Rulebook } from "@/shared/server";
 
 export interface RulebookRow {
   id: string;
@@ -19,11 +19,14 @@ export interface RulebookRow {
   certRequired: boolean;
   hidden: boolean;
   certifiedCount: number;
+  homebrew: Rulebook["homebrew"];
 }
 
 export interface RulebookCategory {
   name: string;
   bookCount: number;
+  homebrew: boolean;
+  miniRule: boolean;
 }
 
 export async function listRulebooks({ query }: { query?: string } = {}) {
@@ -45,6 +48,7 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
         certRequired: rulebook.certRequired,
         hidden: rulebook.hidden,
         certifiedCount: db.certifications.filter((item) => item.rulebook === label).length,
+        homebrew: rulebook.homebrew,
       };
     })
     .toSorted(
@@ -53,10 +57,15 @@ export async function listRulebooks({ query }: { query?: string } = {}) {
         RULEBOOK_KINDS.indexOf(a.kind) - RULEBOOK_KINDS.indexOf(b.kind) ||
         a.label.localeCompare(b.label, "ko"),
     );
-  const categories: RulebookCategory[] = uniq(rows.map((row) => row.category)).map((name) => ({
-    name,
-    bookCount: db.rulebooks.filter((rulebook) => rulebook.category === name).length,
-  }));
+  const categories: RulebookCategory[] = uniq(rows.map((row) => row.category)).map((name) => {
+    const books = rows.filter((row) => row.category === name);
+    return {
+      name,
+      bookCount: books.length,
+      homebrew: books.some((book) => book.homebrew),
+      miniRule: books.some((book) => book.categoryMiniRule),
+    };
+  });
   const keyword = query?.trim().toLowerCase();
   const matches = (needle: string) => (row: RulebookRow) =>
     [row.label, row.category, ...row.aliases].some((text) => text.toLowerCase().includes(needle));

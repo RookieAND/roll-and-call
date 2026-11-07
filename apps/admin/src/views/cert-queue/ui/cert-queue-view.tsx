@@ -1,12 +1,7 @@
 import { Chip, HStack, VStack } from "@roll-and-call/ui";
 
-import {
-  CERT_TABS,
-  CERT_QUEUE_FILTERS,
-  type CertQueueFilter,
-  type CertQueueFilterKey,
-} from "@/entities/cert";
-import { type listCertQueue } from "@/entities/cert/server";
+import { CERT_QUEUE_FILTERS, type CertQueueFilter, type CertQueueFilterKey } from "@/entities/cert";
+import { CertTabs, type listCertQueue } from "@/entities/cert/server";
 import { paginate, parsePageSize, withQuery } from "@/shared/lib";
 import {
   AdminHeader,
@@ -14,10 +9,8 @@ import {
   EmptyState,
   ListPager,
   Panel,
-  RouteTabs,
   ServerLink,
   SortFixedNote,
-  TabCount,
   UrlSearchInput,
   UrlSelect,
 } from "@/shared/ui";
@@ -48,24 +41,11 @@ export function CertQueueView({ queue, page, pageSizeParam, filter }: CertQueueV
     filter: filter.filter,
     pageSize: pageSizeParam,
   };
-  const tabs = CERT_TABS.map((tab) =>
-    tab.href === "/cert"
-      ? {
-          href: tab.href,
-          label: (
-            <HStack align="center" gap="075" render={<span />}>
-              {tab.label}
-              <TabCount count={queue.total} selected />
-            </HStack>
-          ),
-        }
-      : tab,
-  );
 
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert" />
+      <CertTabs value="/cert" />
       <VStack gap="150" className="flex-1 p-200">
         {queue.total === 0 ? (
           <Panel>

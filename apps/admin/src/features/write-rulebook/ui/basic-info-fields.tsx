@@ -16,6 +16,8 @@ interface BasicInfoFieldsProps {
   // 모바일은 입력란을 한 줄에 하나씩 쌓는다.
   stacked?: boolean;
   onChange: (changes: Partial<RulebookDraft>) => void;
+  // 자작 룰이면 별칭(다른 이름) 말고는 모두 잠그고, 잠긴 칸을 이 자리(다른 이름 위)에 둔다.
+  lockedFields?: ReactNode;
   children?: ReactNode;
 }
 
@@ -30,8 +32,11 @@ export function BasicInfoFields({
   withAliases = true,
   stacked,
   onChange,
+  lockedFields,
   children,
 }: BasicInfoFieldsProps) {
+  const locked = Boolean(lockedFields);
+  const lockedOrDisabled = disabled || locked;
   const categoryPlaceholder =
     draft.kind === "core" && draft.name.trim() ? draft.name.trim() : "검색 또는 새 이름";
   return (
@@ -56,7 +61,7 @@ export function BasicInfoFields({
             value={draft.category}
             placeholder={categoryPlaceholder}
             invalid={Boolean(categoryError)}
-            disabled={disabled}
+            disabled={lockedOrDisabled}
             onChange={(event) => onChange({ category: event.target.value })}
           />
           <datalist id={`${idPrefix}-categories`}>
@@ -70,7 +75,7 @@ export function BasicInfoFields({
             id={`${idPrefix}-name`}
             value={draft.name}
             invalid={Boolean(nameError)}
-            disabled={disabled}
+            disabled={lockedOrDisabled}
             onChange={(event) => onChange({ name: event.target.value })}
           />
         </Field.Root>
@@ -79,12 +84,13 @@ export function BasicInfoFields({
             id={`${idPrefix}-edition`}
             value={draft.edition}
             placeholder="예: 7판, 3rd"
-            disabled={disabled}
+            disabled={lockedOrDisabled}
             onChange={(event) => onChange({ edition: event.target.value })}
           />
         </Field.Root>
       </div>
-      {draft.kind === "core" ? (
+      {lockedFields}
+      {draft.kind === "core" && !locked ? (
         <Field.Root
           label="카테고리 약어"
           htmlFor={`${idPrefix}-category-alias`}

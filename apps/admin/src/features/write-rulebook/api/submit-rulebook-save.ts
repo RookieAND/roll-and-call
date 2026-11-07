@@ -36,6 +36,8 @@ export async function submitRulebookSave(
     actor: staff,
     reason: input.reason.trim(),
   });
+  // 화면이 잠근 칸을 우회해 보낸 경우다. 오류 토스트로 끝낸다.
+  if ("locked" in result) throw new Error("자작 룰은 별칭만 고칠 수 있습니다");
   revalidatePath("/", "layout");
   return result;
 }

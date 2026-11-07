@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Field, HStack, TextInput, VStack } from "@roll-and-call/ui";
+import { Button, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import type { RulebookDetail } from "@/entities/rulebook/server";
@@ -10,6 +10,7 @@ import { useRulebookEditForm } from "../model/use-rulebook-edit-form";
 import { BasicInfoFields } from "./basic-info-fields";
 import { CertPolicyField } from "./cert-policy-field";
 import { CoveredBooksField } from "./covered-books-field";
+import { HomebrewLockedFields } from "./homebrew-locked-fields";
 import { KindCards } from "./kind-cards";
 import { MiniRuleField } from "./mini-rule-field";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
@@ -18,11 +19,49 @@ interface RulebookEditFormProps {
   rulebook: RulebookDetail;
   viewerId: string;
   aside: ReactNode;
+  // 기본 정보 위에 두는 패널(자작 룰 정보)
+  lead?: ReactNode;
 }
 
-export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditFormProps) {
+export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEditFormProps) {
   const form = useRulebookEditForm({ rulebook, viewerId });
   const { draft, pending } = form;
+  const homebrew = Boolean(rulebook.homebrew);
+  const reasonPlaceholder = homebrew
+    ? "사유는 활동 기록에 남습니다"
+    : "기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다";
+  const basicInfoPanel = (
+    <Panel title="기본 정보" bodyClassName="p-175">
+      <BasicInfoFields
+        draft={draft}
+        categories={form.categories}
+        idPrefix="rulebook"
+        categoryHelp={form.categoryHint}
+        categoryError={form.category.error}
+        nameError={form.nameError}
+        disabled={pending}
+        lockedFields={
+          homebrew ? <HomebrewLockedFields rulebook={rulebook} idPrefix="rulebook" /> : undefined
+        }
+        onChange={form.change}
+      >
+        {homebrew ? null : (
+          <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
+            <Field.Root
+              label="종류"
+              description={form.certifiedCount > 0 ? form.kindDescription : undefined}
+            >
+              <KindCards
+                kind={draft.kind}
+                disabled={pending}
+                onChange={(kind) => form.change({ kind })}
+              />
+            </Field.Root>
+          </VStack>
+        )}
+      </BasicInfoFields>
+    </Panel>
+  );
 
   return (
     <VStack data-full-bleed className="min-h-0 flex-1">
@@ -31,46 +70,34 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
           {(form.saving.networkError && !form.dialogOpen) || form.unhiding.networkError ? (
             <ActionNetworkError />
           ) : null}
-          <Panel title="기본 정보" bodyClassName="p-175">
-            <BasicInfoFields
-              draft={draft}
-              categories={form.categories}
-              idPrefix="rulebook"
-              categoryHelp={form.categoryHint}
-              categoryError={form.category.error}
-              nameError={form.nameError}
-              disabled={pending}
-              onChange={form.change}
-            >
-              <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
-                <Field.Root
-                  label="종류"
-                  description={form.certifiedCount > 0 ? form.kindDescription : undefined}
-                >
-                  <KindCards
-                    kind={draft.kind}
-                    disabled={pending}
-                    onChange={(kind) => form.change({ kind })}
-                  />
-                </Field.Root>
-              </VStack>
-            </BasicInfoFields>
-          </Panel>
-          <Panel title="인증 정책" bodyClassName="p-175">
-            <CertPolicyField
-              certRequired={draft.certRequired}
-              disabled={pending}
-              onChange={(certRequired) => form.change({ certRequired })}
-            />
-          </Panel>
-          <Panel title="함께 인증되는 책" bodyClassName="p-175">
-            <CoveredBooksField
-              draft={draft}
-              category={form.category}
-              disabled={pending}
-              onChange={form.change}
-            />
-          </Panel>
+          {lead}
+          {homebrew ? (
+            <VStack gap="100">
+              <Text typography="body4" foreground="hint">
+                자작 룰은 별칭만 고칠 수 있습니다.
+              </Text>
+              {basicInfoPanel}
+            </VStack>
+          ) : (
+            <>
+              {basicInfoPanel}
+              <Panel title="인증 정책" bodyClassName="p-175">
+                <CertPolicyField
+                  certRequired={draft.certRequired}
+                  disabled={pending}
+                  onChange={(certRequired) => form.change({ certRequired })}
+                />
+              </Panel>
+              <Panel title="함께 인증되는 책" bodyClassName="p-175">
+                <CoveredBooksField
+                  draft={draft}
+                  category={form.category}
+                  disabled={pending}
+                  onChange={form.change}
+                />
+              </Panel>
+            </>
+          )}
           <Panel title="미니룰" bodyClassName="p-175">
             <MiniRuleField
               miniRule={form.miniRule}
@@ -90,7 +117,7 @@ export function RulebookEditForm({ rulebook, viewerId, aside }: RulebookEditForm
           <TextInput
             id="rulebook-reason"
             value={form.reason}
-            placeholder="기본 정보와 인증 정책을 함께 저장하며, 사유는 활동 기록에 남습니다"
+            placeholder={reasonPlaceholder}
             onChange={(event) => form.setReason(event.target.value)}
           />
         </Field.Root>

@@ -28,8 +28,6 @@ export async function listCertManage({
     editionOptions: uniq(all.map((row) => row.edition)).toSorted((a, b) =>
       a.localeCompare(b, "ko"),
     ),
-    pendingCount: db.certApplications.filter((application) => application.status === "pending")
-      .length,
     userLabel: filteredUser?.nickname,
     rulebookLabel: filteredBook ? rulebookLabel(filteredBook) : undefined,
   };

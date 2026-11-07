@@ -6,26 +6,17 @@ import { useState, useTransition } from "react";
 
 import type { ForumTagForm, ForumTagOptions } from "@/features/edit-forum-tags";
 
+import {
+  ADULT_ROWS,
+  HOMEBREW_ROW,
+  KIND_ROWS,
+  PLAY_TYPE_ROWS,
+  STATUS_ROWS,
+} from "../model/forum-tag-rows";
+import { ruleTagRows } from "../model/rule-tag-rows";
+import { withRuleTag } from "../model/with-rule-tag";
 import { DiscordFrame } from "./discord-frame";
 import { ForumTagSection } from "./forum-tag-section";
-
-const PLAY_TYPE_ROWS = [
-  { key: "voice", label: "보이스" },
-  { key: "text", label: "텍스트" },
-] as const;
-
-const KIND_ROWS = [
-  { key: "briefing", label: "설명회" },
-  { key: "session", label: "세션" },
-] as const;
-
-const ADULT_ROWS = [{ key: "adult", label: "성인 전용" }] as const;
-
-const STATUS_ROWS = [
-  { key: "open", label: "모집중" },
-  { key: "closed", label: "마감" },
-  { key: "cancelled", label: "취소됨" },
-] as const;
 
 interface ForumTagsViewProps {
   // 서버 전용 모듈이 클라이언트 번들에 들어가지 않게 페이지가 서버 액션을 넘긴다.
@@ -42,6 +33,7 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
   const linkedRows = [
     ...STATUS_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
     ...categories.map(({ id, name }) => ({ label: name, id: form.categories[id] })),
+    { label: HOMEBREW_ROW.label, id: form.homebrew },
     ...PLAY_TYPE_ROWS.map(({ key, label }) => ({ label, id: form.playTypes[key] })),
     ...KIND_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
     ...ADULT_ROWS.map(({ key, label }) => ({ label, id: form[key] })),
@@ -94,15 +86,8 @@ export function ForumTagsView({ options, categories, saved, onSave }: ForumTagsV
             title="룰 분류"
             columnLabel="룰 분류"
             tags={options.tags}
-            rows={categories.map((category) => ({
-              key: category.id,
-              label: category.name,
-              value: form.categories[category.id] ?? "",
-              savedValue: saved.categories[category.id] ?? "",
-            }))}
-            onChange={(id, tagId) =>
-              setForm({ ...form, categories: { ...form.categories, [id]: tagId } })
-            }
+            rows={ruleTagRows({ categories, form, saved })}
+            onChange={(key, tagId) => setForm(withRuleTag({ form, key, tagId }))}
           />
           <ForumTagSection
             title="플레이 유형"

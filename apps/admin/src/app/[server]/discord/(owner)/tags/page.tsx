@@ -22,6 +22,7 @@ export default async function DiscordTagsPage() {
       closed: saved?.closed ?? "",
       cancelled: saved?.cancelled ?? "",
       categories: saved?.categories ?? {},
+      homebrew: saved?.homebrew ?? "",
       playTypes: { voice: saved?.playTypes?.voice ?? "", text: saved?.playTypes?.text ?? "" },
       adult: saved?.adult ?? "",
       briefing: saved?.briefing ?? "",

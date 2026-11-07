@@ -47,8 +47,14 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
 
   // 처리 대기는 기다리지 않고 넘긴다. 받는 곳마다 따로 기다려서 화면 틀과 loading.tsx가 먼저 뜬다.
   const pendingItemsPromise = getPendingItems();
-  const countOf = (kind: PendingKind) =>
-    pendingItemsPromise.then((items) => items.find((item) => item.kind === kind)?.count);
+  // 사이드바 「룰북 인증」은 인증 신청과 자작 룰 신청을 합친 건수다. 0이면 숨는다.
+  const countOf = (...kinds: PendingKind[]) =>
+    pendingItemsPromise.then(
+      (items) =>
+        items
+          .filter((item) => kinds.includes(item.kind))
+          .reduce((total, item) => total + item.count, 0) || undefined,
+    );
 
   const sidebarProps = {
     nickname: staff.nickname,
@@ -56,7 +62,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/[server]">
     platformAdmin: staff.platformAdmin,
     server: current,
     servers,
-    countPromises: { cert: countOf("cert"), rules: countOf("rulebookRequest") },
+    countPromises: { cert: countOf("cert", "homebrew"), rules: countOf("rulebookRequest") },
     signOutButton: <SignOutIconButton />,
   };
 

@@ -52,6 +52,8 @@ export function RulebookEditDialogs({ rulebook, viewerId, form }: RulebookEditDi
         rulebookLabel={rulebook.label}
         certifiedCount={form.certifiedCount}
         pendingApplicationCount={rulebook.pendingApplicationCount}
+        homebrew={Boolean(rulebook.homebrew)}
+        openGameCount={rulebook.openGameCount}
         viewerId={viewerId}
         onClose={() => form.setHiding(false)}
       />

@@ -4,22 +4,13 @@ import { X } from "lucide-react";
 import {
   CERT_MANAGE_STATUS,
   CERT_MANAGE_STATUS_LABEL,
-  CERT_TABS,
   type CertManageFilter,
   type CertManageSortColumn,
   type CertManageStatus,
 } from "@/entities/cert";
-import type { CertManageList } from "@/entities/cert/server";
+import { CertTabs, type CertManageList } from "@/entities/cert/server";
 import { SORT_DIR, withQuery, type TableSort } from "@/shared/lib";
-import {
-  AdminHeader,
-  ListSortBar,
-  RouteTabs,
-  ServerLink,
-  TabCount,
-  UrlSearchInput,
-  UrlSelect,
-} from "@/shared/ui";
+import { AdminHeader, ListSortBar, ServerLink, UrlSearchInput, UrlSelect } from "@/shared/ui";
 
 import { CertManageMobileRows } from "./mobile/cert-manage-mobile-rows";
 
@@ -45,19 +36,6 @@ interface CertManageMobileViewProps {
 
 // 반려로 돌리기 확인 시트는 데스크톱 화면이 주소(action=revoke)를 보고 한 번만 연다.
 export function CertManageMobileView({ list, filter, sort, query }: CertManageMobileViewProps) {
-  const tabs = CERT_TABS.map((tab) =>
-    tab.href === "/cert"
-      ? {
-          href: tab.href,
-          label: (
-            <HStack align="center" gap="075" render={<span />}>
-              {tab.label}
-              <TabCount count={list.pendingCount} selected={false} />
-            </HStack>
-          ),
-        }
-      : tab,
-  );
   const linkChips = [
     { param: "user", label: list.userLabel && `유저: ${list.userLabel}` },
     { param: "rulebook", label: list.rulebookLabel && `룰북: ${list.rulebookLabel}` },
@@ -66,7 +44,7 @@ export function CertManageMobileView({ list, filter, sort, query }: CertManageMo
   return (
     <>
       <AdminHeader title="룰북 인증" />
-      <RouteTabs label="룰북 인증 화면" items={tabs} value="/cert/manage" />
+      <CertTabs value="/cert/manage" />
       <VStack gap="100" className="border-b border-gray-200 bg-surface px-200 py-150">
         <UrlSearchInput placeholder="닉네임 또는 디스코드 ID" />
         <UrlSelect
