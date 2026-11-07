@@ -66,6 +66,7 @@ export function UsersTable({ rows, sort, showState }: UsersTableProps) {
                     typography="body3"
                     weight="bold"
                     truncate
+                    title={row.nickname}
                     render={<ServerLink path={`/users/${row.id}`} />}
                     className="after:absolute after:inset-0"
                   >

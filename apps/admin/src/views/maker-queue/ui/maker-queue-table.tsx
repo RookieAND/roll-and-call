@@ -33,6 +33,7 @@ export function MakerQueueTable({ rows }: MakerQueueTableProps) {
                   typography="body3"
                   weight="bold"
                   truncate
+                  title={row.applicantNickname}
                   render={<ServerLink path={`/cert/maker/${row.id}`} />}
                   className="block after:absolute after:inset-0"
                 >

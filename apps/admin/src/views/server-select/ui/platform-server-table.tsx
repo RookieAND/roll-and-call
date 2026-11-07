@@ -2,7 +2,14 @@ import { HStack, Table, Text } from "@roll-and-call/ui";
 import Link from "next/link";
 
 import type { MyServer } from "@/shared/server";
-import { EMPTY_IMAGE, ServerIcon, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ServerIcon,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
+  TABLE_COLUMN,
+} from "@/shared/ui";
 
 interface PlatformServerTableProps {
   servers: MyServer[];
@@ -12,7 +19,14 @@ export function PlatformServerTable({ servers }: PlatformServerTableProps) {
   return (
     <Table.Root className="table-equal">
       <TableColumns
-        widths={[220, { fixed: 120 }, { fixed: 80 }, { fixed: 90 }, { fixed: 120 }, { fixed: 120 }]}
+        widths={[
+          TABLE_COLUMN.title,
+          { fixed: 120 },
+          TABLE_COLUMN.number,
+          TABLE_COLUMN.numberMid,
+          TABLE_COLUMN.numberLong,
+          TABLE_COLUMN.badge,
+        ]}
       />
       <Table.Header>
         <Table.Row>
@@ -37,6 +51,7 @@ export function PlatformServerTable({ servers }: PlatformServerTableProps) {
                   typography="body3"
                   weight="bold"
                   truncate
+                  title={server.name}
                   render={<Link href={`/${server.slug}`} />}
                   className="after:absolute after:inset-0"
                 >

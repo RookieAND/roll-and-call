@@ -2,7 +2,7 @@ import { Table } from "@roll-and-call/ui";
 
 import type { RulebookCategory, RulebookRow } from "@/entities/rulebook/server";
 import { quoteWithParticle, withAndParticle } from "@/shared/lib";
-import { EMPTY_IMAGE, TableColumns, TableEmptyRow } from "@/shared/ui";
+import { EMPTY_IMAGE, TableColumns, TableEmptyRow, TABLE_COLUMN } from "@/shared/ui";
 
 import { CategoryRow } from "./category-row";
 import { RulebookBookRow } from "./rulebook-book-row";
@@ -15,12 +15,19 @@ interface RulebookTableProps {
 export function RulebookTable({ groups, query }: RulebookTableProps) {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[320, { fixed: 120 }, { fixed: 120 }, { fixed: 44 }]} />
+      <TableColumns
+        widths={[
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.badgeLong,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.chevron,
+        ]}
+      />
       <Table.Header>
         <Table.Row>
           <Table.Head>룰북</Table.Head>
           <Table.Head>판본</Table.Head>
-          <Table.Head align="center">종류</Table.Head>
+          <Table.Head>종류</Table.Head>
           <Table.Head />
         </Table.Row>
       </Table.Header>

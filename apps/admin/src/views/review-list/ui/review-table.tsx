@@ -4,7 +4,15 @@ import { ChevronRight } from "lucide-react";
 import { REVIEW_SORT_COLUMN, type ReviewRow, type ReviewSortColumn } from "@/entities/review";
 import { GmBadge } from "@/entities/user";
 import { formatFullDateTime, type TableSort } from "@/shared/lib";
-import { ServerLink, SortableHead, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import {
+  ServerLink,
+  SortableHead,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
+  TABLE_COLUMN,
+  EmptyDash,
+} from "@/shared/ui";
 
 interface ReviewTableProps {
   rows: ReviewRow[];
@@ -23,13 +31,13 @@ export function ReviewTable({ rows, sort, gameChip, empty, detailQuery }: Review
     <Table.Root className="table-equal">
       <TableColumns
         widths={[
-          { fixed: 168 },
-          { fixed: 128 },
-          ...(gameColumns ? [{ fixed: 200 }, { fixed: 96 }] : []),
-          240,
-          { fixed: 64 },
-          { fixed: 120 },
-          { fixed: 44 },
+          TABLE_COLUMN.dateTime,
+          TABLE_COLUMN.nickname,
+          ...(gameColumns ? [TABLE_COLUMN.nickname, TABLE_COLUMN.nickname] : []),
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.number,
+          TABLE_COLUMN.badgeLong,
+          TABLE_COLUMN.chevron,
         ]}
       />
       <Table.Header>
@@ -75,14 +83,18 @@ export function ReviewTable({ rows, sort, gameChip, empty, detailQuery }: Review
                 </Text>
               </Table.Cell>
             ) : null}
-            {gameColumns ? <Table.Cell className="truncate">{row.gmNickname}</Table.Cell> : null}
+            {gameColumns ? (
+              <Table.Cell className="truncate" title={row.gmNickname}>
+                {row.gmNickname}
+              </Table.Cell>
+            ) : null}
             <Table.Cell>
               <Text typography="body3" truncate title={row.firstLine} className="block">
                 {row.firstLine}
               </Text>
             </Table.Cell>
             <Table.Cell align="end" numeric>
-              {row.photoCount ? `${row.photoCount}장` : null}
+              {row.photoCount ? `${row.photoCount}장` : <EmptyDash />}
             </Table.Cell>
             <Table.Cell>
               <HStack align="center" gap="050">

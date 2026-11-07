@@ -20,6 +20,7 @@ import {
   SortableHead,
   TableColumns,
   TableEmptyRow,
+  TABLE_COLUMN,
 } from "@/shared/ui";
 
 import type { CertifiedGmSortColumn } from "../model/certified-gm-sort";
@@ -82,7 +83,14 @@ export function CertifiedGmPanel({
       }
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[180, { fixed: 140 }, { fixed: 140 }, { fixed: 44 }]} />
+        <TableColumns
+          widths={[
+            TABLE_COLUMN.title,
+            TABLE_COLUMN.date,
+            TABLE_COLUMN.numberLong,
+            TABLE_COLUMN.chevron,
+          ]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>닉네임</Table.Head>
@@ -111,6 +119,7 @@ export function CertifiedGmPanel({
                   typography="body3"
                   weight="bold"
                   truncate
+                  title={gm.nickname}
                   render={<ServerLink path={`/users/${gm.userId}`} />}
                   className="block after:absolute after:inset-0"
                 >

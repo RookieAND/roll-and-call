@@ -11,6 +11,8 @@ import {
   TableColumns,
   TableEmptyRow,
   Tag,
+  TABLE_COLUMN,
+  EmptyDash,
 } from "@/shared/ui";
 
 import { CERT_ROW_LABEL, CERT_ROW_STATE, toCertRows } from "../model/to-cert-rows";
@@ -49,12 +51,18 @@ export function CertPanel({ user, page, pageSize: pageSizeParam }: CertPanelProp
       >
         <Table.Root className="table-equal">
           <TableColumns
-            widths={[0, { fixed: 88 }, { fixed: 160 }, { fixed: 104 }, { fixed: 44 }]}
+            widths={[
+              TABLE_COLUMN.title,
+              TABLE_COLUMN.badge,
+              TABLE_COLUMN.date,
+              TABLE_COLUMN.staff,
+              TABLE_COLUMN.chevron,
+            ]}
           />
           <Table.Header>
             <Table.Row>
               <Table.Head>룰북</Table.Head>
-              <Table.Head align="center">상태</Table.Head>
+              <Table.Head>상태</Table.Head>
               <Table.Head>처리 일자</Table.Head>
               <Table.Head>처리한 운영진</Table.Head>
               <Table.Head aria-label="조치" />
@@ -85,6 +93,7 @@ export function CertPanel({ user, page, pageSize: pageSizeParam }: CertPanelProp
                         typography="body3"
                         weight="bold"
                         truncate
+                        title={row.rulebook}
                         render={row.action ? <ServerLink path={row.action.href} /> : undefined}
                         className={row.action ? "after:absolute after:inset-0" : undefined}
                       >
@@ -97,7 +106,7 @@ export function CertPanel({ user, page, pageSize: pageSizeParam }: CertPanelProp
                       ) : null}
                     </VStack>
                   </Table.Cell>
-                  <Table.Cell align="center">
+                  <Table.Cell>
                     <Tag tone={state.tone}>{state.label}</Tag>
                   </Table.Cell>
                   <Table.Cell>
@@ -105,13 +114,7 @@ export function CertPanel({ user, page, pageSize: pageSizeParam }: CertPanelProp
                       {row.date}
                     </Text>
                   </Table.Cell>
-                  <Table.Cell>
-                    {row.staff ?? (
-                      <Text typography="body3" foreground="hint">
-                        -
-                      </Text>
-                    )}
-                  </Table.Cell>
+                  <Table.Cell>{row.staff ?? <EmptyDash />}</Table.Cell>
                   <Table.Cell align="end">
                     {row.action ? (
                       <Tooltip content={row.action.label}>

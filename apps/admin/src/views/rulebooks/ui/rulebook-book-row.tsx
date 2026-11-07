@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react";
 
 import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import type { RulebookRow } from "@/entities/rulebook/server";
-import { ServerLink, Tag } from "@/shared/ui";
+import { ServerLink, Tag, EmptyDash } from "@/shared/ui";
 
 import { homebrewMakerNote } from "../model/homebrew-maker-note";
 import { TreeGuide } from "./tree-guide";
@@ -38,14 +38,8 @@ export function RulebookBookRow({ row, last }: RulebookBookRowProps) {
           ) : null}
         </HStack>
       </Table.Cell>
+      <Table.Cell>{row.edition || <EmptyDash />}</Table.Cell>
       <Table.Cell>
-        {row.edition || (
-          <Text typography="body3" foreground="hint">
-            —
-          </Text>
-        )}
-      </Table.Cell>
-      <Table.Cell align="center">
         <Tag>{RULEBOOK_KIND_LABEL[row.kind]}</Tag>
       </Table.Cell>
       <Table.Cell align="end">

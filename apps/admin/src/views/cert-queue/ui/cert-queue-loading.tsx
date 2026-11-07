@@ -47,10 +47,10 @@ export function CertQueueLoading() {
           <SkeletonTable
             columns={[
               { label: "닉네임", kind: "text", width: 150, fixed: true },
-              { label: "신청한 책", kind: "text", width: 380 },
-              { label: "종류", kind: "badge", width: 110, fixed: true },
-              { label: "형식", kind: "badge", width: 90, fixed: true },
-              { label: "대기 일수", kind: "number", width: 90, fixed: true, align: "end" },
+              { label: "신청한 책", kind: "text", width: 240 },
+              { label: "종류", kind: "badge", width: 96, fixed: true },
+              { label: "형식", kind: "badge", width: 96, fixed: true },
+              { label: "대기 일수", kind: "number", width: 88, fixed: true, align: "end" },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />

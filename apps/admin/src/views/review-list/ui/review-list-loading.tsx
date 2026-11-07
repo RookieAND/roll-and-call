@@ -35,12 +35,12 @@ export function ReviewListLoading() {
           <SkeletonTable
             rows={5}
             columns={[
-              { label: "작성 시각", kind: "date", width: 168, fixed: true, sorted: true },
-              { label: "작성자", kind: "text", width: 128, fixed: true },
-              { label: "구인", kind: "text", width: 200, fixed: true },
-              { label: "GM", kind: "text", width: 96, fixed: true },
+              { label: "작성 시각", kind: "date", width: 192, fixed: true, sorted: true },
+              { label: "작성자", kind: "text", width: 150, fixed: true },
+              { label: "구인", kind: "text", width: 150, fixed: true },
+              { label: "GM", kind: "text", width: 150, fixed: true },
               { label: "본문", kind: "text", width: 240 },
-              { label: "사진", kind: "number", width: 64, fixed: true, align: "end" },
+              { label: "사진", kind: "number", width: 72, fixed: true, align: "end" },
               { label: "상태", kind: "badge", width: 120, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}

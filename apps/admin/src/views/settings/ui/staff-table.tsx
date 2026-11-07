@@ -2,7 +2,7 @@ import { Button, HStack, Table, Text } from "@roll-and-call/ui";
 
 import { formatFullDate, STAFF_ROLE_LABEL, withQuery } from "@/shared/lib";
 import type { StaffRow } from "@/shared/server";
-import { ServerLink, TableColumns, Tag } from "@/shared/ui";
+import { ServerLink, TableColumns, Tag, TABLE_COLUMN, EmptyDash } from "@/shared/ui";
 
 import { formatLastActive } from "../model/format-last-active";
 
@@ -15,7 +15,13 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
   return (
     <Table.Root className="table-equal">
       <TableColumns
-        widths={[180, { fixed: 104 }, { fixed: 152 }, { fixed: 152 }, { fixed: 150 }]}
+        widths={[
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.date,
+          TABLE_COLUMN.date,
+          TABLE_COLUMN.actionLong,
+        ]}
       />
       <Table.Header>
         <Table.Row>
@@ -40,7 +46,7 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
             <Table.Row key={row.userId}>
               <Table.Cell>
                 <HStack align="center" gap="075">
-                  <Text typography="body3" weight="bold" truncate>
+                  <Text typography="body3" weight="bold" truncate title={row.nickname}>
                     {row.nickname}
                   </Text>
                   {row.userId === viewerId ? <Tag>나</Tag> : null}
@@ -50,14 +56,22 @@ export function StaffTable({ rows, viewerId }: StaffTableProps) {
                 <Tag>{STAFF_ROLE_LABEL[row.role]}</Tag>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="hint">
-                  {row.since ? formatFullDate(row.since) : null}
-                </Text>
+                {row.since ? (
+                  <Text typography="body3" foreground="hint">
+                    {formatFullDate(row.since)}
+                  </Text>
+                ) : (
+                  <EmptyDash />
+                )}
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="hint">
-                  {row.lastActiveAt ? formatLastActive(row.lastActiveAt) : null}
-                </Text>
+                {row.lastActiveAt ? (
+                  <Text typography="body3" foreground="hint">
+                    {formatLastActive(row.lastActiveAt)}
+                  </Text>
+                ) : (
+                  <EmptyDash />
+                )}
               </Table.Cell>
               <Table.Cell align="end">
                 {owner ? null : (

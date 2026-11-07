@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { actionTone, auditTargetParts } from "@/entities/audit";
 import { formatFullDateTime, type TableSort } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
-import { ServerLink, SortableHead, TableColumns, Tag } from "@/shared/ui";
+import { ServerLink, SortableHead, TableColumns, Tag, TABLE_COLUMN, EmptyDash } from "@/shared/ui";
 
 interface AuditLogTableProps {
   rows: AuditEntry[];
@@ -20,12 +20,12 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
     <Table.Root className="table-equal">
       <TableColumns
         widths={[
-          { fixed: 176 },
-          { fixed: 148 },
-          { fixed: 220 },
-          240,
-          { fixed: 150 },
-          { fixed: 44 },
+          TABLE_COLUMN.dateTime,
+          TABLE_COLUMN.badgeAction,
+          TABLE_COLUMN.nickname,
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.staff,
+          TABLE_COLUMN.chevron,
         ]}
       />
       <Table.Header>
@@ -86,9 +86,11 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                       {target.reason}
                     </Text>
                   </Tooltip>
-                ) : null}
+                ) : (
+                  <EmptyDash />
+                )}
               </Table.Cell>
-              <Table.Cell className="truncate">{row.actor}</Table.Cell>
+              <Table.Cell>{row.actor}</Table.Cell>
               <Table.Cell align="end">
                 <ChevronRight
                   size={16}

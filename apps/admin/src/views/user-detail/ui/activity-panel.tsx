@@ -12,6 +12,8 @@ import {
   TableColumns,
   Tag,
   UrlSelect,
+  TABLE_COLUMN,
+  EmptyDash,
 } from "@/shared/ui";
 
 import { ACTIVITY_ROLE, type ActivityRole } from "../model/activity-role";
@@ -61,19 +63,19 @@ export function ActivityPanel({
       <Table.Root className="table-equal">
         <TableColumns
           widths={[
-            { fixed: 192 },
-            { fixed: 66 },
-            200,
-            { fixed: 140 },
-            { fixed: 100 },
-            { fixed: 96 },
-            { fixed: 44 },
+            TABLE_COLUMN.dateTime,
+            TABLE_COLUMN.badge,
+            TABLE_COLUMN.title,
+            TABLE_COLUMN.rulebook,
+            TABLE_COLUMN.nickname,
+            TABLE_COLUMN.badge,
+            TABLE_COLUMN.chevron,
           ]}
         />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>
-            <Table.Head align="center">역할</Table.Head>
+            <Table.Head>역할</Table.Head>
             <Table.Head>세션</Table.Head>
             <Table.Head>룰북</Table.Head>
             <Table.Head>GM</Table.Head>
@@ -101,7 +103,7 @@ export function ActivityPanel({
                   {formatFullSessionTime(activity.startsAt)}
                 </Text>
               </Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell>
                 <Tag>{activity.hosted ? "GM" : "참여"}</Tag>
               </Table.Cell>
               <Table.Cell>
@@ -116,16 +118,20 @@ export function ActivityPanel({
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="muted" truncate>
+                <Text typography="body3" foreground="muted">
                   {activity.rulebook}
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" truncate>
-                  {activity.hosted ? null : activity.gmNickname}
-                </Text>
+                {activity.hosted ? (
+                  <EmptyDash />
+                ) : (
+                  <Text typography="body3" truncate title={activity.gmNickname}>
+                    {activity.gmNickname}
+                  </Text>
+                )}
               </Table.Cell>
-              <Table.Cell>{activity.noShow ? <Tag>불참</Tag> : null}</Table.Cell>
+              <Table.Cell>{activity.noShow ? <Tag>불참</Tag> : <EmptyDash />}</Table.Cell>
               <Table.Cell align="end">
                 <ChevronRight size={16} aria-hidden className="inline text-hint" />
               </Table.Cell>

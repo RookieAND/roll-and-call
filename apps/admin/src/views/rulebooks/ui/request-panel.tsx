@@ -8,8 +8,18 @@ import {
   type RequestAction,
 } from "@/features/process-rulebook-request";
 import { formatFullDate } from "@/shared/lib";
-import { EMPTY_IMAGE, EmptyState, Panel, SortFixedNote, TableColumns, Tag } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  EmptyState,
+  Panel,
+  SortFixedNote,
+  TableColumns,
+  Tag,
+  TABLE_COLUMN,
+  EmptyDash,
+} from "@/shared/ui";
 
+import { requesterOf } from "../model/requester-of";
 import { RequestGamesPopover } from "./request-games-popover";
 
 interface RequestPanelProps {
@@ -36,13 +46,13 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
       <Table.Root className="table-equal">
         <TableColumns
           widths={[
-            260,
-            { fixed: 140 },
-            { fixed: 116 },
-            { fixed: 104 },
-            { fixed: 96 },
+            TABLE_COLUMN.title,
+            TABLE_COLUMN.date,
+            TABLE_COLUMN.badgeLong,
+            TABLE_COLUMN.badge,
+            TABLE_COLUMN.nickname,
             { fixed: 170 },
-            { fixed: 220 },
+            TABLE_COLUMN.icon,
           ]}
         />
         <Table.Header>
@@ -50,7 +60,7 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
             <Table.Head>요청한 룰북</Table.Head>
             <Table.Head>요청일</Table.Head>
             <Table.Head>카테고리</Table.Head>
-            <Table.Head align="center">종류</Table.Head>
+            <Table.Head>종류</Table.Head>
             <Table.Head>요청자</Table.Head>
             <Table.Head>요청 메모</Table.Head>
             <Table.Head />
@@ -77,18 +87,18 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" truncate>
-                  {request.category ?? "—"}
-                </Text>
+                {request.category ? (
+                  <Text typography="body3">{request.category}</Text>
+                ) : (
+                  <EmptyDash />
+                )}
               </Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell>
                 <Tag>{request.kind ? RULEBOOK_KIND_LABEL[request.kind] : "잘 모름"}</Tag>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" truncate>
-                  {request.otherRequesterCount > 0
-                    ? `${request.requesterNickname} 외 ${request.otherRequesterCount}명`
-                    : request.requesterNickname}
+                <Text typography="body3" truncate title={requesterOf(request)}>
+                  {requesterOf(request)}
                 </Text>
               </Table.Cell>
               <Table.Cell>
@@ -97,11 +107,11 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
                     <Text typography="body3">구인에서 직접 입력</Text>
                     <RequestGamesPopover games={request.games} />
                   </VStack>
-                ) : (
-                  <Text typography="body3" foreground={request.note ? "normal" : "hint"}>
-                    {request.note || "—"}
-                  </Text>
-                )}
+                ) : null}
+                {!request.games && request.note ? (
+                  <Text typography="body3">{request.note}</Text>
+                ) : null}
+                {!request.games && !request.note ? <EmptyDash /> : null}
               </Table.Cell>
               <Table.Cell align="end">
                 <RequestActions

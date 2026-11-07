@@ -2,6 +2,29 @@ import { isNumber } from "es-toolkit";
 
 export type TableColumnWidth = number | { fixed: number };
 
+// 열 폭 토큰. 제목은 표마다 늘어나는 열 하나이고 최소 폭만 준다. 퍼센트 폭은 쓰지 않는다.
+export const TABLE_COLUMN = {
+  chevron: { fixed: 44 },
+  icon: { fixed: 64 },
+  // 라벨 2~3자 / 4~6자
+  action: { fixed: 96 },
+  actionLong: { fixed: 120 },
+  // 기본 / 복수·긴 뱃지 / 활동 기록 조치명
+  badge: { fixed: 96 },
+  badgeLong: { fixed: 120 },
+  badgeAction: { fixed: 160 },
+  date: { fixed: 140 },
+  dateTime: { fixed: 192 },
+  // 머리글 4자 이하 / 5~6자 / 7자 이상
+  number: { fixed: 72 },
+  numberMid: { fixed: 88 },
+  numberLong: { fixed: 120 },
+  nickname: { fixed: 150 },
+  staff: { fixed: 140 },
+  rulebook: { fixed: 140 },
+  title: 240,
+} as const satisfies Record<string, TableColumnWidth>;
+
 interface TableColumnsProps {
   widths: TableColumnWidth[];
 }

@@ -14,6 +14,7 @@ import {
   ServerLink,
   SortableHead,
   type EmptyImage,
+  TABLE_COLUMN,
 } from "@/shared/ui";
 
 interface NoShowsTableProps {
@@ -29,13 +30,13 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
     <Table.Root className="table-equal">
       <TableColumns
         widths={[
-          { fixed: 110 },
-          200,
-          { fixed: 140 },
-          { fixed: 192 },
-          { fixed: 140 },
-          { fixed: 84 },
-          { fixed: 44 },
+          TABLE_COLUMN.nickname,
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.rulebook,
+          TABLE_COLUMN.dateTime,
+          TABLE_COLUMN.staff,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.chevron,
         ]}
       />
       <Table.Header>
@@ -70,6 +71,7 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
                 typography="body3"
                 weight="bold"
                 truncate
+                title={row.nickname}
                 render={<ServerLink path={hrefOf(row.id)} scroll={false} />}
                 className="after:absolute after:inset-0"
               >
@@ -82,7 +84,7 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
               </Text>
             </Table.Cell>
             <Table.Cell>
-              <Text typography="body3" foreground="muted" truncate>
+              <Text typography="body3" foreground="muted">
                 {row.rulebook}
               </Text>
             </Table.Cell>
@@ -92,9 +94,7 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
               </Text>
             </Table.Cell>
             <Table.Cell>
-              <Text typography="body3" truncate>
-                {row.handler}
-              </Text>
+              <Text typography="body3">{row.handler}</Text>
             </Table.Cell>
             <Table.Cell>
               <NoShowStatusTag status={row.status} />

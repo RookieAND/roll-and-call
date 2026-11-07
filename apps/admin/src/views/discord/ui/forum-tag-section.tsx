@@ -1,6 +1,6 @@
 import { Select, Table, Text } from "@roll-and-call/ui";
 
-import { Panel, TableColumns, Tag } from "@/shared/ui";
+import { Panel, TableColumns, Tag, TABLE_COLUMN } from "@/shared/ui";
 
 import { describeStatus } from "../model/describe-forum-tag-status";
 import { ForumTagChip } from "./forum-tag-chip";
@@ -47,7 +47,9 @@ export function ForumTagSection({
       bodyClassName="p-0"
     >
       <Table.Root className="table-equal">
-        <TableColumns widths={[200, { fixed: 192 }, { fixed: 96 }, { fixed: 204 }]} />
+        <TableColumns
+          widths={[TABLE_COLUMN.title, { fixed: 192 }, TABLE_COLUMN.badge, { fixed: 204 }]}
+        />
         <Table.Header>
           <Table.Row>
             <Table.Head>{columnLabel}</Table.Head>

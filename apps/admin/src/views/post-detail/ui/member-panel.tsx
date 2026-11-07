@@ -2,11 +2,17 @@ import { Button, Table, Text } from "@roll-and-call/ui";
 
 import type { PostDetail } from "@/entities/post/server";
 import { formatFullDateTime } from "@/shared/lib";
-import { EMPTY_IMAGE, TableEmptyRow, TableColumns, ServerLink } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  TableEmptyRow,
+  TableColumns,
+  ServerLink,
+  TABLE_COLUMN,
+  EmptyDash,
+} from "@/shared/ui";
 
 const NO_SHOW_WARNING_COUNT = 2;
 const COLUMN_COUNT = 4;
-const NOTE_COLUMN_WIDTH = 120;
 
 const EMPTY_COPY = {
   members: {
@@ -31,11 +37,11 @@ export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelP
     <Table.Root className="table-equal">
       <TableColumns
         widths={[
-          160,
-          { fixed: 180 },
-          { fixed: 170 },
-          { fixed: 96 },
-          ...(noteHref ? [{ fixed: NOTE_COLUMN_WIDTH }] : []),
+          TABLE_COLUMN.nickname,
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.dateTime,
+          TABLE_COLUMN.numberMid,
+          ...(noteHref ? [TABLE_COLUMN.actionLong] : []),
         ]}
       />
       <Table.Header>
@@ -44,7 +50,7 @@ export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelP
           <Table.Head>디스코드 ID</Table.Head>
           <Table.Head>신청 일시</Table.Head>
           {waiting ? (
-            <Table.Head align="center">대기 순번</Table.Head>
+            <Table.Head align="end">대기 순번</Table.Head>
           ) : (
             <Table.Head align="end">불참 횟수</Table.Head>
           )}
@@ -69,6 +75,7 @@ export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelP
                   typography="body3"
                   weight="bold"
                   truncate
+                  title={member.nickname}
                   render={<ServerLink path={`/users/${member.userId}`} />}
                   className="block after:absolute after:inset-0"
                 >
@@ -76,17 +83,22 @@ export function MemberPanel({ members, waiting = false, noteHref }: MemberPanelP
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" foreground="muted" truncate>
+                <Text
+                  typography="body3"
+                  foreground="muted"
+                  truncate
+                  title={`@${member.discordHandle}`}
+                >
                   @{member.discordHandle}
                 </Text>
               </Table.Cell>
               <Table.Cell numeric>
                 <Text typography="body3" foreground="muted">
-                  {member.joinedAt ? formatFullDateTime(member.joinedAt) : "없음"}
+                  {member.joinedAt ? formatFullDateTime(member.joinedAt) : <EmptyDash />}
                 </Text>
               </Table.Cell>
               {"listOrder" in member ? (
-                <Table.Cell align="center" numeric>
+                <Table.Cell align="end" numeric>
                   {member.listOrder}
                 </Table.Cell>
               ) : (

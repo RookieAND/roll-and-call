@@ -3,7 +3,15 @@ import { ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 
 import type { QuizQuestion } from "@/shared/server";
-import { EMPTY_IMAGE, Panel, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  Panel,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
+  TABLE_COLUMN,
+  EmptyDash,
+} from "@/shared/ui";
 
 interface QuizQuestionPanelProps {
   questions: QuizQuestion[];
@@ -38,7 +46,14 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
       </Text>
       <Table.Root className="table-equal">
         <TableColumns
-          widths={[320, { fixed: 200 }, { fixed: 80 }, { fixed: 64 }, { fixed: 80 }, { fixed: 44 }]}
+          widths={[
+            TABLE_COLUMN.title,
+            { fixed: 200 },
+            TABLE_COLUMN.numberMid,
+            TABLE_COLUMN.number,
+            TABLE_COLUMN.badge,
+            TABLE_COLUMN.chevron,
+          ]}
         />
         <Table.Header>
           <Table.Row>
@@ -46,7 +61,7 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
             <Table.Head>허용하는 답</Table.Head>
             <Table.Head align="end">참고 쪽수</Table.Head>
             <Table.Head align="end">출제</Table.Head>
-            <Table.Head align="center">상태</Table.Head>
+            <Table.Head>상태</Table.Head>
             <Table.Head />
           </Table.Row>
         </Table.Header>
@@ -69,6 +84,7 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
                 <Text
                   typography="body3"
                   truncate
+                  title={question.question}
                   render={
                     <Link
                       href={`?tab=quiz&question=${question.id}`}
@@ -89,16 +105,12 @@ export function QuizQuestionPanel({ questions }: QuizQuestionPanelProps) {
                 </HStack>
               </Table.Cell>
               <Table.Cell align="end" numeric>
-                {question.page || (
-                  <Text typography="body3" foreground="hint">
-                    —
-                  </Text>
-                )}
+                {question.page || <EmptyDash />}
               </Table.Cell>
               <Table.Cell align="end" numeric>
                 {question.askedCount}회
               </Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell>
                 <Tag>{question.active ? "사용 중" : "비활성"}</Tag>
               </Table.Cell>
               <Table.Cell align="end">

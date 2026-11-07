@@ -3,7 +3,14 @@ import { Table, Text } from "@roll-and-call/ui";
 import { NoShowStatusTag } from "@/entities/no-show";
 import type { UserDetail } from "@/entities/user/server";
 import { formatFullSessionTime, paginate, parsePageSize } from "@/shared/lib";
-import { EMPTY_IMAGE, ListPager, Panel, TableColumns, TableEmptyRow } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ListPager,
+  Panel,
+  TableColumns,
+  TableEmptyRow,
+  TABLE_COLUMN,
+} from "@/shared/ui";
 
 import { noShowStatus } from "../model/no-show-status";
 import { NoShowRowMenu } from "./no-show-row-menu";
@@ -31,14 +38,20 @@ export function NoShowPanel({ noShows, page, pageSize: pageSizeParam }: NoShowPa
     >
       <Table.Root className="table-equal">
         <TableColumns
-          widths={[{ fixed: 192 }, 200, { fixed: 140 }, { fixed: 96 }, { fixed: 56 }]}
+          widths={[
+            TABLE_COLUMN.dateTime,
+            TABLE_COLUMN.title,
+            TABLE_COLUMN.staff,
+            TABLE_COLUMN.badge,
+            { fixed: 56 },
+          ]}
         />
         <Table.Header>
           <Table.Row>
             <Table.Head>일시</Table.Head>
             <Table.Head>세션</Table.Head>
             <Table.Head>처리한 사람</Table.Head>
-            <Table.Head align="center">상태</Table.Head>
+            <Table.Head>상태</Table.Head>
             <Table.Head aria-label="더 보기" />
           </Table.Row>
         </Table.Header>
@@ -64,11 +77,9 @@ export function NoShowPanel({ noShows, page, pageSize: pageSizeParam }: NoShowPa
                 </Text>
               </Table.Cell>
               <Table.Cell>
-                <Text typography="body3" truncate>
-                  {noShow.recordedBy}
-                </Text>
+                <Text typography="body3">{noShow.recordedBy}</Text>
               </Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell>
                 <NoShowStatusTag status={noShowStatus(noShow)} />
               </Table.Cell>
               <Table.Cell align="end">

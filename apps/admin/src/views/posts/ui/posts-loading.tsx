@@ -43,13 +43,13 @@ export function PostsLoading() {
         <Panel className="flex-1" footer={<SkeletonPager />}>
           <SkeletonTable
             columns={[
-              { label: "제목", kind: "text", width: 360 },
-              { label: "GM", kind: "text", width: 124, fixed: true },
+              { label: "제목", kind: "text", width: 240 },
+              { label: "GM", kind: "text", width: 150, fixed: true },
               { label: "룰북", kind: "text", width: 140, fixed: true },
               { label: "세션 일시", kind: "date", width: 192, fixed: true, sorted: true },
-              { label: "참여", kind: "number", width: 76, fixed: true, align: "end" },
-              { label: "상태", kind: "text", width: 112, fixed: true, align: "center" },
-              { label: "운영진 조치", kind: "badge", width: 110, fixed: true },
+              { label: "참여", kind: "number", width: 72, fixed: true, align: "end" },
+              { label: "상태", kind: "text", width: 120, fixed: true },
+              { label: "운영진 조치", kind: "badge", width: 120, fixed: true },
               { label: "", kind: "empty", width: 44, fixed: true },
             ]}
           />

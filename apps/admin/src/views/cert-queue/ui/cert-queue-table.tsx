@@ -4,7 +4,14 @@ import { ChevronRight } from "lucide-react";
 import { CERT_FORMAT_LABEL, type CertQueueRow } from "@/entities/cert";
 import { appliedRulebookLabel, RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import { withQuery } from "@/shared/lib";
-import { EMPTY_IMAGE, ServerLink, TableColumns, TableEmptyRow, Tag } from "@/shared/ui";
+import {
+  EMPTY_IMAGE,
+  ServerLink,
+  TableColumns,
+  TableEmptyRow,
+  Tag,
+  TABLE_COLUMN,
+} from "@/shared/ui";
 
 const LONG_WAIT_DAYS = 5;
 
@@ -17,7 +24,14 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
   return (
     <Table.Root className="table-equal">
       <TableColumns
-        widths={[{ fixed: 150 }, 380, { fixed: 110 }, { fixed: 90 }, { fixed: 90 }, { fixed: 44 }]}
+        widths={[
+          TABLE_COLUMN.nickname,
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.numberMid,
+          TABLE_COLUMN.chevron,
+        ]}
       />
       <Table.Header>
         <Table.Row>
@@ -46,6 +60,7 @@ export function CertQueueTable({ rows, query }: CertQueueTableProps) {
                   typography="body3"
                   weight="bold"
                   truncate
+                  title={row.nickname}
                   render={<ServerLink path={withQuery(`/cert/${row.id}`, query, {})} />}
                   className="block after:absolute after:inset-0"
                 >

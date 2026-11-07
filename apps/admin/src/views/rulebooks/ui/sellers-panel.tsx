@@ -2,7 +2,7 @@ import { Table, Text } from "@roll-and-call/ui";
 
 import type { CertSellerRow } from "@/entities/rulebook/server";
 import { AddSellerButton, RemoveSellerButton } from "@/features/manage-cert-sellers";
-import { Panel, TableColumns } from "@/shared/ui";
+import { Panel, TableColumns, TABLE_COLUMN } from "@/shared/ui";
 
 interface SellersPanelProps {
   sellers: CertSellerRow[];
@@ -13,7 +13,9 @@ export function SellersPanel({ sellers }: SellersPanelProps) {
     <>
       <Panel title="전자책 판매처" right={<AddSellerButton />}>
         <Table.Root className="table-equal">
-          <TableColumns widths={[200, { fixed: 160 }, { fixed: 56 }]} />
+          <TableColumns
+            widths={[TABLE_COLUMN.title, TABLE_COLUMN.numberLong, TABLE_COLUMN.action]}
+          />
           <Table.Header>
             <Table.Row>
               <Table.Head>판매처</Table.Head>
@@ -25,7 +27,7 @@ export function SellersPanel({ sellers }: SellersPanelProps) {
             {sellers.map((seller) => (
               <Table.Row key={seller.id}>
                 <Table.Cell>
-                  <Text typography="body3" weight="bold" truncate>
+                  <Text typography="body3" weight="bold" truncate title={seller.name}>
                     {seller.name}
                   </Text>
                 </Table.Cell>

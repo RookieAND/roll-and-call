@@ -80,10 +80,10 @@ export function UserDetailLoading() {
                   rows={6}
                   columns={[
                     { label: "일시", kind: "date", width: 192 },
-                    { label: "역할", kind: "badge", width: 66, align: "center" },
-                    { label: "세션", kind: "text", width: 200 },
+                    { label: "역할", kind: "badge", width: 96 },
+                    { label: "세션", kind: "text", width: 240 },
                     { label: "룰북", kind: "text", width: 140 },
-                    { label: "GM", kind: "text", width: 100 },
+                    { label: "GM", kind: "text", width: 150 },
                     { label: "", kind: "empty", width: 96 },
                     { label: "", kind: "empty", width: 44, fixed: true },
                   ]}

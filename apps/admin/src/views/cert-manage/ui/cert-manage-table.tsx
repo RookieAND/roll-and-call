@@ -15,6 +15,7 @@ import {
   TableColumns,
   TableEmptyRow,
   Tag,
+  TABLE_COLUMN,
 } from "@/shared/ui";
 
 import { certRowActions } from "../model/cert-row-actions";
@@ -36,14 +37,21 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
   return (
     <Table.Root className="table-equal">
       <TableColumns
-        widths={[{ fixed: 170 }, { fixed: 260 }, 300, { fixed: 90 }, { fixed: 120 }, { fixed: 64 }]}
+        widths={[
+          TABLE_COLUMN.nickname,
+          { fixed: 260 },
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.badge,
+          TABLE_COLUMN.date,
+          TABLE_COLUMN.icon,
+        ]}
       />
       <Table.Header>
         <Table.Row>
           <SortableHead column="user" label="유저" sort={sort} />
           <Table.Head>판본</Table.Head>
           <Table.Head>인증한 책</Table.Head>
-          <Table.Head align="center">상태</Table.Head>
+          <Table.Head>상태</Table.Head>
           <SortableHead column="changed" label="최근 변경" sort={sort} />
           <Table.Head aria-label="동작" />
         </Table.Row>
@@ -74,6 +82,7 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
                     typography="body3"
                     weight="bold"
                     truncate
+                    title={row.nickname}
                     render={<ServerLink path={`/users/${row.userId}`} />}
                   >
                     {row.nickname}
@@ -103,7 +112,7 @@ export function CertManageTable({ rows, sort, query, noRecords }: CertManageTabl
                   </Text>
                 </HStack>
               </Table.Cell>
-              <Table.Cell align="center">
+              <Table.Cell>
                 <Tag tone={status.tone}>{status.label}</Tag>
               </Table.Cell>
               <Table.Cell>

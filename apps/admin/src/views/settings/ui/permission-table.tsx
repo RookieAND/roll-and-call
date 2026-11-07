@@ -1,6 +1,6 @@
 import { Table } from "@roll-and-call/ui";
 
-import { TableColumns } from "@/shared/ui";
+import { TableColumns, TABLE_COLUMN } from "@/shared/ui";
 
 import { PERMISSION_ROWS } from "../model/permission-rows";
 import { PermissionMark } from "./permission-mark";
@@ -8,7 +8,7 @@ import { PermissionMark } from "./permission-mark";
 export function PermissionTable() {
   return (
     <Table.Root className="table-equal">
-      <TableColumns widths={[240, { fixed: 100 }, { fixed: 100 }]} />
+      <TableColumns widths={[TABLE_COLUMN.title, TABLE_COLUMN.badge, TABLE_COLUMN.badge]} />
       <Table.Header>
         <Table.Row>
           <Table.Head>

@@ -1,6 +1,6 @@
 import { Button, Skeleton, Table, Text } from "@roll-and-call/ui";
 
-import { LoadingRegion, Panel, TableColumns } from "@/shared/ui";
+import { LoadingRegion, Panel, TABLE_COLUMN, TableColumns } from "@/shared/ui";
 
 import { DiscordFrame } from "./discord-frame";
 
@@ -31,7 +31,9 @@ export function ForumTagsLoading() {
             bodyClassName="p-0"
           >
             <Table.Root className="table-equal">
-              <TableColumns widths={[200, { fixed: 192 }, { fixed: 96 }, { fixed: 204 }]} />
+              <TableColumns
+                widths={[TABLE_COLUMN.title, { fixed: 192 }, TABLE_COLUMN.badge, { fixed: 204 }]}
+              />
               <Table.Header>
                 <Table.Row>
                   <Table.Head>{columnLabel}</Table.Head>

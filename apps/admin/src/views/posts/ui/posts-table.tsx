@@ -11,6 +11,8 @@ import {
   TableEmptyRow,
   Tag,
   type EmptyImage,
+  TABLE_COLUMN,
+  EmptyDash,
 } from "@/shared/ui";
 
 const COLUMN_COUNT = 8;
@@ -30,14 +32,14 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
     <Table.Root className="table-equal">
       <TableColumns
         widths={[
-          360,
-          { fixed: 124 },
-          { fixed: 140 },
-          { fixed: 192 },
-          { fixed: 76 },
-          { fixed: 112 },
-          { fixed: 110 },
-          { fixed: 44 },
+          TABLE_COLUMN.title,
+          TABLE_COLUMN.nickname,
+          TABLE_COLUMN.rulebook,
+          TABLE_COLUMN.dateTime,
+          TABLE_COLUMN.number,
+          TABLE_COLUMN.badgeLong,
+          TABLE_COLUMN.badgeLong,
+          TABLE_COLUMN.chevron,
         ]}
       />
       <Table.Header>
@@ -47,7 +49,7 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
           <Table.Head>룰북</Table.Head>
           <SortableHead column={POST_SORT_COLUMN.at} label="세션 일시" sort={sort} />
           <SortableHead column={POST_SORT_COLUMN.members} label="참여" sort={sort} align="end" />
-          <Table.Head align="center">상태</Table.Head>
+          <Table.Head>상태</Table.Head>
           <Table.Head>운영진 조치</Table.Head>
           <Table.Head aria-label="열기" />
         </Table.Row>
@@ -75,9 +77,11 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
                 {row.isPrivate && <Tag>지정 모집</Tag>}
               </HStack>
             </Table.Cell>
-            <Table.Cell className="truncate">{row.gmNickname}</Table.Cell>
+            <Table.Cell className="truncate" title={row.gmNickname}>
+              {row.gmNickname}
+            </Table.Cell>
             <Table.Cell>
-              <Text typography="body3" foreground="muted" truncate>
+              <Text typography="body3" foreground="muted">
                 {row.rulebook}
               </Text>
             </Table.Cell>
@@ -89,19 +93,13 @@ export function PostsTable({ rows, sort, empty, detailQuery }: PostsTableProps) 
             <Table.Cell align="end" numeric>
               {row.memberCount}/{row.capacity}명
             </Table.Cell>
-            <Table.Cell align="center">
+            <Table.Cell>
               <Text typography="body3" foreground="muted">
                 {row.status}
               </Text>
             </Table.Cell>
             <Table.Cell>
-              {row.staffAction ? (
-                <Tag>{row.staffAction}</Tag>
-              ) : (
-                <Text typography="body3" foreground="hint">
-                  —
-                </Text>
-              )}
+              {row.staffAction ? <Tag>{row.staffAction}</Tag> : <EmptyDash />}
             </Table.Cell>
             <Table.Cell align="end">
               <ChevronRight size={16} aria-hidden className="inline text-hint" />
