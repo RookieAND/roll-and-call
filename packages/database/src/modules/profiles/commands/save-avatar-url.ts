@@ -3,6 +3,12 @@ import { eq } from "drizzle-orm";
 import { db } from "#db/client";
 import { profiles } from "#db/schema";
 
-export async function saveAvatarUrl({ userId, avatarUrl }: { userId: string; avatarUrl: string }) {
+export async function saveAvatarUrl({
+  userId,
+  avatarUrl,
+}: {
+  userId: string;
+  avatarUrl: string | null;
+}) {
   await db.update(profiles).set({ avatarUrl }).where(eq(profiles.id, userId));
 }
