@@ -11,6 +11,7 @@ import { AppBar } from "@/shared/ui";
 import { toDrawOutcome } from "../model/to-draw-outcome";
 import { AppliedDraw } from "./applied-draw";
 import { DrawResultFrame } from "./draw-result-frame";
+import { DrawResultPanel } from "./draw-result-panel";
 import { EmptyDraw } from "./empty-draw";
 import { MyDrawResult } from "./my-draw-result";
 import { NoDrawEmpty } from "./no-draw-empty";
@@ -71,6 +72,15 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
     : undefined;
 
   let content = <AppliedDraw gameId={id} title={game.title} outcome={outcome} drawnAt={drawnAt} />;
+  const panel = hasRolls && !mine && (
+    <DrawResultPanel
+      gameId={id}
+      title={game.title}
+      applicantCount={outcome.rolled.length}
+      confirmedCount={outcome.confirmed.length}
+      drawnAt={drawnAt}
+    />
+  );
   if (!hasRolls) content = <EmptyDraw gameId={id} title={game.title} />;
   else if (mine) {
     content = (
@@ -89,7 +99,7 @@ export async function DrawResultView({ id }: DrawResultViewProps) {
   }
 
   return (
-    <DrawResultFrame appBar={resultAppBar}>
+    <DrawResultFrame appBar={resultAppBar} panel={panel}>
       <Container size="sm" className="py-200 desktop:max-w-none">
         {content}
       </Container>

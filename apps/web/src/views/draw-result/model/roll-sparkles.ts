@@ -31,4 +31,6 @@ export const ROLL_SPARKLES = {
       duration: 1.6,
     },
   ],
+  [ROLL_GRADE.extremeFailure]: [],
+  [ROLL_GRADE.criticalFailure]: [],
 } as const satisfies Record<RollGrade, Sparkle[]>;

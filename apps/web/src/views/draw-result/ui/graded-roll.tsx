@@ -16,15 +16,18 @@ const pill = cva(
         critical: "animate-roll-shine bg-critical-bg text-critical-ink",
         extreme:
           "bg-extreme-bg text-extreme-ink shadow-[inset_0_0_0_1px_var(--color-extreme-border)]",
+        extremeFailure:
+          "bg-danger-50 text-danger-600 shadow-[inset_0_0_0_1px_var(--color-danger-200)]",
+        criticalFailure: "bg-danger-solid text-surface",
       },
     },
   },
 );
 
-const sparkleColor = {
+const sparkleColor: Partial<Record<RollGrade, string>> = {
   critical: "text-critical-sparkle",
   extreme: "text-extreme-ink",
-} as const satisfies Record<RollGrade, string>;
+};
 
 interface GradedRollProps {
   value: number;
@@ -34,9 +37,10 @@ interface GradedRollProps {
 
 export function GradedRoll({ value, grade, typography }: GradedRollProps) {
   const critical = grade === ROLL_GRADE.critical;
+  const pushedRight = critical || grade === ROLL_GRADE.criticalFailure;
 
   return (
-    <span className={cn("relative inline-flex flex-none animate-roll-in", critical && "ml-125")}>
+    <span className={cn("relative inline-flex flex-none animate-roll-in", pushedRight && "ml-125")}>
       <span className={pill({ grade })}>
         {critical && (
           <span

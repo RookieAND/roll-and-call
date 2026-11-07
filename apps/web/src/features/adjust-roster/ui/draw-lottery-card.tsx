@@ -74,7 +74,12 @@ export function DrawLotteryCard({
           <LineBreaks lines={lines} />
         </Callout.Description>
         {!isNull(blockedMinPlayers) && (
-          <Text typography="body4" foreground="muted" render={<p />} className="col-start-2 mt-100">
+          <Text
+            typography="body4"
+            foreground="muted"
+            render={<p />}
+            className="col-span-full mt-100"
+          >
             <LineBreaks
               lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}
             />

@@ -14,17 +14,19 @@ interface AppliedDrawProps {
   drawnAt: Date;
 }
 
-// GM·직접 확정자·나간 사람·비참여자가 보는 결과(보드 12 C·H).
+// GM·직접 확정자·나간 사람·비참여자가 보는 결과(보드 12 C·H). 1100px 이상에서는 요약과 돌아가기 버튼이 우측 패널(DrawResultPanel)로 간다.
 export function AppliedDraw({ gameId, title, outcome, drawnAt }: AppliedDrawProps) {
   return (
     <FloatingBar.Root elevated={false}>
       <VStack gap="250">
-        <DrawSummary
-          title={title}
-          applicantCount={outcome.rolled.length}
-          confirmedCount={outcome.confirmed.length}
-          drawnAt={drawnAt}
-        />
+        <div className="desktop:hidden">
+          <DrawSummary
+            title={title}
+            applicantCount={outcome.rolled.length}
+            confirmedCount={outcome.confirmed.length}
+            drawnAt={drawnAt}
+          />
+        </div>
         <DrawQueue
           label="확정"
           caption="값이 낮은 순"
@@ -40,7 +42,9 @@ export function AppliedDraw({ gameId, title, outcome, drawnAt }: AppliedDrawProp
           />
         )}
       </VStack>
-      <BackToGameBar gameId={gameId} />
+      <div className="desktop:hidden">
+        <BackToGameBar gameId={gameId} />
+      </div>
     </FloatingBar.Root>
   );
 }
