@@ -63,8 +63,8 @@ export function CertApplyForm({
   const { pending, run } = useAction();
   const retry = !isNull(rejection);
   const missing = draftMissing(draft);
-  const totalSteps = quiz ? 3 : 2;
-  const step = onQuiz ? 3 : 2;
+  const totalSteps = quiz ? 4 : 3;
+  const step = onQuiz ? 4 : 3;
   const submitLabel = retry ? "다시 신청하기" : "신청하기";
 
   const submit = () =>

@@ -21,6 +21,7 @@ const book = (id: string, overrides: Partial<MyRulebook> = {}) =>
     latestApplication: null,
     unlockedBy: null,
     includedInId: null,
+    homebrew: null,
     ...overrides,
   }) as MyRulebook;
 

@@ -9,6 +9,7 @@ interface RulebookSetBadgeProps {
 }
 
 export function RulebookSetBadge({ set }: RulebookSetBadgeProps) {
-  const { label, colorPalette } = rulebookSetBadgeOf(set);
-  return <Badge colorPalette={colorPalette}>{label}</Badge>;
+  const badge = rulebookSetBadgeOf(set);
+  if (!badge) return null;
+  return <Badge colorPalette={badge.colorPalette}>{badge.label}</Badge>;
 }

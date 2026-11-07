@@ -1,6 +1,6 @@
 import type { Game } from "@roll-and-call/database";
 import type { Server } from "@roll-and-call/database";
-import { findGameCategoryId, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
+import { findGameRuleTagKey, findGameCategoryLabel } from "@roll-and-call/database/rulebooks";
 import { createForumMessagePost, syncForumFollowUps } from "@roll-and-call/discord";
 import {
   loadRecruitTarget,
@@ -26,7 +26,7 @@ export async function notifyGameCreated({
 }): Promise<string | undefined> {
   const [target, categoryId, ruleLabel] = await Promise.all([
     loadRecruitTarget(server),
-    findGameCategoryId({ serverId: server.id, gameId: game.id }),
+    findGameRuleTagKey({ serverId: server.id, gameId: game.id }),
     findGameCategoryLabel({ serverId: server.id, gameId: game.id }),
   ]);
   if (!target || !server.recruitChannelId) {

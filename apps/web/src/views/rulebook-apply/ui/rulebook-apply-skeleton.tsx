@@ -9,20 +9,19 @@ export function RulebookApplySkeleton() {
       readable
       appBar={
         <AppBar
-          back="/me/rulebooks"
-          backIcon="close"
+          back="/me/rulebooks/apply"
           title="인증 신청"
           heading={false}
           action={
             <Text typography="body4" foreground="hint" numeric className="px-100">
-              1 / 2
+              2 / 3
             </Text>
           }
         />
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={1} max={2} className="h-[3px] rounded-none" aria-label="진행" />
+        <Progress value={2} max={3} className="h-[3px] rounded-none" aria-label="진행" />
         <Container
           size="sm"
           className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col"

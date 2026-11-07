@@ -12,6 +12,7 @@ import {
 import { isNull } from "es-toolkit";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { toMyRulebooks } from "@/entities/rulebook";
 import { LoginRequired } from "@/features/auth";
@@ -22,6 +23,9 @@ import { AppBar, DESKTOP_CARD_CLASS, LineBreaks, PageShell } from "@/shared/ui";
 import { myRulebooksHome } from "../model/my-rulebooks-home";
 import { EnforcementBanner } from "./enforcement-banner";
 import { ListSection } from "./list-section";
+import { MyHomebrewErrorBoundary } from "./my-homebrew-error-boundary";
+import { MyHomebrewSection } from "./my-homebrew-section";
+import { MyHomebrewSkeleton } from "./my-homebrew-skeleton";
 import { OwnedCategoryCard } from "./owned-category-card";
 
 const TITLE = "내 룰북";
@@ -85,6 +89,11 @@ export async function MyRulebooksView() {
                 ))}
               </VStack>
             )}
+            <MyHomebrewErrorBoundary>
+              <Suspense fallback={<MyHomebrewSkeleton />}>
+                <MyHomebrewSection serverId={server.id} userId={user.id} />
+              </Suspense>
+            </MyHomebrewErrorBoundary>
             {home.requests.length > 0 && (
               <ListSection title="추가 요청한 룰북" rows={home.requests} />
             )}
@@ -128,7 +137,7 @@ export async function MyRulebooksView() {
               {applyDisabled ? (
                 <Button size="lg" disabled className="w-full">
                   <Plus size={16} strokeWidth={2.2} aria-hidden />
-                  인증 신청하기
+                  룰북 신청하기
                 </Button>
               ) : (
                 <Button
@@ -139,7 +148,7 @@ export async function MyRulebooksView() {
                   className="w-full"
                 >
                   <Plus size={16} strokeWidth={2.2} aria-hidden />
-                  인증 신청하기
+                  룰북 신청하기
                 </Button>
               )}
             </Container>

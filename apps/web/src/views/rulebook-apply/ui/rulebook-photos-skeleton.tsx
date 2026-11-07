@@ -8,18 +8,18 @@ export function RulebookPhotosSkeleton() {
       readable
       appBar={
         <AppBar
-          back="/me/rulebooks/apply"
+          back="/me/rulebooks/apply?step=books"
           title="인증 신청"
           action={
             <Text typography="body4" foreground="hint" numeric className="px-100">
-              2 / 2
+              3 / 3
             </Text>
           }
         />
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={2} max={2} className="h-[3px] rounded-none" aria-label="진행" />
+        <Progress value={3} max={3} className="h-[3px] rounded-none" aria-label="진행" />
         <Container size="sm">
           <VStack gap="200" aria-busy className="pt-200 pb-250">
             <VStack gap="050">

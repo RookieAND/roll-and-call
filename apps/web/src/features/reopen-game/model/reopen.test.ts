@@ -109,6 +109,17 @@ describe("reopenDefaults", () => {
     expect(ruleNotice).toEqual({ kind: RULE_NOTICE.notFound });
   });
 
+  it("쓸 수 없게 된 자작 룰이면 자작 룰 안내로 비운다", () => {
+    const { defaults, ruleNotice } = reopenDefaults({
+      game: { ...original, rulebookId: "없음" },
+      rulebooks: data([book("7판")]),
+      homebrew: true,
+      now: NOW,
+    });
+    expect(defaults).toMatchObject({ rule: "", rulebookId: "" });
+    expect(ruleNotice).toEqual({ kind: RULE_NOTICE.homebrewUnavailable });
+  });
+
   it("인증이 막히면 룰을 비우고 판본 이름을 알려 준다", () => {
     const { defaults, ruleNotice } = reopenDefaults({
       game: original,

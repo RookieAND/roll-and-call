@@ -34,3 +34,13 @@ export {
   type SupplementOptionState,
 } from "./model/supplement-options";
 export { certPhotoPathOf } from "./model/cert-photo-path";
+export { isOwnCertFile } from "./model/is-own-cert-file";
+export { uploadCertPhoto } from "./api/upload-cert-photo";
+export {
+  CERT_PHOTO_ACCEPT,
+  CERT_PHOTO_MAX_BYTES,
+  CERT_PHOTO_MAX_SIDE,
+  CERT_PHOTO_TOO_LARGE,
+  CERT_PHOTO_UPLOAD_FAILED,
+  CERT_RECEIPT_ACCEPT,
+} from "./model/cert-photo-rules";

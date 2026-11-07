@@ -1,5 +1,5 @@
 import type { CertApplication } from "@roll-and-call/database";
-import type { RulebookRecords } from "@roll-and-call/database/certifications";
+import type { HomebrewOwnership, RulebookRecords } from "@roll-and-call/database/certifications";
 
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";
@@ -21,6 +21,8 @@ export interface MyRulebook {
   categoryName: string;
   supersedesId: string | null;
   includedInId: string | null;
+  // 자작 룰이면 내가 만든 룰(mine)인지 다른 사람의 룰(shared)인지. 사용 범위는 알 수 없다.
+  homebrew: HomebrewOwnership | null;
   state: CertState | null;
   stateAt: Date | null;
   latestApplication: CertApplication | null;

@@ -48,6 +48,9 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.rulebookRequestAdded:
     case NOTIFICATION_KIND.rulebookRequestDeclined:
       return "/me/rulebooks";
+    case NOTIFICATION_KIND.homebrewApproved:
+    case NOTIFICATION_KIND.homebrewRejected:
+      return `/me/rulebooks/maker/${payload.params.applicationId}`;
     case NOTIFICATION_KIND.reviewHidden:
     case NOTIFICATION_KIND.reviewUnhidden:
     case NOTIFICATION_KIND.reviewDeleted:

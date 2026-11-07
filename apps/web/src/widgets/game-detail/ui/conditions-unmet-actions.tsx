@@ -15,7 +15,7 @@ export function ConditionsUnmetActions({ lines, certUnmet }: ConditionsUnmetActi
       <ActionNotice title="신청 조건을 채우지 못했습니다" lines={lines} colorPalette="danger" />
       {certUnmet && (
         <Button
-          render={<ServerLink path="/me/rulebooks/apply" />}
+          render={<ServerLink path="/me/rulebooks/apply?step=books" />}
           variant="outline"
           size="lg"
           className="w-full"

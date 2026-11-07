@@ -42,7 +42,8 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
     : [];
   const hasOptions = options.length > 0;
   const ruleChosen = Boolean(rulebookId);
-  const showListButton = hasOptions || !ruleChosen;
+  const homebrew = Boolean(set?.homebrew);
+  const showListButton = !homebrew && (hasOptions || !ruleChosen);
   const full = items.length >= SUPPLEMENTS_MAX;
   const { visible, foldable, hiddenCount } = foldSupplements({ items, expanded });
   const pickedIds = items.flatMap((item) =>
@@ -50,7 +51,7 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
   );
   const room = SUPPLEMENTS_MAX - (items.length - pickedIds.length);
   const hint = ruleChosen
-    ? supplementHint({ full, hasOptions, editing })
+    ? supplementHint({ full, hasOptions, editing, homebrew })
     : ["룰을 고르면 서플리먼트를 넣을 수 있습니다."];
   const fieldError = formState.errors.supplements?.message;
 
@@ -142,9 +143,11 @@ export function GameSupplementField({ form, rulebooks, editing }: GameSupplement
           {fieldError}
         </Text>
       ) : (
-        <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
-          <LineBreaks lines={hint} />
-        </Text>
+        hint.length > 0 && (
+          <Text typography="body4" foreground="hint" render={<p />} className="break-keep">
+            <LineBreaks lines={hint} />
+          </Text>
+        )
       )}
 
       {set && hasOptions && (

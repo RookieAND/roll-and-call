@@ -9,6 +9,7 @@ export {
   postStaffNotice,
   STAFF_NOTICE_KIND,
   syncCertStaffNotices,
+  syncHomebrewStaffNotice,
 } from "@roll-and-call/game-notices";
 export { announceRecruitmentComplete } from "./discord/announce-recruitment-complete";
 export { announceMonthlyAwards } from "./discord/announce-monthly-awards";

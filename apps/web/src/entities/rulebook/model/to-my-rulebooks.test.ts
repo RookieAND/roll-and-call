@@ -17,6 +17,7 @@ const catalogBook = (id: string, overrides: Record<string, unknown> = {}) => ({
   categoryName: "크툴루",
   supersedesId: null,
   includedInId: null,
+  homebrew: null,
   ...overrides,
 });
 

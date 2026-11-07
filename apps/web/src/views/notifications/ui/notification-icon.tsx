@@ -1,9 +1,10 @@
 import {
   NOTIFICATION_GROUP,
+  NOTIFICATION_KIND,
   notificationGroup,
   type NotificationKind,
 } from "@roll-and-call/database/notifications/model";
-import { Calendar, MessageCircle, ShieldCheck, User } from "lucide-react";
+import { Calendar, MessageCircle, PenLine, ShieldCheck, User } from "lucide-react";
 
 const ICON = {
   [NOTIFICATION_GROUP.game]: Calendar,
@@ -12,12 +13,17 @@ const ICON = {
   [NOTIFICATION_GROUP.account]: User,
 } as const;
 
+const HOMEBREW_KINDS: ReadonlySet<NotificationKind> = new Set([
+  NOTIFICATION_KIND.homebrewApproved,
+  NOTIFICATION_KIND.homebrewRejected,
+]);
+
 interface NotificationIconProps {
   kind: NotificationKind;
 }
 
 export function NotificationIcon({ kind }: NotificationIconProps) {
-  const Icon = ICON[notificationGroup(kind)];
+  const Icon = HOMEBREW_KINDS.has(kind) ? PenLine : ICON[notificationGroup(kind)];
   return (
     <span className="flex size-8 flex-none items-center justify-center rounded-full bg-gray-50 text-gray-600">
       <Icon size={18} aria-hidden />

@@ -11,7 +11,13 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { CERT_FORMAT, CERT_FORMAT_LABEL, CERT_SHOTS, rulebookLabel } from "@/entities/rulebook";
+import {
+  CERT_FORMAT,
+  CERT_FORMAT_LABEL,
+  CERT_SHOTS,
+  isOwnCertFile,
+  rulebookLabel,
+} from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -21,7 +27,6 @@ import {
   STAFF_NOTICE_KIND,
 } from "@/shared/server";
 
-import { isOwnCertFile } from "../model/is-own-cert-file";
 import { isQuizAnswer } from "../model/is-quiz-answer";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 import { QUIZ_WRONG_ANSWER } from "../model/quiz-wrong-answer";

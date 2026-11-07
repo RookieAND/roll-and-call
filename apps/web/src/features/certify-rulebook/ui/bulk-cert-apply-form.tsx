@@ -47,8 +47,8 @@ export function BulkCertApplyForm({
 
   const rulebookIds = rulebooks.map((rulebook) => rulebook.id);
   const hasQuiz = quizzes.length > 0;
-  const totalSteps = hasQuiz ? 3 : 2;
-  const step = onQuiz ? 3 : 2;
+  const totalSteps = hasQuiz ? 4 : 3;
+  const step = onQuiz ? 4 : 3;
   const photoMissing = bulkDraftMissing(draft);
   const quizMissing = bulkQuizMissing({
     rulebookIds: quizzes.map((quiz) => quiz.rulebookId),

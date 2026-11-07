@@ -15,7 +15,7 @@ import {
 
 // key는 공개 URL 모양 문자열이다. 버킷은 비공개라 그 주소로 열리지 않지만,
 // 하루 정리 함수 orphan_storage_objects(0041)가 이 모양으로 연결 여부를 판단하므로 경로로 바꾸면 모든 인증 사진이 지워진다.
-// 미리보기는 blob 주소(previewUrl)로 그리고, 칸을 지우거나 화면을 떠날 때 revokePreview로 푼다.
+// 미리보기는 blob 주소(previewUrl)로 그리고, 칸을 지우거나 화면을 떠날 때 호출부가 URL.revokeObjectURL로 푼다.
 // 경로 셋째 칸(servers/서버 id/내 id)이 내 id여야 스토리지 정책이 올리기를 허락한다.
 export async function uploadCertPhoto({
   serverId,

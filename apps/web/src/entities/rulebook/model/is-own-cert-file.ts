@@ -1,4 +1,4 @@
-import { certPhotoPathOf } from "@/entities/rulebook";
+import { certPhotoPathOf } from "./cert-photo-path";
 
 interface IsOwnCertFileInput {
   url: string;

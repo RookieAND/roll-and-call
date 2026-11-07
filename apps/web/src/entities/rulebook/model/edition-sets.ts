@@ -14,6 +14,7 @@ export interface EditionSet {
   cores: MyRulebook[];
   extras: MyRulebook[];
   free: boolean;
+  homebrew: MyRulebook["homebrew"];
   opened: boolean;
   earned: boolean;
   unlockedBy: string | null;
@@ -47,6 +48,7 @@ export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
         (book) => book.kind !== RULEBOOK_KIND.core && editionSetKey(book) === key,
       ),
       free: cores.every((core) => !core.certRequired),
+      homebrew: first.homebrew,
       opened,
       earned: opened && cores.some((core) => core.certRequired),
       unlockedBy: opened && unlocking ? unlocking.edition || unlocking.shortName : null,

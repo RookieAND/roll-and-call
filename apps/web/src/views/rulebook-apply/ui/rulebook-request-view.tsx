@@ -18,7 +18,10 @@ export async function RulebookRequestView({ query }: RulebookRequestViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   if (!user) {
     return (
-      <PageShell readable appBar={<AppBar back="/me/rulebooks/apply" title="룰북 추가 요청" />}>
+      <PageShell
+        readable
+        appBar={<AppBar back="/me/rulebooks/apply?step=books" title="룰북 추가 요청" />}
+      >
         <div className={DESKTOP_CARD_CLASS}>
           <Container size="sm">
             <div className="py-300">
@@ -34,7 +37,9 @@ export async function RulebookRequestView({ query }: RulebookRequestViewProps) {
   return (
     <PageShell
       readable
-      appBar={<AppBar back="/me/rulebooks/apply" title="룰북 추가 요청" heading={false} />}
+      appBar={
+        <AppBar back="/me/rulebooks/apply?step=books" title="룰북 추가 요청" heading={false} />
+      }
     >
       <div className={DESKTOP_CARD_CLASS}>
         <RulebookRequestScreen

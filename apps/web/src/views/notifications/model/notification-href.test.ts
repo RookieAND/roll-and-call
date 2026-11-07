@@ -98,6 +98,20 @@ const CASES: [NotificationPayload, string | null][] = [
     { kind: NOTIFICATION_KIND.rulebookRequestDeclined, params: { rulebookName: "인세인" } },
     "/me/rulebooks",
   ],
+  [
+    {
+      kind: NOTIFICATION_KIND.homebrewApproved,
+      params: { applicationId: "h1", ruleName: "달그림자" },
+    },
+    "/me/rulebooks/maker/h1",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.homebrewRejected,
+      params: { applicationId: "h1", ruleName: "달그림자" },
+    },
+    "/me/rulebooks/maker/h1",
+  ],
   [{ kind: NOTIFICATION_KIND.reviewHidden, params: { ...game, reason: "x" } }, "/me/reviews"],
   [{ kind: NOTIFICATION_KIND.reviewUnhidden, params: game }, "/me/reviews"],
   [{ kind: NOTIFICATION_KIND.reviewDeleted, params: { ...game, reason: "x" } }, "/me/reviews"],

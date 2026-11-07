@@ -61,9 +61,6 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     notice: formColumns.notice,
   });
   const owner = { serverId: server.id, gameId: id, gmId: user.id };
-  const myRulebooks = toMyRulebooks(
-    await getRulebookRecords({ serverId: server.id, userId: user.id }),
-  );
 
   // 같은 구인의 신청·명단 조정·추첨과 줄을 서도록 행을 잠그고 검사와 저장을 한 번에 한다.
   const result = await withTransaction(async (transaction) => {
@@ -83,7 +80,14 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
     });
     if (block || !game) return block ?? { error: EDIT_FORBIDDEN_MESSAGE };
 
-    // 룰은 바꿀 수 없으므로 서플리먼트는 저장된 룰의 판본에서 고른다.
+    // 룰은 바꿀 수 없으므로 서플리먼트는 저장된 룰의 판본에서 고른다. 그 룰은 사용 범위가 좁아져도 찾는다.
+    const myRulebooks = toMyRulebooks(
+      await getRulebookRecords({
+        serverId: server.id,
+        userId: user.id,
+        includeRulebookId: game.rulebookId,
+      }),
+    );
     const set = game.rulebookId ? ruleSetOf({ myRulebooks, rulebookId: game.rulebookId }) : null;
     const supplementCheck = checkSupplements({
       supplements: values.supplements,

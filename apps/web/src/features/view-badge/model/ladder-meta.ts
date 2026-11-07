@@ -33,5 +33,6 @@ export const LADDER_META: Record<BadgeLadderKey, LadderMeta> = {
   [BADGE_LADDER.developer]: SPECIAL_META,
   [BADGE_LADDER.guildMaster]: SPECIAL_META,
   [BADGE_LADDER.apprentice]: SPECIAL_META,
+  [BADGE_LADDER.worldOwner]: SPECIAL_META,
   ...HIDDEN_META,
 };

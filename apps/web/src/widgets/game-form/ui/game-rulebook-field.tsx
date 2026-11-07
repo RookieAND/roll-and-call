@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { RULE_GATE, ruleGate, ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
-import type { RuleNotice } from "@/features/reopen-game";
+import { RULE_NOTICE, type RuleNotice } from "@/features/reopen-game";
 import type { GameFormValues } from "@/features/write-game";
 import { LineBreaks, ServerLink, toast } from "@/shared/ui";
 
@@ -27,6 +27,8 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
   const set = rulebooks ? ruleSetOf({ myRulebooks: rulebooks, rulebookId }) : null;
   const gate = set && rulebooks ? ruleGate({ set, myRulebooks: rulebooks }) : null;
   const error = gate?.type === RULE_GATE.blocked ? null : formState.errors.rule?.message;
+  const visibleNotice = set ? null : ruleNotice;
+  const noticeBelow = visibleNotice?.kind === RULE_NOTICE.homebrewUnavailable;
   const calloutPalette = gate?.type === RULE_GATE.blocked ? "danger" : "warning";
   const hint = rulebooks
     ? "구인을 열 룰과 판본을 고릅니다."
@@ -43,7 +45,7 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
         </Text>
       </HStack>
 
-      {ruleNotice && !set && <RuleNoticeCallout notice={ruleNotice} />}
+      {visibleNotice && !noticeBelow && <RuleNoticeCallout notice={visibleNotice} />}
 
       {rulebooks ? (
         // ponytail: 두 줄 값을 담고 시트를 여는 칸이라 Select 대신 손으로 둔다.
@@ -89,6 +91,8 @@ export function GameRulebookField({ form, rulebooks, ruleNotice }: GameRulebookF
           <Lock size={16} strokeWidth={2.2} aria-label="잠김" className="text-hint" />
         </HStack>
       )}
+
+      {visibleNotice && noticeBelow && <RuleNoticeCallout notice={visibleNotice} />}
 
       {gate?.okText && (
         <HStack align="center" gap="075">

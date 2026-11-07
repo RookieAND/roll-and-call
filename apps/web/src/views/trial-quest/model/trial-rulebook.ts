@@ -19,6 +19,7 @@ export const TRIAL_RULEBOOK: MyRulebook = {
   categoryName: "CoC",
   supersedesId: null,
   includedInId: null,
+  homebrew: null,
   state: null,
   stateAt: null,
   latestApplication: null,

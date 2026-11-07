@@ -57,6 +57,7 @@ function rulebook(latestApplication: CertApplication): MyRulebook {
     categoryName: "룰",
     supersedesId: null,
     includedInId: null,
+    homebrew: null,
     state: CERT_STATE.certified,
     stateAt: new Date("2026-09-01T00:00:00Z"),
     latestApplication,

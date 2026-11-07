@@ -2,8 +2,24 @@ import { Callout } from "@roll-and-call/ui";
 
 import { RULE_NOTICE, type RuleNotice } from "@/features/reopen-game";
 import { topicParticle } from "@/shared/lib";
+import { LineBreaks } from "@/shared/ui";
 
-export function RuleNoticeCallout({ notice }: { notice: RuleNotice }) {
+interface RuleNoticeCalloutProps {
+  notice: RuleNotice;
+}
+
+export function RuleNoticeCallout({ notice }: RuleNoticeCalloutProps) {
+  if (notice.kind === RULE_NOTICE.homebrewUnavailable) {
+    return (
+      <Callout.Root colorPalette="primary">
+        <Callout.Description className="break-keep">
+          <LineBreaks
+            lines={["이 룰은 지금 사용할 수 없어 다시 고를 수 없습니다.", "다른 룰을 골라 주세요."]}
+          />
+        </Callout.Description>
+      </Callout.Root>
+    );
+  }
   const isBlocked = notice.kind === RULE_NOTICE.blocked;
   return (
     <Callout.Root colorPalette="warning">

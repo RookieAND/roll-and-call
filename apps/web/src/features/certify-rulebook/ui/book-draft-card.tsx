@@ -17,18 +17,16 @@ import {
   RULEBOOK_KIND_LABEL,
   ShotArt,
   type MyRulebook,
+  CERT_PHOTO_ACCEPT,
+  CERT_PHOTO_UPLOAD_FAILED,
+  CERT_RECEIPT_ACCEPT,
+  uploadCertPhoto,
 } from "@/entities/rulebook";
 import { TRIAL_SAMPLE_PHOTO, useIsTrial } from "@/shared/trial";
 import { LineBreaks } from "@/shared/ui";
 
-import { uploadCertPhoto } from "../api/upload-cert-photo";
 import type { BookDraft } from "../model/book-draft";
 import { certPhotoError } from "../model/cert-photo-error";
-import {
-  CERT_PHOTO_ACCEPT,
-  CERT_PHOTO_UPLOAD_FAILED,
-  CERT_RECEIPT_ACCEPT,
-} from "../model/cert-photo-rules";
 import { PHOTO_SLOT, revokePreview, slotKey, type PhotoSlot } from "../model/photo-slot";
 import { isProofKey, slotOf, type SlotKey } from "../model/slot-of";
 import { EbookFields } from "./ebook-fields";

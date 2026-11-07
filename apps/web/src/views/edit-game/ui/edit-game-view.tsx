@@ -23,7 +23,11 @@ export async function EditGameView({ id }: EditGameViewProps) {
   const lockedTitle = isGm ? editLockedTitle(game) : null;
   if (isGm && !lockedTitle) {
     const rulebooks = toMyRulebooks(
-      await getRulebookRecords({ serverId: server.id, userId: game.gmId }),
+      await getRulebookRecords({
+        serverId: server.id,
+        userId: game.gmId,
+        includeRulebookId: game.rulebookId,
+      }),
     );
     return (
       <EditGameForm

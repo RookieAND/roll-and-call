@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { CERT_FORMAT, CERT_FORMAT_LABEL, rulebookLabel } from "@/entities/rulebook";
+import { CERT_FORMAT, CERT_FORMAT_LABEL, isOwnCertFile, rulebookLabel } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -29,7 +29,6 @@ import { bulkBlockedReason } from "../model/bulk-blocked-reason";
 import { bulkNoticeLabel } from "../model/bulk-notice-label";
 import { bulkPhotoUrls } from "../model/bulk-photo-urls";
 import { bulkQuizAnswerField } from "../model/bulk-quiz-field";
-import { isOwnCertFile } from "../model/is-own-cert-file";
 import { isQuizAnswer } from "../model/is-quiz-answer";
 import { QUIZ_WRONG_ANSWER } from "../model/quiz-wrong-answer";
 

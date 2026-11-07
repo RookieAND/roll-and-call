@@ -27,6 +27,7 @@ import type { GameEditContext } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
 import type { ReopenContext } from "../model/reopen-context";
+import { submitErrorMessage } from "../model/submit-error-message";
 import { GameFormWizard } from "./game-form-wizard";
 
 interface GameFormProps {
@@ -118,10 +119,14 @@ export function GameForm({
     run(async (): Promise<ActionResult> => (await onSubmit(values)) ?? {}, {
       onSuccess: () => toast.success(successMessage),
       onError: (result) => {
+        const chosen = rulebooks
+          ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: values.rulebookId })
+          : null;
+        const message = submitErrorMessage({ result, homebrew: Boolean(chosen?.homebrew) });
         if (result.field && result.field in values) {
-          form.setError(result.field as keyof GameFormValues, { message: result.error });
+          form.setError(result.field as keyof GameFormValues, { message });
         }
-        form.setError("root", { message: result.error });
+        form.setError("root", { message });
       },
     });
   }

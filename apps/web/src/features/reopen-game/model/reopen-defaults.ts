@@ -11,10 +11,14 @@ import {
 
 import { openSupplements } from "./open-supplements";
 
-export const RULE_NOTICE = { notFound: "notFound", blocked: "blocked" } as const;
+export const RULE_NOTICE = {
+  notFound: "notFound",
+  homebrewUnavailable: "homebrewUnavailable",
+  blocked: "blocked",
+} as const;
 
 export type RuleNotice =
-  | { kind: typeof RULE_NOTICE.notFound }
+  | { kind: typeof RULE_NOTICE.notFound | typeof RULE_NOTICE.homebrewUnavailable }
   | { kind: typeof RULE_NOTICE.blocked; label: string };
 
 const CARRIED_COLUMNS = [
@@ -46,14 +50,17 @@ const CARRIED_COLUMNS = [
 
 // 일정·참여자·디스코드 글 같은 회차별 값은 가져오지 않는다. 일정 칸은 폼 기본값(비어 있음)으로 남는다.
 // 룰은 저장된 이름이 아니라 룰북 ID로 지금의 판본을 찾아 채우고, 못 찾거나 인증이 막히면 비운다.
+// homebrew는 원래 룰이 자작 룰인지다. 쓸 수 없는 자작 룰은 목록에 없어서 서버가 따로 알려 준다.
 // 서플리먼트는 룰을 채울 때만 가져온다. 등록된 책은 지금 고를 수 있는 것만 남기고, 직접 입력한 책은 그대로 둔다.
 export function reopenDefaults({
   game,
   rulebooks,
+  homebrew = false,
   now = new Date(),
 }: {
   game: Pick<Game, (typeof CARRIED_COLUMNS)[number] | "rulebookId" | "supplements">;
   rulebooks: MyRulebooks;
+  homebrew?: boolean;
   now?: Date;
 }) {
   const carried = pick(game, CARRIED_COLUMNS);
@@ -65,7 +72,9 @@ export function reopenDefaults({
   if (!set) {
     return {
       defaults: { ...carried, ...empty },
-      ruleNotice: { kind: RULE_NOTICE.notFound } as const,
+      ruleNotice: {
+        kind: homebrew ? RULE_NOTICE.homebrewUnavailable : RULE_NOTICE.notFound,
+      } as const,
     };
   }
   if (ruleGate({ set, myRulebooks: rulebooks, now }).type === RULE_GATE.blocked) {

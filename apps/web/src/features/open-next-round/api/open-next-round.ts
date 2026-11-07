@@ -53,9 +53,6 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
   const { server, user } = member;
-  const myRulebooks = toMyRulebooks(
-    await getRulebookRecords({ serverId: server.id, userId: user.id }),
-  );
   const now = new Date();
 
   let opened: { gameId: string; confirmedUserIds: string[]; maxPlayers: number };
@@ -100,6 +97,14 @@ export async function openNextRound(input: z.input<typeof inputSchema>): Promise
       if (sanctionedIds.includes(user.id)) {
         throw new AppError("활동 정지 기간에는 구인을 열 수 없습니다.");
       }
+      // 원 구인의 룰은 사용 범위와 상관없이 찾는다. 자작 룰은 인증이 필요 없어 그대로 열리고, 일반 룰은 지금처럼 인증을 본다.
+      const myRulebooks = toMyRulebooks(
+        await getRulebookRecords({
+          serverId: server.id,
+          userId: user.id,
+          includeRulebookId: game.rulebookId,
+        }),
+      );
       const set = game.rulebookId ? ruleSetOf({ myRulebooks, rulebookId: game.rulebookId }) : null;
       if (!set || ruleGate({ set, myRulebooks }).type === RULE_GATE.blocked) {
         throw new AppError("이 룰로는 지금 구인을 열 수 없습니다. 룰북 인증 상태를 확인해 주세요.");

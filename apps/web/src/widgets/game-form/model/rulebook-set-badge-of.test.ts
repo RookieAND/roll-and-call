@@ -7,9 +7,11 @@ import { rulebookSetBadgeOf } from "./rulebook-set-badge-of";
 const setWith = ({
   state = null,
   certRequired = true,
+  homebrew = null,
 }: {
   state?: CertState | null;
   certRequired?: boolean;
+  homebrew?: MyRulebook["homebrew"];
 }) => {
   const book = {
     id: "인세인",
@@ -22,6 +24,7 @@ const setWith = ({
     edition: "",
     kind: "core",
     certRequired,
+    homebrew,
     state,
     stateAt: null,
     latestApplication: null,
@@ -36,7 +39,7 @@ describe("rulebookSetBadgeOf", () => {
       label: "인증 완료",
       colorPalette: "success",
     });
-    expect(rulebookSetBadgeOf(setWith({ certRequired: false })).label).toBe("무료 배포");
+    expect(rulebookSetBadgeOf(setWith({ certRequired: false }))?.label).toBe("무료 배포");
   });
 
   it("잠긴 판본은 심사 중·반려됨·미인증을 회색으로", () => {
@@ -44,7 +47,11 @@ describe("rulebookSetBadgeOf", () => {
       label: "심사 중",
       colorPalette: "gray",
     });
-    expect(rulebookSetBadgeOf(setWith({ state: CERT_STATE.rejected })).label).toBe("반려됨");
-    expect(rulebookSetBadgeOf(setWith({})).label).toBe("미인증");
+    expect(rulebookSetBadgeOf(setWith({ state: CERT_STATE.rejected }))?.label).toBe("반려됨");
+    expect(rulebookSetBadgeOf(setWith({}))?.label).toBe("미인증");
+  });
+
+  it("자작 룰은 배지가 없다", () => {
+    expect(rulebookSetBadgeOf(setWith({ certRequired: false, homebrew: "shared" }))).toBeNull();
   });
 });

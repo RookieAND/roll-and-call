@@ -3,15 +3,18 @@
 import { Callout, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { useRef } from "react";
 
-import { ShotArt } from "@/entities/rulebook";
+import {
+  CERT_PHOTO_ACCEPT,
+  CERT_PHOTO_UPLOAD_FAILED,
+  ShotArt,
+  uploadCertPhoto,
+} from "@/entities/rulebook";
 import { LineBreaks } from "@/shared/ui";
 
-import { uploadCertPhoto } from "../api/upload-cert-photo";
 import type { BulkDraft } from "../model/bulk-draft";
 import { bulkPhotoLabel } from "../model/bulk-photo-label";
 import { bulkTileSlots } from "../model/bulk-tile-slots";
 import { certPhotoError } from "../model/cert-photo-error";
-import { CERT_PHOTO_ACCEPT, CERT_PHOTO_UPLOAD_FAILED } from "../model/cert-photo-rules";
 import { PHOTO_SLOT, revokePreview, slotKey, type PhotoSlot } from "../model/photo-slot";
 import { removeBulkPhoto } from "../model/remove-bulk-photo";
 import { setBulkPhoto } from "../model/set-bulk-photo";

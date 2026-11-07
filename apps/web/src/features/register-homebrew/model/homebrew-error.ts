@@ -1,0 +1,15 @@
+export const HOMEBREW_ERROR = {
+  nameRequired: "룰 이름을 적어 주세요.",
+  summaryRequired: "한 줄 소개를 적어 주세요.",
+  nameTaken: "같은 이름의 룰이 이미 있습니다.",
+  linkFormat: "http나 https로 시작하는 주소를 넣어 주세요.",
+  linkDuplicate: "같은 링크가 이미 있습니다.",
+  imageInvalid: "이미지를 다시 올려 주세요.",
+  imageFormat: "JPG 또는 PNG 파일만 올릴 수 있습니다.",
+  materialRequired: "링크나 이미지를 하나 이상 넣어야 합니다.",
+  pendingLimit: "심사 중인 자작 룰 신청은 최대 3건까지 낼 수 있습니다.",
+  previousInvalid: "이미 다시 신청한 기록입니다. 화면을 새로 고쳐 주세요.",
+  sanctioned: "활동 정지 기간에는 자작 룰을 신청할 수 없습니다.",
+  alreadyProcessed: "운영진이 이미 처리한 신청입니다. 화면을 새로 고쳐 주세요.",
+  summaryLocked: "소개를 고칠 수 없는 룰입니다. 화면을 새로 고쳐 주세요.",
+} as const;

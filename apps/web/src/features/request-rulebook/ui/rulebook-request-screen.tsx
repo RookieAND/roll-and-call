@@ -42,7 +42,7 @@ export function RulebookRequestScreen({
               </Text>
             </VStack>
           }
-          onSent={() => router.replace(toServerPath("/me/rulebooks/apply"))}
+          onSent={() => router.replace(toServerPath("/me/rulebooks/apply?step=books"))}
           renderFooter={({ submit, pending, disabled }) => (
             <FloatingBar.Root elevated={false}>
               <FloatingBar.Content>

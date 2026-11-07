@@ -98,7 +98,7 @@ export function TrialCertResult({ onBack, onOpenMine }: TrialCertResultProps) {
                   variant="outline"
                   size="lg"
                   className="w-full"
-                  render={<ServerLink path="/me/rulebooks/apply" data-trial-exit />}
+                  render={<ServerLink path="/me/rulebooks/apply?step=books" data-trial-exit />}
                 >
                   실제로 인증 신청하기
                 </Button>

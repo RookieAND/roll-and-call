@@ -1,3 +1,5 @@
+import { isHomebrewRulebook } from "@roll-and-call/database/homebrew";
+
 import type { MyRulebooks } from "@/entities/rulebook";
 import { canReopenGame, reopenDefaults } from "@/features/reopen-game";
 import { getGameById } from "@/shared/server";
@@ -18,7 +20,10 @@ export async function loadReopen({
   try {
     const source = await getGameById(serverId, gameId);
     if (!source || !canReopenGame({ game: source, userId, serverId })) return null;
-    const { defaults, ruleNotice } = reopenDefaults({ game: source, rulebooks });
+    const homebrew = source.rulebookId
+      ? await isHomebrewRulebook({ serverId, rulebookId: source.rulebookId })
+      : false;
+    const { defaults, ruleNotice } = reopenDefaults({ game: source, rulebooks, homebrew });
     return { defaults, reopen: { title: source.title, ruleNotice } satisfies ReopenContext };
   } catch {
     return { defaults: undefined, reopen: { failed: true } satisfies ReopenContext };

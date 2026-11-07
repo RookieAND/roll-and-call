@@ -6,7 +6,9 @@ export function RulebookRequestSkeleton() {
   return (
     <PageShell
       readable
-      appBar={<AppBar back="/me/rulebooks/apply" title="룰북 추가 요청" heading={false} />}
+      appBar={
+        <AppBar back="/me/rulebooks/apply?step=books" title="룰북 추가 요청" heading={false} />
+      }
     >
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm">
