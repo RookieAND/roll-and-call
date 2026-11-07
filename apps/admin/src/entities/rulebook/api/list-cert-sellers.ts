@@ -1,5 +1,7 @@
 import "server-only";
-import { loadAdminData } from "@/shared/server";
+import { countCertifiedBySeller } from "@roll-and-call/database/moderation";
+
+import { getCurrentServer, loadAdminData } from "@/shared/server";
 
 export interface CertSellerRow {
   id: string;
@@ -8,14 +10,8 @@ export interface CertSellerRow {
 }
 
 export async function listCertSellers(): Promise<CertSellerRow[]> {
-  const db = await loadAdminData(["certApplications", "sellers"]);
-  return db.sellers.map((seller) => ({
-    ...seller,
-    certifiedCount: db.certApplications.filter(
-      (application) =>
-        application.status === "approved" &&
-        application.format === "ebook" &&
-        application.purchase.seller === seller.name,
-    ).length,
-  }));
+  const db = await loadAdminData(["sellers"]);
+  const counts = await countCertifiedBySeller({ serverId: (await getCurrentServer()).id });
+  const countOf = new Map(counts.map((row) => [row.seller, row.count]));
+  return db.sellers.map((seller) => ({ ...seller, certifiedCount: countOf.get(seller.name) ?? 0 }));
 }

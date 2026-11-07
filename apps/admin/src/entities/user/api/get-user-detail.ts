@@ -6,7 +6,7 @@ import {
   recentNoShowCountsByUser,
 } from "@roll-and-call/database/moderation/model";
 
-import { loadAdminData, type Snapshot, type Session } from "@/shared/server";
+import { loadAdminData, loadAuditEntries, type Snapshot, type Session } from "@/shared/server";
 
 import { previousNicknameOf } from "../model/previous-nickname-of";
 import { staffMemoRowsOf } from "../model/staff-memo-rows-of";
@@ -22,14 +22,15 @@ export async function getUserDetail(userId: string) {
     "certApplications",
     "sessions",
     "noShows",
-    "auditLog",
     "staffMemos",
   ]);
   const user = db.users.find((candidate) => candidate.id === userId);
   if (!user) return null;
+  // 활동 기록은 이 사람이 대상인 기록만 본다.
+  const auditLog = await loadAuditEntries({ targetUserId: userId });
   const now = Date.now();
   const sanction = isSanctioned(user, now) ? user.sanction! : null;
-  const sanctionCount = db.auditLog.filter(
+  const sanctionCount = auditLog.filter(
     (entry) => entry.action === "제재" && entry.targetUserId === userId,
   ).length;
   const countOptions = {
@@ -84,7 +85,7 @@ export async function getUserDetail(userId: string) {
     membership: user.membership,
     ban: user.ban ?? null,
     previousNickname: previousNicknameOf({
-      auditLog: db.auditLog,
+      auditLog,
       userId,
       nickname: user.nickname,
     }),
@@ -98,7 +99,7 @@ export async function getUserDetail(userId: string) {
     sanction,
     // 지금 걸린 제재는 지난 제재로 세지 않는다.
     pastSanctionCount: Math.max(0, sanctionCount - (sanction ? 1 : 0)),
-    unbanned: db.auditLog.some(
+    unbanned: auditLog.some(
       (entry) => entry.action === "차단 해제" && entry.targetUserId === userId,
     ),
     certifications,
@@ -133,7 +134,7 @@ export async function getUserDetail(userId: string) {
         };
       })
       .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime()),
-    memos: staffMemoRowsOf({ db, userId }),
+    memos: staffMemoRowsOf({ db: { staffMemos: db.staffMemos, auditLog }, userId }),
   };
 }
 

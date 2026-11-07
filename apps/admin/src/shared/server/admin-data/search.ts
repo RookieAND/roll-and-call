@@ -1,14 +1,19 @@
 import "server-only";
+import { loadAdminMemberActivity, searchAdminMembers } from "@roll-and-call/database/moderation";
 import {
   playedCountsByUser,
   recentNoShowCountsByUser,
 } from "@roll-and-call/database/moderation/model";
-import { groupBy, isUndefined, sortBy } from "es-toolkit";
+import { groupBy } from "es-toolkit";
 
 import { waitedDays } from "@/shared/lib";
 
-import { loadAdminData } from "./load-admin-data";
-import { nicknameMatchRank } from "./nickname-match-rank";
+import { getCurrentServer } from "../auth/get-current-server";
+import { requireStaff } from "../auth/require-staff";
+import { buildShapes } from "./build-shapes";
+
+// ponytail: 한 글자 검색처럼 많이 맞으면 앞의 이만큼만 보인다. 더 보여야 하면 늘린다.
+const SEARCH_LIMIT = 20;
 
 export interface UserSearchResult {
   id: string;
@@ -30,12 +35,21 @@ export interface UserSearchResult {
 export async function searchUsers(query: string): Promise<UserSearchResult[]> {
   const keyword = query.trim();
   if (!keyword) return [];
-  const db = await loadAdminData(["memberNicknames", "sessions", "noShows", "certApplications"]);
+  await requireStaff();
+  const server = await getCurrentServer();
+  const users = await searchAdminMembers({ serverId: server.id, keyword, limit: SEARCH_LIMIT });
+  if (users.length === 0) return [];
+  // 맞은 사람과 관련된 행만 읽어 같은 모양으로 만든다.
+  const tables = await loadAdminMemberActivity({
+    serverId: server.id,
+    userIds: users.map((user) => user.id),
+  });
   const now = new Date();
-  const ranked = db.memberNicknames
-    .map((user) => ({ user, rank: nicknameMatchRank({ nickname: user.nickname, keyword }) }))
-    .filter((entry) => !isUndefined(entry.rank));
-  const users = sortBy(ranked, [(entry) => entry.rank!]).map(({ user }) => user);
+  const db = buildShapes({
+    tables,
+    now: now.getTime(),
+    keys: ["memberNicknames", "sessions", "noShows", "certApplications"],
+  });
   const countOptions = {
     sessions: db.sessions,
     noShows: db.noShows,

@@ -59,4 +59,6 @@ export {
   updateServerSettings,
 } from "@roll-and-call/database/servers";
 export { loadAdminData } from "./load-admin-data";
+export { loadAuditEntries } from "./load-audit-entries";
+export { MISSING_NAME, SYSTEM_ACTOR_NAME } from "./actor-names";
 export { type Snapshot } from "./snapshot";

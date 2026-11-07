@@ -5,9 +5,8 @@ import {
   type CertDecision,
   type CertDecisionResult,
 } from "@roll-and-call/database/certifications";
+import { loadCertDecisionRecords } from "@roll-and-call/database/moderation";
 import { isUndefined } from "es-toolkit";
-
-import { loadAdminData } from "@/shared/server";
 
 import { decideCert } from "./decide-cert";
 
@@ -29,8 +28,8 @@ export async function decideCertGroup({
   actor: Actor;
   decision: CertDecision;
 }): Promise<CertGroupDecisionResult> {
-  const snapshot = await loadAdminData(["rulebooks", "certApplications"]);
-  const applications = ids.map((id) => snapshot.certApplications.find((row) => row.id === id));
+  const records = await loadCertDecisionRecords({ serverId, applicationIds: ids });
+  const applications = ids.map((id) => records.certApplications.find((row) => row.id === id));
   const first = applications[0];
   if (!first?.groupId || applications.some((row) => row?.groupId !== first.groupId)) {
     throw new Error("같은 묶음의 신청이 아닙니다");
@@ -39,7 +38,7 @@ export async function decideCertGroup({
     applications.filter((row) => !isUndefined(row)).map((row) => [row.id, row.rulebookId]),
   );
   const isCore = (rulebookId: string) =>
-    snapshot.rulebooks.find((rulebook) => rulebook.id === rulebookId)?.kind === "core";
+    records.rulebooks.find((rulebook) => rulebook.id === rulebookId)?.kind === "core";
   const approving = decision.kind === "approve";
   const direction = approving ? -1 : 1;
   const ordered = applications

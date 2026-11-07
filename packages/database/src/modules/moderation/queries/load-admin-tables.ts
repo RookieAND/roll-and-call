@@ -1,4 +1,4 @@
-import { and, eq, getTableColumns, isNull, ne, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, isNull, ne, sql, type SQL } from "drizzle-orm";
 import { omit } from "es-toolkit";
 
 import { db } from "#db/client";
@@ -26,8 +26,9 @@ import {
 // 어드민 화면이 읽는 표. 룰북·카테고리·퀴즈 문항·판매처까지 모두 그 서버 것만 읽는다.
 // 사람(profiles)은 그 서버 멤버만 읽고, 멤버십 상태(탈퇴·차단)를 함께 붙인다.
 // 트랜잭션 풀러(:6543)에 여러 개를 Promise.all로 한꺼번에 보내면 응답이 멈춘다(2026-09-24 재현). 호출하는 쪽이 순서대로 읽는다.
-const ADMIN_TABLE_LOADERS = {
-  profileRows: (serverId: string) =>
+// scope를 주면 그 조건에 맞는 행만 읽는다(같은 모양의 행을 일부만 읽는 조회가 쓴다).
+export const ADMIN_TABLE_LOADERS = {
+  profileRows: (serverId: string, scope?: SQL) =>
     db
       .select({
         ...getTableColumns(profiles),
@@ -45,18 +46,23 @@ const ADMIN_TABLE_LOADERS = {
         serverMembers,
         and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
       )
+      .where(scope)
       .orderBy(profiles.createdAt, profiles.id),
-  gameRows: (serverId: string) => db.select().from(games).where(eq(games.serverId, serverId)),
+  gameRows: (serverId: string, scope?: SQL) =>
+    db
+      .select()
+      .from(games)
+      .where(and(eq(games.serverId, serverId), scope)),
   // 신청글 본문은 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.
-  participantRows: (serverId: string) =>
+  participantRows: (serverId: string, scope?: SQL) =>
     db
       .select({
         ...omit(getTableColumns(participants), ["applicationNote"]),
         hasApplicationNote: sql<boolean>`${participants.applicationNote} is not null`,
       })
       .from(participants)
-      .where(eq(participants.serverId, serverId)),
-  rulebookRows: (serverId: string) =>
+      .where(and(eq(participants.serverId, serverId), scope)),
+  rulebookRows: (serverId: string, scope?: SQL) =>
     db
       .select({
         ...getTableColumns(rulebooks),
@@ -70,19 +76,25 @@ const ADMIN_TABLE_LOADERS = {
       .from(rulebooks)
       .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
       .leftJoin(homebrewRules, eq(homebrewRules.rulebookId, rulebooks.id))
-      .where(eq(rulebooks.serverId, serverId)),
+      .where(and(eq(rulebooks.serverId, serverId), scope)),
   requestRows: (serverId: string) =>
     db.select().from(rulebookRequests).where(eq(rulebookRequests.serverId, serverId)),
   requestGameRows: (serverId: string) =>
     db.select().from(rulebookRequestGames).where(eq(rulebookRequestGames.serverId, serverId)),
   categoryRows: (serverId: string) =>
     db.select().from(rulebookCategories).where(eq(rulebookCategories.serverId, serverId)),
-  applicationRows: (serverId: string) =>
-    db.select().from(certApplications).where(eq(certApplications.serverId, serverId)),
+  applicationRows: (serverId: string, scope?: SQL) =>
+    db
+      .select()
+      .from(certApplications)
+      .where(and(eq(certApplications.serverId, serverId), scope)),
   certificationRows: (serverId: string) =>
     db.select().from(certifications).where(eq(certifications.serverId, serverId)),
-  quizRows: (serverId: string) =>
-    db.select().from(rulebookQuizQuestions).where(eq(rulebookQuizQuestions.serverId, serverId)),
+  quizRows: (serverId: string, scope?: SQL) =>
+    db
+      .select()
+      .from(rulebookQuizQuestions)
+      .where(and(eq(rulebookQuizQuestions.serverId, serverId), scope)),
   sellerRows: (serverId: string) =>
     db
       .select()
@@ -99,8 +111,6 @@ const ADMIN_TABLE_LOADERS = {
   staffRows: (serverId: string) => db.select().from(staff).where(eq(staff.serverId, serverId)),
   memoRows: (serverId: string) =>
     db.select().from(staffMemos).where(eq(staffMemos.serverId, serverId)),
-  auditRows: (serverId: string) =>
-    db.select().from(auditLog).where(eq(auditLog.serverId, serverId)),
   // 닉네임 수정 기록만. 유저 목록의 이전 닉네임 검색용이라 활동 기록 전체를 읽지 않는다.
   nicknameEditRows: (serverId: string) =>
     db

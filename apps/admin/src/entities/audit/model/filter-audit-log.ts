@@ -1,10 +1,7 @@
 import { SORT_DIR, sortRows, type SortDir } from "@/shared/lib";
 import type { AuditEntry } from "@/shared/server";
 
-import { AUDIT_PERIODS } from "./audit-period";
-import { defaultAuditPeriod } from "./default-audit-period";
-
-const DAY = 86_400_000;
+import { auditLogPeriod } from "./audit-log-period";
 
 export interface AuditLogFilter {
   actor?: string;
@@ -26,10 +23,7 @@ interface FilterAuditLogOptions {
 // 대상은 ID로 거른다. ID가 없는 대상(후기, 룰북, 서버 설정)만 「 · 」 앞 이름이 정확히 같은 기록을 고른다.
 export function filterAuditLog({ entries, filter, now = Date.now() }: FilterAuditLogOptions) {
   const { actor, actions = [], q, target, targetUser, targetGame, dir = SORT_DIR.desc } = filter;
-  const scoped = Boolean(q || target || targetUser || targetGame);
-  const period = filter.period ?? defaultAuditPeriod({ scoped });
-  const days = AUDIT_PERIODS.find((candidate) => candidate.value === period)?.days;
-  const since = days ? now - days * DAY : null;
+  const { period, since } = auditLogPeriod({ filter, now });
   const keyword = q?.toLowerCase();
   const rows = entries.filter(
     (entry) =>

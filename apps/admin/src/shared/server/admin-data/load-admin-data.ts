@@ -1,18 +1,15 @@
 import "server-only";
 import type { AdminTableKey, AdminTables } from "@roll-and-call/database/moderation";
-import { rulebookLabel } from "@roll-and-call/database/rulebooks/model";
 import { cache } from "react";
 
 import { getCurrentServer } from "../auth/get-current-server";
 import { requireStaff } from "../auth/require-staff";
+import { buildShapes } from "./build-shapes";
 import { loadTable } from "./load-table";
 import { SHAPE_REGISTRY } from "./shapes/registry";
-import type { ShapeContext } from "./shapes/shape-context";
 import type { AdminShapes } from "./types";
 
 type ShapeKey = keyof AdminShapes;
-
-const MISSING_NAME = "알 수 없음";
 
 // 한 요청 안에서 읽은 표와 만든 모양은 다시 쓴다.
 const requestStore = cache(() => ({
@@ -41,35 +38,11 @@ export const loadAdminData = async <Key extends ShapeKey>(
   const server = await getCurrentServer();
   const store = requestStore();
   // 트랜잭션 풀러에 Promise.all로 한꺼번에 보내면 응답이 멈추므로 표는 순서대로 읽는다(같은 요청의 다른 호출이 읽는 중이면 그 결과를 기다린다).
-  const loaded: Partial<Record<AdminTableKey, unknown>> = {};
+  const loaded: Partial<AdminTables> = {};
   for (const table of tablesOf(keys)) {
     const running = store.tables.get(table) ?? loadTable(server.id, table);
     store.tables.set(table, running);
-    loaded[table] = await running;
+    (loaded as Record<AdminTableKey, unknown>)[table] = await running;
   }
-  const tables = loaded as AdminTables;
-
-  let nicknames: Map<string, string> | undefined;
-  let rulebookLabels: Map<string, string> | undefined;
-  const context: ShapeContext = {
-    tables,
-    now: store.now,
-    nicknameOf: (id) => {
-      nicknames ??= new Map(tables.profileRows.map((profile) => [profile.id, profile.nickname]));
-      return id ? (nicknames.get(id) ?? MISSING_NAME) : MISSING_NAME;
-    },
-    rulebookLabelOf: (id) => {
-      rulebookLabels ??= new Map(
-        tables.rulebookRows.map((rulebook) => [rulebook.id, rulebookLabel(rulebook)]),
-      );
-      return rulebookLabels.get(id);
-    },
-    shape: (key) => {
-      if (!store.shapes.has(key)) store.shapes.set(key, SHAPE_REGISTRY[key].build(context));
-      return store.shapes.get(key) as never;
-    },
-  };
-  const result: Partial<AdminShapes> = {};
-  for (const key of keys) (result as Record<ShapeKey, unknown>)[key] = context.shape(key);
-  return result as Pick<AdminShapes, Key>;
+  return buildShapes({ tables: loaded, now: store.now, keys, built: store.shapes });
 };

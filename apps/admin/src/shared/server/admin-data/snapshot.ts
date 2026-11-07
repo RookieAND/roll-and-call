@@ -14,6 +14,5 @@ export type Snapshot = Pick<
   | "sessions"
   | "noShows"
   | "reviews"
-  | "auditLog"
   | "staffMemos"
 >;

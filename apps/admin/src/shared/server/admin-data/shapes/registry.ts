@@ -1,7 +1,6 @@
 import type { AdminTableKey } from "@roll-and-call/database/moderation";
 
 import type { AdminShapes } from "../types";
-import { buildAuditLog } from "./build-audit-log";
 import { buildCertApplications } from "./build-cert-applications";
 import { buildCertifications } from "./build-certifications";
 import { buildCertifiedUserIds } from "./build-certified-user-ids";
@@ -59,11 +58,6 @@ export const SHAPE_REGISTRY: { [Key in keyof AdminShapes]: ShapeSpec<Key> } = {
   },
   noShows: { tables: ["profileRows", "gameRows", "participantRows"], build: buildNoShows },
   reviews: { tables: ["profileRows", "participantRows", "reviewRows"], build: buildReviews },
-  auditLog: {
-    tables: ["profileRows", "rulebookRows", "auditRows"],
-    needs: ["reviews"],
-    build: buildAuditLog,
-  },
   countingSessions: { tables: ["gameRows", "participantRows"], build: buildCountingSessions },
   countingNoShows: { tables: ["gameRows", "participantRows"], build: buildCountingNoShows },
   lastActive: { tables: ["lastActiveRows"], build: buildLastActive },

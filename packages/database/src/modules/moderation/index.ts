@@ -36,5 +36,20 @@ export {
   type AdminTables,
 } from "./queries/load-admin-tables";
 export { loadPendingQueue } from "./queries/load-pending-queue";
+export {
+  listAdminAuditRows,
+  type AdminAuditActorFilter,
+  type AdminAuditRow,
+} from "./queries/list-admin-audit-rows";
+export { listAdminAuditActors } from "./queries/list-admin-audit-actors";
+export { countGmGameAuditRows } from "./queries/count-gm-game-audit-rows";
+export { listAdminRulebookLabels } from "./queries/list-admin-rulebook-labels";
+export { listAdminMemberNicknames } from "./queries/list-admin-member-nicknames";
+export { searchAdminMembers } from "./queries/search-admin-members";
+export { loadAdminMemberActivity } from "./queries/load-admin-member-activity";
+export { loadCertDecisionRecords } from "./queries/load-cert-decision-records";
+export { getAdminGameTitle } from "./queries/get-admin-game-title";
+export { getAdminReviewGameTitle } from "./queries/get-admin-review-game-title";
+export { countCertifiedBySeller } from "./queries/count-certified-by-seller";
 export { getStaffRole, isPlatformAdmin } from "./queries/staff";
 export * from "./model";

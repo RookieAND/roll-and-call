@@ -283,7 +283,7 @@ export interface NicknameEdit {
   previousNickname: string;
 }
 
-// loadAdminData가 고를 수 있는 모양. 앞의 열세 개가 Snapshot이다.
+// loadAdminData가 고를 수 있는 모양. 앞의 열두 개가 Snapshot이다. 활동 기록은 loadAuditEntries로 조건에 맞는 것만 읽는다.
 export interface AdminShapes {
   users: AdminUser[];
   staff: Staff[];
@@ -296,7 +296,6 @@ export interface AdminShapes {
   sessions: Session[];
   noShows: NoShow[];
   reviews: Review[];
-  auditLog: AuditEntry[];
   staffMemos: StaffMemo[];
   countingSessions: CountingSession[];
   countingNoShows: CountingNoShow[];

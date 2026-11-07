@@ -1,4 +1,4 @@
-import type { Snapshot } from "@/shared/server";
+import type { AuditEntry, StaffMemo } from "@/shared/server";
 
 const SANCTION_MEMO_ACTIONS: readonly string[] = ["제재", "제재 해제"];
 
@@ -18,7 +18,7 @@ export function staffMemoRowsOf({
   db,
   userId,
 }: {
-  db: Pick<Snapshot, "staffMemos" | "auditLog">;
+  db: { staffMemos: StaffMemo[]; auditLog: AuditEntry[] };
   userId: string;
 }) {
   const direct: StaffMemoRow[] = db.staffMemos

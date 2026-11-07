@@ -1,7 +1,13 @@
 import "server-only";
-import { loadAdminData } from "@/shared/server";
+import { listAdminMemberNicknames } from "@roll-and-call/database/moderation";
+
+import { getCurrentServer, requireStaff } from "@/shared/server";
 
 export async function getUserNickname(id: string) {
-  const db = await loadAdminData(["users"]);
-  return db.users.find((user) => user.id === id)?.nickname;
+  await requireStaff();
+  const [user] = await listAdminMemberNicknames({
+    serverId: (await getCurrentServer()).id,
+    userIds: [id],
+  });
+  return user?.nickname;
 }

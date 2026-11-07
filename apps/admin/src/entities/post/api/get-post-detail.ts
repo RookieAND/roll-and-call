@@ -1,9 +1,10 @@
 import "server-only";
 import { REVIEW_WRITE_DAYS } from "@roll-and-call/database/games/model";
+import { countGmGameAuditRows } from "@roll-and-call/database/moderation";
 import { recentNoShowCountsByUser } from "@roll-and-call/database/moderation/model";
 
 import { PAGE_SIZE } from "@/shared/lib";
-import { loadAdminData, type Snapshot } from "@/shared/server";
+import { getCurrentServer, loadAdminData, type Snapshot } from "@/shared/server";
 
 import { postStatusOf } from "../model/post-status-of";
 import { selectPostRows, type PostListFilter } from "../model/select-post-rows";
@@ -25,20 +26,16 @@ interface GetPostDetailInput {
 // filter는 들어온 목록의 검색·필터·정렬이고 pageSize는 그 목록의 쪽 크기다.
 // [다음 건]은 그 목록에서 다음 구인과 그 구인이 있는 쪽이다.
 export async function getPostDetail({ id, filter, pageSize = PAGE_SIZE }: GetPostDetailInput) {
-  const db = await loadAdminData(["users", "sessions", "auditLog", "countingNoShows"]);
+  const db = await loadAdminData(["users", "sessions", "countingNoShows"]);
   const session = db.sessions.find((candidate) => candidate.id === id);
   if (!session) return null;
   const now = Date.now();
   const gm = userOf(db, session.gmId);
-  const gmGameIds = new Set(
-    db.sessions.filter((candidate) => candidate.gmId === gm.id).map((candidate) => candidate.id),
-  );
-  const receivedActionCount = db.auditLog.filter(
-    (entry) =>
-      entry.targetGameId &&
-      gmGameIds.has(entry.targetGameId) &&
-      RECEIVED_POST_ACTIONS.includes(entry.action),
-  ).length;
+  const receivedActionCount = await countGmGameAuditRows({
+    serverId: (await getCurrentServer()).id,
+    gmId: gm.id,
+    actions: RECEIVED_POST_ACTIONS,
+  });
   const nicknames = new Map(db.users.map((user) => [user.id, user.nickname]));
   const listIds = selectPostRows({
     rows: db.sessions.map((candidate) => toPostRow({ nicknames, session: candidate })),
