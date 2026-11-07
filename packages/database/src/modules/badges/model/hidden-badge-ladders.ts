@@ -396,4 +396,10 @@ export const HIDDEN_BADGE_LADDERS: Record<HiddenLadderKey, BadgeLadderDefinition
     description: "이달의 GM·PL로 세 번 뽑혀 이름이 전당에 새겨졌습니다.",
     granted: true,
   }),
+  [HIDDEN_LADDER.worldOwner]: hidden({
+    emoji: "🪐",
+    name: "세계의 주인",
+    grade: 5,
+    description: "직접 만든 룰이 서버 룰북으로 등록되었습니다.",
+  }),
 };

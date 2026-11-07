@@ -29,7 +29,6 @@ const FIRST_BADGE_LADDERS: ReadonlySet<string> = new Set([
 // 재계산 밖에서 주는 칭호(오너가 주거나 이달의 뱃지와 함께 주는 것) 중 받은 사람에게 알리는 것.
 const NOTIFIED_GRANTED_LADDERS = new Set<string>([
   BADGE_LADDER.apprentice,
-  BADGE_LADDER.worldOwner,
   BADGE_LADDER.lantern,
   BADGE_LADDER.doubleCrown,
   BADGE_LADDER.hallOfFame,

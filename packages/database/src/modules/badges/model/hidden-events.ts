@@ -172,6 +172,8 @@ export function hiddenEvents({
       return tightropeEvents(draws);
     case HIDDEN_LADDER.heavenHell:
       return heavenHellEvents(draws);
+    case HIDDEN_LADDER.worldOwner:
+      return facts.homebrewApprovals;
     case HIDDEN_LADDER.lantern:
     case HIDDEN_LADDER.doubleCrown:
     case HIDDEN_LADDER.hallOfFame:

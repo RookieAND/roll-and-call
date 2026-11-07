@@ -1,4 +1,4 @@
-import { and, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
+import { and, asc, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import type { BadgeFacts } from "#db/modules/badges/model/badge-facts";
@@ -8,6 +8,7 @@ import { RECRUIT_METHOD } from "#db/modules/games/model";
 import {
   drawResults,
   games,
+  homebrewRuleApplications,
   participants,
   serverMembers,
   sessionReviews,
@@ -51,7 +52,14 @@ const applicantsOfGame = sql<number>`(
 
 type HiddenBadgeFacts = Pick<
   BadgeFacts,
-  "draws" | "hostedDraws" | "joinedAt" | "rush" | "fullCasts" | "absences" | "briefingIds"
+  | "draws"
+  | "hostedDraws"
+  | "joinedAt"
+  | "rush"
+  | "fullCasts"
+  | "absences"
+  | "briefingIds"
+  | "homebrewApprovals"
 >;
 
 // 숨겨진 칭호만 쓰는 기록. 숨기거나 취소한 구인은 근거에서 빠져 칭호도 회수된다.
@@ -109,6 +117,18 @@ export async function loadHiddenBadgeFacts({
       ),
     )
     .groupBy(games.id);
+  const homebrewApprovals = await db
+    .select({ at: homebrewRuleApplications.processedAt })
+    .from(homebrewRuleApplications)
+    .where(
+      and(
+        eq(homebrewRuleApplications.serverId, serverId),
+        eq(homebrewRuleApplications.userId, userId),
+        eq(homebrewRuleApplications.status, "approved"),
+        isNotNull(homebrewRuleApplications.processedAt),
+      ),
+    )
+    .orderBy(asc(homebrewRuleApplications.processedAt));
   const [member] = await db
     .select({ joinedAt: serverMembers.joinedAt })
     .from(serverMembers)
@@ -159,6 +179,7 @@ export async function loadHiddenBadgeFacts({
   return {
     absences: absences.map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
     briefingIds: briefings.map((briefing) => briefing.gameId),
+    homebrewApprovals: homebrewApprovals.map((approval) => ({ at: approval.at!, gameId: null })),
     draws: draws.map((draw) => ({ ...draw, roll: draw.roll!, drawnAt: draw.drawnAt! })),
     hostedDraws: hostedDraws.map((draw) => ({ ...draw, drawnAt: draw.drawnAt! })),
     joinedAt: member?.joinedAt ?? null,

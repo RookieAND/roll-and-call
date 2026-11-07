@@ -29,18 +29,31 @@ describe("planBadgeNotices", () => {
     });
   });
 
-  it("세계의 주인은 업적 알림 한 줄이고 시트는 없다", () => {
+  it("세계의 주인은 숨겨진 칭호라 조건 없이 설명 한 줄로 알리고 시트 대상이다", () => {
     expect(
       planBadgeNotices({ grants: [grant({ badgeKey: "sp.worldowner", tier: 1 })], now }),
     ).toEqual({
       notifications: [
         {
-          kind: "badge_earned",
-          params: { emoji: "🪐", name: "세계의 주인", criterion: "자작 룰 승인" },
+          kind: "hidden_title_earned",
+          params: {
+            emoji: "🪐",
+            name: "세계의 주인",
+            description: "직접 만든 룰이 서버 룰북으로 등록되었습니다.",
+          },
         },
       ],
-      sheet: false,
+      sheet: true,
     });
+  });
+
+  it("이미 알림을 받은 세계의 주인은 다시 알리지 않는다", () => {
+    expect(
+      planBadgeNotices({
+        grants: [grant({ badgeKey: "sp.worldowner", tier: 1, notifiedTier: 1 })],
+        now,
+      }),
+    ).toEqual({ notifications: [], sheet: false });
   });
 
   it("같은 단계나 이전 최고 이하로 다시 받으면 알리지 않는다", () => {

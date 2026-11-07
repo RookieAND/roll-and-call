@@ -46,7 +46,5 @@ export function badgeRequirement({
       return "디스코드 길드장";
     case BADGE_LADDER.apprentice:
       return "튜토리얼 퀘스트 모두 클리어";
-    case BADGE_LADDER.worldOwner:
-      return "자작 룰 승인";
   }
 }

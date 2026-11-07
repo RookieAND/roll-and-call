@@ -58,6 +58,8 @@ export type BadgeFacts = {
   briefingIds: string[];
   // 유효한 룰북 인증(취소되지 않은 것)을 받은 시각순. 룰북 인증 칭호가 센다.
   certified: BadgeEvent[];
+  // 그 서버에서 내 자작 룰 신청이 승인된 시각순. 세계의 주인은 첫 승인으로 받고, 룰을 숨기거나 범위를 바꿔도 승인 기록은 남아 회수되지 않는다.
+  homebrewApprovals: BadgeEvent[];
   asOf: Date;
 };
 

@@ -35,6 +35,7 @@ const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   absences: [],
   briefingIds: [],
   certified: [],
+  homebrewApprovals: [],
   asOf: new Date(Date.UTC(2027, 0, 1)),
   ...overrides,
 });
@@ -255,5 +256,24 @@ describe("숨겨진 칭호 4종 (D343)", () => {
       false,
     );
     expect(earned({ hostedDraws: [crowded(0), crowded(1), crowded(2)] }, "popular")).toBe(true);
+  });
+});
+
+describe("세계의 주인", () => {
+  it("그 서버에서 자작 룰이 처음 승인된 시각에 받고, 승인 기록이 없으면 받지 않는다", () => {
+    const first = new Date("2026-11-01T03:00:00Z");
+    const badges = computeBadges(
+      facts({
+        homebrewApprovals: [
+          { at: first, gameId: null },
+          { at: new Date("2026-11-05T03:00:00Z"), gameId: null },
+        ],
+      }),
+    );
+    expect(badges.find((badge) => badge.badgeKey === "sp.worldowner")).toMatchObject({
+      tier: 1,
+      earnedAt: first,
+    });
+    expect(earned({ homebrewApprovals: [] }, "worldowner")).toBe(false);
   });
 });

@@ -194,14 +194,6 @@ export const BADGE_LADDERS: Record<BadgeLadderKey, BadgeLadderDefinition> = {
     granted: false,
     steps: [{ threshold: 1, emoji: "🎖️", name: "이달의 GM", grade: 5, look: "monthly" }],
   },
-  [BADGE_LADDER.worldOwner]: {
-    role: BADGE_ROLE.special,
-    perRule: false,
-    monthly: false,
-    granted: true,
-    description: "직접 만든 룰이 서버 룰북으로 등록되었습니다.",
-    steps: [{ threshold: 1, emoji: "🪐", name: "세계의 주인", grade: 5 }],
-  },
   [BADGE_LADDER.developer]: {
     role: BADGE_ROLE.special,
     perRule: false,

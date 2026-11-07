@@ -57,6 +57,8 @@ export const HIDDEN_LADDER = {
   tightrope: "sp.tightrope",
   heavenHell: "sp.heavenhell",
   hallOfFame: "sp.hall",
+  // 자작 룰이 그 서버에서 처음 승인되면 받는다. 키는 공개 칭호였을 때와 같아 이미 받은 기록이 그대로 이어진다.
+  worldOwner: "sp.worldowner",
 } as const;
 export type HiddenLadderKey = (typeof HIDDEN_LADDER)[keyof typeof HIDDEN_LADDER];
 
@@ -83,7 +85,6 @@ export const BADGE_LADDER = {
   developer: "sp.dev",
   guildMaster: "sp.guild",
   apprentice: "sp.apprentice",
-  worldOwner: "sp.worldowner",
   ...RULEBOOK_LADDER,
   ...HIDDEN_LADDER,
 } as const;
