@@ -1,6 +1,8 @@
-import { Avatar, Badge, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { AppBar, DESKTOP_CARD_CLASS, GoBackButton, PageShell } from "@/shared/ui";
+
+import { ProfileHero } from "./profile-hero";
 
 interface DepartedMemberScreenProps {
   name: string;
@@ -12,13 +14,21 @@ export function DepartedMemberScreen({ name, avatarUrl }: DepartedMemberScreenPr
   return (
     <PageShell readable appBar={<AppBar back="/games" title="프로필" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <HStack align="center" gap="150" className="px-200 py-250">
-          <Avatar src={avatarUrl} name={name} size="lg" className="opacity-50" />
-          <Text truncate typography="heading2" render={<h2 />}>
-            {name}
-          </Text>
-          <Badge colorPalette="gray">나감</Badge>
-        </HStack>
+        <div className="px-200 pb-250">
+          <ProfileHero
+            name={name}
+            avatarUrl={avatarUrl}
+            bannerUrl={null}
+            accentColor={null}
+            departed
+          />
+          <HStack align="center" gap="100" className="mt-175 min-w-0">
+            <Text truncate typography="heading2" render={<h2 />}>
+              {name}
+            </Text>
+            <Badge colorPalette="gray">나감</Badge>
+          </HStack>
+        </div>
         <VStack
           align="center"
           justify="center"

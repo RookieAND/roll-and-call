@@ -16,6 +16,8 @@ import {
 } from "@/widgets/session-list";
 import { loadProfile } from "@/widgets/session-list/server";
 
+import { UserSessionsProfilePanel } from "./user-sessions-profile-panel";
+
 const EMPTY_IMAGE = {
   [SESSION_ROLE.player]: "empty-my-games",
   [SESSION_ROLE.host]: "empty-hosted",
@@ -53,6 +55,7 @@ export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
 
   return (
     <PageShell
+      panel={<UserSessionsProfilePanel profile={profile} />}
       appBar={<AppBar back={`/users/${profile.id}`} title={`${profile.username}의 세션`} />}
     >
       <div className={DESKTOP_CARD_CLASS}>

@@ -8,19 +8,19 @@ interface ProfileHeroProps {
   avatarUrl: string | null | undefined;
   bannerUrl: string | null | undefined;
   accentColor: string | null | undefined;
-  // 아바타 오른쪽 끝(편집 버튼 등)
   action?: ReactNode;
+  departed?: boolean;
   className?: string;
 }
 
-// 프로필 맨 위 3:1 배너와 겹쳐 놓인 아바타. 배너가 없으면 강조색 면(강조색도 없으면 기본 면)이다.
-// 좌우 여백을 가진 부모 안에서 쓰고, 배너는 여백을 뚫고 가장자리까지 펼친다. 폭은 읽기 좋은 640px 열(PageShell readable) 안이고,
+// 배너가 없으면 강조색 면, 강조색도 없으면 기본 면이다. 나간 멤버는 회색 면에 흐린 아바타다.
 export function ProfileHero({
   name,
   avatarUrl,
   bannerUrl,
   accentColor,
   action,
+  departed,
   className,
 }: ProfileHeroProps) {
   const accent = accentColor ? ({ "--acc": accentColor } as CSSProperties) : undefined;
@@ -30,11 +30,19 @@ export function ProfileHero({
 
   return (
     <div style={accent} className={cn("-mx-200", className)}>
-      <div className={cn("relative aspect-[3/1] w-full overflow-hidden", faceClass)}>
+      <div
+        className={cn(
+          "relative aspect-[3/1] w-full overflow-hidden",
+          faceClass,
+          departed && "bg-gray-100",
+        )}
+      >
         {bannerUrl && <BannerImage src={bannerUrl} />}
       </div>
       <HStack align="end" gap="100" className="relative z-10 -mt-600 px-200 desktop:-mt-13">
-        <span className={"flex flex-none rounded-full bg-surface p-050"}>
+        <span
+          className={cn("flex flex-none rounded-full bg-surface p-050", departed && "opacity-50")}
+        >
           <Avatar
             src={avatarUrl}
             name={name}

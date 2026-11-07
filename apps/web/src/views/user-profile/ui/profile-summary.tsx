@@ -38,7 +38,7 @@ export async function ProfileSummary({
   const server = await getCurrentServer();
   const role = await getMemberRole({ serverId: server.id, userId: profile.id });
   const joinedLabel = toKst(profile.joinedAt).format("YYYY년 M월부터");
-  const bioText = profile.bio || EMPTY_BIO_TEXT;
+  const bioText = profile.bio || `${EMPTY_BIO_TEXT}.`;
   const bioForeground = profile.bio ? "normal" : "hint";
 
   return (
