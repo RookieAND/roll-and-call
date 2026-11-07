@@ -5,10 +5,13 @@ import { ServerLink } from "@/shared/ui";
 
 interface QuestAchievementPreviewProps {
   earned: boolean;
+  // 받기 전 설명. 없으면 받은 뒤와 같은 문구를 흐리게 보인다(모바일).
+  lockedCaption?: string;
 }
 
 // 받기 전에는 흐린 점선 윤곽, 받은 뒤에는 업적 도감의 특별 탭으로 가는 [업적 보기]가 붙는다.
-export function QuestAchievementPreview({ earned }: QuestAchievementPreviewProps) {
+export function QuestAchievementPreview({ earned, lockedCaption }: QuestAchievementPreviewProps) {
+  const caption = !earned && lockedCaption ? lockedCaption : "튜토리얼 퀘스트를 모두 마쳤습니다.";
   return (
     <VStack
       gap="150"
@@ -31,7 +34,7 @@ export function QuestAchievementPreview({ earned }: QuestAchievementPreviewProps
             견습 모험가
           </Text>
           <Text typography="body3" foreground="muted">
-            튜토리얼 퀘스트를 모두 마쳤습니다.
+            {caption}
           </Text>
         </VStack>
       </HStack>

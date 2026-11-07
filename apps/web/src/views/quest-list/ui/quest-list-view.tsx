@@ -11,6 +11,7 @@ import { MarkOnboardedOnMount } from "./mark-onboarded-on-mount";
 import { QuestAchievementPreview } from "./quest-achievement-preview";
 import { QuestCard } from "./quest-card";
 import { QuestGlanceCard } from "./quest-glance-card";
+import { QuestPanel } from "./quest-panel";
 import { QuestProgress } from "./quest-progress";
 import { QuestSectionLabel } from "./quest-section-label";
 
@@ -32,11 +33,19 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
     : { label: "나중에 하기", path: "/games" };
 
   return (
-    <PageShell readable appBar={<AppBar title="튜토리얼 퀘스트" />}>
+    <PageShell
+      readable
+      appBar={<AppBar title="튜토리얼 퀘스트" />}
+      panel={<QuestPanel clearedCount={cleared.length} allCleared={allCleared} />}
+    >
       <Container size="sm">
         <VStack gap="150" className="px-050 pt-200 pb-250">
-          <QuestProgress clearedCount={cleared.length} allCleared={allCleared} />
-          <QuestGlanceCard defaultOpen={!review} />
+          <div className="desktop:hidden">
+            <QuestProgress clearedCount={cleared.length} allCleared={allCleared} />
+          </div>
+          <div className="desktop:hidden">
+            <QuestGlanceCard defaultOpen={!review} />
+          </div>
           {tracks.map(({ track, cards }) => (
             <VStack key={track} gap="100" render={<section />} className="pt-050">
               <QuestSectionLabel>{QUEST_TRACK_LABEL[track]}</QuestSectionLabel>
@@ -49,7 +58,7 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
               ))}
             </VStack>
           ))}
-          <VStack gap="100" render={<section />} className="pt-050">
+          <VStack gap="100" render={<section />} className="pt-050 desktop:hidden">
             <QuestSectionLabel>보상</QuestSectionLabel>
             <QuestAchievementPreview earned={allCleared} />
           </VStack>
