@@ -44,7 +44,7 @@ export const profiles = pgTable(
   (table) => [
     check("profiles_featured_badges_limit", sql`cardinality(${table.featuredBadges}) <= 3`),
   ],
-);
+).enableRLS();
 
 // 쓴 사람만 본다. 상대는 내용도, 메모가 있다는 사실도 볼 수 없다.
 export const profileMemos = pgTable(
@@ -66,7 +66,7 @@ export const profileMemos = pgTable(
     index("profile_memos_owner_id_idx").on(table.ownerId),
     index("profile_memos_target_id_idx").on(table.targetId),
   ],
-);
+).enableRLS();
 
 export type Profile = typeof profiles.$inferSelect;
 

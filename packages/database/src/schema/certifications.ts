@@ -9,6 +9,7 @@ import {
   text,
   timestamp,
   uuid,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 import { profiles } from "./profiles";
@@ -71,7 +72,10 @@ export const certApplications = pgTable(
     rejectTag: text("reject_tag"),
     rejectReason: text("reject_reason"),
     flaggedShots: text("flagged_shots").array().$type<CertShot[]>().notNull().default([]),
-    processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
+    processedBy: uuid("processed_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     processedAt: timestamp("processed_at", { withTimezone: true }),
     // 보관 기간(결정 뒤 30일)이 지나 사진 칸을 비운 시각
     filesPurgedAt: timestamp("files_purged_at", { withTimezone: true }),
@@ -90,6 +94,10 @@ export const certApplications = pgTable(
     index("cert_applications_server_id_pending_idx")
       .on(table.serverId, table.createdAt)
       .where(sql`status = 'pending'`),
+    // 같은 룰북에 대기 중인 신청은 한 사람당 하나뿐이다. 두 번 눌러 동시에 들어와도 하나만 남는다.
+    uniqueIndex("cert_applications_pending_unique")
+      .on(table.serverId, table.userId, table.rulebookId)
+      .where(sql`status = 'pending'`),
   ],
 ).enableRLS();
 
@@ -103,11 +111,17 @@ export const certifications = pgTable(
     rulebookId: uuid("rulebook_id")
       .notNull()
       .references(() => rulebooks.id, { onDelete: "cascade" }),
-    approvedBy: uuid("approved_by").references(() => profiles.id, { onDelete: "set null" }),
+    approvedBy: uuid("approved_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     approvedAt: timestamp("approved_at", { withTimezone: true }).notNull().defaultNow(),
     // 운영진이 반려로 돌리면 지우지 않고 남긴다. 사용자 화면에는 반려로 보이고, 다시 인증하면 비운다.
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
-    revokedBy: uuid("revoked_by").references(() => profiles.id, { onDelete: "set null" }),
+    revokedBy: uuid("revoked_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     revokeReason: text("revoke_reason"),
     // 사용자가 반려 기록을 지운 시각. 사용자 앱에서만 숨기고 어드민 이력에는 남는다
     discardedAt: timestamp("discarded_at", { withTimezone: true }),

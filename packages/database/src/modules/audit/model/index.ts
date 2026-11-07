@@ -9,6 +9,7 @@ export {
 } from "./audit-actions";
 export { isAuditAction } from "./is-audit-action";
 export { auditActionLabel } from "./audit-action-label";
+export { auditActionsLabeled } from "./audit-actions-labeled";
 export {
   scalarChange,
   listChange,

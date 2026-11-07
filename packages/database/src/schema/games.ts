@@ -143,13 +143,19 @@ export const games = pgTable(
     discordThreadId: text("discord_thread_id"),
     // 운영진 조치. 숨긴 구인은 사용자 앱의 목록·검색에서만 빠진다.
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
-    hiddenBy: uuid("hidden_by").references(() => profiles.id, { onDelete: "set null" }),
+    hiddenBy: uuid("hidden_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     // 사유 코드(CONTENT_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
     hiddenReasonCode: text("hidden_reason_code"),
     hiddenReasonText: text("hidden_reason_text"),
     // 취소한 구인은 지우지 않고 남겨 신청·수정·명단 조정만 막는다. 사유는 GM이 취소할 때만 남긴다.
     cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
-    cancelledBy: uuid("cancelled_by").references(() => profiles.id, { onDelete: "set null" }),
+    cancelledBy: uuid("cancelled_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     cancelKind: gameCancelKind("cancel_kind"),
     cancelReason: text("cancel_reason"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -247,7 +253,7 @@ export const games = pgTable(
       sql`${table.attendanceFirstConfirmedAt} is null or ${table.attendanceConfirmedAt} is not null`,
     ),
   ],
-);
+).enableRLS();
 
 export const participants = pgTable(
   "participants",
@@ -271,6 +277,7 @@ export const participants = pgTable(
     absenceCancelledAt: timestamp("absence_cancelled_at", { withTimezone: true }),
     absenceCancelledBy: uuid("absence_cancelled_by").references(() => profiles.id, {
       onDelete: "set null",
+      onUpdate: "cascade",
     }),
     absenceCancelReason: text("absence_cancel_reason"),
     // 대기가 된 시각. 같은 시각끼리는 drawRank, 그다음 joinedAt 순서다. 확정 상태에서는 의미가 없다.
@@ -285,6 +292,7 @@ export const participants = pgTable(
     absenceAddedAt: timestamp("absence_added_at", { withTimezone: true }),
     absenceAddedBy: uuid("absence_added_by").references(() => profiles.id, {
       onDelete: "set null",
+      onUpdate: "cascade",
     }),
     absenceAddedTag: text("absence_added_tag"),
     absenceAddedReason: text("absence_added_reason"),
@@ -324,7 +332,7 @@ export const participants = pgTable(
       sql`char_length(${table.absenceAddedReason}) <= 200`,
     ),
   ],
-);
+).enableRLS();
 
 // status에는 removed를 쓰지 않는다(participants와 같은 enum이라 DB로는 막지 않는다).
 // 추첨을 적용한 순간의 명단. 뒤에 누가 나가거나 순번이 바뀌어도 추첨 결과 페이지는 이 기록을 보여 준다.
@@ -376,7 +384,7 @@ export const availabilities = pgTable(
     // 내가 응답한 게임(user_id → distinct game_id)을 인덱스만으로 끝낸다.
     index("availabilities_user_id_game_id_idx").on(table.userId, table.gameId),
   ],
-);
+).enableRLS();
 
 // 구인에서 직접 입력한 서플리먼트가 만든 룰북 추가 요청과 그 이름을 적은 구인. 같은 이름이면 요청 하나에 구인이 여럿 붙는다.
 // 구인이 취소되거나 그 이름을 지우면 행이 빠지고, 구인이 하나도 남지 않은 대기 중 자동 요청은 트리거가 지운다.

@@ -48,9 +48,15 @@ export const sanctions = pgTable(
     reasonCode: text("reason_code").notNull(),
     reasonText: text("reason_text"),
     until: timestamp("until", { withTimezone: true }),
-    createdBy: uuid("created_by").references(() => profiles.id, { onDelete: "set null" }),
+    createdBy: uuid("created_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    releasedBy: uuid("released_by").references(() => profiles.id, { onDelete: "set null" }),
+    releasedBy: uuid("released_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     releasedAt: timestamp("released_at", { withTimezone: true }),
   },
   (table) => [
@@ -69,11 +75,17 @@ export const reports = pgTable(
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
-    reporterId: uuid("reporter_id").references(() => profiles.id, { onDelete: "set null" }),
+    reporterId: uuid("reporter_id").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     category: text("category").notNull(),
     detail: text("detail").notNull().default(""),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-    resolvedBy: uuid("resolved_by").references(() => profiles.id, { onDelete: "set null" }),
+    resolvedBy: uuid("resolved_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     resolvedAt: timestamp("resolved_at", { withTimezone: true }),
   },
   (table) => [
@@ -111,7 +123,10 @@ export const staffMemos = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    authorId: uuid("author_id").references(() => profiles.id, { onDelete: "set null" }),
+    authorId: uuid("author_id").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     body: text("body").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -124,11 +139,17 @@ export const auditLog = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: serverId(),
-    actorId: uuid("actor_id").references(() => profiles.id, { onDelete: "set null" }),
+    actorId: uuid("actor_id").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     actorKind: auditActorKind("actor_kind").notNull().default("staff"),
     action: text("action").notNull(),
     target: text("target").notNull(),
-    targetUserId: uuid("target_user_id").references(() => profiles.id, { onDelete: "set null" }),
+    targetUserId: uuid("target_user_id").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     targetGameId: uuid("target_game_id").references(() => games.id, { onDelete: "set null" }),
     reason: text("reason").notNull().default(""),
     reasonTag: text("reason_tag"),

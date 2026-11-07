@@ -28,6 +28,7 @@ import {
 } from "@/shared/server";
 
 import { isQuizAnswer } from "../model/is-quiz-answer";
+import { PENDING_APPLICATION_ERROR } from "../model/pending-application-error";
 import { QUIZ_ANSWER_FIELD } from "../model/quiz-answer-field";
 import { QUIZ_WRONG_ANSWER } from "../model/quiz-wrong-answer";
 
@@ -90,7 +91,7 @@ export async function submitCertification(
   const certifiedIds = new Set(certified.map((row) => row.rulebookId));
   if (certifiedIds.has(book.id)) return { error: "이미 인증된 룰북입니다." };
   const latest = applications.find((application) => application.rulebookId === book.id);
-  if (latest?.status === "pending") return { error: "심사 중인 신청이 있습니다." };
+  if (latest?.status === "pending") return { error: PENDING_APPLICATION_ERROR };
   const withCategory = (candidate: (typeof books)[number]) => ({
     ...candidate,
     category: candidate.categoryId,
@@ -113,7 +114,7 @@ export async function submitCertification(
   }
 
   const previous = latest?.status === "rejected" ? latest.photoUrls : null;
-  const { id: applicationId } = await createCertApplication({
+  const created = await createCertApplication({
     serverId: server.id,
     application: {
       userId: user.id,
@@ -133,6 +134,8 @@ export async function submitCertification(
       quizAnswer: quizQuestion ? quiz!.answer.trim().slice(0, 200) : null,
     },
   });
+  if (!created) return { error: PENDING_APPLICATION_ERROR };
+  const applicationId = created.id;
   after(async () => {
     const applicant = await getMemberIdentity({ serverId: server.id, userId: user.id });
     if (!applicant) return;

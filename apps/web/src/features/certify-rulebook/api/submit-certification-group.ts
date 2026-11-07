@@ -30,6 +30,7 @@ import { bulkNoticeLabel } from "../model/bulk-notice-label";
 import { bulkPhotoUrls } from "../model/bulk-photo-urls";
 import { bulkQuizAnswerField } from "../model/bulk-quiz-field";
 import { isQuizAnswer } from "../model/is-quiz-answer";
+import { PENDING_APPLICATION_ERROR } from "../model/pending-application-error";
 import { QUIZ_WRONG_ANSWER } from "../model/quiz-wrong-answer";
 
 const TEXT_INPUT_MAX = 1000;
@@ -103,7 +104,7 @@ export async function submitCertificationGroup(
   const questionByBook = new Map(quizQuestions.map((question) => [question.rulebookId, question]));
 
   const photoUrls = bulkPhotoUrls(photos);
-  const { applications: created } = await createCertApplicationGroup({
+  const group = await createCertApplicationGroup({
     serverId: server.id,
     applications: rulebookIds.map((rulebookId) => {
       const question = questionByBook.get(rulebookId);
@@ -119,6 +120,8 @@ export async function submitCertificationGroup(
       };
     }),
   });
+  if (!group) return { error: PENDING_APPLICATION_ERROR };
+  const created = group.applications;
   after(async () => {
     const applicant = await getMemberIdentity({ serverId: server.id, userId: user.id });
     if (!applicant) return;

@@ -105,7 +105,10 @@ export const rulebookRequests = pgTable(
     source: rulebookRequestSource("source").notNull().default("user"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
-    processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
+    processedBy: uuid("processed_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     processedAt: timestamp("processed_at", { withTimezone: true }),
     // 반려할 때 요청자에게 보이는 사유. 내 룰북에 처리 뒤 30일 보인다
     rejectReason: text("reject_reason"),

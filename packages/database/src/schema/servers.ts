@@ -101,7 +101,10 @@ export const serverMembers = pgTable(
     rejoinedAt: timestamp("rejoined_at", { withTimezone: true }),
     // 추방하면 디스코드에서 차단하고 이 칸을 채운다. 차단 해제 때 비운다.
     bannedAt: timestamp("banned_at", { withTimezone: true }),
-    bannedBy: uuid("banned_by").references(() => profiles.id, { onDelete: "set null" }),
+    bannedBy: uuid("banned_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     // 사유 코드(USER_ACTION_REASON 키)와 기타일 때 입력한 글. 보이는 글은 reasonLabel로 만든다.
     banReasonCode: text("ban_reason_code"),
     banReasonText: text("ban_reason_text"),
@@ -129,7 +132,10 @@ export const serverMessageHeads = pgTable(
       .references(() => servers.id),
     caseKey: text("case_key").notNull(),
     headLine: text("head_line").notNull(),
-    updatedBy: uuid("updated_by").references(() => profiles.id, { onDelete: "set null" }),
+    updatedBy: uuid("updated_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.serverId, table.caseKey] })],
@@ -144,7 +150,10 @@ export const serverMessageTexts = pgTable(
       .references(() => servers.id),
     textKey: text("text_key").notNull(),
     body: text("body").notNull(),
-    updatedBy: uuid("updated_by").references(() => profiles.id, { onDelete: "set null" }),
+    updatedBy: uuid("updated_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.serverId, table.textKey] })],

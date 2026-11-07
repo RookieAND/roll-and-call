@@ -72,7 +72,10 @@ export const homebrewRuleApplications = pgTable(
     previousId: uuid("previous_id").references((): AnyPgColumn => homebrewRuleApplications.id, {
       onDelete: "set null",
     }),
-    processedBy: uuid("processed_by").references(() => profiles.id, { onDelete: "set null" }),
+    processedBy: uuid("processed_by").references(() => profiles.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
     // 승인·반려·거둔 시각
     processedAt: timestamp("processed_at", { withTimezone: true }),
     rejectTag: text("reject_tag"),
