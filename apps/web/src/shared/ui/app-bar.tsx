@@ -8,6 +8,8 @@ import { BackButton } from "./back-button";
 import { BACK_BUTTON_CLASS } from "./back-button-class";
 import { BrandLogo } from "./brand-logo";
 import { ServerSwitcher } from "./server-switcher";
+import { TrialAppBarBadge } from "./trial-app-bar-badge";
+import { TrialAppBarExit } from "./trial-app-bar-exit";
 
 interface AppBarProps {
   title: string;
@@ -105,6 +107,7 @@ export function AppBar({
           {title}
         </Text>
       )}
+      <TrialAppBarBadge />
       {subtitle && (
         <Text
           typography="body4"
@@ -116,6 +119,7 @@ export function AppBar({
         </Text>
       )}
       {!subtitle && <span className="flex-1" />}
+      <TrialAppBarExit />
       {action}
     </HStack>
   );

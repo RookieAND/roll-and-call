@@ -86,7 +86,7 @@ export function QuestCard({ card, justCleared }: QuestCardProps) {
         )}
         {cleared && (
           <Button
-            variant="ghost"
+            variant="outline"
             colorPalette="gray"
             size="md"
             className="min-h-11 w-full"
