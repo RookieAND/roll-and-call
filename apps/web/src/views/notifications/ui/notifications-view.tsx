@@ -25,7 +25,7 @@ export async function NotificationsView() {
             <LoginRequired
               image="empty-party"
               title="로그인하면 알림을 볼 수 있습니다"
-              description="디스코드 계정으로 로그인해 주세요."
+              description="디스코드로 로그인해 주세요."
             />
           </VStack>
         </Container>

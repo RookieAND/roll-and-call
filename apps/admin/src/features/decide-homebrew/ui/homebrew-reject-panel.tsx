@@ -92,7 +92,7 @@ export function HomebrewRejectPanel({ decision, ruleLabel }: HomebrewRejectPanel
       <Callout.Root colorPalette="gray">
         <Callout.Title>제작자의 알림 탭에 이렇게 보입니다</Callout.Title>
         <Callout.Description>
-          {`${ruleLabel} 자작 룰 신청이 반려되었습니다.`}
+          {`${ruleLabel} 내가 만든 룰 신청이 반려되었습니다.`}
           <Text typography="body4" foreground="hint" className="mt-050 block">
             사유는 알림을 눌러 신청 상세에서 확인합니다.
           </Text>

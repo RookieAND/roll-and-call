@@ -224,9 +224,9 @@ export function notificationText(payload: NotificationPayload): NotificationText
         "요청한 ",
       );
     case NOTIFICATION_KIND.homebrewApproved:
-      return bold(payload.params.ruleName, " 자작 룰이 승인되었습니다.");
+      return bold(payload.params.ruleName, " 내가 만든 룰이 승인되었습니다.");
     case NOTIFICATION_KIND.homebrewRejected:
-      return bold(payload.params.ruleName, " 자작 룰 신청이 반려되었습니다.");
+      return bold(payload.params.ruleName, " 내가 만든 룰 신청이 반려되었습니다.");
     case NOTIFICATION_KIND.reviewHidden:
       return bold(
         payload.params.gameTitle,

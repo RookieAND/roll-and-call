@@ -267,7 +267,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
       kind: NOTIFICATION_KIND.homebrewApproved,
       params: { applicationId: "h1", ruleName: "달그림자 연대기" },
     },
-    "달그림자 연대기 자작 룰이 승인되었습니다.",
+    "달그림자 연대기 내가 만든 룰이 승인되었습니다.",
     null,
   ],
   [
@@ -275,7 +275,7 @@ const CASES: [NotificationPayload, string, string | null][] = [
       kind: NOTIFICATION_KIND.homebrewRejected,
       params: { applicationId: "h1", ruleName: "달그림자 연대기" },
     },
-    "달그림자 연대기 자작 룰 신청이 반려되었습니다.",
+    "달그림자 연대기 내가 만든 룰 신청이 반려되었습니다.",
     null,
   ],
   [
