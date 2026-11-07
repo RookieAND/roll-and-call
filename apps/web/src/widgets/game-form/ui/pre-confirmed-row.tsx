@@ -1,7 +1,7 @@
 import { HStack, IconButton } from "@roll-and-call/ui";
 import { X } from "lucide-react";
 
-import { EMPTY_BIO_TEXT, ProfileRow } from "@/entities/profile";
+import { ProfileRow } from "@/entities/profile";
 import type { PreConfirmedPlayer } from "@/features/write-game";
 
 interface PreConfirmedRowProps {
@@ -15,7 +15,7 @@ export function PreConfirmedRow({ player, onRemove }: PreConfirmedRowProps) {
       <ProfileRow
         name={player.username}
         avatarUrl={player.avatarUrl}
-        subline={player.bio ?? EMPTY_BIO_TEXT}
+        subline={player.bio ?? "소개를 아직 적지 않았습니다"}
         sublineForeground="hint"
       />
       <IconButton

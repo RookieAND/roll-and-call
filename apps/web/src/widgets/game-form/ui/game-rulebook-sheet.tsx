@@ -4,7 +4,7 @@ import { Button, HStack, Sheet, Text, TextInput } from "@roll-and-call/ui";
 import { uniq } from "es-toolkit";
 import { type KeyboardEvent, useState } from "react";
 
-import { RULE_GATE, type EditionSet, type MyRulebooks } from "@/entities/rulebook";
+import { RULE_GATE, RulebookOption, type EditionSet, type MyRulebooks } from "@/entities/rulebook";
 import { RulebookRequestSheet } from "@/features/request-rulebook";
 import { useIsTrial } from "@/shared/trial";
 import { EmptyState } from "@/shared/ui";
@@ -107,6 +107,12 @@ export function GameRulebookSheet({
                 ))}
               </RulebookSheetGroup>
             ))}
+            {/* ponytail: 기타 룰(R28)은 고를 때의 동작이 정해지지 않아 자리만 둔다. */}
+            {!query.trim() && (
+              <RulebookSheetGroup title="기타">
+                <RulebookOption name="기타 룰" edition="" disabled tabbable={false} />
+              </RulebookSheetGroup>
+            )}
             {groups.length === 0 && (
               <EmptyState
                 image="empty-rulebook-search"

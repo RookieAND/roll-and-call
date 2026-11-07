@@ -12,7 +12,7 @@ export function ReopenNotice({ reopen }: { reopen: ReopenContext }) {
     );
   }
   return (
-    <Callout.Root colorPalette="primary">
+    <Callout.Root colorPalette="primary" className="p-150">
       <Callout.Icon />
       <Callout.Title>{reopen.title} 구인의 내용을 불러왔습니다.</Callout.Title>
       <Callout.Description>

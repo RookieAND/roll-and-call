@@ -22,7 +22,7 @@ export function RuleNoticeCallout({ notice }: RuleNoticeCalloutProps) {
   }
   const isBlocked = notice.kind === RULE_NOTICE.blocked;
   return (
-    <Callout.Root colorPalette="warning">
+    <Callout.Root colorPalette="warning" className="p-150">
       <Callout.Icon />
       <Callout.Title>
         {isBlocked

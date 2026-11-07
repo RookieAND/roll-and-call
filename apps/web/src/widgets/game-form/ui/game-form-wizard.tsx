@@ -261,7 +261,6 @@ export function GameFormWizard({
                 ? form.formState.errors.endDate.message
                 : undefined)
             }
-            cancelLabel={edit ? "취소" : undefined}
             onNext={goNext}
             onBack={goBack}
           />

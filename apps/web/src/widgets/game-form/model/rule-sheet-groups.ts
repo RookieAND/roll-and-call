@@ -5,7 +5,7 @@ const HOMEBREW_GROUP = {
   shared: { key: "homebrew:shared", name: "자작 룰" },
 } as const;
 
-// 순서는 내가 만든 룰, 일반 카테고리(이름 순), 다른 사람의 자작 룰이다. 기타 룰(R28) 자리는 아직 없다.
+// 순서는 내가 만든 룰, 일반 카테고리(이름 순), 다른 사람의 자작 룰이다. 맨 끝 기타 룰(R28)은 시트가 자리만 그린다.
 export function ruleSheetGroups({ data, query }: { data: MyRulebooks; query: string }) {
   const keyword = query.trim().toLowerCase();
   const matches = (set: EditionSet) =>

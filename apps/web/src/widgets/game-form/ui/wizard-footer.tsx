@@ -14,7 +14,6 @@ interface WizardFooterProps {
   pending: boolean;
   submitLabel: string;
   error?: string;
-  cancelLabel?: string;
   onNext: () => void;
   onBack: () => void;
 }
@@ -25,13 +24,12 @@ export function WizardFooter({
   pending,
   submitLabel,
   error,
-  cancelLabel,
   onNext,
   onBack,
 }: WizardFooterProps) {
   const isFirstStep = step === 0;
   const isLastStep = step === total - 1;
-  const backLabel = isFirstStep ? cancelLabel : "이전";
+  const backLabel = isFirstStep ? "취소" : "이전";
 
   return (
     <FloatingBar.Root elevated={false}>
@@ -47,17 +45,9 @@ export function WizardFooter({
               </Callout.Root>
             )}
             <HStack gap="100" className="[&>*]:flex-1">
-              {backLabel && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onBack}
-                  size="lg"
-                  disabled={pending}
-                >
-                  {backLabel}
-                </Button>
-              )}
+              <Button type="button" variant="outline" onClick={onBack} size="lg" disabled={pending}>
+                {backLabel}
+              </Button>
               {/* key가 없으면 같은 DOM 버튼의 type만 submit으로 바뀌어, 마지막 단계로 넘어간 그
                   클릭이 곧바로 제출로 이어진다. */}
               {!isLastStep && <WizardNextButton key="next" onClick={onNext} />}
