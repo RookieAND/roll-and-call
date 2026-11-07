@@ -535,6 +535,19 @@
   --rc-legacy-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
+
+  --rc-callout-gray-bg: #34343f;
+  --rc-callout-gray-border: #4a4a56;
+  --rc-callout-primary-bg: #2b2b5c;
+  --rc-callout-primary-border: #55559a;
+  --rc-callout-success-bg: #18382c;
+  --rc-callout-success-border: #29624b;
+  --rc-callout-warning-bg: #3f3018;
+  --rc-callout-warning-border: #8a5a1b;
+  --rc-callout-notice-bg: #3d2f20;
+  --rc-callout-notice-border: #8a5a1b;
+  --rc-callout-danger-bg: #452b2b;
+  --rc-callout-danger-border: #7d4949;
 }
 
 /* 부분 테마 보정: @theme 별칭은 :root에서 한 번만 계산되므로, [data-theme] 상자에서
@@ -635,6 +648,38 @@
   --color-heat-5: var(--rc-color-heat-5);
   --color-heat-ink: var(--rc-color-heat-ink);
   --color-heat-ink-strong: var(--rc-color-heat-ink-5);
+}
+
+/* 다크 Callout: 페이지 배경(#1e1e26)과 구분되도록 채움·테두리를 Callout 안에서만 올린다. 전역 토큰은 그대로다. */
+[data-theme="dark"] [data-slot="callout"] {
+  border-color: var(--callout-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-variant="tinted"] {
+  background-color: var(--callout-bg);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="gray"] {
+  --callout-bg: var(--rc-callout-gray-bg);
+  --callout-border: var(--rc-callout-gray-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="primary"] {
+  --callout-bg: var(--rc-callout-primary-bg);
+  --callout-border: var(--rc-callout-primary-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="success"] {
+  --callout-bg: var(--rc-callout-success-bg);
+  --callout-border: var(--rc-callout-success-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="warning"] {
+  --callout-bg: var(--rc-callout-warning-bg);
+  --callout-border: var(--rc-callout-warning-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="notice"] {
+  --callout-bg: var(--rc-callout-notice-bg);
+  --callout-border: var(--rc-callout-notice-border);
+}
+[data-theme="dark"] [data-slot="callout"][data-color-palette="danger"] {
+  --callout-bg: var(--rc-callout-danger-bg);
+  --callout-border: var(--rc-callout-danger-border);
 }
 
 @keyframes shimmer {
