@@ -74,6 +74,11 @@ export function RulePicker({ options, selected, onDone }: RulePickerProps) {
                 </label>
               </li>
             ))}
+            {keyword && visible.length === 0 && (
+              <li className="px-200 py-400 text-center">
+                <Text typography="subtitle1">{`「${query.trim()}」에 맞는 룰이 없습니다`}</Text>
+              </li>
+            )}
           </ul>
         </VStack>
       </Sheet.Body>

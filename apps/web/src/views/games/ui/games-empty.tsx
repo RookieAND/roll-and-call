@@ -4,11 +4,13 @@ import { EmptyState, ServerLink } from "@/shared/ui";
 
 import { filterParams } from "../lib/filter-params";
 import { gamesHref } from "../lib/games-href";
+import { EMPTY_FILTER_DRAFT } from "../model/filter-draft";
 import {
   GAME_STATUS_FILTER_DEFAULT,
   GAME_STATUS_FILTERS,
   GAME_TAB,
   GAME_TAB_DEFAULT,
+  hasGameFilters,
   type GamesFilter,
 } from "../model/game-sort";
 import type { NewGameSanction } from "../model/new-game-sanction";
@@ -91,6 +93,31 @@ export function GamesEmpty({ filter, total, sanction }: GamesEmptyProps) {
             className="mt-100"
           >
             전체 보기
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (hasGameFilters(filter)) {
+    return (
+      <EmptyState
+        image="empty-search"
+        title="조건에 맞는 구인이 없습니다"
+        description="필터 조건을 바꾸거나 초기화해 주세요."
+        action={
+          <Button
+            render={
+              <ServerLink
+                path={gamesHref(
+                  filterParams({ ...filter, ...EMPTY_FILTER_DRAFT, page: undefined }),
+                )}
+              />
+            }
+            variant="outline"
+            className="mt-100"
+          >
+            필터 초기화
           </Button>
         }
       />
