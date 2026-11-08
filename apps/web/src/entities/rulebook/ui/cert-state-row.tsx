@@ -29,8 +29,10 @@ interface CertStateRowProps {
   title: string;
   meta?: string;
   statusPlacement?: "inline" | "end" | "badge" | "none";
-  // 화면마다 짧은 라벨을 쓸 때 덮어 쓴다(마이페이지 「인증」·「반려」).
+  // 화면마다 짧은 라벨을 쓸 때 덮어 쓴다(마이페이지 「확인 중」·「반려됨」).
   statusLabel?: string;
+  // 종류 배지(기본 룰북·서플리먼트). 상태 배지 대신 오른쪽 끝에 놓는다.
+  kindLabel?: string;
   chevron?: boolean;
   size?: "md" | "sm";
 }
@@ -41,6 +43,7 @@ export function CertStateRow({
   meta,
   statusPlacement = "end",
   statusLabel,
+  kindLabel,
   chevron = true,
   size = "md",
 }: CertStateRowProps) {
@@ -73,6 +76,11 @@ export function CertStateRow({
       {statusPlacement === "badge" && (
         <Badge colorPalette={BADGE_PALETTE[foreground]} className="flex-none">
           {label}
+        </Badge>
+      )}
+      {kindLabel && (
+        <Badge colorPalette="gray" className="flex-none">
+          {kindLabel}
         </Badge>
       )}
       {chevron && <ChevronRight size={16} aria-hidden className="flex-none text-hint" />}
