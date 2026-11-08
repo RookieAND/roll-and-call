@@ -514,13 +514,13 @@
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
 
   --rc-callout-gray-bg: #34343f;
-  --rc-callout-gray-border: #4a4a56;
+  --rc-callout-gray-border: var(--rc-color-gray-700);
   --rc-callout-primary-bg: #2b2b5c;
   --rc-callout-primary-border: #55559a;
-  --rc-callout-success-bg: #18382c;
+  --rc-callout-success-bg: var(--rc-color-green-900);
   --rc-callout-success-border: #29624b;
-  --rc-callout-warning-bg: #3f3018;
-  --rc-callout-warning-border: #8a5a1b;
+  --rc-callout-warning-bg: var(--rc-color-amber-900);
+  --rc-callout-warning-border: var(--rc-color-amber-700);
   --rc-callout-danger-bg: #452b2b;
   --rc-callout-danger-border: #7d4949;
 }
