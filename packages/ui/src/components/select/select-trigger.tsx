@@ -43,7 +43,7 @@ export function SelectTrigger({
           "flex h-11 w-full items-center justify-between gap-100 rounded-400 border bg-surface px-150 text-left text-sm outline-none transition-colors focus:ring-2 disabled:opacity-50",
           invalid
             ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
-            : "border-gray-500 focus:border-primary-500 focus:ring-focus",
+            : "border-input focus:border-primary-500 focus:ring-focus",
           resolveStateProp({ prop: className, state }),
         )
       }
@@ -57,7 +57,7 @@ export function SelectTrigger({
               )
             }
           </BaseSelect.Value>
-          <BaseSelect.Icon data-slot="select-icon" className="text-gray-500">
+          <BaseSelect.Icon data-slot="select-icon" className="text-hint">
             {icon}
           </BaseSelect.Icon>
         </>

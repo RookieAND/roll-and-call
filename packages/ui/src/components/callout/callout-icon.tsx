@@ -29,7 +29,7 @@ export function CalloutIcon({ className, children }: CalloutIconProps) {
       data-slot="callout-icon"
       className={cn(
         "col-start-1 row-span-2 mt-025 mr-100 flex-none self-start",
-        colorPalette === "gray" ? "text-gray-500" : calloutInk({ colorPalette }),
+        colorPalette === "gray" ? "text-hint" : calloutInk({ colorPalette }),
         className,
       )}
     >

@@ -12,7 +12,7 @@ import { toDateKey } from "./to-date-key";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const NAVIGATION_BUTTON =
-  "h-7 w-7 rounded-200 text-gray-500 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus";
+  "h-7 w-7 rounded-200 text-hint hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus";
 const ARROW_OFFSETS: Record<string, number> = {
   ArrowLeft: -1,
   ArrowRight: 1,

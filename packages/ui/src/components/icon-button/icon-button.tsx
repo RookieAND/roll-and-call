@@ -12,7 +12,7 @@ const iconButton = cva(
       variant: {
         solid: "bg-primary-600 text-white hover:bg-primary-700",
         ghost: "text-gray-600 hover:bg-gray-100",
-        outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
+        outline: "border border-gray-300 text-label hover:bg-gray-50",
       },
       size: { sm: "h-8 w-8", md: "h-10 w-10", lg: "h-12 w-12" },
     },

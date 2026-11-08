@@ -39,7 +39,7 @@ export function ServerSwitcher({ servers = [], destination }: ServerSwitcherProp
         <Badge
           colorPalette="primary"
           render={<button type="button" aria-label={`${current.name}, 다른 서버로 옮기기`} />}
-          className="min-w-0 shrink cursor-pointer gap-050 pl-075 hover:bg-tinted-bg-hover"
+          className="min-w-0 shrink cursor-pointer gap-050 pl-075 hover:bg-primary-100"
         >
           <ServerIcon name={current.name} icon={current.icon} size="xs" />
           <span className="truncate">{current.name}</span>

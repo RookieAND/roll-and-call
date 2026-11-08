@@ -72,7 +72,7 @@ export function ForumTagSection({
                 </Table.Cell>
                 <Table.Cell>
                   {deleted ? (
-                    <span className="inline-flex items-center rounded-200 border border-dashed border-gray-500 px-100 text-body4 leading-4.5 text-muted">
+                    <span className="inline-flex items-center rounded-200 border border-dashed border-input px-100 text-body4 leading-4.5 text-muted">
                       삭제된 태그
                     </span>
                   ) : null}

@@ -13,7 +13,7 @@ export function HelpQuestCard({ href, progress }: HelpQuestCardProps) {
       padding="sm"
       interactive
       render={<Link href={href} />}
-      className="border-tinted-border bg-tinted-bg hover:bg-tinted-bg-hover"
+      className="border-tinted-border bg-tinted-bg hover:bg-primary-100"
     >
       <HStack align="center" gap="150" className="px-050 py-025">
         <span className="flex size-9.5 flex-none items-center justify-center rounded-500 bg-primary-600 text-white">

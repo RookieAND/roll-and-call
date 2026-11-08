@@ -29,7 +29,7 @@ export function DesktopNavServer({ current, servers, memberCount }: DesktopNavSe
           </Text>
         )}
       </VStack>
-      {switchable && <ChevronsUpDown size={16} aria-hidden className="flex-none text-gray-500" />}
+      {switchable && <ChevronsUpDown size={16} aria-hidden className="flex-none text-hint" />}
     </>
   );
   const className = "w-full items-center gap-125 rounded-500 border border-gray-200 p-125";

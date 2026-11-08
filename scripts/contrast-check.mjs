@@ -43,7 +43,9 @@ const contrast = (a, b) => {
 const PAIRS = [
   ["fg-normal", "bg-canvas-base", 4.5],
   ["fg-muted", "bg-canvas-base", 4.5],
+  ["fg-label", "bg-canvas-base", 4.5],
   ["fg-hint", "bg-canvas-base", 4.5],
+  ["border-input", "bg-canvas-base", 3],
   ["fg-hint", "bg-secondary", 4.5],
   ["fg-warning", "bg-warning-weak", 4.5],
   ["fg-notice", "bg-warning-weak", 4.5],

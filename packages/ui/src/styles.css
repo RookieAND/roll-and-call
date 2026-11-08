@@ -99,11 +99,7 @@
   --color-gray-100: var(--rc-color-bg-secondary);
   --color-gray-200: var(--rc-color-border-normal);
   --color-gray-300: var(--rc-color-border-strong);
-  --color-gray-400: var(--rc-legacy-gray-400);
-  --color-gray-500: var(--rc-legacy-gray-500);
   --color-gray-600: var(--rc-color-fg-muted);
-  --color-gray-700: var(--rc-legacy-gray-700);
-  --color-gray-800: var(--rc-legacy-gray-800);
   --color-gray-900: var(--rc-color-fg-normal);
 
   --color-discord: var(--rc-color-bg-discord);
@@ -118,9 +114,8 @@
   --color-surface: var(--rc-color-bg-canvas-base);
 
   --color-danger-50: var(--rc-color-bg-danger-weak);
-  --color-danger-100: var(--rc-legacy-danger-100);
+  --color-danger-100: var(--rc-color-bg-danger-weak-hover);
   --color-danger-200: var(--rc-color-border-danger);
-  --color-danger-300: var(--rc-legacy-danger-300);
   --color-danger-400: var(--rc-color-border-danger);
   --color-danger-600: var(--rc-color-fg-danger);
   --color-danger-solid: var(--rc-color-bg-danger);
@@ -129,11 +124,12 @@
   --color-warning-50: var(--rc-color-bg-warning-weak);
   --color-warning-600: var(--rc-color-fg-warning);
 
+  --color-input: var(--rc-color-border-input);
+  --color-label: var(--rc-color-fg-label);
+  --color-disabled: var(--rc-color-fg-disabled);
   --color-hint: var(--rc-color-fg-hint);
   --color-dim: var(--rc-color-bg-canvas-dim);
-  --color-primary-ink: var(--rc-legacy-primary-ink);
   --color-tinted-bg: var(--rc-color-bg-primary-weakest);
-  --color-tinted-bg-hover: var(--rc-legacy-tinted-bg-hover);
   --color-tinted-border: var(--rc-color-border-primary);
   --color-tinted-ink: var(--rc-color-fg-primary);
 
@@ -175,6 +171,7 @@
   --rc-color-gray-250: #d3d3db;
   --rc-color-gray-300: #b4b4be;
   --rc-color-gray-400: #96969f;
+  --rc-color-gray-450: #8f8f9a;
   --rc-color-gray-500: #6d6d77;
   --rc-color-gray-600: #5f5f6b;
   --rc-color-gray-700: #4a4a55;
@@ -322,8 +319,6 @@
   }
 }
 
-/* --rc-legacy-*는 역할 토큰이 아직 없는 옛 숫자 램프 유틸리티(text-gray-700 등)의 값이다.
-   값은 문서 프리미티브에서 가장 가까운 단계를 쓰고, 사용처가 역할 유틸리티로 옮겨 가면 지운다. */
 :root,
 [data-theme="light"] {
   --rc-color-bg-canvas-base: var(--rc-color-gray-000);
@@ -372,6 +367,10 @@
   --rc-color-border-subtle: var(--rc-color-gray-050);
   --rc-color-border-normal: var(--rc-color-gray-100);
   --rc-color-border-strong: var(--rc-color-gray-200);
+  --rc-color-border-input: var(--rc-color-gray-450);
+  --rc-color-fg-label: var(--rc-color-gray-800);
+  --rc-color-fg-disabled: var(--rc-color-gray-300);
+  --rc-color-bg-danger-weak-hover: var(--rc-color-red-100);
   --rc-color-border-primary: var(--rc-color-indigo-200);
   --rc-color-border-primary-strong: var(--rc-color-indigo-500);
   --rc-color-border-focus: var(--rc-color-indigo-500);
@@ -402,14 +401,6 @@
   --rc-color-data-gray-bg: #f2f2f6;
   --rc-color-data-gray-ink: #5f5f6b;
 
-  --rc-legacy-gray-400: var(--rc-color-gray-300);
-  --rc-legacy-gray-500: var(--rc-color-gray-400);
-  --rc-legacy-gray-700: var(--rc-color-gray-800);
-  --rc-legacy-gray-800: var(--rc-color-gray-900);
-  --rc-legacy-primary-ink: var(--rc-color-indigo-500);
-  --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-100);
-  --rc-legacy-danger-100: var(--rc-color-red-100);
-  --rc-legacy-danger-300: var(--rc-color-red-200);
   --rc-color-bg-highlight-extreme: var(--rc-color-indigo-100);
   --rc-color-border-highlight-extreme: var(--rc-color-indigo-200);
   --rc-color-fg-highlight-extreme: var(--rc-color-indigo-600);
@@ -422,16 +413,6 @@
   --rc-color-fg-rank-silver: var(--rc-color-gray-600);
   --rc-color-bg-rank-silver: var(--rc-color-gray-050);
   --rc-color-shine-rank-silver: var(--rc-color-gray-000);
-
-  --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
-  --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
-  --rc-legacy-critical-bg: var(--rc-color-bg-highlight-critical);
-  --rc-legacy-critical-ink: var(--rc-color-fg-highlight-critical);
-  --rc-legacy-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
-  --rc-legacy-critical-glow: var(--rc-color-shadow-highlight-glow);
-  --rc-legacy-extreme-bg: var(--rc-color-bg-highlight-extreme);
-  --rc-legacy-extreme-border: var(--rc-color-border-highlight-extreme);
-  --rc-legacy-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #eaecff 0%, #f6f6fb 44%, #ffffff 76%);
 }
@@ -479,6 +460,10 @@
   --rc-color-border-subtle: var(--rc-color-gray-850);
   --rc-color-border-normal: var(--rc-color-gray-800);
   --rc-color-border-strong: var(--rc-color-gray-700);
+  --rc-color-border-input: var(--rc-color-gray-450);
+  --rc-color-fg-label: var(--rc-color-gray-250);
+  --rc-color-fg-disabled: var(--rc-color-gray-700);
+  --rc-color-bg-danger-weak-hover: var(--rc-color-red-900);
   --rc-color-border-primary: #3a3a6b; /* 문서 표에만 있고 램프에 없는 값 */
   --rc-color-border-primary-strong: var(--rc-color-indigo-500);
   --rc-color-border-focus: var(--rc-color-indigo-300);
@@ -509,14 +494,6 @@
   --rc-color-data-gray-bg: #2e2e38;
   --rc-color-data-gray-ink: #b4b4be;
 
-  --rc-legacy-gray-400: var(--rc-color-gray-700);
-  --rc-legacy-gray-500: var(--rc-color-gray-400);
-  --rc-legacy-gray-700: var(--rc-color-gray-250);
-  --rc-legacy-gray-800: var(--rc-color-gray-100);
-  --rc-legacy-primary-ink: var(--rc-color-indigo-300);
-  --rc-legacy-tinted-bg-hover: var(--rc-color-indigo-900);
-  --rc-legacy-danger-100: var(--rc-color-red-900);
-  --rc-legacy-danger-300: var(--rc-color-red-900);
   --rc-color-bg-highlight-extreme: rgb(251 191 36 / 0.16);
   --rc-color-border-highlight-extreme: rgb(251 191 36 / 0.42);
   --rc-color-fg-highlight-extreme: var(--rc-color-amber-300);
@@ -529,16 +506,6 @@
   --rc-color-fg-rank-silver: var(--rc-color-gray-300);
   --rc-color-bg-rank-silver: var(--rc-color-gray-850);
   --rc-color-shine-rank-silver: var(--rc-color-gray-050);
-
-  --rc-legacy-rank-gold: var(--rc-color-fg-rank-gold);
-  --rc-legacy-rank-bronze: var(--rc-color-fg-rank-bronze);
-  --rc-legacy-critical-bg: var(--rc-color-bg-highlight-critical);
-  --rc-legacy-critical-ink: var(--rc-color-fg-highlight-critical);
-  --rc-legacy-critical-sparkle: var(--rc-color-fg-highlight-sparkle);
-  --rc-legacy-critical-glow: var(--rc-color-shadow-highlight-glow);
-  --rc-legacy-extreme-bg: var(--rc-color-bg-highlight-extreme);
-  --rc-legacy-extreme-border: var(--rc-color-border-highlight-extreme);
-  --rc-legacy-extreme-ink: var(--rc-color-fg-highlight-extreme);
 
   --gradient-onboarding: radial-gradient(130% 78% at 50% -8%, #221f42 0%, #17161f 46%, #131318 80%);
 
@@ -582,11 +549,7 @@
   --color-gray-100: var(--rc-color-bg-secondary);
   --color-gray-200: var(--rc-color-border-normal);
   --color-gray-300: var(--rc-color-border-strong);
-  --color-gray-400: var(--rc-legacy-gray-400);
-  --color-gray-500: var(--rc-legacy-gray-500);
   --color-gray-600: var(--rc-color-fg-muted);
-  --color-gray-700: var(--rc-legacy-gray-700);
-  --color-gray-800: var(--rc-legacy-gray-800);
   --color-gray-900: var(--rc-color-fg-normal);
 
   --color-discord: var(--rc-color-bg-discord);
@@ -601,9 +564,8 @@
   --color-surface: var(--rc-color-bg-canvas-base);
 
   --color-danger-50: var(--rc-color-bg-danger-weak);
-  --color-danger-100: var(--rc-legacy-danger-100);
+  --color-danger-100: var(--rc-color-bg-danger-weak-hover);
   --color-danger-200: var(--rc-color-border-danger);
-  --color-danger-300: var(--rc-legacy-danger-300);
   --color-danger-400: var(--rc-color-border-danger);
   --color-danger-600: var(--rc-color-fg-danger);
   --color-danger-solid: var(--rc-color-bg-danger);
@@ -612,11 +574,12 @@
   --color-warning-50: var(--rc-color-bg-warning-weak);
   --color-warning-600: var(--rc-color-fg-warning);
 
+  --color-input: var(--rc-color-border-input);
+  --color-label: var(--rc-color-fg-label);
+  --color-disabled: var(--rc-color-fg-disabled);
   --color-hint: var(--rc-color-fg-hint);
   --color-dim: var(--rc-color-bg-canvas-dim);
-  --color-primary-ink: var(--rc-legacy-primary-ink);
   --color-tinted-bg: var(--rc-color-bg-primary-weakest);
-  --color-tinted-bg-hover: var(--rc-legacy-tinted-bg-hover);
   --color-tinted-border: var(--rc-color-border-primary);
   --color-tinted-ink: var(--rc-color-fg-primary);
 

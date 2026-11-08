@@ -24,11 +24,7 @@ export function FieldLabel({
       data-slot="field-header"
       className={cn("flex items-baseline justify-between gap-100", className)}
     >
-      <label
-        data-slot="field-label"
-        htmlFor={htmlFor}
-        className="text-body4 font-bold text-gray-700"
-      >
+      <label data-slot="field-label" htmlFor={htmlFor} className="text-body4 font-bold text-label">
         {children ?? label}
         {required && <span className="text-danger-600"> *</span>}
       </label>

@@ -14,7 +14,7 @@ const frame = cva(
     variants: {
       invalid: {
         true: "border-[1.5px] border-danger-400 bg-danger-50 focus-within:ring-danger-600",
-        false: "border-gray-500 focus-within:ring-focus",
+        false: "border-input focus-within:ring-focus",
       },
     },
     defaultVariants: { invalid: false },
@@ -22,7 +22,7 @@ const frame = cva(
 );
 
 const STEP_BUTTON =
-  "flex size-11 items-center justify-center text-gray-700 transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
+  "flex size-11 items-center justify-center text-label transition-colors hover:bg-gray-50 disabled:pointer-events-none disabled:text-gray-300";
 
 type StepperState = { invalid: boolean; disabled: boolean };
 

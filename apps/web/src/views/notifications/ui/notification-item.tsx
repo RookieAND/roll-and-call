@@ -14,7 +14,7 @@ const notificationRow = cva(
   "min-h-16 w-full cursor-pointer py-150 pr-200 pl-100 text-left text-gray-900 transition-colors",
   {
     variants: {
-      unread: { true: "bg-tinted-bg hover:bg-tinted-bg-hover", false: "hover:bg-gray-50" },
+      unread: { true: "bg-tinted-bg hover:bg-primary-100", false: "hover:bg-gray-50" },
     },
   },
 );

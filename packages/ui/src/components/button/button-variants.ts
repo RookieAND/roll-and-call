@@ -78,7 +78,7 @@ export const buttonVariants = cva(
       {
         variant: "tinted",
         colorPalette: "primary",
-        className: "border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-tinted-bg-hover",
+        className: "border-tinted-border bg-tinted-bg text-tinted-ink hover:bg-primary-100",
       },
       {
         variant: "tinted",
@@ -98,7 +98,7 @@ export const buttonVariants = cva(
       {
         variant: "tinted",
         colorPalette: "gray",
-        className: "border-transparent bg-gray-100 text-gray-700 hover:bg-gray-200",
+        className: "border-transparent bg-gray-100 text-label hover:bg-gray-200",
       },
       {
         variant: "tinted",
@@ -121,7 +121,7 @@ export const buttonVariants = cva(
         colorPalette: "warning",
         className: "text-warning-600 hover:bg-warning-50",
       },
-      { variant: "ghost", colorPalette: "gray", className: "text-gray-700 hover:bg-gray-100" },
+      { variant: "ghost", colorPalette: "gray", className: "text-label hover:bg-gray-100" },
       { variant: "ghost", colorPalette: "discord", className: "text-discord hover:bg-gray-100" },
     ],
     defaultVariants: { variant: "solid", size: "md" },

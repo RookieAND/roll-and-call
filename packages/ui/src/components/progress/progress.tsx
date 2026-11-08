@@ -15,7 +15,7 @@ const fill = cva("h-full rounded-100", {
     { variant: "tinted", colorPalette: "primary", className: "bg-primary-300" },
     { variant: "solid", colorPalette: "success", className: "bg-success-600" },
     { variant: "tinted", colorPalette: "success", className: "bg-success-200" },
-    { variant: "solid", colorPalette: "gray", className: "bg-gray-400" },
+    { variant: "solid", colorPalette: "gray", className: "bg-disabled" },
     { variant: "tinted", colorPalette: "gray", className: "bg-gray-300" },
   ],
   defaultVariants: { variant: "solid", colorPalette: "primary" },

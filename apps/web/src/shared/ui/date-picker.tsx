@@ -37,7 +37,7 @@ export function DatePicker({
   const fieldAria = useFieldControlAria({ invalid });
   const toneClass = invalid
     ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
-    : "border-gray-500 focus:border-primary-500 focus:ring-focus";
+    : "border-input focus:border-primary-500 focus:ring-focus";
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
@@ -55,7 +55,7 @@ export function DatePicker({
             {placeholder}
           </Text>
         )}
-        <CalendarIcon size={16} aria-hidden className="shrink-0 text-gray-400" />
+        <CalendarIcon size={16} aria-hidden className="shrink-0 text-hint" />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Positioner sideOffset={4} className="z-50">

@@ -17,7 +17,7 @@ export function ProfileRoleMark({ role }: ProfileRoleMarkProps) {
   const { Icon, label } = ROLE_MARK[role];
   return (
     <Tooltip content={label}>
-      <span role="img" aria-label={label} tabIndex={0} className="flex-none text-primary-ink">
+      <span role="img" aria-label={label} tabIndex={0} className="flex-none text-tinted-ink">
         <Icon size={18} aria-hidden />
       </span>
     </Tooltip>

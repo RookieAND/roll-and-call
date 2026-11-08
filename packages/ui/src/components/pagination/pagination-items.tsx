@@ -9,9 +9,9 @@ const cell = cva(
   {
     variants: {
       tone: {
-        link: "border border-gray-200 text-gray-700 hover:bg-gray-50",
+        link: "border border-gray-200 text-label hover:bg-gray-50",
         current: "bg-primary-600 font-bold text-white",
-        disabled: "border border-gray-200 text-gray-400",
+        disabled: "border border-gray-200 text-disabled",
         ellipsis: "text-hint",
       },
     },

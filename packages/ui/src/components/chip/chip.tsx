@@ -16,8 +16,8 @@ const chip = cva(
       // 칩의 결. 고를 수 있는 칩은 selected가 이 위를 덮는다(뒤에 오므로 twMerge가 이긴다).
       tone: {
         interactive: "border-gray-200 bg-surface text-gray-600 hover:bg-gray-50",
-        neutral: "border-transparent bg-gray-100 text-gray-700",
-        outline: "border-gray-200 text-gray-700",
+        neutral: "border-transparent bg-gray-100 text-label",
+        outline: "border-gray-200 text-label",
         notice: "border-notice-border bg-notice-bg text-notice-ink",
       },
       selected: {

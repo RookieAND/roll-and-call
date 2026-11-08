@@ -34,12 +34,7 @@ export function QuestFlowRow({ label, steps }: QuestFlowRowProps) {
                 render={<span />}
                 className="h-7 gap-050 bg-surface px-100 font-medium text-gray-900"
               >
-                <Icon
-                  size={14}
-                  strokeWidth={2}
-                  aria-hidden
-                  className="flex-none text-primary-ink"
-                />
+                <Icon size={14} strokeWidth={2} aria-hidden className="flex-none text-tinted-ink" />
                 {step.label}
               </Chip>
             </HStack>

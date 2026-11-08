@@ -9,7 +9,7 @@ import { QuestStamp } from "./quest-stamp";
 
 const TILE_CLASS = {
   [QUEST_STATE.cleared]: "bg-success-50 text-success-800",
-  [QUEST_STATE.open]: "bg-primary-50 text-primary-ink",
+  [QUEST_STATE.open]: "bg-primary-50 text-tinted-ink",
   [QUEST_STATE.locked]: "bg-gray-100 text-hint",
 } as const satisfies Record<QuestState, string>;
 

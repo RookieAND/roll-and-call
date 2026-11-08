@@ -95,7 +95,7 @@ export function AuditLogTable({ rows, sort, empty, listQuery }: AuditLogTablePro
                 <ChevronRight
                   size={16}
                   aria-hidden
-                  className="inline-block text-hint transition-[color,transform] group-hover/row:translate-x-0.5 group-hover/row:text-gray-700 motion-reduce:transition-none"
+                  className="inline-block text-hint transition-[color,transform] group-hover/row:translate-x-0.5 group-hover/row:text-label motion-reduce:transition-none"
                 />
               </Table.Cell>
             </Table.Row>

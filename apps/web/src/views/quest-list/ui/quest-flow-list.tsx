@@ -22,7 +22,7 @@ export function QuestFlowList({ label, steps }: QuestFlowListProps) {
             <HStack key={step.label} align="center" gap="100" render={<li />}>
               <span
                 aria-hidden
-                className="flex size-6 flex-none items-center justify-center rounded-full bg-primary-50 text-primary-ink"
+                className="flex size-6 flex-none items-center justify-center rounded-full bg-primary-50 text-tinted-ink"
               >
                 <Icon size={13} strokeWidth={2.2} />
               </span>
