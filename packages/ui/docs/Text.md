@@ -9,7 +9,7 @@ category: Display
 ```ts
 interface TextProps {
   typography?:
-    | "stat"
+    | "metric"
     | "heading1"
     | "heading2"
     | "heading3"

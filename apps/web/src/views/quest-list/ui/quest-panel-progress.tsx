@@ -13,7 +13,7 @@ export function QuestPanelProgress({ clearedCount }: QuestPanelProgressProps) {
           진행 상황
         </Text>
         <HStack align="baseline" gap="075">
-          <Text typography="stat" numeric>
+          <Text typography="metric" numeric>
             {clearedCount}
           </Text>
           <Text typography="body2" weight="bold" foreground="muted">

@@ -27,7 +27,7 @@ export function AchievementSheet({ open }: AchievementSheetProps) {
         <VStack align="center" gap="175" className="pt-200 text-center">
           <span
             aria-hidden
-            className="flex size-28 items-center justify-center rounded-full border-3 border-primary-600 bg-primary-50 text-emblem"
+            className="flex size-28 items-center justify-center rounded-full border-3 border-primary-600 bg-primary-50 text-[length:var(--icon-emblem)] leading-none"
           >
             🧭
           </span>

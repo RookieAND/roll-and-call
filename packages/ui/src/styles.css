@@ -51,10 +51,9 @@
   --text-body3--line-height: 1.6;
   --text-body4: 12px;
   --text-body4--line-height: 1.55;
-  --text-stat: 32px;
-  --text-stat--line-height: 1;
-  --text-emblem: 54px;
-  --text-emblem--line-height: 1;
+  --text-metric: 32px;
+  --text-metric--line-height: 1;
+  --icon-emblem: 54px;
   --text-body5: 10px;
   --text-body5--line-height: 1.3;
 
