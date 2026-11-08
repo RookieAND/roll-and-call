@@ -13,7 +13,7 @@ interface CertTodoCardProps {
 
 export function CertTodoCard({ item }: CertTodoCardProps) {
   return (
-    <VStack gap="050" render={<Card.Root padding="none" className="p-175" />}>
+    <VStack gap="050" render={<Card.Root padding="md" />}>
       <TodoCardHead eyebrow={item.eyebrow} blocked={item.blocked} />
       <TodoCardBody title={item.title} lines={item.lines} />
       <HStack gap="100" className="mt-125">

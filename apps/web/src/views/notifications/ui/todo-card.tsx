@@ -14,7 +14,7 @@ export function TodoCard({ item }: TodoCardProps) {
   const buttonVariant = item.blocked ? "solid" : "tinted";
 
   return (
-    <VStack gap="050" render={<Card.Root padding="none" className="p-175" />}>
+    <VStack gap="050" render={<Card.Root padding="md" />}>
       <TodoCardHead eyebrow={item.eyebrow} blocked={item.blocked} />
       <TodoCardBody title={item.title} lines={item.lines} />
       <Button
