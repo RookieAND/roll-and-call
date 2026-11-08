@@ -18,6 +18,14 @@
   --color-tinted-ink: color-mix(in oklch, var(--acc) 70%, var(--rc-color-fg-normal));
 }
 
+/* 다크에서는 강조색이 어두운 바탕에 묻히지 않게 글자색은 밝게, 연한 바탕은 더 진하게 섞는다. */
+[data-theme="dark"] [data-accent] {
+  --rc-color-fg-primary: color-mix(in oklch, var(--acc) 60%, var(--rc-color-fg-on-primary));
+  --color-tinted-ink: color-mix(in oklch, var(--acc) 60%, var(--rc-color-fg-on-primary));
+  --rc-color-bg-primary-weak: color-mix(in oklch, var(--acc) 24%, var(--rc-color-bg-canvas-base));
+  --color-primary-50: color-mix(in oklch, var(--acc) 24%, var(--rc-color-bg-canvas-base));
+}
+
 /* 진행 막대는 primary 별칭을 거치지 않아 강조색을 직접 입힌다. */
 [data-accent] [data-slot="progress-indicator"] {
   background: var(--acc);
