@@ -17,14 +17,13 @@ export type MyReviewActions = (typeof MY_REVIEW_ACTIONS)[keyof typeof MY_REVIEW_
 
 export type MyReviewCardModel = {
   id: string;
-  authorName: string;
-  authorAvatarUrl: string | null;
   title: string;
   gm: boolean;
   meta: string;
   body: string | null;
   bodyMuted: boolean;
   badge: { label: string; palette: Palette } | null;
+  caption: string | null;
   callout: { palette: Palette; title: string; lines: string[] } | null;
   actions: MyReviewActions;
   editHref: string;
@@ -46,14 +45,13 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
   const sessionDate = row.sessionAt ? formatDate(row.sessionAt) : formatDate(row.createdAt);
   const base = {
     id: row.id,
-    authorName: row.authorName,
-    authorAvatarUrl: row.authorAvatarUrl,
     title: row.gameTitle,
     gm: row.authorRole === REVIEW_AUTHOR_ROLE.gm,
-    meta: `${row.gameRule} · ${sessionDate}${row.updatedAt ? " · 수정됨" : ""}`,
+    meta: `${sessionDate}${row.updatedAt ? " · 수정됨" : ""}`,
     body: row.body,
     bodyMuted: true,
     badge: null,
+    caption: null,
     callout: null,
     editHref: `/games/${row.gameId}/review`,
     subject: `${row.gameTitle} · ${sessionDate} 세션`,
@@ -66,7 +64,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
       return {
         ...base,
         bodyMuted: false,
-        badge: { label, palette: "primary" },
+        caption: label,
         actions: MY_REVIEW_ACTIONS.editAndDelete,
       };
     }
@@ -77,7 +75,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
         ...base,
         badge: { label: "보류", palette: "gray" },
         callout: { palette: "gray", title: "불참으로 바뀌어 비공개되었습니다", lines: [] },
-        actions: MY_REVIEW_ACTIONS.delete,
+        actions: MY_REVIEW_ACTIONS.none,
       };
     case REVIEW_STATE.hidden:
       return {
@@ -96,6 +94,7 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
     case REVIEW_STATE.removed:
       return {
         ...base,
+        meta: `${row.gameRule} · ${base.meta}`,
         body: null,
         badge: { label: "삭제됨", palette: "danger" },
         callout: {

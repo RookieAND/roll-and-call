@@ -1,5 +1,5 @@
 import { getGameReviews } from "@roll-and-call/database/reviews";
-import { Text, VStack } from "@roll-and-call/ui";
+import { Card, Text, VStack } from "@roll-and-call/ui";
 import { notFound } from "next/navigation";
 
 import { PARTICIPANT_STATUS, SessionHeading } from "@/entities/game";
@@ -13,7 +13,7 @@ import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
 import { ReviewList } from "./review-list";
 import { ReviewsPage } from "./reviews-page";
 
-const NO_PARTICIPANT_REVIEWS = "아직 달린 참석자 후기가 없습니다";
+const NO_PARTICIPANT_REVIEWS = "아직 달린 후기가 없습니다";
 
 interface SessionReviewsViewProps {
   gameId: string;
@@ -53,42 +53,30 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
     userIds: [...(gmReview ? [gmReview] : []), ...participantReviews].map((row) => row.authorId),
     now: new Date(),
   });
-  const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
   const hasReviews = gmReview || participantReviews.length > 0;
 
   return (
     <ReviewsPage title="세션 후기" back={`/games/${gameId}`}>
       <SessionHeading
         title={game.title}
-        rule={game.rule}
-        subline={`${when}후기 ${participantReviews.length}개`}
+        rule={`후기 ${participantReviews.length}개`}
+        subline={game.confirmedAt ? formatDateTime(game.confirmedAt) : ""}
       />
       {hasReviews ? (
         <MemberTitleSheetsProvider sheets={titleSheets}>
           <VStack gap="150">
-            {gmReview && (
-              <ReviewList
-                rows={[gmReview]}
-                perspective={REVIEW_PERSPECTIVE.session}
-                viewerId={viewerId}
-                emptyText=""
-              />
-            )}
-            {participantReviews.length > 0 ? (
-              <ReviewList
-                rows={participantReviews}
-                perspective={REVIEW_PERSPECTIVE.session}
-                viewerId={viewerId}
-                emptyText=""
-              />
-            ) : (
-              <Text
-                typography="subtitle2"
-                foreground="muted"
-                className="rounded-500 bg-gray-50 px-150 py-300 text-center"
-              >
-                {NO_PARTICIPANT_REVIEWS}
-              </Text>
+            <ReviewList
+              rows={[...(gmReview ? [gmReview] : []), ...participantReviews]}
+              perspective={REVIEW_PERSPECTIVE.session}
+              viewerId={viewerId}
+              emptyText=""
+            />
+            {participantReviews.length === 0 && (
+              <Card.Root padding="md" radius={500} background="subtle" className="text-center">
+                <Text typography="subtitle2" foreground="muted">
+                  {NO_PARTICIPANT_REVIEWS}
+                </Text>
+              </Card.Root>
             )}
           </VStack>
         </MemberTitleSheetsProvider>

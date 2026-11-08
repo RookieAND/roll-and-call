@@ -24,7 +24,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
   const now = Date.now();
 
   return (
-    <VStack gap="150">
+    <VStack gap="150" className="desktop:grid desktop:grid-cols-2 desktop:items-start">
       {rows.map((row) => {
         const { title, meta } = reviewCardText({ row, perspective });
         const author = (

@@ -2,6 +2,7 @@
 
 import { RichText } from "@roll-and-call/tiptap/viewer";
 import { Button, Text, VStack, cn } from "@roll-and-call/ui";
+import { Minus, Plus } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 
 const CLAMP_CLASS = { 2: "line-clamp-2", 3: "line-clamp-3" } as const;
@@ -44,12 +45,13 @@ export function ReviewBody({ body, lines = 3, muted = false }: ReviewBodyProps) 
       </div>
       {long && (
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="-ml-100"
+          colorPalette="gray"
           onClick={() => setExpanded(!expanded)}
         >
-          {expanded ? "접기" : "더 보기"}
+          {expanded ? <Minus size={14} aria-hidden /> : <Plus size={14} aria-hidden />}
+          {expanded ? "접기" : "더보기"}
         </Button>
       )}
     </VStack>

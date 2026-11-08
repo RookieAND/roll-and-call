@@ -1,4 +1,3 @@
-import { REVIEW_AUTHOR_ROLE } from "@roll-and-call/database/games/model";
 import type { ReviewCardRow } from "@roll-and-call/database/reviews";
 
 import { formatDate } from "@/shared/lib";
@@ -17,9 +16,6 @@ export function reviewCardText({
   const date = formatDate(row.createdAt) + (row.updatedAt ? " · 수정됨" : "");
   switch (perspective) {
     case REVIEW_PERSPECTIVE.session:
-      if (row.authorRole === REVIEW_AUTHOR_ROLE.gm) {
-        return { title: null, meta: `마스터링 후기 · ${date}` };
-      }
       return { title: null, meta: date };
     case REVIEW_PERSPECTIVE.received:
       return { title: null, meta: `${row.gameTitle} · ${date}` };

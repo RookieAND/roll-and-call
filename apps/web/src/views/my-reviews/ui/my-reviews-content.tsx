@@ -1,3 +1,5 @@
+import { VStack } from "@roll-and-call/ui";
+
 import { ReviewEmpty } from "@/entities/review";
 import { LoginRequired } from "@/features/auth";
 import { LineBreaks } from "@/shared/ui";
@@ -19,5 +21,11 @@ export function MyReviewsContent({ signedIn, cards }: MyReviewsContentProps) {
         description={<LineBreaks lines={["참여한 세션이 끝나면", "후기를 남길 수 있습니다."]} />}
       />
     );
-  return cards.map((card) => <MyReviewCard key={card.id} card={card} />);
+  return (
+    <VStack gap="150" className="desktop:grid desktop:grid-cols-2 desktop:items-start">
+      {cards.map((card) => (
+        <MyReviewCard key={card.id} card={card} />
+      ))}
+    </VStack>
+  );
 }

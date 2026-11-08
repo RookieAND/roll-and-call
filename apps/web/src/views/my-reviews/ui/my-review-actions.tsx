@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, HStack } from "@roll-and-call/ui";
+import { Badge, HStack, IconButton } from "@roll-and-call/ui";
+import { Clock, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -20,15 +21,33 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
 
   return (
     <>
-      <HStack gap="100" className="[&>*]:flex-1">
-        <Button variant="outline" size="lg" onClick={() => setDeleting(true)}>
-          삭제하기
-        </Button>
-        {card.actions === MY_REVIEW_ACTIONS.editAndDelete && (
-          <Button variant="tinted" size="lg" render={<Link href={toServerPath(card.editHref)} />}>
-            수정하기
-          </Button>
+      <HStack align="center" gap="050" className="mt-025 border-t border-gray-200 pt-100">
+        {card.caption && (
+          <Badge colorPalette="primary">
+            <Clock size={12} aria-hidden />
+            {card.caption}
+          </Badge>
         )}
+        <span className="flex-1" />
+        {card.actions === MY_REVIEW_ACTIONS.editAndDelete && (
+          <IconButton
+            variant="outline"
+            size="md"
+            aria-label="수정하기"
+            render={<Link href={toServerPath(card.editHref)} />}
+          >
+            <Pencil size={18} aria-hidden />
+          </IconButton>
+        )}
+        <IconButton
+          variant="outline"
+          size="md"
+          className="text-danger-600"
+          aria-label="삭제하기"
+          onClick={() => setDeleting(true)}
+        >
+          <Trash2 size={18} aria-hidden />
+        </IconButton>
       </HStack>
       <DeleteReviewDialog
         reviewId={card.id}

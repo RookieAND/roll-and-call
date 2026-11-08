@@ -1,4 +1,4 @@
-import { Avatar, Badge, Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { GmBadge, ReviewBody } from "@/entities/review";
 import { LineBreaks } from "@/shared/ui";
@@ -13,9 +13,8 @@ interface MyReviewCardProps {
 export function MyReviewCard({ card }: MyReviewCardProps) {
   return (
     <Card.Root padding="md" radius={500} render={<article />}>
-      <VStack gap="125">
-        <HStack align="center" gap="125">
-          <Avatar src={card.authorAvatarUrl} name={card.authorName} size="md" />
+      <VStack gap="100">
+        <HStack align="start" gap="100">
           <VStack gap="025" className="min-w-0 flex-1">
             <HStack align="center" gap="075" className="min-w-0">
               <Text typography="subtitle2" truncate render={<h3 />}>
@@ -29,8 +28,7 @@ export function MyReviewCard({ card }: MyReviewCardProps) {
           </VStack>
           {card.badge && <Badge colorPalette={card.badge.palette}>{card.badge.label}</Badge>}
         </HStack>
-        <div aria-hidden className="h-px bg-gray-200" />
-        {card.body && <ReviewBody body={card.body} lines={2} muted={card.bodyMuted} />}
+        {card.body && <ReviewBody body={card.body} muted={card.bodyMuted} />}
         {card.callout && (
           <Callout.Root colorPalette={card.callout.palette} size="sm">
             <Callout.Icon />

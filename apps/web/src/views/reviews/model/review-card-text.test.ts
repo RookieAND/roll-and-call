@@ -47,10 +47,10 @@ describe("reviewCardText", () => {
 describe("reviewCardText GM 후기", () => {
   const gmRow = { ...row, authorRole: "gm" };
 
-  it("세션 후기에서는 작성자를 첫 줄에 두고 둘째 줄을 마스터링 후기와 작성일로 적는다", () => {
+  it("세션 후기에서는 참석자 후기와 같이 둘째 줄에 작성일만 적는다", () => {
     expect(reviewCardText({ row: gmRow, perspective: REVIEW_PERSPECTIVE.session })).toEqual({
       title: null,
-      meta: "마스터링 후기 · 9월 20일",
+      meta: "9월 20일",
     });
   });
 
