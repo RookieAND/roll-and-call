@@ -8,7 +8,7 @@ export default function Loading() {
     <PageShell appBar={<AppBar back="/me" title="작성한 후기" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm" className="py-200 desktop:max-w-none">
-          <ReviewListSkeleton actions />
+          <ReviewListSkeleton count={1} />
         </Container>
       </div>
     </PageShell>

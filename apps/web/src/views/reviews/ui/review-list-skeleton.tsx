@@ -3,10 +3,9 @@ import { range } from "es-toolkit";
 
 interface ReviewListSkeletonProps {
   count?: number;
-  actions?: boolean;
 }
 
-export function ReviewListSkeleton({ count = 2, actions = false }: ReviewListSkeletonProps) {
+export function ReviewListSkeleton({ count = 2 }: ReviewListSkeletonProps) {
   return (
     <VStack gap="150" aria-busy>
       {range(count).map((index) => (
@@ -24,12 +23,6 @@ export function ReviewListSkeleton({ count = 2, actions = false }: ReviewListSke
               <Skeleton width="100%" height={16} />
               <Skeleton width="70%" height={16} />
             </VStack>
-            {actions && (
-              <HStack gap="100" className="[&>*]:flex-1">
-                <Skeleton height={48} rounded={500} />
-                <Skeleton height={48} rounded={500} />
-              </HStack>
-            )}
           </VStack>
         </Card.Root>
       ))}
