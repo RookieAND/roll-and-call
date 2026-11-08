@@ -17,6 +17,7 @@ const row = {
   authorName: "윤소라",
   authorAvatarUrl: null,
   gameTitle: "물벼락",
+  sessionAt: new Date("2026-09-19T20:00:00+09:00"),
 } satisfies ReviewCardRow;
 
 describe("reviewCardText", () => {

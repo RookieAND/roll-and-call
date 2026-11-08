@@ -40,7 +40,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
           <ReviewMenu
             reviewId={row.id}
             editPath={editable ? `/games/${row.gameId}/review` : null}
-            deleteSubject={`${row.gameTitle} · ${formatDate(row.createdAt)} 후기`}
+            deleteSubject={`${row.gameTitle} · ${formatDate(row.sessionAt ?? row.createdAt)} 세션`}
           />
         );
         return (

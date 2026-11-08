@@ -16,5 +16,6 @@ export function reviewCardColumns(serverId: string) {
     authorName: memberNicknameSql(serverId),
     authorAvatarUrl: profiles.avatarUrl,
     gameTitle: games.title,
+    sessionAt: games.confirmedAt,
   };
 }
