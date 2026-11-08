@@ -545,8 +545,14 @@ if (!supabaseUrl) {
       const res = await fetch(
         `${supabaseUrl}/storage/v1/object/public/ui-assets/${assetVersion}/${file}`,
       );
-      if (!res.ok) throw new Error(`에셋을 받지 못함: ${file} (${res.status})`);
-      const bytes = Buffer.from(await res.arrayBuffer());
+      // 버킷에 아직 없는 새 파일은 UI_ASSET_LOCAL_DIR(업로드 전 원본 폴더)에서 읽는다
+      const localFile = process.env.UI_ASSET_LOCAL_DIR
+        ? join(process.env.UI_ASSET_LOCAL_DIR, file)
+        : null;
+      if (!res.ok && !(localFile && existsSync(localFile))) {
+        throw new Error(`에셋을 받지 못함: ${file} (${res.status})`);
+      }
+      const bytes = res.ok ? Buffer.from(await res.arrayBuffer()) : readFileSync(localFile);
       const folder = assetGroup(name);
       const localPath = join(OUT, "assets-src", folder, file);
       mkdirSync(dirname(localPath), { recursive: true });
