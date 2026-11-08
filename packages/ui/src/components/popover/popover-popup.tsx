@@ -34,7 +34,7 @@ export function PopoverPopup({
           data-slot="popover-popup"
           className={(state) =>
             cn(
-              "max-w-[min(320px,calc(100vw-2rem))] rounded-500 border border-gray-200 bg-surface p-200 text-body3 text-gray-900 shadow-[0_8px_28px_rgba(23,23,28,0.12)] outline-none",
+              "max-w-[min(320px,calc(100vw-2rem))] rounded-500 border border-gray-200 bg-surface p-200 text-body3 text-gray-900 shadow-popup outline-none",
               resolveStateProp({ prop: className, state }),
             )
           }

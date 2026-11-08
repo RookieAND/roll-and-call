@@ -19,10 +19,9 @@ const popup = cva(
     variants: {
       side: {
         bottom:
-          "inset-x-0 bottom-0 mx-auto max-h-[88dvh] max-w-103 rounded-t-800 border-t pb-[calc(var(--spacing-250)+var(--rc-safe-bottom))] shadow-[0_-8px_28px_rgba(23,23,28,0.1)] desktop:inset-auto desktop:top-1/2 desktop:left-1/2 desktop:max-h-[min(560px,88dvh)] desktop:w-[480px] desktop:max-w-[calc(100vw-2rem)] desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-800 desktop:border desktop:pb-250 desktop:shadow-[0_24px_64px_rgba(0,0,0,0.28)]",
-        left: "inset-y-0 left-0 h-dvh w-[min(360px,88vw)] border-r shadow-[8px_0_28px_rgba(23,23,28,0.1)]",
-        right:
-          "inset-y-0 right-0 h-dvh w-[min(360px,88vw)] border-l shadow-[-8px_0_28px_rgba(23,23,28,0.1)]",
+          "inset-x-0 bottom-0 mx-auto max-h-[88dvh] max-w-103 rounded-t-800 border-t pb-[calc(var(--spacing-250)+var(--rc-safe-bottom))] shadow-sheet desktop:inset-auto desktop:top-1/2 desktop:left-1/2 desktop:max-h-[min(560px,88dvh)] desktop:w-[480px] desktop:max-w-[calc(100vw-2rem)] desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-800 desktop:border desktop:pb-250 desktop:shadow-modal",
+        left: "inset-y-0 left-0 h-dvh w-[min(360px,88vw)] border-r shadow-sheet-left",
+        right: "inset-y-0 right-0 h-dvh w-[min(360px,88vw)] border-l shadow-sheet-right",
       },
       size: { auto: "", half: "", full: "" },
     },

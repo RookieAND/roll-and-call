@@ -6,6 +6,7 @@
    스케일 전체를 미리 넣어 둔다. 여기 없는 이름(bg-blue-500, p-4)은 여전히 무시된다. */
 @source inline("rounded-{100,200,300,400,500,600,700,800,full}");
 @source inline("rounded-{t,b,l,r}-{100,200,300,400,500,600,700,800}");
+@source inline("shadow-{popup,sheet,sheet-left,sheet-right,modal}");
 @source inline("{p,px,py,pt,pb,pl,pr,m,mx,my,mt,mb,ml,mr,gap,gap-x,gap-y,space-x,space-y}-{025,050,075,100,125,150,175,200,225,250,300,400,500,600,700,800}");
 @source inline("text-{heading1,heading2,heading3,subtitle1,subtitle2,body2,body3,body4,body5}");
 @source inline("{bg,text,border}-{surface,canvas,hint,toast,dim,discord,on-primary,inverse,saturday}");

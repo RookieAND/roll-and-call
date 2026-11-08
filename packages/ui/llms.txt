@@ -21,6 +21,9 @@ Roll & Call(ORPG 세션 모집·일정 조율) 앱의 디자인 시스템. React
 - 라디우스: `--rc-radius-100 … -800`, `-full`, `-circle` (유틸리티는 `rounded-500`).
 - 크기: `--rc-size-control-{xs,sm,md,lg,xl}`, `--rc-size-avatar-*`, `--rc-size-icon-*`, `--rc-size-cell`, `--rc-size-appbar`, `--rc-size-tabbar`.
 - 그 밖: `--rc-z-*`(base·sticky·floating-bar·overlay·sheet·dialog·popover·toast), `--rc-duration-*`, `--rc-ease-out`, `--rc-safe-bottom`.
+- 그림자: `shadow-popup`(팝오버·셀렉트) · `shadow-sheet`(바닥 시트·플로팅바) · `shadow-sheet-left`/`-right` · `shadow-modal`(다이얼로그·데스크톱 모달). 임의 `shadow-[…]`를 새로 쓰지 않는다.
+- 글자: `Text typography` = `heading1~3`(22·18·16) · `subtitle1~2`(14·13) · `body2~5`(14·13·12·10) · `metric`(32, 큰 지표 숫자) · `code2`. 본문 기준은 12px(`body4`), 0.5px 단위는 없다. 굵기는 `weight`로 따로 고른다.
+- 대비: 토큰을 바꾸면 `pnpm lint:contrast`로 라이트·다크 대비를 확인한다.
 - 정의 위치: `packages/ui/src/styles.css`.
 
 ## 컴포넌트 40종

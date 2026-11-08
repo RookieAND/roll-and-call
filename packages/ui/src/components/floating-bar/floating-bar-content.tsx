@@ -15,7 +15,7 @@ const bar = cva(
   {
     variants: {
       safeArea: { true: "pb-[calc(var(--spacing-150)+var(--rc-safe-bottom))]", false: "pb-150" },
-      shadow: { true: "shadow-[0_-8px_28px_rgba(23,23,28,0.1)]", false: "" },
+      shadow: { true: "shadow-sheet", false: "" },
       hidden: { true: "invisible translate-y-full", false: "" },
     },
   },
