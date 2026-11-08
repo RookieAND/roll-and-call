@@ -9,7 +9,7 @@ interface ManageGroupProps {
 export function ManageGroup({ title, children }: ManageGroupProps) {
   return (
     <div>
-      <Text typography="subtitle2" foreground="muted" className="px-050 pb-100">
+      <Text render={<div />} typography="subtitle2" foreground="muted" className="px-050 pb-100">
         {title}
       </Text>
       <Card.Root
