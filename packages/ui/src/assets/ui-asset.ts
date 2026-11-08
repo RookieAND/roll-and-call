@@ -18,6 +18,9 @@ export const UI_ASSET_NAMES = [
   "empty-rulebook-search",
   "empty-schedule",
   "empty-search",
+  "error-404",
+  "error-500",
+  "sanctioned",
 ] as const;
 export type UiAssetName = (typeof UI_ASSET_NAMES)[number];
 

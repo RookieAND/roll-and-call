@@ -6,6 +6,8 @@ export const EMPTY_IMAGE = {
   myGames: "empty-my-games",
   search: "empty-search",
   error: "empty-error",
+  notFound: "error-404",
+  serverError: "error-500",
   schedule: "empty-schedule",
   party: "empty-party",
 } as const;

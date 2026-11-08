@@ -530,6 +530,9 @@ const EMPTY_NOTES = {
   "empty-rulebook-search": "룰북 검색 결과가 없을 때",
   "empty-schedule": "잡힌 일정이 없을 때",
   "empty-search": "검색 결과가 없을 때",
+  "error-404": "없는 주소나 찾을 수 없는 구인일 때(404)",
+  "error-500": "서버 오류로 화면을 그리지 못했을 때(500)",
+  sanctioned: "활동이 정지되어 구인을 열 수 없을 때",
 };
 const assetGroup = (name) => (name === "logo" ? "Logo" : "EmptyStates");
 const assetFiles = [];

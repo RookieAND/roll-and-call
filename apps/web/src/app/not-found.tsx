@@ -13,7 +13,7 @@ export default function NotFound() {
   return (
     <AppFrame bottomNav={false}>
       <ErrorScreen
-        image="empty-search"
+        image="error-404"
         title="페이지를 찾을 수 없습니다"
         description={
           <>

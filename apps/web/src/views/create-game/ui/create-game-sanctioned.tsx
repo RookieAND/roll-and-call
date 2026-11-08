@@ -1,5 +1,4 @@
-import { Button, Card, cn, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
-import { Lock } from "lucide-react";
+import { Button, Card, cn, Container, FloatingBar, Text, UiImage, VStack } from "@roll-and-call/ui";
 
 import { sanctionLines } from "@/entities/sanction";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell, ServerLink } from "@/shared/ui";
@@ -17,9 +16,7 @@ export function CreateGameSanctioned({ reason, until }: CreateGameSanctionedProp
         <div className={cn("flex flex-1 flex-col", DESKTOP_CARD_CLASS)}>
           <Container size="sm" className="flex flex-1 flex-col justify-center">
             <VStack gap="175" className="items-center py-400 text-center">
-              <span className="flex size-18 items-center justify-center rounded-full bg-danger-50 text-danger-600">
-                <Lock size={30} aria-hidden />
-              </span>
+              <UiImage name="sanctioned" width={140} height={140} />
               <Text typography="heading2" render={<h2 />}>
                 지금은 구인을 열 수 없습니다
               </Text>

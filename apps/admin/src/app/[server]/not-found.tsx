@@ -9,7 +9,7 @@ export default function ServerNotFound() {
         <AdminHeader title="" />
         <EmptyState
           size="full"
-          image={EMPTY_IMAGE.search}
+          image={EMPTY_IMAGE.notFound}
           title="찾는 화면이 없습니다"
           description="주소가 바뀌었거나 삭제된 항목입니다."
           action={
@@ -23,7 +23,7 @@ export default function ServerNotFound() {
       <div data-view="mobile" className="contents lg:hidden">
         <AdminHeader title="" />
         <EmptyState
-          image={EMPTY_IMAGE.search}
+          image={EMPTY_IMAGE.notFound}
           title="찾는 화면이 없습니다"
           description="주소가 바뀌었거나 삭제된 항목입니다."
           className="flex-1 break-keep"

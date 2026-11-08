@@ -8,7 +8,7 @@ export default function NotFound() {
     <main className="grid min-h-dvh place-items-center bg-canvas">
       <EmptyState
         size="full"
-        image={EMPTY_IMAGE.search}
+        image={EMPTY_IMAGE.notFound}
         title="찾는 화면이 없습니다"
         description="주소가 바뀌었거나 삭제된 항목입니다."
         action={

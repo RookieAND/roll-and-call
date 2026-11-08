@@ -11,7 +11,7 @@ export default function ServerError({ retry }: { retry: () => void }) {
         <AdminHeader title="" />
         <EmptyState
           size="full"
-          image={EMPTY_IMAGE.error}
+          image={EMPTY_IMAGE.serverError}
           title="화면을 불러오지 못했습니다"
           description={
             <>
@@ -31,7 +31,7 @@ export default function ServerError({ retry }: { retry: () => void }) {
       <div data-view="mobile" className="contents lg:hidden">
         <AdminHeader title="" />
         <EmptyState
-          image={EMPTY_IMAGE.error}
+          image={EMPTY_IMAGE.serverError}
           title="화면을 불러오지 못했습니다"
           description="잠시 후 다시 시도해 주세요. 문제가 계속되면 서버 소유자에게 알려 주세요."
           className="flex-1 break-keep"

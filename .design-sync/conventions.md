@@ -119,7 +119,7 @@ const { Card, Text, Badge, Button, VStack } = window.RollAndCallUI;
 ## 에셋
 
 - `assets/Logo`: 로고 한 쌍(라이트, 다크)
-- `assets/EmptyStates`: 빈 상태 일러스트 16종, 각각 라이트·다크 한 쌍
+- `assets/EmptyStates`: 빈 상태·오류·활동 정지 일러스트 19종, 각각 라이트·다크 한 쌍(`error-404`, `error-500`, `sanctioned` 포함)
 - 코드에서는 `<UiImage name="empty-party" />`나 `EmptyState`의 `image`로 쓴다. 테마에 맞는 파일이 자동으로 골라진다.
 - 크기는 한 화면을 채울 때 140px, 구역 안에서는 104px이다.
 - 장식이므로 `alt=""`로 둔다. 제목이 같은 말을 한다.

@@ -10,7 +10,7 @@ export default function ErrorPage({ retry }: { error: Error; retry: () => void }
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm" className="py-300">
           <EmptyState
-            image="empty-error"
+            image="error-500"
             title="내 룰북을 불러오지 못했습니다"
             description="잠시 후 다시 시도해 주세요."
             action={

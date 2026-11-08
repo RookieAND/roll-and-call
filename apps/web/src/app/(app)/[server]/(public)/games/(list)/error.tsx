@@ -10,7 +10,7 @@ export default function ErrorPage({ retry }: { error: Error; retry: () => void }
     <PageShell readable appBar={<AppBar title="구인 목록" brand />}>
       <Container className="py-300">
         <EmptyState
-          image="empty-error"
+          image="error-500"
           title="구인 목록을 불러오지 못했습니다"
           description={
             <>

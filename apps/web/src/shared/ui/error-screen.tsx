@@ -11,7 +11,7 @@ interface ErrorScreenProps {
 }
 
 export function ErrorScreen({
-  image = "empty-error",
+  image = "error-500",
   title,
   description,
   action,

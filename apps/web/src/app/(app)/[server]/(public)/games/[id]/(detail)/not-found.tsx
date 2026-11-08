@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <PageShell readable appBar={<AppBar back="/games" title="구인 상세" />}>
       <ErrorScreen
-        image="empty-search"
+        image="error-404"
         title="찾을 수 없는 구인입니다"
         description={
           <>
