@@ -24,7 +24,7 @@ describe("finishSelectionLines", () => {
 
   it("최소 인원 미달이면 그 줄만", () => {
     expect(finishSelectionLines({ ...base, block: "min_players_unmet", minPlayers: 3 })).toEqual([
-      "최소 인원 3명에 못 미쳐 지금 선발을 마칠 수 없습니다.",
+      "최소 인원 3명에 못 미칩니다.",
     ]);
   });
 });

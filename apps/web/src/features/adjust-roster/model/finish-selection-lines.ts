@@ -17,7 +17,7 @@ export function finishSelectionLines({
   minPlayers: number | null;
 }): string[] {
   if (block === SELECTION_REJECTION.minPlayersUnmet) {
-    return [`최소 인원 ${minPlayers}명에 못 미쳐 지금 선발을 마칠 수 없습니다.`];
+    return [`최소 인원 ${minPlayers}명에 못 미칩니다.`];
   }
   const guide = isFull
     ? "정원이 모두 찼습니다. 마치면 남은 신청자는 대기로 옮깁니다."

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Text } from "@roll-and-call/ui";
+import { Button, Callout } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -65,6 +65,16 @@ export function DrawLotteryCard({
     });
   }
 
+  if (!isNull(blockedMinPlayers)) {
+    return (
+      <Callout.Root colorPalette="warning">
+        <Callout.Icon />
+        <Callout.Title className="text-subtitle1">지금 추첨할 수 없습니다</Callout.Title>
+        <Callout.Description>최소 인원 {blockedMinPlayers}명에 못 미칩니다.</Callout.Description>
+      </Callout.Root>
+    );
+  }
+
   return (
     <>
       <Callout.Root colorPalette="primary">
@@ -73,23 +83,12 @@ export function DrawLotteryCard({
         <Callout.Description>
           <LineBreaks lines={lines} />
         </Callout.Description>
-        {!isNull(blockedMinPlayers) && (
-          <Text
-            typography="body4"
-            foreground="muted"
-            render={<p />}
-            className="col-span-full mt-100"
-          >
-            <LineBreaks
-              lines={[`최소 인원 ${blockedMinPlayers}명에 못 미쳐`, "지금 추첨할 수 없습니다."]}
-            />
-          </Text>
-        )}
         <Callout.Action>
           <Button
-            variant="ghost"
+            variant="solid"
+            colorPalette="primary"
             size="sm"
-            disabled={!isNull(blockedMinPlayers)}
+            loading={pending}
             onClick={() => setConfirming(true)}
           >
             지금 추첨하기

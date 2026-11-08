@@ -1,6 +1,6 @@
 "use client";
 
-import type { SELECTION_REJECTION } from "@roll-and-call/database/games/model";
+import { SELECTION_REJECTION } from "@roll-and-call/database/games/model";
 import { Button, Callout } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useState } from "react";
@@ -64,6 +64,18 @@ export function FinishSelectionCard({
     });
   }
 
+  if (block === SELECTION_REJECTION.minPlayersUnmet) {
+    return (
+      <Callout.Root colorPalette="warning">
+        <Callout.Icon />
+        <Callout.Title className="text-subtitle1">지금 선발을 마칠 수 없습니다</Callout.Title>
+        <Callout.Description>
+          <LineBreaks lines={lines} />
+        </Callout.Description>
+      </Callout.Root>
+    );
+  }
+
   return (
     <>
       <Callout.Root colorPalette="primary">
@@ -74,8 +86,10 @@ export function FinishSelectionCard({
         </Callout.Description>
         <Callout.Action>
           <Button
-            variant="ghost"
+            variant="solid"
+            colorPalette="primary"
             size="sm"
+            loading={pending}
             disabled={!isNull(block)}
             onClick={() => setConfirming(true)}
           >

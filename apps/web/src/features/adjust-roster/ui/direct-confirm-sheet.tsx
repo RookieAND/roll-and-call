@@ -121,7 +121,10 @@ export function DirectConfirmSheet({
     else add(false);
   }
 
-  const seats = raisable ? null : seatsStatus({ openSeats, pickedCount: selected.length });
+  const seats =
+    notice === SEATS_NOTICE.full || !notice
+      ? seatsStatus({ openSeats, pickedCount: selected.length })
+      : null;
 
   return (
     <Sheet.Root open={open} onOpenChange={reset}>
