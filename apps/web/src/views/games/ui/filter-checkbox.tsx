@@ -22,7 +22,7 @@ export function FilterCheckbox({ label, hint, checked, onCheckedChange }: Filter
       <Text
         typography="body4"
         foreground="hint"
-        className="pl-[calc(var(--spacing-250)+var(--spacing-125))] break-keep"
+        className="pl-[calc(var(--spacing-250)+var(--spacing-125))] break-keep whitespace-pre-line"
       >
         {hint}
       </Text>

@@ -28,22 +28,20 @@ export function PastGameDesktopCard({ title, view }: PastGameDesktopCardProps) {
         <span className="aspect-video w-full flex-none bg-gray-100" />
       )}
       <VStack gap="100" className="flex-1 px-175 pt-175 pb-200">
-        <div className="flex">
+        <HStack align="center" gap="075">
+          {view.isPrivate && <PrivateMark />}
           {view.grayBadge ? (
             <Badge colorPalette="gray">{view.grayBadge}</Badge>
           ) : (
             <GameStatusBadge status={view.status} />
           )}
-        </div>
+        </HStack>
         <Text typography="heading3" foreground="muted" className="flex-1 text-pretty">
           {title}
         </Text>
-        <HStack align="center" gap="100" className="flex-wrap">
-          <Text typography="body3" foreground="muted">
-            {view.meta}
-          </Text>
-          {view.isPrivate && <PrivateMark />}
-        </HStack>
+        <Text typography="body3" foreground="muted">
+          {view.meta}
+        </Text>
       </VStack>
     </Card.Root>
   );

@@ -36,18 +36,16 @@ export function PastGameCard({ game }: PastGameCardProps) {
               <Text truncate typography="subtitle1" foreground="muted" className="min-w-0 flex-1">
                 {game.title}
               </Text>
+              {view.isPrivate && <PrivateMark />}
               {view.grayBadge ? (
                 <Badge colorPalette="gray">{view.grayBadge}</Badge>
               ) : (
                 <GameStatusBadge status={view.status} />
               )}
             </HStack>
-            <HStack align="center" gap="100" className="flex-wrap">
-              <Text truncate typography="body4" foreground="muted" className="min-w-0">
-                {view.meta}
-              </Text>
-              {view.isPrivate && <PrivateMark />}
-            </HStack>
+            <Text truncate typography="body4" foreground="muted">
+              {view.meta}
+            </Text>
           </VStack>
         </HStack>
       </Card.Root>
