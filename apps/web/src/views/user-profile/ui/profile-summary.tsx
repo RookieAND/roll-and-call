@@ -7,15 +7,15 @@ import {
   AccentScope,
   EMPTY_BIO_TEXT,
   KeywordChips,
-  PlayStyleBlock,
   ProfileHero,
+  ProfileLinks,
 } from "@/entities/profile";
 import { toKst, serverPath } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
 import { SessionCountStats, userSessionsHref } from "@/widgets/session-list";
 
 import { ProfileBadges, type ProfileFeaturedBadge } from "./profile-badges";
-import { ProfileBlockLabel } from "./profile-block-label";
+import { ProfilePlayStyle } from "./profile-play-style";
 import { ProfileRoleMark } from "./profile-role-mark";
 
 interface ProfileSummaryProps {
@@ -73,6 +73,16 @@ export async function ProfileSummary({
       >
         {bioText}
       </Text>
+      {profile.links.length > 0 && (
+        <div className="mt-175 desktop:hidden">
+          <ProfileLinks links={profile.links} discordId={profile.discordId} variant="circle" />
+        </div>
+      )}
+      {profile.keywords.length > 0 && (
+        <div className="mt-175">
+          <KeywordChips keywords={profile.keywords} />
+        </div>
+      )}
       <div className="mt-175">
         <SessionCountStats
           hosted={{
@@ -96,13 +106,11 @@ export async function ProfileSummary({
           <ProfileBadges userId={profile.id} featured={featuredBadges} total={badgeTotal} />
         </div>
       )}
-      <div className="mt-175">
-        <ProfileBlockLabel label="성향" />
-        <KeywordChips keywords={profile.keywords} />
-      </div>
-      <div className="mt-175">
-        <PlayStyleBlock playStyle={profile.playStyle} />
-      </div>
+      {profile.playStyle && (
+        <div className="mt-175">
+          <ProfilePlayStyle playStyle={profile.playStyle} />
+        </div>
+      )}
     </AccentScope>
   );
 }

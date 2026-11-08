@@ -6,13 +6,7 @@ interface ProfileBlockLabelProps {
 
 export function ProfileBlockLabel({ label }: ProfileBlockLabelProps) {
   return (
-    <Text
-      weight="bold"
-      typography="body4"
-      foreground="muted"
-      render={<h2 />}
-      className="mb-100 block"
-    >
+    <Text typography="heading3" render={<h2 />} className="mb-100 block">
       {label}
     </Text>
   );

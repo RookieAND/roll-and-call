@@ -18,7 +18,7 @@ export async function ProfileReviews({ userId, received, written }: ProfileRevie
   return (
     <VStack render={<section />} className="px-200 pt-200 desktop:pb-200">
       <ProfileBlockLabel label="후기" />
-      <Card.Root padding="none" radius={500} className="overflow-hidden">
+      <Card.Root padding="none" radius={600} className="overflow-hidden">
         {!isNull(received) && (
           <CountLinkRow
             label="진행한 세션 후기"

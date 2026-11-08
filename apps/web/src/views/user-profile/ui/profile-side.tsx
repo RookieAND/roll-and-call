@@ -1,8 +1,9 @@
 import type { MemberProfile } from "@roll-and-call/database/profiles";
 
-import { AvailabilityRows, ProfileLinks } from "@/entities/profile";
+import { ProfileLinks } from "@/entities/profile";
 import { ProfileMemoBlock } from "@/features/profile-memo";
 
+import { ProfileAvailability } from "./profile-availability";
 import { ProfileBlockLabel } from "./profile-block-label";
 
 interface ProfileSideProps {
@@ -11,7 +12,7 @@ interface ProfileSideProps {
   memo: { body: string; updatedAt: Date } | null;
 }
 
-// 링크·가능 시간대·메모: 모바일은 본문 맨 아래, 1100px 이상은 우측 패널에 그린다.
+// 데스크톱(1100px 이상) 우측 패널이다. 모바일은 본문 흐름에 링크·가능 시간대·메모를 따로 둔다.
 export function ProfileSide({ profile, signedIn, memo }: ProfileSideProps) {
   return (
     <>
@@ -20,10 +21,9 @@ export function ProfileSide({ profile, signedIn, memo }: ProfileSideProps) {
         <ProfileLinks links={profile.links} discordId={profile.discordId} />
       </section>
 
-      <section className="px-200 pb-200">
-        <ProfileBlockLabel label="가능 시간대" />
-        <AvailabilityRows intervals={profile.availability} />
-      </section>
+      <div className="px-200 pb-200">
+        <ProfileAvailability profile={profile} />
+      </div>
 
       {signedIn && (
         <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />

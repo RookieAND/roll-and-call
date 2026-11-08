@@ -8,12 +8,14 @@ import { notFound, redirect } from "next/navigation";
 import { countBadges, heldBadges, pickFeaturedBadges } from "@/entities/badge";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { CERT_STATE, toMyRulebooks } from "@/entities/rulebook";
+import { ProfileMemoBlock } from "@/features/profile-memo";
 import { heldBadgeDetail } from "@/features/view-badge";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list/server";
 
+import { ProfileAvailability } from "./profile-availability";
 import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
 import { ProfileSide } from "./profile-side";
@@ -85,6 +87,10 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
             badgeTotal={countBadges(badgeRecords, now).total}
           />
 
+          <div className="px-200 pt-200 desktop:hidden">
+            <ProfileAvailability profile={profile} />
+          </div>
+
           {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
 
           <ProfileReviews
@@ -93,9 +99,11 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
             written={reviewCounts.written}
           />
 
-          <div className="desktop:hidden">
-            <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
-          </div>
+          {viewer && (
+            <div className="desktop:hidden">
+              <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
+            </div>
+          )}
         </Container>
       </div>
     </PageShell>
