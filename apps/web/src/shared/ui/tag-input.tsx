@@ -23,6 +23,9 @@ export interface TagInputProps {
   // 쉼표나 띄어쓰기를 치면 그 앞까지를 태그로 끊는다.
   delimited?: boolean;
   hint?: string;
+  // 입력 칸의 스크린리더 이름. 칩을 지우는 버튼은 "<태그> <removeWord>"로 읽힌다.
+  inputLabel?: string;
+  removeWord?: string;
   // 입력 칸에 글자가 있는 동안 hint 대신 보인다.
   typingHint?: string;
 }
@@ -39,6 +42,8 @@ export function TagInput({
   tone = "primary",
   delimited = false,
   hint,
+  inputLabel,
+  removeWord = "삭제",
   typingHint,
 }: TagInputProps) {
   const [draft, setDraft] = useState("");
@@ -86,7 +91,7 @@ export function TagInput({
           {value.map((tag) => (
             <TagChipOf
               key={tag}
-              label={tag}
+              removeLabel={`${prefix}${tag} ${removeWord}`}
               onRemove={() => onChange(value.filter((item) => item !== tag))}
             >
               {prefix}
@@ -101,6 +106,7 @@ export function TagInput({
       ) : (
         <TagInputEditor
           id={id}
+          label={inputLabel}
           draft={draft}
           placeholder={placeholder}
           maxLength={maxLength}

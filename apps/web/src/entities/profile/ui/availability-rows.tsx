@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, Text, VStack } from "@roll-and-call/ui";
 import { Clock } from "lucide-react";
 
 import { filledDays } from "@/shared/lib";
@@ -19,16 +19,16 @@ export function AvailabilityRows({ intervals, note }: AvailabilityRowsProps) {
 
   if (days.length === 0) {
     return (
-      <HStack
-        align="center"
-        gap="100"
-        className="min-h-11 rounded-400 border border-dashed border-gray-300 px-150"
+      <Card.Root
+        padding="none"
+        radius={400}
+        className="flex min-h-11 items-center gap-100 border-dashed border-gray-300 px-150 text-hint"
       >
-        <Clock size={15} className="flex-none text-hint" aria-hidden />
-        <Text typography="body4" foreground="hint" className="min-w-0 flex-1">
+        <Clock size={15} className="flex-none" aria-hidden />
+        <Text typography="body4" foreground="inherit" className="min-w-0 flex-1">
           적어둔 가능 시간대가 없습니다
         </Text>
-      </HStack>
+      </Card.Root>
     );
   }
 

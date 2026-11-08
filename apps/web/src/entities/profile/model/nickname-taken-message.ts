@@ -2,3 +2,8 @@
 export function nicknameTakenMessage(serverName: string) {
   return `${serverName}에 같은 닉네임이 있습니다.\n다른 닉네임을 정해 주세요.`;
 }
+
+// 프로필 편집은 한 줄로 보인다. 가입 환영 화면(위)은 두 줄이다.
+export function editNicknameTakenMessage(serverName: string) {
+  return `${serverName}에 같은 닉네임이 있습니다. 다른 닉네임을 정해 주세요.`;
+}

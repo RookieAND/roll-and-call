@@ -68,10 +68,7 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
                     replace(index, { service: nextService, value: filled });
                   }}
                 >
-                  <Select.Trigger
-                    aria-label={`${index + 1}번째 링크 서비스`}
-                    className="h-11 w-33 flex-none gap-075"
-                  />
+                  <Select.Trigger aria-label="서비스" className="h-11 w-33 flex-none gap-075" />
                   <Select.Popup>
                     {SERVICE_OPTIONS.map((option) => (
                       <Select.Item key={option.value} value={option.value}>
@@ -83,7 +80,7 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
                 <TextInput
                   value={link.value}
                   placeholder={service.placeholder}
-                  aria-label={`${service.label} 주소`}
+                  aria-label="주소"
                   className="h-11 min-w-0 flex-1"
                   onChange={(event) => replace(index, { ...link, value: event.target.value })}
                   aria-invalid={error ? true : undefined}
@@ -97,7 +94,8 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
                 />
                 <IconButton
                   variant="outline"
-                  aria-label={`${service.label} 링크 지우기`}
+                  size="md"
+                  aria-label="링크 지우기"
                   className="h-11 w-11 flex-none"
                   onClick={() => {
                     setKeys(keys.filter((_, itemIndex) => itemIndex !== index));
@@ -121,6 +119,7 @@ export function ProfileLinksField({ value, onChange, discordHandle }: ProfileLin
         <Button
           type="button"
           variant="tinted"
+          size="md"
           className="h-11 w-full"
           onClick={() => {
             setKeys([...keys, nextKey.current++]);

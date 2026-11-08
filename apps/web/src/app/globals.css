@@ -18,6 +18,11 @@
   --color-tinted-ink: color-mix(in oklch, var(--acc) 70%, var(--rc-color-fg-normal));
 }
 
+/* 진행 막대는 primary 별칭을 거치지 않아 강조색을 직접 입힌다. */
+[data-accent] [data-slot="progress-indicator"] {
+  background: var(--acc);
+}
+
 /* 로딩 화면은 짧고 실제 화면은 길어 스크롤바가 생겼다 사라진다. 자리를 늘 비워 두면 폭이 튀지 않는다. */
 html {
   scrollbar-gutter: stable;

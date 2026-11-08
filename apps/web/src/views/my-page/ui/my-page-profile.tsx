@@ -60,7 +60,7 @@ export function MyPageProfile({
     <VStack gap="175" render={<section />}>
       {notices}
       <ProfileHero
-        className="-mt-225"
+        className="first:-mt-225"
         name={name}
         avatarUrl={avatarUrl}
         bannerUrl={bannerUrl}
@@ -72,7 +72,7 @@ export function MyPageProfile({
             size="lg"
             aria-label="프로필 편집"
             className={cn(
-              "-mb-075 h-10 w-10 desktop:mb-0 desktop:h-11 desktop:w-11",
+              "-mb-075 h-10 w-10 rounded-500 desktop:mb-0 desktop:h-11 desktop:w-11",
               ACCENT_TINT_TEXT,
               ACCENT_TINT_HOVER,
             )}
@@ -82,13 +82,7 @@ export function MyPageProfile({
         }
       />
       <VStack gap="025" className="min-w-0">
-        <Text
-          typography="heading3"
-          weight="extrabold"
-          truncate
-          className="desktop:text-heading1"
-          render={<h2 />}
-        >
+        <Text typography="heading3" weight="extrabold" truncate render={<h2 />}>
           {name}
         </Text>
         <Text typography="body3" foreground={bioForeground}>

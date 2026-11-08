@@ -1,4 +1,4 @@
-import { Container, VStack } from "@roll-and-call/ui";
+import { cn, Container, VStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
 import { AccentScope } from "@/entities/profile";
@@ -17,26 +17,36 @@ import { MyPageRulebooksSection } from "./my-page-rulebooks-section";
 import { MyPageSummary } from "./my-page-summary";
 import { MyPageSummarySkeleton } from "./my-page-summary-skeleton";
 
+// 화면 틀 전체에 강조색을 7% 섞는다. 모바일은 기본 면에, 데스크톱은 움푹 들어간 면에 섞는다.
+const ACCENT_FRAME_CLASS =
+  "bg-[color-mix(in_oklch,var(--acc,var(--rc-color-bg-primary))_7%,var(--rc-color-bg-canvas-base))] desktop:bg-[color-mix(in_oklch,var(--acc,var(--rc-color-bg-primary))_7%,var(--rc-color-bg-canvas-sunken))]";
+
 export async function MyPageView() {
   const user = await getCurrentSessionUser();
   const profile = user ? await loadMyProfile(user.id) : null;
   return (
-    <PageShell
-      readable
-      scrollTop
-      appBar={<AppBar title="마이페이지" action={<HelpButton />} />}
-      panel={
-        user ? (
-          <Suspense fallback={<MyPagePanelLoading />}>
-            <MyPageAccount part="panel" />
-          </Suspense>
-        ) : undefined
-      }
-    >
-      <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="desktop:max-w-none">
-          {user ? (
-            <AccentScope accentColor={profile?.accentColor}>
+    <AccentScope accentColor={profile?.accentColor} className={cn(user && ACCENT_FRAME_CLASS)}>
+      <PageShell
+        readable
+        scrollTop
+        appBar={
+          <AppBar
+            title="마이페이지"
+            action={<HelpButton />}
+            className={cn(user && "bg-transparent desktop:bg-surface")}
+          />
+        }
+        panel={
+          user ? (
+            <Suspense fallback={<MyPagePanelLoading />}>
+              <MyPageAccount part="panel" />
+            </Suspense>
+          ) : undefined
+        }
+      >
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm" className="desktop:max-w-none">
+            {user ? (
               <VStack gap="250" className="py-225">
                 <Suspense fallback={<MyPageSummarySkeleton />}>
                   <MyPageSummary />
@@ -54,14 +64,14 @@ export async function MyPageView() {
                   <MyPageAccount part="body" />
                 </Suspense>
               </VStack>
-            </AccentScope>
-          ) : (
-            <VStack className="py-300">
-              <LoginRequired />
-            </VStack>
-          )}
-        </Container>
-      </div>
-    </PageShell>
+            ) : (
+              <VStack className="py-300">
+                <LoginRequired />
+              </VStack>
+            )}
+          </Container>
+        </div>
+      </PageShell>
+    </AccentScope>
   );
 }

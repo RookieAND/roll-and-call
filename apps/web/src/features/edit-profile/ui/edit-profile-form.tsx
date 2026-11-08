@@ -216,6 +216,8 @@ export function EditProfileForm({
             maxLength={KEYWORD_MAX_LENGTH}
             prefix="#"
             placeholder="수사중심"
+            inputLabel="성향 입력"
+            removeWord="지우기"
             delimited
             hint={`최대 ${KEYWORD_MAX_COUNT}개 · ${KEYWORD_MAX_LENGTH}자까지 · #는 자동으로 붙습니다.`}
             typingHint="쉼표나 띄어쓰기로 구분합니다."

@@ -60,7 +60,7 @@ export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetP
     <Sheet.Root open={imageUrl !== null} onOpenChange={(open) => !open && onClose()}>
       <Sheet.Popup className="gap-0 desktop:w-140">
         <Sheet.Handle />
-        <Sheet.Title className="mb-075 text-heading3">배너 위치 조정</Sheet.Title>
+        <Sheet.Title className="mb-075 text-heading3 font-extrabold">배너 위치 조정</Sheet.Title>
         <Text typography="body4" foreground="muted" render={<p />} className="mb-200">
           밝은 틀 안이 배너로 보입니다.
           <br />

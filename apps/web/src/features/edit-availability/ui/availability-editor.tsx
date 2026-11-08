@@ -87,7 +87,7 @@ export function AvailabilityEditor({ defaultValue, from }: AvailabilityEditorPro
             );
           })}
 
-          <Text typography="body4" foreground="hint" render={<p />} className="leading-[1.65]">
+          <Text typography="body4" foreground="hint" render={<p />} className="[text-wrap:pretty]">
             ＋는 그 요일에 구간을 하나 더 넣습니다.
             <br />
             같은 요일 안에서 시간이 겹치는 구간은 담길 수 없습니다.

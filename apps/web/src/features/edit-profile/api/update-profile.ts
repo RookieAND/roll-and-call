@@ -10,7 +10,7 @@ import {
   KEYWORD_MAX_LENGTH,
   LINK_MAX_COUNT,
   ACCENT_COLOR_ERROR,
-  nicknameTakenMessage,
+  editNicknameTakenMessage,
   normalizeAccentColor,
   normalizePlayStyle,
   PLAY_STYLE_MAX_LENGTH,
@@ -113,7 +113,7 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     links: normalizeLinks(values.links),
   });
   if (!saved.ok) {
-    return { error: nicknameTakenMessage(server.name), field: PROFILE_FIELD.username };
+    return { error: editNicknameTakenMessage(server.name), field: PROFILE_FIELD.username };
   }
 
   const myPagePath = serverPath({ slug: server.slug, path: "/me" });

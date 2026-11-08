@@ -1,4 +1,4 @@
-import { Avatar, cn, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Avatar, Card, cn, HStack, Text, VStack } from "@roll-and-call/ui";
 import type { CSSProperties } from "react";
 
 import { normalizeAccentColor } from "@/entities/profile";
@@ -24,10 +24,11 @@ export function ProfilePreviewPanel({
   const accentStyle = accent ? ({ "--acc": accent } as CSSProperties) : undefined;
 
   return (
-    <VStack
-      gap="150"
+    <Card.Root
+      padding="none"
+      radius={600}
       style={accentStyle}
-      className="rounded-700 border border-dashed border-gray-300 bg-surface p-200"
+      className="flex flex-col gap-150 border-dashed border-gray-300 p-200"
     >
       <Text typography="subtitle2" render={<h2 />}>
         미리보기
@@ -55,6 +56,6 @@ export function ProfilePreviewPanel({
           )}
         </VStack>
       </HStack>
-    </VStack>
+    </Card.Root>
   );
 }

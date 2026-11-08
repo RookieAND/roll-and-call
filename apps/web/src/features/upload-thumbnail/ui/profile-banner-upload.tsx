@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ImageIcon, Move, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -61,8 +61,18 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   return (
     <VStack gap="100">
       <Text typography="subtitle2">배너 (선택)</Text>
-      <div className="relative aspect-[3/1] overflow-hidden rounded-400 border border-dashed border-gray-300 bg-gray-50">
-        {value && <BannerImage src={value} alt="배너 미리보기" />}
+      <Card.Root
+        padding="none"
+        radius={400}
+        className="relative flex aspect-[3/1] items-end justify-end overflow-hidden border-dashed border-gray-300 bg-[repeating-linear-gradient(135deg,var(--rc-color-bg-primary-weak)_0_12px,var(--rc-color-bg-canvas-raised)_12px_24px)] px-125 py-100"
+      >
+        {value ? (
+          <BannerImage src={value} alt="배너 미리보기" />
+        ) : (
+          <Text typography="body4" foreground="muted" className="font-mono whitespace-nowrap">
+            배너 이미지 · 3:1
+          </Text>
+        )}
         <HStack gap="100" className="absolute top-100 right-100">
           <BannerActionButton
             icon={Move}
@@ -86,7 +96,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
             }}
           />
         </HStack>
-      </div>
+      </Card.Root>
       <Text typography="body4" foreground={error ? "danger" : "hint"}>
         {error ?? "배너가 없으면 강조색 면으로 보입니다."}
       </Text>

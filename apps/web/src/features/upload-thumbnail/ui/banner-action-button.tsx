@@ -21,7 +21,7 @@ export function BannerActionButton({
       title={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-11 items-center justify-center rounded-full bg-black/60 text-white transition-opacity hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none disabled:opacity-40"
+      className="flex size-11 items-center justify-center rounded-full bg-black/62 text-on-primary transition-opacity hover:bg-black/70 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none disabled:opacity-40"
     >
       <Icon size={20} aria-hidden />
     </button>

@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Card, Text, VStack } from "@roll-and-call/ui";
 import { PencilLine } from "lucide-react";
 
 interface PlayStyleBlockProps {
@@ -15,24 +15,27 @@ export function PlayStyleBlock({ playStyle, showEmpty = false }: PlayStyleBlockP
         플레이 스타일
       </Text>
       {playStyle ? (
-        <Text
-          typography="body2"
-          render={<p />}
-          className="rounded-600 border border-gray-200 bg-gray-50 p-175 leading-[1.7] text-pretty whitespace-pre-line"
-        >
-          {playStyle}
-        </Text>
+        <Card.Root padding="none" radius={600} className="p-175">
+          <Text
+            typography="body2"
+            foreground="inherit"
+            render={<p />}
+            className="block text-pretty whitespace-pre-line"
+          >
+            {playStyle}
+          </Text>
+        </Card.Root>
       ) : (
-        <HStack
-          align="center"
-          gap="100"
-          className="min-h-11 rounded-400 border border-dashed border-gray-300 px-150 text-hint"
+        <Card.Root
+          padding="none"
+          radius={400}
+          className="flex min-h-11 items-center gap-100 border-dashed border-gray-300 px-150 text-hint"
         >
           <PencilLine size={15} aria-hidden className="flex-none" />
-          <Text typography="body4" foreground="hint">
+          <Text typography="body4" foreground="inherit" className="flex-1">
             적어둔 플레이 스타일이 없습니다
           </Text>
-        </HStack>
+        </Card.Root>
       )}
     </VStack>
   );

@@ -11,7 +11,7 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
   const days = filledDays(intervals);
 
   return (
-    <Card.Root radius={500} background="none" padding="none" className="p-175">
+    <Card.Root radius={500} padding="none" className="flex flex-col p-175">
       <HStack align="baseline" gap="100" className="mb-125">
         <Text weight="bold" typography="body4" className="flex-1">
           가능 시간대
@@ -24,47 +24,48 @@ export function AvailabilitySummaryField({ intervals }: AvailabilitySummaryField
       {days.length > 0 ? (
         <VStack gap="075">
           {days.map((day) => (
-            <HStack
+            <Card.Root
               key={day.day}
-              align="center"
-              gap="125"
-              className="min-h-[38px] rounded-400 bg-gray-50 px-150"
+              padding="none"
+              radius={400}
+              className="flex min-h-[38px] items-center gap-125 px-150"
             >
-              <Text weight="bold" typography="body3" className="w-[34px] flex-none">
+              <Text typography="subtitle2" foreground="inherit" className="w-[34px] flex-none">
                 {day.label}
               </Text>
               <Text
-                truncate
                 numeric
                 typography="body3"
                 foreground="muted"
-                className="min-w-0 flex-1"
+                className="min-w-0 flex-1 truncate"
               >
                 {day.intervals.map(formatInterval).join(" · ")}
               </Text>
-            </HStack>
+            </Card.Root>
           ))}
         </VStack>
       ) : (
-        <HStack
-          align="center"
-          justify="center"
-          className="min-h-11 rounded-400 border border-dashed border-gray-300"
+        <Card.Root
+          padding="none"
+          radius={400}
+          className="flex min-h-11 items-center justify-center border-dashed border-gray-300 text-hint"
         >
-          <Text typography="body4" foreground="hint">
+          <Text typography="body4" foreground="inherit">
             적어둔 가능 시간대가 없습니다
           </Text>
-        </HStack>
+        </Card.Root>
       )}
 
-      <Button
-        render={<ServerLink path="/me/availability" />}
-        variant="outline"
-        colorPalette="primary"
-        className="mt-150 h-11 w-full"
-      >
-        {days.length > 0 ? "수정하기" : "시간대 설정하기"}
-      </Button>
+      <div className="mt-150">
+        <Button
+          render={<ServerLink path="/me/availability" />}
+          variant="outline"
+          colorPalette="primary"
+          className="h-11 w-full"
+        >
+          {days.length > 0 ? "수정하기" : "시간대 설정하기"}
+        </Button>
+      </div>
     </Card.Root>
   );
 }

@@ -1,5 +1,5 @@
 import { ONBOARDING_QUESTS } from "@roll-and-call/database/onboarding/model";
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 
 import { SignOutButton } from "@/features/auth";
@@ -25,11 +25,11 @@ export function MyPageSettings({ handleLabel, questProgress }: MyPageSettingsPro
           </Text>
           <ThemeSetting className="w-39 flex-none" />
         </HStack>
-        <HStack
-          align="center"
-          gap="150"
+        <Button
           render={<ServerLink path="/onboarding?from=me" />}
-          className="min-h-15 border-b border-gray-200 px-175"
+          variant="ghost"
+          colorPalette="gray"
+          className="h-auto min-h-15 w-full justify-start gap-150 rounded-none border-b border-gray-200 px-175 text-left"
         >
           <Text typography="subtitle1" className="min-w-0 flex-1 whitespace-nowrap">
             튜토리얼 퀘스트
@@ -38,7 +38,7 @@ export function MyPageSettings({ handleLabel, questProgress }: MyPageSettingsPro
             {questProgress} / {ONBOARDING_QUESTS.length}
           </Text>
           <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
-        </HStack>
+        </Button>
         <SignOutButton className="min-h-15 w-full justify-between rounded-none border-0 px-175 text-subtitle1 font-bold text-gray-900">
           로그아웃
           {handleLabel && (

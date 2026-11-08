@@ -5,6 +5,7 @@ import type { KeyboardEvent } from "react";
 
 interface TagInputEditorProps {
   id?: string;
+  label?: string;
   draft: string;
   placeholder?: string;
   maxLength?: number;
@@ -17,6 +18,7 @@ interface TagInputEditorProps {
 
 export function TagInputEditor({
   id,
+  label,
   draft,
   placeholder,
   maxLength,
@@ -30,6 +32,7 @@ export function TagInputEditor({
     <>
       <TextInput
         id={id}
+        aria-label={label}
         value={draft}
         placeholder={placeholder}
         maxLength={maxLength}

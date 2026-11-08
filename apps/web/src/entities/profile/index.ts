@@ -26,7 +26,7 @@ export { ProfileLinks } from "./ui/profile-links";
 export { EMPTY_BIO_TEXT } from "./model/empty-bio";
 export { ProfileRow } from "./ui/profile-row";
 export { USERNAME_MAX_LENGTH } from "./model/username-max-length";
-export { nicknameTakenMessage } from "./model/nickname-taken-message";
+export { editNicknameTakenMessage, nicknameTakenMessage } from "./model/nickname-taken-message";
 export { DepartedMemberScreen } from "./ui/departed-member-screen";
 export { ACCENT_COLOR_ERROR, normalizeAccentColor } from "./model/accent-color";
 export { normalizePlayStyle, PLAY_STYLE_MAX_LENGTH } from "./model/play-style";

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
+import { Card, Chip, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
 import { Plus, X } from "lucide-react";
 
 import type { DayIntervalRow } from "../model/day-interval-row";
@@ -27,24 +27,18 @@ export function AvailabilityDayEditor({
   onHourChange,
 }: AvailabilityDayEditorProps) {
   const on = rows.length > 0;
-  const chipClass = cn(
-    "h-11 w-11 flex-none rounded-400 text-sm",
-    on
-      ? "bg-primary-600 font-bold text-on-primary hover:bg-primary-700"
-      : "border border-dashed border-gray-300 font-semibold text-hint",
-  );
-
   return (
     <VStack gap="075">
       <HStack align="center" gap="075">
-        <IconButton
+        <Chip
+          selected={on}
           aria-label={`${label}요일 ${on ? "끄기" : "켜기"}`}
           aria-pressed={on}
-          className={chipClass}
+          className="h-11 w-11 flex-none rounded-400 p-0"
           onClick={onToggle}
         >
           {label}
-        </IconButton>
+        </Chip>
         {on ? (
           <IntervalFields
             label={label}
@@ -55,7 +49,7 @@ export function AvailabilityDayEditor({
               <IconButton
                 variant="ghost"
                 aria-label={`${label}요일 구간 추가`}
-                className="h-11 w-11 flex-none text-tinted-ink"
+                className="h-11 w-11 flex-none"
                 onClick={onAdd}
               >
                 <Plus size={16} aria-hidden />
@@ -63,15 +57,15 @@ export function AvailabilityDayEditor({
             }
           />
         ) : (
-          <HStack
-            align="center"
-            justify="center"
-            className="h-11 min-w-0 flex-1 rounded-400 border border-dashed border-gray-300"
+          <Card.Root
+            padding="none"
+            radius={400}
+            className="flex h-11 min-w-0 flex-1 items-center justify-center border-dashed border-gray-300 text-hint"
           >
-            <Text typography="body4" foreground="hint">
+            <Text typography="body4" foreground="inherit">
               안 되는 날
             </Text>
-          </HStack>
+          </Card.Root>
         )}
       </HStack>
       {on && <ConflictNote message={conflicts.get(rows[0]!.index)} />}
