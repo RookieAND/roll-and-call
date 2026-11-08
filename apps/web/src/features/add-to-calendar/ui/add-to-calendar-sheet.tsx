@@ -85,7 +85,9 @@ export function AddToCalendarSheet({
             <Callout.Root colorPalette="danger" size="sm">
               <Callout.Icon />
               <Callout.Description>
-                캘린더 파일을 만들지 못했습니다. 잠시 뒤 다시 시도해 주세요.
+                캘린더 파일을 만들지 못했습니다.
+                <br />
+                잠시 뒤 다시 시도해 주세요.
               </Callout.Description>
             </Callout.Root>
           )}

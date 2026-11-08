@@ -1,4 +1,4 @@
-import { Text, VStack } from "@roll-and-call/ui";
+import { Card, Text } from "@roll-and-call/ui";
 
 interface GmQuestionProps {
   question: string;
@@ -6,13 +6,13 @@ interface GmQuestionProps {
 
 export function GmQuestion({ question }: GmQuestionProps) {
   return (
-    <VStack gap="050" className="rounded-400 bg-secondary px-150 py-125">
-      <Text typography="body4" foreground="muted" weight="bold">
+    <Card.Root padding="sm" radius={400} className="flex flex-col gap-050">
+      <Text typography="body4" weight="bold" foreground="muted">
         GM의 질문
       </Text>
-      <Text typography="body3" className="break-keep">
+      <Text typography="body2" className="break-keep">
         {question}
       </Text>
-    </VStack>
+    </Card.Root>
   );
 }

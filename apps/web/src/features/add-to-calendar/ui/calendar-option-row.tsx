@@ -19,10 +19,10 @@ export function CalendarOptionRow({
     <Sheet.Item disabled={disabled} onClick={onClick} className="min-h-14 px-175">
       <HStack gap="150" align="center" render={<span />} className="min-w-0 flex-1">
         <img src={iconSrc} alt="" width={24} height={24} className="shrink-0" />
-        <Text typography="subtitle2" className="min-w-0 flex-1">
+        <Text typography="subtitle1" className="min-w-0 flex-1">
           {name}
         </Text>
-        <Text typography="body5" foreground="hint" className="shrink-0">
+        <Text typography="body4" foreground="hint" className="shrink-0">
           {description}
         </Text>
       </HStack>
