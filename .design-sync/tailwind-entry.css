@@ -1,5 +1,4 @@
 /* design-sync 전용 진입점. 컴포넌트가 쓰는 유틸리티와, 디자인이 쓸 토큰 이름을 함께 컴파일한다. */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import "tailwindcss";
 @import "../packages/ui/src/styles.css";
 

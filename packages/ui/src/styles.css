@@ -168,8 +168,8 @@
   --rc-color-gray-200: #dcdce4;
   --rc-color-gray-250: #d3d3db;
   --rc-color-gray-300: #b4b4be;
-  --rc-color-gray-400: #8f8f9a;
-  --rc-color-gray-500: #70707a;
+  --rc-color-gray-400: #96969f;
+  --rc-color-gray-500: #6d6d77;
   --rc-color-gray-600: #5f5f6b;
   --rc-color-gray-700: #4a4a55;
   --rc-color-gray-800: #3a3a45;
@@ -355,7 +355,7 @@
   --rc-color-fg-primary-strong: var(--rc-color-indigo-700);
   --rc-color-fg-success: var(--rc-color-green-600);
   --rc-color-fg-success-strong: var(--rc-color-green-700);
-  --rc-color-fg-warning: var(--rc-color-amber-600);
+  --rc-color-fg-warning: var(--rc-color-amber-700);
   --rc-color-fg-notice: var(--rc-color-amber-700);
   --rc-color-fg-danger: var(--rc-color-red-500);
   --rc-color-fg-on-primary: var(--rc-color-gray-000);

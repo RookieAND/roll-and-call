@@ -4,7 +4,7 @@
 - `src/select.tsx`의 `Select` 객체에는 **명시 타입이 필요하다**. 없으면 TS2742로 `dist/select.d.ts`가 통째로 빠진다.
 - `react-dom`이 `packages/ui/node_modules`에 없다(peer가 아니라 앱에만 있다). 변환기 번들이 실패하므로 `packages/ui/node_modules/react-dom` → `apps/web/node_modules/react-dom` 심볼릭 링크를 만들어 둔다. 클론마다 다시 만들어야 한다.
 - CSS는 `.design-sync/tailwind-entry.css`를 Tailwind CLI로 컴파일해 `packages/ui/dist/design-sync.css`로 내보낸 것을 `cfg.cssEntry`로 쓴다. **토큰은 `cfg.tokensGlob = src/styles.css`**로 따로 잡는다 — 컴파일 결과를 토큰으로 넘기면 `--tw-*`·`--default-*` 같은 Tailwind 내부 변수가 디자인 토큰으로 분류된다(예전 동기화에서 실제로 경고가 났다).
-- 폰트: 앱은 Pretendard를 jsDelivr CDN으로 받지만 번들에는 `@font-face`가 필요하다. `.design-sync/fonts/`에 가변 woff2와 `pretendard.css`를 두고 `cfg.extraFonts`로 싣는다. `--font-sans`가 "Pretendard Variable"과 "Pretendard" 두 이름을 쓰므로 **@font-face도 두 벌** 필요하다.
+- 폰트: `.design-sync/fonts/PretendardVariable.woff2`는 KS X 1001 한글 2,350자 + 라틴·기호로 서브셋한 가변 폰트(467KB, 2026-11-08)다. 목록 밖 글자는 시스템 폰트로 대체된다. `tailwind-entry.css`의 CDN @import는 중복이라 지웠다. 앱은 Pretendard를 jsDelivr CDN으로 받지만 번들에는 `@font-face`가 필요하다. `.design-sync/fonts/`에 가변 woff2와 `pretendard.css`를 두고 `cfg.extraFonts`로 싣는다. `--font-sans`가 "Pretendard Variable"과 "Pretendard" 두 이름을 쓰므로 **@font-face도 두 벌** 필요하다.
 - 미리보기 export 이름은 **ASCII PascalCase**여야 한다. 한글 식별자로 쓰면 `window.__dsCells`가 비어 캡처가 실패한다(문구는 한국어 그대로 쓴다).
 - playwright는 캐시된 크로미움(`chromium-1228`)과 맞는 **1.61.0**을 `.ds-sync`에 설치한다. 최신 버전은 1243을 요구해 실행이 안 된다.
 
@@ -43,3 +43,8 @@
 - 드라이버는 `--entry ./packages/ui/dist/index.js`를 꼭 줘야 한다. 빼면 `packages/ui/node_modules/@roll-and-call/ui/package.json`을 찾다가 ENOENT로 죽는다(패키지가 자기 자신을 설치하지 않으므로).
   `node .ds-sync/resync.mjs --config .design-sync/config.json --node-modules packages/ui/node_modules --entry ./packages/ui/dist/index.js --out ./ds-bundle --remote .design-sync/.cache/remote-sync.json`
 - 접근성 수정(입력칸 테두리 gray-500, 포커스 링 `ring-focus`, 경고 글씨 `text-notice-ink`)으로 Button의 VariantByColor가 그리드 칸보다 넓어져 `[GRID_OVERFLOW]`가 났다 → `cfg.overrides.Button: {"cardMode": "column"}`.
+
+## 2026-11-08 번들 축소
+
+- `overrides/bundle.mjs`는 `lib/bundle.mjs`의 포크다. 달라진 곳은 `minify: true`와 `NODE_ENV=production` 둘뿐이다. 외부 도구를 업데이트하면 포크를 다시 따 와야 한다.
+- `pnpm lint:contrast`(scripts/contrast-check.mjs)가 토큰 쌍의 WCAG 대비를 라이트·다크 모두 검사한다. 토큰을 바꾸면 돌린다.

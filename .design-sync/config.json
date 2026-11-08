@@ -3,7 +3,7 @@
   "shape": "package",
   "pkg": "@roll-and-call/ui",
   "globalName": "RollAndCallUI",
-  "buildCmd": "pnpm -F @roll-and-call/ui exec tsc -p tsconfig.build.json && pnpm dlx @tailwindcss/cli@4.3.3 -i .design-sync/tailwind-entry.css -o packages/ui/dist/design-sync.css",
+  "buildCmd": "pnpm -F @roll-and-call/ui exec tsc -p tsconfig.build.json && pnpm dlx @tailwindcss/cli@4.3.3 -i .design-sync/tailwind-entry.css -o packages/ui/dist/design-sync.css --minify",
   "srcDir": "src",
   "tsconfig": "tsconfig.json",
   "cssEntry": "dist/design-sync.css",
@@ -54,6 +54,7 @@
   },
   "readmeHeader": ".design-sync/conventions.md",
   "libOverrides": {
-    "source-kit.mjs": "그룹은 docs frontmatter category가 정한다 — 소스 폴더 이름이 그룹으로 새지 않게"
+    "source-kit.mjs": "그룹은 docs frontmatter category가 정한다 — 소스 폴더 이름이 그룹으로 새지 않게",
+    "bundle.mjs": "번들 minify + NODE_ENV production — 미리보기 번들 용량을 줄인다"
   }
 }

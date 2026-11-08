@@ -22,7 +22,7 @@ const badge = cva(
       variant: { soft: "", solid: "" },
     },
     compoundVariants: [
-      { variant: "solid", colorPalette: "danger", className: "bg-danger-solid text-on-primary" },
+      { variant: "solid", colorPalette: "danger", className: "bg-danger-solid text-inverse" },
     ],
     defaultVariants: { colorPalette: "gray", variant: "soft" },
   },

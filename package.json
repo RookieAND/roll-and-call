@@ -13,6 +13,7 @@
     "typecheck": "turbo typecheck",
     "lint:fsd": "turbo lint:fsd",
     "lint:tokens": "turbo lint:tokens",
+    "lint:contrast": "node scripts/contrast-check.mjs",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
