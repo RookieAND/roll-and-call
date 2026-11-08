@@ -76,11 +76,7 @@ export function RecruitSlide() {
             >
               2
             </Text>
-            <span className="flex size-6 flex-none items-center justify-center rounded-full bg-primary-600">
-              <Text typography="body5" weight="extrabold" foreground="onPrimary">
-                나
-              </Text>
-            </span>
+            <Avatar size="sm" name="나" />
             <Text typography="body4" weight="extrabold" foreground="primary" truncate>
               내 순서
             </Text>
