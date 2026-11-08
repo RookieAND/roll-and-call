@@ -496,6 +496,91 @@ for (const name of componentNames) {
 }
 write("components/index.d.ts", `import * as React from 'react';\n\n${dtsParts.join("\n")}`);
 
+// ---------- 에셋: Supabase 공개 버킷의 일러스트·로고를 내려받아 업로드할 파일과 그룹 README를 만든다 ----------
+const assetSource = readFileSync(join(ROOT, "packages/ui/src/assets/ui-asset.ts"), "utf8");
+const assetNames = [
+  ...assetSource.match(/UI_ASSET_NAMES = \[([\s\S]*?)\] as const/)[1].matchAll(/"([\w-]+)"/g),
+].map((m) => m[1]);
+const assetVersion = assetSource.match(/ui-assets\/(v\d+)/)[1];
+const envLine = [".env.local", "apps/web/.env.local"]
+  .map((f) =>
+    existsSync(join(ROOT, f))
+      ? readFileSync(join(ROOT, f), "utf8").match(/^NEXT_PUBLIC_SUPABASE_URL=(.+)$/m)?.[1]
+      : undefined,
+  )
+  .find(Boolean);
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? envLine ?? "").replace(
+  /^["']|["']$/g,
+  "",
+);
+const EMPTY_NOTES = {
+  "empty-achievement": "받은 업적이 없을 때",
+  "empty-day": "선택한 날에 일정이 없을 때",
+  "empty-error": "불러오기에 실패했을 때",
+  "empty-forbidden": "볼 권한이 없을 때",
+  "empty-hosted": "내가 연 구인이 없을 때",
+  "empty-month-record": "이번 달 기록이 없을 때",
+  "empty-my-games": "내가 참여한 구인이 없을 때",
+  "empty-notification": "알림이 없을 때",
+  "empty-party": "참여자가 없을 때",
+  "empty-profile": "프로필 정보가 없을 때",
+  "empty-recruit-feed": "모집 중인 구인이 없을 때",
+  "empty-review": "후기가 없을 때",
+  "empty-rulebook": "룰북이 없을 때",
+  "empty-rulebook-search": "룰북 검색 결과가 없을 때",
+  "empty-schedule": "잡힌 일정이 없을 때",
+  "empty-search": "검색 결과가 없을 때",
+};
+const assetGroup = (name) => (name === "logo" ? "Logo" : "EmptyStates");
+const assetFiles = [];
+if (!supabaseUrl) {
+  warnings.push("NEXT_PUBLIC_SUPABASE_URL이 없어 에셋을 건너뜀");
+} else {
+  for (const name of assetNames) {
+    for (const suffix of ["", "-dark"]) {
+      const file = `${name}${suffix}.webp`;
+      const res = await fetch(
+        `${supabaseUrl}/storage/v1/object/public/ui-assets/${assetVersion}/${file}`,
+      );
+      if (!res.ok) throw new Error(`에셋을 받지 못함: ${file} (${res.status})`);
+      const bytes = Buffer.from(await res.arrayBuffer());
+      const folder = assetGroup(name);
+      const localPath = join(OUT, "assets-src", folder, file);
+      mkdirSync(dirname(localPath), { recursive: true });
+      writeFileSync(localPath, bytes);
+      assetFiles.push({ group: folder, file, localPath, size: bytes.length, type: "image/webp" });
+    }
+  }
+  write(
+    "assets/Logo/README.md",
+    `서비스 로고(워드마크). 라이트와 다크 두 파일이 한 쌍이다.
+
+- \`logo.webp\`: 라이트 테마용
+- \`logo-dark.webp\`: 다크 테마용
+- 코드에서는 \`<UiImage name="logo" alt="Roll & Call" />\`로 쓴다. 테마에 맞는 파일이 자동으로 골라진다.
+- 색을 바꾸거나 다시 그리지 않는다. 원본은 Supabase \`ui-assets/${assetVersion}\` 버킷이다.
+`,
+  );
+  write(
+    "assets/EmptyStates/README.md",
+    `빈 상태 일러스트 ${assetNames.length - 1}종. 목록이나 화면이 비었을 때 제목·설명과 함께 보여 준다. 모두 라이트와 다크 두 파일이 한 쌍이다.
+
+사용 규칙
+- 코드에서는 \`EmptyState\`의 \`image\` 또는 \`<UiImage name="empty-party" />\`로 쓴다. 테마에 맞는 파일이 자동으로 골라진다.
+- 크기: 한 화면을 채우는 빈 상태는 140px, 구역 안의 빈 상태는 104px(\`--rc-size-illust\`).
+- 일러스트는 장식이다. 제목이 같은 말을 하므로 \`alt=""\`로 둔다.
+- 색을 바꾸거나 다시 그리지 않는다. 원본은 Supabase \`ui-assets/${assetVersion}\` 버킷이다.
+
+쓰는 자리
+${assetNames
+  .filter((n) => n !== "logo")
+  .map((n) => `- \`${n}\`: ${EMPTY_NOTES[n] ?? "빈 상태"}`)
+  .join("\n")}
+`,
+  );
+}
+writeFileSync(join(OUT, "assets.json"), `${JSON.stringify(assetFiles, null, 2)}\n`);
+
 // ---------- 문서 ----------
 write(
   "README.md",
@@ -535,6 +620,7 @@ console.log(
     textStyles: textStyles.length,
     react: reactVersion,
     deletes: oldPaths.length,
+    assets: assetFiles.length,
     warnings,
   }),
 );

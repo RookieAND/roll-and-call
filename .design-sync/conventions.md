@@ -116,6 +116,15 @@ const { Card, Text, Badge, Button, VStack } = window.RollAndCallUI;
 - 되돌릴 수 없는 확정: `variant="solid" colorPalette="danger"`
 - 삭제로 들어가는 입구: `variant="outline" colorPalette="danger"`
 
+## 에셋
+
+- `assets/Logo`: 로고 한 쌍(라이트, 다크)
+- `assets/EmptyStates`: 빈 상태 일러스트 16종, 각각 라이트·다크 한 쌍
+- 코드에서는 `<UiImage name="empty-party" />`나 `EmptyState`의 `image`로 쓴다. 테마에 맞는 파일이 자동으로 골라진다.
+- 크기는 한 화면을 채울 때 140px, 구역 안에서는 104px이다.
+- 장식이므로 `alt=""`로 둔다. 제목이 같은 말을 한다.
+- 색을 바꾸거나 다시 그리지 않는다.
+
 ## 지킬 것
 
 - 터치 대상은 44px보다 작게 하지 않는다. `Button`은 md=40, lg=48이고 세그먼트·탭 칸은 44다.
