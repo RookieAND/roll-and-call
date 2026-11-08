@@ -19,7 +19,7 @@ export interface TagInputProps {
   suggestions?: string[];
   // 칩과 입력 칸 앞에 붙는 글자. 저장되는 값에는 들어가지 않는다.
   prefix?: string;
-  tone?: "primary" | "notice";
+  tone?: "primary" | "warning";
   // 쉼표나 띄어쓰기를 치면 그 앞까지를 태그로 끊는다.
   delimited?: boolean;
   hint?: string;
@@ -77,7 +77,7 @@ export function TagInput({
   }
 
   const unusedSuggestions = suggestions.filter((suggestion) => !value.includes(suggestion));
-  const TagChipOf = tone === "notice" ? NoticeTagChip : TagChip;
+  const TagChipOf = tone === "warning" ? NoticeTagChip : TagChip;
 
   return (
     <VStack gap="100">

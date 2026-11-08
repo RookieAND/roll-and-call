@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { Badge, Callout } from "@roll-and-call/ui";
 
 interface EnforcementBannerProps {
@@ -7,8 +8,10 @@ interface EnforcementBannerProps {
 
 export function EnforcementBanner({ title, dday }: EnforcementBannerProps) {
   return (
-    <Callout.Root colorPalette="notice">
-      <Callout.Icon />
+    <Callout.Root colorPalette="warning">
+      <Callout.Icon>
+        <Info size={14} strokeWidth={2.2} />
+      </Callout.Icon>
       <Callout.Title className="break-keep">{title}</Callout.Title>
       <Callout.Description className="break-keep text-pretty">
         인증이 필요한 룰은 별도의 룰북 인증이 필요합니다.

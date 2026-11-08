@@ -82,7 +82,7 @@ export function MessageField({
         </Text>
       ) : null}
       {!error && warning ? (
-        <Text typography="body4" className="text-notice-ink">
+        <Text typography="body4" className="text-warning-600">
           {warning}
         </Text>
       ) : null}

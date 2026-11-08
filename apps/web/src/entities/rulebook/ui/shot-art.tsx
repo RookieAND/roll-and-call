@@ -4,9 +4,9 @@ const COLOR = {
   cover: "var(--rc-color-bg-primary-weak)",
   edge: "var(--rc-color-border-primary)",
   ink: "var(--rc-color-fg-primary)",
-  paper: "var(--rc-color-bg-notice-weak)",
-  paperEdge: "var(--rc-color-border-notice)",
-  pen: "var(--rc-color-fg-notice)",
+  paper: "var(--rc-color-bg-warning-weakest)",
+  paperEdge: "var(--rc-color-border-warning)",
+  pen: "var(--rc-color-fg-warning)",
   bar: "var(--rc-color-fg-muted)",
   base: "var(--rc-color-bg-canvas-base)",
 } as const;

@@ -133,9 +133,10 @@
   --color-tinted-border: var(--rc-color-border-primary);
   --color-tinted-ink: var(--rc-color-fg-primary);
 
-  --color-notice-bg: var(--rc-color-bg-notice-weak);
-  --color-notice-border: var(--rc-color-border-notice);
-  --color-notice-ink: var(--rc-color-fg-notice);
+  --color-warning-weakest: var(--rc-color-bg-warning-weakest);
+  --color-warning-border: var(--rc-color-border-warning);
+  --color-warning-solid: var(--rc-color-bg-warning);
+  --color-on-solid: var(--rc-color-fg-on-solid);
 
   --color-rank-gold: var(--rc-color-fg-rank-gold);
   --color-rank-bronze: var(--rc-color-fg-rank-bronze);
@@ -334,8 +335,9 @@
   --rc-color-bg-primary-weakest: var(--rc-color-indigo-050);
   --rc-color-bg-success: var(--rc-color-green-600);
   --rc-color-bg-success-weak: var(--rc-color-green-050);
+  --rc-color-bg-warning: var(--rc-color-amber-700);
   --rc-color-bg-warning-weak: var(--rc-color-amber-100);
-  --rc-color-bg-notice-weak: var(--rc-color-amber-050);
+  --rc-color-bg-warning-weakest: var(--rc-color-amber-050);
   --rc-color-bg-danger: var(--rc-color-red-500);
   --rc-color-bg-danger-weak: var(--rc-color-red-050);
   --rc-color-bg-discord: var(--rc-color-discord-500);
@@ -357,10 +359,11 @@
   --rc-color-fg-success: var(--rc-color-green-600);
   --rc-color-fg-success-strong: var(--rc-color-green-700);
   --rc-color-fg-warning: var(--rc-color-amber-700);
-  --rc-color-fg-notice: var(--rc-color-amber-700);
   --rc-color-fg-danger: var(--rc-color-red-500);
   --rc-color-fg-on-primary: var(--rc-color-gray-000);
+  --rc-color-fg-on-solid: var(--rc-color-gray-000);
   --rc-color-fg-inverse: var(--rc-color-gray-000);
+  --rc-color-fg-on-solid: var(--rc-color-gray-000);
   --rc-color-fg-gm: var(--rc-color-gold-700);
   --rc-color-fg-on-spark: var(--rc-color-gold-975);
 
@@ -376,7 +379,7 @@
   --rc-color-border-focus: var(--rc-color-indigo-500);
   --rc-color-border-success: var(--rc-color-green-100);
   --rc-color-border-danger: var(--rc-color-red-200);
-  --rc-color-border-notice: var(--rc-color-amber-200);
+  --rc-color-border-warning: var(--rc-color-amber-200);
 
   --rc-color-heat-1: #edeefc;
   --rc-color-heat-2: #d8dafa;
@@ -431,8 +434,9 @@
   --rc-color-bg-primary-weakest: var(--rc-color-indigo-950);
   --rc-color-bg-success: var(--rc-color-green-500);
   --rc-color-bg-success-weak: var(--rc-color-green-900);
+  --rc-color-bg-warning: var(--rc-color-amber-300);
   --rc-color-bg-warning-weak: var(--rc-color-amber-900);
-  --rc-color-bg-notice-weak: var(--rc-color-amber-950);
+  --rc-color-bg-warning-weakest: var(--rc-color-amber-950);
   --rc-color-bg-danger: var(--rc-color-red-300);
   --rc-color-bg-danger-weak: var(--rc-color-red-950);
   --rc-color-bg-discord: var(--rc-color-discord-500);
@@ -450,10 +454,10 @@
   --rc-color-fg-success: var(--rc-color-green-300);
   --rc-color-fg-success-strong: var(--rc-color-green-200);
   --rc-color-fg-warning: var(--rc-color-amber-300);
-  --rc-color-fg-notice: var(--rc-color-amber-250);
   --rc-color-fg-danger: var(--rc-color-red-300);
   --rc-color-fg-on-primary: var(--rc-color-gray-000);
   --rc-color-fg-inverse: var(--rc-color-gray-975);
+  --rc-color-fg-on-solid: var(--rc-color-gray-975);
   --rc-color-fg-gm: var(--rc-color-gold-400);
   --rc-color-fg-on-spark: var(--rc-color-gold-975);
 
@@ -469,7 +473,7 @@
   --rc-color-border-focus: var(--rc-color-indigo-300);
   --rc-color-border-success: var(--rc-color-green-800);
   --rc-color-border-danger: var(--rc-color-red-900);
-  --rc-color-border-notice: var(--rc-color-amber-700);
+  --rc-color-border-warning: var(--rc-color-amber-700);
 
   --rc-color-heat-1: #221f42;
   --rc-color-heat-2: #2f2f57;
@@ -517,8 +521,6 @@
   --rc-callout-success-border: #29624b;
   --rc-callout-warning-bg: #3f3018;
   --rc-callout-warning-border: #8a5a1b;
-  --rc-callout-notice-bg: #3d2f20;
-  --rc-callout-notice-border: #8a5a1b;
   --rc-callout-danger-bg: #452b2b;
   --rc-callout-danger-border: #7d4949;
 }
@@ -583,9 +585,10 @@
   --color-tinted-border: var(--rc-color-border-primary);
   --color-tinted-ink: var(--rc-color-fg-primary);
 
-  --color-notice-bg: var(--rc-color-bg-notice-weak);
-  --color-notice-border: var(--rc-color-border-notice);
-  --color-notice-ink: var(--rc-color-fg-notice);
+  --color-warning-weakest: var(--rc-color-bg-warning-weakest);
+  --color-warning-border: var(--rc-color-border-warning);
+  --color-warning-solid: var(--rc-color-bg-warning);
+  --color-on-solid: var(--rc-color-fg-on-solid);
 
   --color-rank-gold: var(--rc-color-fg-rank-gold);
   --color-rank-bronze: var(--rc-color-fg-rank-bronze);
@@ -641,10 +644,6 @@
 [data-theme="dark"] [data-slot="callout"][data-color-palette="warning"] {
   --callout-bg: var(--rc-callout-warning-bg);
   --callout-border: var(--rc-callout-warning-border);
-}
-[data-theme="dark"] [data-slot="callout"][data-color-palette="notice"] {
-  --callout-bg: var(--rc-callout-notice-bg);
-  --callout-border: var(--rc-callout-notice-border);
 }
 [data-theme="dark"] [data-slot="callout"][data-color-palette="danger"] {
   --callout-bg: var(--rc-callout-danger-bg);

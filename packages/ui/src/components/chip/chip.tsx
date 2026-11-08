@@ -18,7 +18,7 @@ const chip = cva(
         interactive: "border-gray-200 bg-surface text-gray-600 hover:bg-gray-50",
         neutral: "border-transparent bg-gray-100 text-label",
         outline: "border-gray-200 text-label",
-        notice: "border-notice-border bg-notice-bg text-notice-ink",
+        warning: "border-warning-border bg-warning-weakest text-warning-600",
       },
       selected: {
         true: "border-tinted-border bg-tinted-bg text-tinted-ink",

@@ -22,17 +22,17 @@ export const buttonVariants = cva(
       {
         variant: "solid",
         colorPalette: "success",
-        className: "bg-success-solid text-inverse hover:opacity-90",
+        className: "bg-success-solid text-on-solid hover:opacity-90",
       },
       {
         variant: "solid",
         colorPalette: "danger",
-        className: "bg-danger-solid text-inverse hover:opacity-90",
+        className: "bg-danger-solid text-on-solid hover:opacity-90",
       },
       {
         variant: "solid",
         colorPalette: "warning",
-        className: "bg-warning-600 text-surface hover:opacity-90",
+        className: "bg-warning-solid text-on-solid hover:opacity-90",
       },
       {
         variant: "solid",
@@ -63,7 +63,7 @@ export const buttonVariants = cva(
       {
         variant: "outline",
         colorPalette: "warning",
-        className: "border-notice-border text-warning-600 hover:bg-warning-50",
+        className: "border-warning-border text-warning-600 hover:bg-warning-50",
       },
       {
         variant: "outline",
@@ -93,7 +93,7 @@ export const buttonVariants = cva(
       {
         variant: "tinted",
         colorPalette: "warning",
-        className: "border-notice-border bg-warning-50 text-notice-ink",
+        className: "border-warning-border bg-warning-50 text-warning-600",
       },
       {
         variant: "tinted",

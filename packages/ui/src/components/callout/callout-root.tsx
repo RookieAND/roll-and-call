@@ -12,7 +12,7 @@ import { CalloutContext, type CalloutPalette } from "./callout-context";
 const callout = cva("grid grid-cols-[auto_1fr_auto] items-start border", {
   variants: {
     variant: { tinted: "", outline: "bg-transparent" },
-    colorPalette: { gray: "", primary: "", success: "", warning: "", notice: "", danger: "" },
+    colorPalette: { gray: "", primary: "", success: "", warning: "", danger: "" },
     size: { sm: "rounded-400 px-150 py-150", md: "rounded-500 px-175 py-150" },
   },
   compoundVariants: [
@@ -20,13 +20,11 @@ const callout = cva("grid grid-cols-[auto_1fr_auto] items-start border", {
     { variant: "tinted", colorPalette: "primary", className: "border-transparent bg-tinted-bg" },
     { variant: "tinted", colorPalette: "success", className: "border-success-200 bg-success-50" },
     { variant: "tinted", colorPalette: "warning", className: "border-transparent bg-warning-50" },
-    { variant: "tinted", colorPalette: "notice", className: "border-transparent bg-notice-bg" },
     { variant: "tinted", colorPalette: "danger", className: "border-danger-200 bg-danger-50" },
     { variant: "outline", colorPalette: "gray", className: "border-gray-200" },
     { variant: "outline", colorPalette: "primary", className: "border-tinted-border" },
     { variant: "outline", colorPalette: "success", className: "border-success-200" },
-    { variant: "outline", colorPalette: "warning", className: "border-notice-border" },
-    { variant: "outline", colorPalette: "notice", className: "border-notice-border" },
+    { variant: "outline", colorPalette: "warning", className: "border-warning-border" },
     { variant: "outline", colorPalette: "danger", className: "border-danger-200" },
   ],
   defaultVariants: { variant: "tinted", colorPalette: "gray", size: "md" },

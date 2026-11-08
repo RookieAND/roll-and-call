@@ -9,7 +9,7 @@ category: Display
 ```ts
 Callout.Root: {
   variant?: "tinted" | "outline"; // 기본 tinted(옅은 채움). outline은 배경을 비우고 테두리만 둔다
-  colorPalette?: "gray" | "primary" | "success" | "warning" | "notice" | "danger"; // 기본 gray
+  colorPalette?: "gray" | "primary" | "success" | "warning" | "danger"; // 기본 gray
   size?: "sm" | "md"; // 기본 md. sm은 패딩과 제목 글자를 줄인다
   // 그 외 div props 그대로. className·style은 상태 기반 함수형도 된다
 }

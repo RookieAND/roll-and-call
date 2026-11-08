@@ -82,7 +82,7 @@ export function GamePreflightFields({
               maxLength={GAME_TAG_MAX_LENGTH}
               placeholder={TAG_PLACEHOLDER[key]}
               suggestions={TAG_SUGGESTIONS[key]}
-              tone={key === GAME_TAG.triggers ? "notice" : "primary"}
+              tone={key === GAME_TAG.triggers ? "warning" : "primary"}
               onChange={(next) => setValue(key, next, { shouldDirty: true })}
             />
           </Field.Root>

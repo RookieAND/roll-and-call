@@ -11,4 +11,4 @@
 @source inline("text-{heading1,heading2,heading3,subtitle1,subtitle2,body2,body3,body4,body5}");
 @source inline("{bg,text,border}-{surface,canvas,hint,toast,dim,discord,on-primary,inverse,saturday}");
 @source inline("{bg,text,border}-{primary,gray,success,warning,danger}-{50,100,200,300,400,500,600,700,800,900}");
-@source inline("{bg,text,border}-{tinted-bg,tinted-bg-hover,tinted-border,tinted-ink,notice-bg,notice-border,notice-ink,primary-ink,danger-solid,success-solid}");
+@source inline("{bg,text,border}-{tinted-bg,tinted-border,tinted-ink,warning-weakest,warning-border,warning-solid,on-solid,danger-solid,success-solid}");

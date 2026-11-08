@@ -14,9 +14,9 @@ export function ConflictNotice({ title, description, actions }: ConflictNoticePr
       role="alert"
       align="center"
       gap="150"
-      className="rounded-600 border border-(--rc-color-fg-notice) bg-notice-bg px-175 py-150"
+      className="rounded-600 border border-(--rc-color-fg-warning) bg-warning-weakest px-175 py-150"
     >
-      <TriangleAlert size={18} aria-hidden className="shrink-0 text-notice-ink" />
+      <TriangleAlert size={18} aria-hidden className="shrink-0 text-warning-600" />
       <VStack gap="025" className="min-w-0 flex-1">
         <Text typography="subtitle2">{title}</Text>
         <Text typography="body4" foreground="muted">

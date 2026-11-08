@@ -9,7 +9,7 @@ category: Actions
 ```ts
 interface ChipProps {
   shape?: "block" | "pill"; // 기본 pill
-  tone?: "outline" | "notice" | "interactive" | "neutral"; // 기본 interactive
+  tone?: "outline" | "warning" | "interactive" | "neutral"; // 기본 interactive
   selected?: boolean; // 기본 false
 }
 ```
@@ -33,7 +33,7 @@ interface ChipProps {
   <Chip tone="interactive">전체</Chip>
   <Chip tone="neutral">모집 중</Chip>
   <Chip tone="outline">대기 접수 중</Chip>
-  <Chip tone="notice">마감 임박</Chip>
+  <Chip tone="warning">마감 임박</Chip>
 </HStack>
 ```
 

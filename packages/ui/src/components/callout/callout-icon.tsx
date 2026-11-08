@@ -12,7 +12,6 @@ const DEFAULT_ICON: Record<CalloutPalette, ReactNode> = {
   primary: <Info size={14} strokeWidth={2.2} />,
   success: <CircleCheck size={14} strokeWidth={2.2} />,
   warning: <TriangleAlert size={14} strokeWidth={2.2} />,
-  notice: <Info size={14} strokeWidth={2.2} />,
   danger: <CircleAlert size={14} strokeWidth={2.2} />,
 };
 

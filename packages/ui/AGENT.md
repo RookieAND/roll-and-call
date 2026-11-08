@@ -94,7 +94,7 @@
       </VStack>
     </Card.Root>
 
-    <Callout.Root colorPalette="notice" variant="outline">
+    <Callout.Root colorPalette="warning" variant="outline">
       <Callout.Icon />
       <Callout.Title>트리거 안내</Callout.Title>
       <Callout.Description>공포·유혈 묘사가 있습니다.</Callout.Description>

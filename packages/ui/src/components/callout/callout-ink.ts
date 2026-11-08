@@ -7,7 +7,6 @@ export const calloutInk = cva("", {
       primary: "text-tinted-ink",
       success: "text-success-700",
       warning: "text-warning-600",
-      notice: "text-notice-ink",
       danger: "text-danger-600",
     },
   },

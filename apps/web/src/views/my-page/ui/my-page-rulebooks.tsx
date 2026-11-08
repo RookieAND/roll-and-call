@@ -1,5 +1,5 @@
 import { Button, Callout, HStack, Text, VStack, cn } from "@roll-and-call/ui";
-import { Plus } from "lucide-react";
+import { Info, Plus } from "lucide-react";
 
 import { CERT_STATE, isCertEnforced, type MyRulebooks } from "@/entities/rulebook";
 import { formatDate } from "@/shared/lib";
@@ -36,8 +36,10 @@ export function MyPageRulebooks({
       </HStack>
 
       {showBand && (
-        <Callout.Root colorPalette="notice" role="note">
-          <Callout.Icon />
+        <Callout.Root colorPalette="warning" role="note">
+          <Callout.Icon>
+            <Info size={14} strokeWidth={2.2} />
+          </Callout.Icon>
           <Callout.Description>
             {formatDate(enforcementDate!)}부터 구인을 열려면 룰북 인증이 필요합니다.
             <br />

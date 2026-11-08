@@ -48,9 +48,10 @@ const PAIRS = [
   ["border-input", "bg-canvas-base", 3],
   ["fg-hint", "bg-secondary", 4.5],
   ["fg-warning", "bg-warning-weak", 4.5],
-  ["fg-notice", "bg-warning-weak", 4.5],
-  ["fg-inverse", "bg-danger", 4.5],
-  ["fg-inverse", "bg-success", 4.5],
+  ["fg-warning", "bg-warning-weakest", 4.5],
+  ["fg-on-solid", "bg-warning", 4.5],
+  ["fg-on-solid", "bg-danger", 4.5],
+  ["fg-on-solid", "bg-success", 4.5],
 ];
 
 let failed = 0;

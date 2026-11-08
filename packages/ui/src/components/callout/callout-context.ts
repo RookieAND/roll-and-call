@@ -5,7 +5,6 @@ export const CALLOUT_PALETTE = {
   primary: "primary",
   success: "success",
   warning: "warning",
-  notice: "notice",
   danger: "danger",
 } as const;
 

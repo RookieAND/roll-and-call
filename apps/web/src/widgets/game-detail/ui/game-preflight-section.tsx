@@ -30,7 +30,7 @@ export function GamePreflightSection({ game, adultOnlyEnabled }: GamePreflightSe
           label={gameTagLabel[GAME_TAG.triggers]}
           tags={game.triggers}
           noteLines={TRIGGER_NOTE_LINES}
-          tone="notice"
+          tone="warning"
         />
       )}
       {game.notice && <GameNoticeBlock notice={game.notice} linkLabels={game.linkLabels} />}
