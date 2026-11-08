@@ -1,8 +1,7 @@
 "use client";
 
-import { Button, Chip, HStack, Sheet, Text } from "@roll-and-call/ui";
+import { Button, Chip, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 
-import { ProfileBlockLabel } from "./profile-block-label";
 import { RulebookSheetList } from "./rulebook-sheet-list";
 
 const FOLDED_COUNT = 5;
@@ -15,9 +14,11 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
   const hiddenCount = rulebooks.length - FOLDED_COUNT;
 
   return (
-    <section className="px-200 pt-200">
+    <VStack gap="100" render={<section />} className="px-200 pb-250">
       <HStack align="baseline" gap="075">
-        <ProfileBlockLabel label="인증한 룰북" />
+        <Text typography="heading3" render={<h2 />}>
+          인증한 룰북
+        </Text>
         <Text typography="body4" foreground="hint" numeric>
           {rulebooks.length}
         </Text>
@@ -42,7 +43,7 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
               +{hiddenCount}
             </Sheet.Trigger>
             <Sheet.Overlay />
-            <Sheet.Popup aria-label="인증한 룰북" className="max-h-[78dvh] px-0">
+            <Sheet.Popup aria-label="인증한 룰북" className="h-[78dvh] px-0 desktop:h-140">
               <Sheet.Handle />
               <HStack align="center" gap="075" className="min-h-12 pr-100 pl-200">
                 <Text typography="heading3" render={<h2 />}>
@@ -58,6 +59,6 @@ export function ProfileRulebooks({ rulebooks }: ProfileRulebooksProps) {
           </Sheet.Root>
         )}
       </HStack>
-    </section>
+    </VStack>
   );
 }

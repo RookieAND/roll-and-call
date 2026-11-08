@@ -10,7 +10,7 @@ interface ProfileAvailabilityProps {
 
 export function ProfileAvailability({ profile }: ProfileAvailabilityProps) {
   return (
-    <section>
+    <section className="**:data-[slot=card]:bg-transparent">
       <ProfileBlockLabel label="가능 시간대" />
       <AvailabilityRows intervals={profile.availability} />
     </section>

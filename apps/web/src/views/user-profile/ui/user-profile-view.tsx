@@ -15,6 +15,8 @@ import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list/server";
 
+import { PROFILE_APP_BAR_TINT_CLASS } from "../model/profile-tint";
+import { ProfileAccentFrame } from "./profile-accent-frame";
 import { ProfileAvailability } from "./profile-availability";
 import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
@@ -66,46 +68,54 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
   );
 
   return (
-    <PageShell
-      readable
-      scrollTop
-      appBar={<AppBar back="/games" title={`${profile.username}님의 프로필`} />}
-      panel={
-        <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
-          <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
-        </div>
-      }
-    >
-      <div className={DESKTOP_CARD_CLASS}>
-        <Container size="sm" className="px-0 desktop:max-w-none">
-          <ProfileSummary
-            profile={profile}
-            absences={absences}
-            hosted={counts.hosted}
-            played={counts.played}
-            featuredBadges={featuredBadges}
-            badgeTotal={countBadges(badgeRecords, now).total}
+    <ProfileAccentFrame accentColor={profile.accentColor}>
+      <PageShell
+        readable
+        scrollTop
+        appBar={
+          <AppBar
+            back="/games"
+            title={`${profile.username}님의 프로필`}
+            className={profile.accentColor ? PROFILE_APP_BAR_TINT_CLASS : undefined}
           />
-
-          <div className="px-200 pt-200 desktop:hidden">
-            <ProfileAvailability profile={profile} />
+        }
+        panel={
+          <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
+            <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
           </div>
+        }
+      >
+        <div className={DESKTOP_CARD_CLASS}>
+          <Container size="sm" className="px-0 desktop:max-w-none">
+            <ProfileSummary
+              profile={profile}
+              absences={absences}
+              hosted={counts.hosted}
+              played={counts.played}
+              featuredBadges={featuredBadges}
+              badgeTotal={countBadges(badgeRecords, now).total}
+            />
 
-          {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
-
-          <ProfileReviews
-            userId={profile.id}
-            received={counts.hosted >= 1 ? reviewCounts.received : null}
-            written={reviewCounts.written}
-          />
-
-          {viewer && (
-            <div className="desktop:hidden">
-              <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
+            <div className="px-200 pb-250 desktop:hidden">
+              <ProfileAvailability profile={profile} />
             </div>
-          )}
-        </Container>
-      </div>
-    </PageShell>
+
+            {certified.length > 0 && <ProfileRulebooks rulebooks={certified} />}
+
+            <ProfileReviews
+              userId={profile.id}
+              received={counts.hosted >= 1 ? reviewCounts.received : null}
+              written={reviewCounts.written}
+            />
+
+            {viewer && (
+              <div className="desktop:hidden">
+                <ProfileMemoBlock targetId={profile.id} targetName={profile.username} memo={memo} />
+              </div>
+            )}
+          </Container>
+        </div>
+      </PageShell>
+    </ProfileAccentFrame>
   );
 }

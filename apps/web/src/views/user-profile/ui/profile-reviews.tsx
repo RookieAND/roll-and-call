@@ -1,11 +1,10 @@
-import { Card, VStack } from "@roll-and-call/ui";
+import { Card, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer } from "@/shared/server";
-import { CountLinkRow } from "@/shared/ui";
 
-import { ProfileBlockLabel } from "./profile-block-label";
+import { ProfileReviewRow } from "./profile-review-row";
 
 interface ProfileReviewsProps {
   userId: string;
@@ -16,17 +15,19 @@ interface ProfileReviewsProps {
 export async function ProfileReviews({ userId, received, written }: ProfileReviewsProps) {
   const server = await getCurrentServer();
   return (
-    <VStack render={<section />} className="px-200 pt-200 desktop:pb-200">
-      <ProfileBlockLabel label="후기" />
-      <Card.Root padding="none" radius={600} className="overflow-hidden">
+    <VStack gap="125" render={<section />} className="px-200 pb-250 desktop:py-200">
+      <Text typography="heading3" render={<h2 />}>
+        후기
+      </Text>
+      <Card.Root padding="none" radius={600} background="none" className="overflow-hidden">
         {!isNull(received) && (
-          <CountLinkRow
+          <ProfileReviewRow
             label="진행한 세션 후기"
             count={received}
             href={serverPath({ slug: server.slug, path: `/users/${userId}/reviews/received` })}
           />
         )}
-        <CountLinkRow
+        <ProfileReviewRow
           label="작성한 후기"
           count={written}
           href={serverPath({ slug: server.slug, path: `/users/${userId}/reviews/written` })}

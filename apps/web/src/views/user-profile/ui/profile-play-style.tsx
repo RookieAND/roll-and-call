@@ -10,7 +10,7 @@ export function ProfilePlayStyle({ playStyle }: ProfilePlayStyleProps) {
   return (
     <VStack render={<section />}>
       <ProfileBlockLabel label="플레이 스타일" />
-      <Card.Root padding="md" radius={600}>
+      <Card.Root background="subtle" padding="md" radius={600}>
         <Text typography="body2" render={<p />} className="text-pretty whitespace-pre-line">
           {playStyle}
         </Text>

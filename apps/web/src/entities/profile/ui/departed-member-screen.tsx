@@ -14,7 +14,7 @@ export function DepartedMemberScreen({ name, avatarUrl }: DepartedMemberScreenPr
   return (
     <PageShell readable appBar={<AppBar back="/games" title="프로필" />}>
       <div className={DESKTOP_CARD_CLASS}>
-        <div className="px-200 pb-250">
+        <div className="px-200 pb-200">
           <ProfileHero
             name={name}
             avatarUrl={avatarUrl}

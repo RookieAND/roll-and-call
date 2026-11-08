@@ -3,6 +3,7 @@ const HANGUL_END = 0xd7a3;
 const SYLLABLES_PER_INITIAL = 588;
 // 쌍자음은 같은 칸으로 묶는다.
 const INITIALS = "ㄱㄱㄴㄷㄷㄹㅁㅂㅂㅅㅅㅇㅈㅈㅊㅋㅌㅍㅎ";
+const LATIN_GROUP = "A-Z";
 const OTHER_GROUP = "기타";
 
 export interface RulebookGroup<Item> {
@@ -16,16 +17,16 @@ export function initialOf(label: string): string {
   if (code >= HANGUL_START && code <= HANGUL_END) {
     return INITIALS[Math.floor((code - HANGUL_START) / SYLLABLES_PER_INITIAL)]!;
   }
-  if (/[A-Za-z]/.test(first)) return first.toUpperCase();
+  if (/[A-Za-z]/.test(first)) return LATIN_GROUP;
   return OTHER_GROUP;
 }
 
 function rank(label: string): number {
   if (label === OTHER_GROUP) return 2;
-  return /^[A-Z]$/.test(label) ? 1 : 0;
+  return label === LATIN_GROUP ? 1 : 0;
 }
 
-// 한글 초성(ㄱ~ㅎ) → 알파벳(A~Z) → 기타 순으로 묶고, 묶음 안은 가나다순이다.
+// 한글 초성(ㄱ~ㅎ) → 알파벳(A-Z 한 칸) → 기타 순으로 묶고, 묶음 안은 가나다순이다.
 export function groupRulebooksByInitial<Item extends { label: string }>(
   items: readonly Item[],
 ): RulebookGroup<Item>[] {

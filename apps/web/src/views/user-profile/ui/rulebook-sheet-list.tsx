@@ -45,12 +45,18 @@ export function RulebookSheetList({ rulebooks }: RulebookSheetListProps) {
         )}
         {groups.map((group) => (
           <section key={group.label}>
-            <h3 className="sticky top-0 z-10 flex items-center gap-100 bg-surface pt-150 pb-075 text-body4 font-extrabold text-tinted-ink">
+            <Text
+              typography="body4"
+              weight="extrabold"
+              foreground="primary"
+              render={<h3 />}
+              className="sticky top-0 z-10 flex items-center gap-100 bg-surface pt-150 pb-075"
+            >
               {group.label}
               <Text typography="body4" foreground="hint" numeric render={<span />}>
                 {group.items.length}
               </Text>
-            </h3>
+            </Text>
             {group.items.map((rulebook) => (
               <Text
                 key={rulebook.id}

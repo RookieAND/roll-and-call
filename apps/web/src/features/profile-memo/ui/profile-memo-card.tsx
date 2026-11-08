@@ -27,7 +27,7 @@ export function ProfileMemoCard({ targetId, targetName, body }: ProfileMemoCardP
           <Pencil size={16} aria-hidden />
         </IconButton>
       </HStack>
-      <Text typography="body3" render={<p />} className="whitespace-pre-line">
+      <Text typography="body3" render={<p />} className="text-pretty whitespace-pre-line">
         {body}
       </Text>
       <Text typography="body4" foreground="hint" render={<p />} className="mt-125">

@@ -18,10 +18,10 @@ export function ProfileSide({ profile, signedIn, memo }: ProfileSideProps) {
     <>
       <section className="p-200">
         <ProfileBlockLabel label="링크" />
-        <ProfileLinks links={profile.links} discordId={profile.discordId} />
+        <ProfileLinks links={profile.links} discordId={profile.discordId} variant="circle" />
       </section>
 
-      <div className="px-200 pb-200">
+      <div className="px-200 pb-250">
         <ProfileAvailability profile={profile} />
       </div>
 
