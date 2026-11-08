@@ -29,6 +29,15 @@ AlertDialog.Footer: {
 AlertDialog.Close    // Base UI AlertDialog.Close 그대로
 ```
 
+## Dialog와 다른 점
+
+모양(Popup·Header·Footer)은 `Dialog`와 같다. 다른 것은 동작이다.
+
+- 화면 낭독기에는 일반 창이 아니라 경고창(`role="alertdialog"`)으로 읽힌다.
+- 바깥을 눌러도 닫히지 않는다. 확인이나 취소 버튼을 눌러야 닫힌다.
+- 열릴 때 포커스가 안전한 쪽(취소)으로 간다.
+- 되돌릴 수 없는 조치를 확인받는 자리에만 쓴다. 그 밖의 창은 `Dialog`다.
+
 ## 언제 쓰나
 
 구인 삭제, 참여자 내보내기처럼 되돌릴 수 없는 조치를 한 번 더 확인받을 때 쓴다. 바깥을 눌러도 닫히지 않으며, 열리면 포커스가 취소 쪽에 가도록 Base UI가 처리한다.

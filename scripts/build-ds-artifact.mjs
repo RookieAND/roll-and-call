@@ -20,6 +20,16 @@ const PROJECT = join(OUT, "project");
 const TITLE = "Nat20";
 const NAMESPACE = "RollAndCallUI";
 const SKIP_COMPONENTS = new Set(["UiImage"]);
+// 포털로 화면 전체를 덮는 컴포넌트: 예시를 한 번에 하나씩 보여 준다(겹침 방지). 값은 카드 높이.
+const OVERLAY_HEIGHT = {
+  AlertDialog: 520,
+  Dialog: 520,
+  Sheet: 620,
+  Popover: 340,
+  Tooltip: 280,
+  Toast: 420,
+  FloatingBar: 420,
+};
 
 const write = (path, text) => {
   mkdirSync(dirname(join(PROJECT, path)), { recursive: true });
@@ -403,6 +413,61 @@ write("components/bundle.js", bundleJs);
 write("components/bundle.css", readFileSync(join(BUNDLE, "_ds_bundle.css"), "utf8"));
 
 // ---------- 컴포넌트 ----------
+const PREVIEW_STYLE = `body{margin:0;padding:16px;background:var(--rc-color-bg-canvas-base);color:var(--rc-color-fg-normal);font-family:var(--font-sans)}
+.cell{margin:0 0 16px;min-width:0}
+.cell>h4{margin:0 0 8px;font:600 12px/1.4 var(--font-sans);color:var(--rc-color-fg-muted)}
+.hint{margin:0 0 12px;font:400 12px/1.4 var(--font-sans);color:var(--rc-color-fg-hint)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;position:relative;z-index:1}
+.tabs button{font:600 12px/1 var(--font-sans);padding:8px 12px;border-radius:var(--rc-radius-300);border:1px solid var(--rc-color-border-strong);background:var(--rc-color-bg-canvas-base);color:var(--rc-color-fg-label);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--rc-color-bg-primary-weak);border-color:var(--rc-color-border-primary-strong);color:var(--rc-color-fg-primary)}`;
+function previewHtml(name, category) {
+  const overlay = OVERLAY_HEIGHT[name];
+  const body = overlay
+    ? `<div class="tabs" id="t"></div>
+<p class="hint">예시를 닫은 뒤 다른 탭을 고르면 그 예시가 열린다.</p>
+<div id="g"></div>
+<script src="./preview.js"></script>
+<script>
+(function(){
+  var t=document.getElementById('t'), g=document.getElementById('g'), ex=window.__dsPreview||{}, root=null;
+  var keys=Object.keys(ex).filter(function(k){return typeof ex[k]==='function'&&/^[A-Z]/.test(k)});
+  function show(k){
+    if(root)root.unmount();
+    g.innerHTML='<div id="r"></div>';
+    root=ReactDOM.createRoot(document.getElementById('r'));
+    try{root.render(React.createElement(ex[k]))}catch(e){g.textContent='Error: '+(e&&e.message||e)}
+    [].forEach.call(t.children,function(b){b.setAttribute('aria-pressed',String(b.textContent===k))});
+  }
+  keys.forEach(function(k){var b=document.createElement('button');b.textContent=k;b.onclick=function(){show(k)};t.appendChild(b)});
+  if(keys.length)show(keys[0]);else g.textContent='No example exported for ${name}.';
+})();
+</script>`
+    : `<div id="g"></div>
+<script src="./preview.js"></script>
+<script>
+(function(){
+  var g=document.getElementById('g'), ex=window.__dsPreview||{}, n=0;
+  Object.keys(ex).forEach(function(k){
+    if(typeof ex[k]!=='function'||!/^[A-Z]/.test(k))return;
+    var s=document.createElement('section'); s.className='cell';
+    s.innerHTML='<h4>'+k+'</h4><div id="r'+n+'"></div>'; g.appendChild(s);
+    try{ReactDOM.createRoot(document.getElementById('r'+n)).render(React.createElement(ex[k]))}
+    catch(e){document.getElementById('r'+n).textContent='Error: '+(e&&e.message||e)}
+    n++;
+  });
+  if(!n)g.textContent='No example exported for ${name}.';
+})();
+</script>`;
+  return `<!-- @dsCard group="${category}" height=${overlay ?? 240} -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+${PREVIEW_STYLE}
+</style></head><body>
+${body}
+</body></html>
+`;
+}
 const groupDirs = readdirSync(join(BUNDLE, "components"));
 const dtsParts = [];
 const oldPaths = [];
@@ -418,34 +483,7 @@ for (const name of componentNames) {
   );
   write(`components/${name}/README.md`, readme);
   copy(join(BUNDLE, "_preview", `${name}.js`), `components/${name}/preview.js`);
-  write(
-    `components/${name}/preview.html`,
-    `<!-- @dsCard group="${category}" height=240 -->
-<!doctype html>
-<html><head><meta charset="utf-8">
-<style>
-body{margin:0;padding:16px;background:var(--rc-color-bg-canvas-base);color:var(--rc-color-fg-normal);font-family:var(--font-sans)}
-.cell{margin:0 0 16px;min-width:0}
-.cell>h4{margin:0 0 8px;font:600 12px/1.4 var(--font-sans);color:var(--rc-color-fg-muted)}
-</style></head><body>
-<div id="g"></div>
-<script src="./preview.js"></script>
-<script>
-(function(){
-  var g=document.getElementById('g'), ex=window.__dsPreview||{}, n=0;
-  Object.keys(ex).forEach(function(k){
-    if(typeof ex[k]!=='function'||!/^[A-Z]/.test(k))return;
-    var s=document.createElement('section'); s.className='cell';
-    s.innerHTML='<h4>'+k+'</h4><div id="r'+n+'"></div>'; g.appendChild(s);
-    try{ReactDOM.createRoot(document.getElementById('r'+n)).render(React.createElement(ex[k]))}
-    catch(e){document.getElementById('r'+n).textContent='Error: '+(e&&e.message||e)}
-    n++;
-  });
-  if(!n)g.textContent='No example exported for ${name}.';
-})();
-</script></body></html>
-`,
-  );
+  write(`components/${name}/preview.html`, previewHtml(name, category));
   dtsParts.push(
     `// ${name}\n${readFileSync(join(dir, `${name}.d.ts`), "utf8").replace(/^import \* as React from 'react';\n\n/, "")}`,
   );
