@@ -1,10 +1,12 @@
 "use client";
 
-import { Button, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Button, Sheet } from "@roll-and-call/ui";
 import { useState, type ReactNode } from "react";
 
 import { EndSessionDialog } from "@/features/end-session";
 import { ServerLink } from "@/shared/ui";
+
+import { AttendanceSheetItemContent } from "./attendance-sheet-item-content";
 
 interface AttendanceRowButtonProps {
   gameId: string;
@@ -36,27 +38,24 @@ export function AttendanceRowButton({ gameId, plannedEndAt, children }: Attendan
           {children}
         </Sheet.Trigger>
         <Sheet.Overlay />
-        <Sheet.Popup aria-label="출석 확인 메뉴">
+        <Sheet.Popup>
           <Sheet.Handle />
+          <Sheet.Title className="text-heading3">출석 확인</Sheet.Title>
           <Sheet.Body>
             <Sheet.Item
               render={<ServerLink path={`/games/${gameId}/attendance`} />}
               className="min-h-14 justify-start px-100"
             >
-              <VStack gap="025" render={<span />} className="items-start">
-                <Text typography="subtitle2">출석 입력하기</Text>
-                <Text typography="body4" foreground="muted">
-                  불참한 참여자를 골라 출석을 확정합니다.
-                </Text>
-              </VStack>
+              <AttendanceSheetItemContent
+                title="출석 입력하기"
+                description="불참한 참여자를 골라 출석을 확정합니다."
+              />
             </Sheet.Item>
             <Sheet.Item onClick={openEndDialog} className="min-h-14 justify-start px-100">
-              <VStack gap="025" render={<span />} className="items-start">
-                <Text typography="subtitle2">세션 마치기</Text>
-                <Text typography="body4" foreground="muted">
-                  예정보다 일찍 끝났다면 여기서 마쳐 주세요.
-                </Text>
-              </VStack>
+              <AttendanceSheetItemContent
+                title="세션 마치기"
+                description="예정보다 일찍 끝났다면 여기서 마쳐 주세요."
+              />
             </Sheet.Item>
           </Sheet.Body>
         </Sheet.Popup>

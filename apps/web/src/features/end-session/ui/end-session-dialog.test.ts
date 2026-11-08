@@ -44,8 +44,7 @@ describe("EndSessionDialogView", () => {
     expect(html).toContain("[title:세션을 지금 마칠까요?]");
     expect(html).toContain("마치면 참여자 관리가 닫히고");
     expect(html).toContain("출석 확인으로 넘어갑니다.");
-    expect(html).toContain(">예정 종료</span>");
-    expect(html).toContain(">9월 19일 (토) 23:00</span>");
+    expect(html).toContain("예정 종료 9월 19일 (토) 23:00");
     expect(html).toContain("[confirm:마치기|solid|primary|loading:false]");
     expect(html).not.toContain("세션을 마치지 못했습니다.");
   });
