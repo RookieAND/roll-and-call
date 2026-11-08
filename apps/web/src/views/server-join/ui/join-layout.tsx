@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import type { ReactNode } from "react";
 
@@ -38,25 +38,17 @@ export function JoinLayout({ target, status, action }: JoinLayoutProps) {
       }
     >
       <VStack align="center" gap="125" className="text-center">
-        <Text
-          typography="heading1"
-          render={<h1 />}
-          className="text-[length:34px] leading-[1.2] tracking-[-0.045em]"
-        >
+        <Text typography="metric" foreground="inherit" render={<h1 />}>
           {target.name}
         </Text>
-        <HStack
-          align="center"
-          gap="075"
-          className="h-7 rounded-full border border-(--rc-color-border-subtle) bg-surface/70 px-150"
-        >
-          <span className="flex text-discord">
-            <BrandMark service="discord" size={14} />
-          </span>
-          <Text typography="body4" weight="bold" foreground="muted">
+        <Badge colorPalette="gray">
+          <HStack align="center" gap="075">
+            <span className="flex text-discord">
+              <BrandMark service="discord" size={14} />
+            </span>
             디스코드 서버 · 롤앤콜
-          </Text>
-        </HStack>
+          </HStack>
+        </Badge>
       </VStack>
     </ServerStage>
   );

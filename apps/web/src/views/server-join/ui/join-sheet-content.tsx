@@ -17,7 +17,7 @@ export function JoinSheetContent({ status, serverName, hasInvite, action }: Join
     <>
       <VStack align="center" gap="125" className="text-center">
         <Badge colorPalette={badgePalette}>{badge}</Badge>
-        <Text typography="heading1" render={<h2 />} className="text-pretty">
+        <Text typography="heading1" foreground="inherit" render={<h2 />} className="text-pretty">
           {title}
         </Text>
         <Text typography="body2" foreground="muted" render={<p />} className="text-pretty">
