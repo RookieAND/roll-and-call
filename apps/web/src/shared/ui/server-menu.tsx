@@ -47,7 +47,7 @@ export function ServerMenu({
         >
           <Menu.Popup
             aria-label={label}
-            className="flex w-[max(var(--anchor-width),260px)] max-w-[calc(100vw-32px)] flex-col rounded-600 border border-gray-200 bg-surface p-075 shadow-[0_16px_40px_rgba(23,23,28,0.16)] outline-none"
+            className="flex w-[max(var(--anchor-width),260px)] max-w-[calc(100vw-32px)] flex-col rounded-600 border border-gray-200 bg-surface p-075 shadow-popup outline-none"
           >
             <Menu.Group>
               <Menu.GroupLabel

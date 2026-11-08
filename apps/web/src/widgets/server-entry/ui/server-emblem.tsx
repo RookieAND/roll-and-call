@@ -29,7 +29,7 @@ export function ServerEmblem({ name, icon, mark, dimmed = false }: ServerEmblemP
           style={{ animationDelay: delay }}
         />
       ))}
-      <div className="relative flex size-full items-center justify-center rounded-800 bg-surface shadow-[0_14px_34px_rgb(23_23_28/0.14),0_0_0_1px_var(--rc-color-border-subtle)]">
+      <div className="relative flex size-full items-center justify-center rounded-800 border border-(--rc-color-border-subtle) bg-surface shadow-popup">
         <span className={cn("flex", dimmed && "opacity-50")}>
           <ServerIcon name={name} icon={icon} size="xl" tone="primary" />
         </span>
