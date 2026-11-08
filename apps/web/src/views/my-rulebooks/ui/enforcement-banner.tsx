@@ -1,5 +1,5 @@
-import { Info } from "lucide-react";
 import { Badge, Callout } from "@roll-and-call/ui";
+import { Info } from "lucide-react";
 
 interface EnforcementBannerProps {
   title: string;
