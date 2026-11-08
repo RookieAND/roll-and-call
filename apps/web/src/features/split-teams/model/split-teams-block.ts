@@ -1,5 +1,7 @@
 import { difference, intersection } from "es-toolkit";
 
+import { GAME_VISIBILITY, type GameVisibility } from "@/entities/game";
+
 import { isCapacityMatched } from "./is-capacity-matched";
 import { SPLIT_TEAMS_MESSAGE } from "./split-teams-rules";
 
@@ -8,16 +10,20 @@ import { SPLIT_TEAMS_MESSAGE } from "./split-teams-rules";
 export function splitTeamsBlock({
   userIds,
   capacity,
+  visibility,
   waitingIds,
   excludedIds,
 }: {
   userIds: readonly string[];
   capacity: number;
+  visibility: GameVisibility;
   waitingIds: readonly string[];
   excludedIds: readonly string[];
 }): string | null {
-  if (!isCapacityMatched({ capacity, selectedCount: userIds.length })) {
-    return SPLIT_TEAMS_MESSAGE.capacityMismatch;
+  if (!isCapacityMatched({ capacity, selectedCount: userIds.length, visibility })) {
+    return visibility === GAME_VISIBILITY.public
+      ? SPLIT_TEAMS_MESSAGE.capacityTooSmall
+      : SPLIT_TEAMS_MESSAGE.capacityMismatch;
   }
   if (difference([...userIds], [...waitingIds]).length > 0) return SPLIT_TEAMS_MESSAGE.notWaiting;
   if (intersection([...userIds], [...excludedIds]).length > 0) return SPLIT_TEAMS_MESSAGE.excluded;

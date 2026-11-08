@@ -4,7 +4,6 @@ import { AppBar, PageShell } from "@/shared/ui";
 
 import type { ManagedMember } from "../model/managed-member";
 import type { RosterSummary } from "../model/roster-summary";
-import type { SplitCandidate } from "../model/split-candidate";
 import { RosterBody } from "./roster-body";
 import { RosterHeader } from "./roster-header";
 import { RosterStats } from "./roster-stats";
@@ -21,7 +20,8 @@ interface ParticipantManagerProps {
   // 신청글 받기 구인이면 GM의 질문. 신청글 창 맨 위에 보인다.
   applicationQuestion: string | null;
   // 팀 나누기에서 고를 수 있는 대기자(판정 전에는 신청자). 세션이 시작되면 비어 있다.
-  splitCandidates: SplitCandidate[];
+  // 팀 나누기에서 고를 수 있는 사람 수. 0이면 입구를 두지 않는다.
+  splitCandidateCount: number;
 }
 
 export function ParticipantManager({
@@ -32,9 +32,9 @@ export function ParticipantManager({
   summary,
   isCoordinate,
   applicationQuestion,
-  splitCandidates,
+  splitCandidateCount,
 }: ParticipantManagerProps) {
-  const showSplitTeams = splitCandidates.length > 0;
+  const showSplitTeams = splitCandidateCount > 0;
 
   // 제목·지표·상태 카드는 모바일에서는 명단 위에, 1100px 이상에서는 우측 패널에 둔다.
   const header = (
@@ -79,10 +79,8 @@ export function ParticipantManager({
             <div className="desktop:-order-1">
               <SplitTeamsBanner
                 gameId={game.id}
-                gameTitle={game.title}
-                candidates={splitCandidates}
+                candidateCount={splitCandidateCount}
                 beforeResult={summary.beforeDraw}
-                carriesApplicationNote={applicationQuestion !== null}
               />
             </div>
           )}

@@ -12,7 +12,6 @@ import { AppBar, PageShell } from "@/shared/ui";
 
 import { summarizeRoster } from "../model/roster-summary";
 import { toManagedMember } from "../model/to-managed-member";
-import { toSplitCandidate } from "../model/to-split-candidate";
 import { ParticipantManager } from "./participant-manager";
 
 interface ManageParticipantsViewProps {
@@ -67,16 +66,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     .map(toMember);
   const isCoordinate = game.scheduleMode === SCHEDULE_MODE.coordinate;
   const started = isSessionStarted(game);
-  const splitCandidates = started
-    ? []
-    : roster.waiting.map((participant) =>
-        toSplitCandidate({
-          userId: participant.userId,
-          username: participant.user?.username ?? "익명",
-          applicationNote: applicationNotes.get(participant.userId) ?? null,
-          bio: participant.user?.bio ?? null,
-        }),
-      );
+  const splitCandidateCount = started ? 0 : roster.waiting.length;
   const summary = summarizeRoster({
     confirmed,
     waiting,
@@ -105,7 +95,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       summary={summary}
       isCoordinate={isCoordinate}
       applicationQuestion={applicationQuestionOf(game)}
-      splitCandidates={splitCandidates}
+      splitCandidateCount={splitCandidateCount}
     />
   );
 }

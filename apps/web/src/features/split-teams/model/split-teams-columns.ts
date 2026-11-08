@@ -1,11 +1,8 @@
 import type { Game, NewGame } from "@roll-and-call/database";
-import {
-  GAME_VISIBILITY,
-  PRIVATE_GAME_COLUMNS,
-  privateEndDate,
-} from "@roll-and-call/database/games/model";
+import { privateEndDate, type GameVisibility } from "@roll-and-call/database/games/model";
 import { omit } from "es-toolkit";
 
+import type { SplitTeamsRecruitColumns } from "./split-teams-recruit";
 import type { SplitTeamsScheduleColumns } from "./split-teams-schedule";
 
 // 원 구인 행을 빼는 목록 방식으로 복사한다. 뒤에 칼럼이 늘어도 모집글 내용은 저절로 따라온다.
@@ -33,23 +30,30 @@ const CLEARED_COLUMNS = {
   cancelReason: null,
 } as const satisfies Partial<NewGame>;
 
-// 새 구인은 언제나 지정 모집이다. 제목과 모집글은 원 구인 그대로, 정원과 일정만 GM이 정한 값이다.
+// 제목과 모집글은 원 구인 그대로, 모집 유형·정원·일정만 GM이 정한 값이다.
 export function splitTeamsColumns({
   game,
   maxPlayers,
+  visibility,
+  endDate,
+  recruit,
   schedule,
 }: {
   game: Game;
   maxPlayers: number;
+  visibility: GameVisibility;
+  // 일반 모집의 모집 마감. 지정 모집은 null이다.
+  endDate: Date | null;
+  recruit: SplitTeamsRecruitColumns;
   schedule: SplitTeamsScheduleColumns;
 }): Omit<NewGame, "serverId"> {
   return {
     ...omit(game, DROPPED_COLUMNS),
     ...CLEARED_COLUMNS,
-    ...PRIVATE_GAME_COLUMNS,
+    ...recruit,
     ...schedule,
-    visibility: GAME_VISIBILITY.private,
+    visibility,
     maxPlayers,
-    endDate: privateEndDate({ ...schedule, endDate: game.endDate }),
+    endDate: endDate ?? privateEndDate({ ...schedule, endDate: game.endDate }),
   };
 }

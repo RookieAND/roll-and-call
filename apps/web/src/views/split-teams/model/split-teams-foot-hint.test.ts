@@ -4,17 +4,26 @@ import { splitTeamsFootHint } from "./split-teams-foot-hint";
 import { toSplitCandidate } from "./to-split-candidate";
 
 const ready = {
+  step: 1,
   selectedCount: 3,
   capacityMatched: true,
+  visibility: "private" as const,
   scheduleMode: "coordinate" as const,
   rangeStart: "2026-11-14",
   rangeEnd: "2026-11-20",
   startsAt: "",
+  endDate: "",
 };
 
 describe("splitTeamsFootHint", () => {
-  it("아무도 고르지 않았거나 다 채웠으면 안내가 없다", () => {
-    expect(splitTeamsFootHint({ ...ready, selectedCount: 0, capacityMatched: false })).toBeNull();
+  it("1단계는 아무도 고르지 않았을 때만 안내한다", () => {
+    expect(splitTeamsFootHint({ ...ready, step: 0, selectedCount: 0 })).toBe(
+      "참여자를 고르면 다음으로 갈 수 있습니다.",
+    );
+    expect(splitTeamsFootHint({ ...ready, step: 0 })).toBeNull();
+  });
+
+  it("2단계를 다 채웠으면 안내가 없다", () => {
     expect(splitTeamsFootHint(ready)).toBeNull();
   });
 
@@ -26,11 +35,20 @@ describe("splitTeamsFootHint", () => {
 
   it("남은 일정 칸을 알려 준다", () => {
     expect(splitTeamsFootHint({ ...ready, rangeEnd: "" })).toBe(
-      "종료일을 고르면 구인을 열 수 있습니다.",
+      "조율 기간과 시간대를 고르면 구인을 열 수 있습니다.",
     );
     expect(splitTeamsFootHint({ ...ready, scheduleMode: "fixed" })).toBe(
       "세션 일시를 고르면 구인을 열 수 있습니다.",
     );
+  });
+
+  it("일반 모집은 모집 마감까지 채워야 한다", () => {
+    expect(splitTeamsFootHint({ ...ready, visibility: "public" })).toBe(
+      "모집 마감을 고르면 구인을 열 수 있습니다.",
+    );
+    expect(
+      splitTeamsFootHint({ ...ready, visibility: "public", endDate: "2026-11-12T20:00" }),
+    ).toBeNull();
   });
 });
 
