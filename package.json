@@ -14,6 +14,7 @@
     "lint:fsd": "turbo lint:fsd",
     "lint:tokens": "turbo lint:tokens",
     "lint:contrast": "node scripts/contrast-check.mjs",
+    "ds:artifact": "node scripts/build-ds-artifact.mjs",
     "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",

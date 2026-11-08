@@ -48,3 +48,23 @@
 
 - `overrides/bundle.mjs`는 `lib/bundle.mjs`의 포크다. 달라진 곳은 `minify: true`와 `NODE_ENV=production` 둘뿐이다. 외부 도구를 업데이트하면 포크를 다시 따 와야 한다.
 - `pnpm lint:contrast`(scripts/contrast-check.mjs)가 토큰 쌍의 WCAG 대비를 라이트·다크 모두 검사한다. 토큰을 바꾸면 돌린다.
+
+## 2026-11-08 아티팩트 직접 갱신 (design-sync 대신)
+
+이 DS는 Claude Design 프로젝트(`projectId`)에서 "Design System" 아티팩트(https://claude.ai/artifact/3PMwtyYNdeNQX1WRGnSmsH)로 옮겨졌고 `/design-sync`는 거기에 쓰지 못한다. 아티팩트는 `editing: "code"`라 페이지가 읽기 전용이고 저장소가 원본이다. 갱신은 Artifact 도구로 직접 한다.
+
+1. design-sync 빌드로 `ds-bundle/`을 만든다(`resync.mjs`, 위 명령). 이 폴더는 중간 산출물일 뿐 아티팩트 구조가 아니다.
+2. `pnpm ds:artifact` — `scripts/build-ds-artifact.mjs`가 `.design-sync/.cache/artifact/project/`와 `deletes.json`을 만든다. `styles.css`에서 `tokens.json`·`tokens.css`를 만들고(토큰 문법도 검사), React 19를 `components/lib/`에 minify해서 싣는다. `.design-sync/conventions.md`가 아티팩트 Overview(`README.md`)의 원본이다(첫 제목 줄만 뗀다).
+3. 로컬 렌더 확인: `components/<이름>/preview.html`을 tokens.css·bundle.css·lib·bundle.js를 먼저 불러온 페이지에서 실행해 에러가 없는지 본다.
+4. 발행 순서: ① 새 파일 ② 옛 경로 삭제(`files`에 `null`) ③ `design-system.json`(발행 직전에 라이브 사본을 읽고 `lastChange`만 바꾼다).
+
+- 발행이 "최신 버전을 보지 않았다"로 거절되면 `read`(path 없이) 한 번 한 뒤 다시 보낸다. 같은 내용을 그대로 재전송해도 된다.
+- `.d.ts`는 `contentType: "text/plain"`을 직접 줘야 한다.
+- 아티팩트 규격은 `components/bundle.js`·`bundle.css`·`index.d.ts`·`<이름>/README.md`·`preview.html`이다. 루트 `_ds_bundle.*`·`_vendor`·`_preview`는 쓰지 않는다.
+- `components/Cover/preview.html`은 아티팩트에만 있는 손작업 파일이다(저장소에 원본 없음). 토큰 이름을 바꾸면 이 파일도 같이 고친다.
+
+## Re-sync risks (추가)
+
+- 서브셋 폰트에 없는 한글은 시스템 폰트로 대체된다(KS X 1001 2,350자).
+- `tokens.json`의 용도 설명은 `build-ds-artifact.mjs`의 `ROLE_NOTES`에 있다. 역할 토큰을 새로 만들면 여기에도 설명을 넣는다(없으면 경고가 나온다).
+- Callout 다크 색 일부(`--rc-callout-*`)와 `border-primary` 다크 값은 일부러 조정한 원시 hex라 `tokens.json`에 들어가지 않는다.
