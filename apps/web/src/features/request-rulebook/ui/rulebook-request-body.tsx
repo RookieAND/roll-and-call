@@ -53,7 +53,7 @@ export function RulebookRequestBody({
   const duplicate = pendingRequestNames.some(
     (pendingName) => pendingName.toLowerCase() === requested,
   );
-  const nameError = edited && !name.trim() ? "룰북 이름을 적어야 합니다." : undefined;
+  const nameError = edited && !name.trim() ? "룰북 이름을 적어 주세요." : undefined;
 
   const submit = () => {
     if (!name.trim()) return;
@@ -139,9 +139,7 @@ export function RulebookRequestBody({
           </Text>
         </Field.Root>
         <VStack gap="100">
-          <Text typography="body2" weight="bold">
-            종류
-          </Text>
+          <Text typography="subtitle1">종류</Text>
           <RadioGroup
             value={kind}
             onValueChange={(value) => {

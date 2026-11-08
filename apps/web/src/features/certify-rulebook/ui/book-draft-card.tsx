@@ -154,15 +154,12 @@ export function BookDraftCard({
         <VStack gap="075" render={<ol />}>
           {CERT_GUIDE[draft.format].map((line, index) => (
             <HStack key={line} align="start" gap="100" render={<li />}>
-              <Text
-                typography="body4"
-                weight="bold"
-                foreground="muted"
-                numeric
-                className="mt-025 flex size-5 flex-none items-center justify-center rounded-full bg-gray-100"
+              <Badge
+                colorPalette="gray"
+                className="mt-025 size-5 flex-none justify-center rounded-full p-0 tabular-nums"
               >
                 {index + 1}
-              </Text>
+              </Badge>
               <Text typography="body3" foreground="muted" className="min-w-0 flex-1 break-keep">
                 {line}
               </Text>
@@ -174,13 +171,9 @@ export function BookDraftCard({
             <Text typography="body4" foreground="muted">
               쪽지에 적을 닉네임
             </Text>
-            <Text
-              typography="body4"
-              weight="bold"
-              className="rounded-200 border border-gray-200 bg-surface px-100 py-025 font-mono"
-            >
+            <Badge colorPalette="gray" className="font-mono">
               {nickname}
-            </Text>
+            </Badge>
           </HStack>
         )}
       </VStack>

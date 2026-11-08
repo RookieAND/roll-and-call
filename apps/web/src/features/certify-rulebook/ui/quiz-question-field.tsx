@@ -27,7 +27,7 @@ export function QuizQuestionField({
           <BookOpen size={14} strokeWidth={2.2} />
         </Callout.Icon>
         <Callout.Description>
-          <Text typography="body3" weight="bold" foreground="inherit">
+          <Text typography="subtitle2" foreground="inherit">
             {bookTitle}
           </Text>
           <Text typography="body4" foreground="muted">
@@ -37,7 +37,8 @@ export function QuizQuestionField({
       </Callout.Root>
       <VStack gap="150" className="pt-100">
         <Text
-          typography="subtitle1"
+          typography="body2"
+          weight="bold"
           render={<label htmlFor={inputId} />}
           className="break-keep text-pretty"
         >

@@ -43,7 +43,7 @@ export function ListRowItem({ row }: ListRowItemProps) {
               className="size-[7px] flex-none rounded-full bg-primary-500"
             />
           )}
-          <Text typography="body2" weight="bold" className="break-keep">
+          <Text typography="subtitle1" className="break-keep">
             {row.title}
           </Text>
         </HStack>

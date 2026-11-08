@@ -59,7 +59,7 @@ export function BookResultSection({ result, guide }: BookResultSectionProps) {
               aria-hidden
               className="mt-025 flex-none text-danger-600"
             />
-            <Text typography="body2" weight="bold" className="break-keep">
+            <Text typography="subtitle1" className="break-keep">
               {result.reason.text}
             </Text>
           </HStack>

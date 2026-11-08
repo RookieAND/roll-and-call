@@ -35,27 +35,29 @@ export function OwnedCategoryCard({ category, defaultOpen }: OwnedCategoryCardPr
           </VStack>
         </Collapsible.Trigger>
         <Collapsible.Panel>
-          <div className="border-t border-gray-100 bg-gray-50">
-            {category.books.map((book) => (
-              <HStack
-                key={book.key}
-                align="center"
-                gap="150"
-                className="min-h-[60px] border-t border-gray-100 px-200 py-150 first:border-t-0"
-              >
-                <VStack gap="050" className="min-w-0 flex-1">
-                  <Text typography="body2" weight="medium">
-                    {book.title}
-                  </Text>
-                  <Text typography="body4" foreground="hint">
-                    {book.meta}
-                  </Text>
-                </VStack>
-                <Badge colorPalette={book.badge.palette} className="flex-none">
-                  {book.badge.label}
-                </Badge>
-              </HStack>
-            ))}
+          <div className="px-200 pb-200">
+            <Card.Root padding="none" radius={500} className="overflow-hidden">
+              {category.books.map((book) => (
+                <HStack
+                  key={book.key}
+                  align="center"
+                  gap="150"
+                  className="min-h-[60px] border-t border-gray-100 px-200 py-150 first:border-t-0"
+                >
+                  <VStack gap="050" className="min-w-0 flex-1">
+                    <Text typography="body2" weight="medium">
+                      {book.title}
+                    </Text>
+                    <Text typography="body4" foreground="muted">
+                      {book.meta}
+                    </Text>
+                  </VStack>
+                  <Badge colorPalette={book.badge.palette} className="flex-none">
+                    {book.badge.label}
+                  </Badge>
+                </HStack>
+              ))}
+            </Card.Root>
           </div>
         </Collapsible.Panel>
       </Collapsible.Root>

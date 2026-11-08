@@ -26,7 +26,7 @@ export function PickerCategorySection({
   const selectedCount = books.filter((book) => selectedIds.includes(book.id)).length;
 
   return (
-    <Card.Root background="subtle" padding="md" render={<section aria-label={name} />}>
+    <Card.Root padding="md" render={<section aria-label={name} />}>
       <VStack gap="200">
         <HStack align="center" justify="between" gap="100">
           <Text typography="heading3" render={<h2 />}>

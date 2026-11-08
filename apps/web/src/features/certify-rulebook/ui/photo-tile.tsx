@@ -1,4 +1,4 @@
-import { cn, HStack, IconButton, Progress, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Card, cn, IconButton, Progress, Text, VStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 import { CircleAlert, FileText, Plus, X } from "lucide-react";
 import type { ReactNode } from "react";
@@ -45,10 +45,9 @@ const art = cva("absolute inset-0", {
   },
 });
 
-const PILL_CLASS =
-  "absolute bottom-125 left-1/2 flex -translate-x-1/2 items-center gap-050 whitespace-nowrap rounded-full border bg-surface px-125 py-050";
+const PILL_CLASS = "absolute bottom-125 left-1/2 -translate-x-1/2 gap-050";
 
-const TAG_CLASS = "absolute top-075 left-075 rounded-100 bg-surface px-075";
+const TAG_CLASS = "absolute top-075 left-075";
 
 interface PhotoTileProps {
   label: string;
@@ -100,22 +99,21 @@ export function PhotoTile({
           )}
           {!filled && <span className={art({ status: slot.status })}>{example}</span>}
           {tag && (
-            <Text typography="body4" weight="bold" foreground="muted" className={TAG_CLASS}>
+            <Badge colorPalette="gray" className={TAG_CLASS}>
               {tag}
-            </Text>
+            </Badge>
           )}
           {slot.status === PHOTO_SLOT.empty && (
-            <HStack align="center" className={cn(PILL_CLASS, "border-gray-200 text-tinted-ink")}>
+            <Badge colorPalette="primary" className={PILL_CLASS}>
               <Plus size={12} strokeWidth={2.6} aria-hidden />
-              <Text typography="body4" weight="bold" foreground="inherit">
-                추가
-              </Text>
-            </HStack>
+              추가
+            </Badge>
           )}
           {slot.status === PHOTO_SLOT.uploading && (
-            <VStack
-              gap="050"
-              className="absolute right-100 bottom-125 left-100 rounded-300 bg-surface px-100 py-075"
+            <Card.Root
+              padding="none"
+              radius={400}
+              className="absolute right-100 bottom-125 left-100 flex flex-col gap-050 px-100 py-075"
             >
               <Text typography="body4" weight="bold" foreground="muted" numeric>
                 올리는 중 {Math.round(slot.progress * 100)}%
@@ -126,18 +124,13 @@ export function PhotoTile({
                 className="h-1"
                 aria-label="올리는 중"
               />
-            </VStack>
+            </Card.Root>
           )}
           {slot.status === PHOTO_SLOT.error && (
-            <HStack
-              align="center"
-              className={cn(PILL_CLASS, "border-warning-600 text-warning-600")}
-            >
+            <Badge colorPalette="warning" className={PILL_CLASS}>
               <CircleAlert size={12} strokeWidth={2.6} aria-hidden />
-              <Text typography="body4" weight="bold" foreground="inherit">
-                다시 올리기
-              </Text>
-            </HStack>
+              다시 올리기
+            </Badge>
           )}
         </button>
         {removable && (

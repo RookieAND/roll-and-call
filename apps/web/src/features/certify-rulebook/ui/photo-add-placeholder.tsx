@@ -18,7 +18,7 @@ export function PhotoAddPlaceholder({ label, onPick }: PhotoAddPlaceholderProps)
       >
         <Plus size={28} strokeWidth={2} aria-hidden />
       </button>
-      <Text typography="body3" weight="bold" foreground="hint" className="text-center">
+      <Text typography="subtitle2" foreground="hint" className="text-center">
         {label}
       </Text>
     </VStack>

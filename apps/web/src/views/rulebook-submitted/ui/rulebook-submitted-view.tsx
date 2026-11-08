@@ -57,9 +57,7 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
                   className="flex min-h-14 items-center gap-125 border-t border-gray-100 px-175 py-100 first:border-t-0"
                 >
                   <VStack className="min-w-0 flex-1">
-                    <Text typography="body2" weight="bold">
-                      {book.shortName}
-                    </Text>
+                    <Text typography="subtitle1">{book.shortName}</Text>
                     <Text typography="body4" foreground="hint">
                       {`${book.categoryName} ${book.edition}`.trim()}
                       {book.latestApplication &&

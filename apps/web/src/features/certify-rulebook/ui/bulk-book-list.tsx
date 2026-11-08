@@ -20,7 +20,7 @@ export function BulkBookList({ books }: BulkBookListProps) {
   const toggleLabel = expanded ? "접기" : `+${books.length - COLLAPSED_COUNT}`;
 
   return (
-    <Card.Root background="subtle" padding="sm">
+    <Card.Root padding="sm">
       <HStack wrap gap="075" align="center">
         {shown.map((book) => (
           <Badge key={book.id} colorPalette="gray">

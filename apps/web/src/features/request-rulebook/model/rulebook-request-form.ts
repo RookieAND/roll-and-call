@@ -24,7 +24,7 @@ export const REQUEST_KIND_CARDS = [
 ] as const;
 
 export const rulebookRequestSchema = z.object({
-  name: z.string().trim().min(1, "룰북 이름을 적어야 합니다.").max(100),
+  name: z.string().trim().min(1, "룰북 이름을 적어 주세요.").max(100),
   edition: z.string().trim().max(50),
   kind: z.enum(REQUEST_KINDS),
   category: z.string().trim().max(100),

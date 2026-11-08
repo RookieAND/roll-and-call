@@ -155,7 +155,12 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
                   추가되면 알림 탭으로 알립니다.
                 </Callout.Description>
                 <Callout.Action>
-                  <Button render={<Link href={requestHref} />} variant="ghost" size="sm">
+                  <Button
+                    render={<Link href={requestHref} />}
+                    variant="solid"
+                    colorPalette="primary"
+                    size="sm"
+                  >
                     <Plus size={14} strokeWidth={2.4} aria-hidden />
                     추가 요청
                   </Button>

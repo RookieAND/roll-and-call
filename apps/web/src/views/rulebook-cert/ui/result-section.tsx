@@ -11,7 +11,7 @@ export function ResultSection({ label, children }: ResultSectionProps) {
     <VStack render={<section />}>
       <div aria-hidden className="h-100 bg-canvas" />
       <VStack gap="100" className="px-200 py-225">
-        <Text typography="body3" weight="bold" foreground="muted" render={<h3 />}>
+        <Text typography="subtitle2" foreground="muted" render={<h3 />}>
           {label}
         </Text>
         {children}

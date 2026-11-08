@@ -120,7 +120,8 @@ export async function MyRulebooksView() {
                             href={serverPath({ slug: server.slug, path: home.suggestion.href })}
                           />
                         }
-                        variant="ghost"
+                        variant="solid"
+                        colorPalette="primary"
                         size="sm"
                       >
                         신청하기
