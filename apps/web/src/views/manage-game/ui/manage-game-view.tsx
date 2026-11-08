@@ -6,17 +6,14 @@ import { notFound } from "next/navigation";
 
 import {
   GAME_CANCEL_KIND,
-  GAME_VISIBILITY,
   gameCancelledRecipients,
   isSessionEnded,
   MANAGE_STAGE_LABEL,
   MANAGE_STAGE_TONE,
   plannedEndAt,
-  visibilitySwitchBlock,
 } from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
-import { GameVisibilityRow, VISIBILITY_SWITCH_MESSAGE } from "@/features/make-game-private";
 import { canReopenGame } from "@/features/reopen-game";
 import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
@@ -89,14 +86,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     userId: user.id,
   });
   const gmReview = manageReviewButtonOf(reviewStatusOf(reviewTarget));
-  const visibilityBlock = visibilitySwitchBlock({
-    game,
-    participantCount: game.participants.length,
-  });
-  const visibilityBlockedReason =
-    game.visibility === GAME_VISIBILITY.public && visibilityBlock
-      ? VISIBILITY_SWITCH_MESSAGE[visibilityBlock]
-      : null;
   const groups = manageRowGroups({ game, reviewCount: reviews.length, gmReview });
   const timeline = manageTimeline({
     game,
@@ -119,11 +108,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
       {groups.management.map((row) => (
         <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={endAt} />
       ))}
-      <GameVisibilityRow
-        gameId={id}
-        visibility={game.visibility}
-        blockedReason={visibilityBlockedReason}
-      />
       <CancelGameRow
         gameId={id}
         notifyCount={notifyCount}
