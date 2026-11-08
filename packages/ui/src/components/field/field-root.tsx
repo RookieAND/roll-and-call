@@ -46,7 +46,7 @@ export function FieldRoot({
       className: cn("flex flex-col gap-075", resolveStateProp({ prop: className, state })),
       style: resolveStateProp({ prop: style, state }),
       children: (
-        <FieldContext
+        <FieldContext.Provider
           value={{
             messageId: error || description ? messageId : undefined,
             invalid: Boolean(error),
@@ -61,7 +61,7 @@ export function FieldRoot({
           ) : (
             description && <FieldDescription id={messageId} text={description} />
           )}
-        </FieldContext>
+        </FieldContext.Provider>
       ),
     },
   });
