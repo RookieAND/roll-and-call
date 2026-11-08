@@ -8,7 +8,7 @@ import {
   REVIEW_POINTS,
   SESSION_POINTS,
 } from "@roll-and-call/database/badges/model";
-import { Sheet, Text } from "@roll-and-call/ui";
+import { IconButton, Sheet, Text } from "@roll-and-call/ui";
 import { Info } from "lucide-react";
 
 const NOTES = [
@@ -33,8 +33,9 @@ export function HomeRecordGuide() {
   return (
     <Sheet.Root>
       <Sheet.Trigger
-        aria-label="점수 기준 보기"
-        className="-my-150 -ml-100 flex size-11 flex-none items-center justify-center text-hint hover:text-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600"
+        render={
+          <IconButton variant="ghost" aria-label="점수 기준 보기" className="-my-150 -ml-100" />
+        }
       >
         <Info size={18} aria-hidden />
       </Sheet.Trigger>

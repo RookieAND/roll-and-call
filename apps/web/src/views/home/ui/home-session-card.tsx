@@ -22,7 +22,7 @@ export function HomeSessionCard({ session, stacked = false }: HomeSessionCardPro
       aria-label={`참여 인원 ${session.players.length}/${session.maxPlayers}`}
       className="flex flex-none items-center gap-050"
     >
-      <User size={12} aria-hidden />
+      {!stacked && <User size={12} aria-hidden />}
       {session.players.length}/{session.maxPlayers}
     </Text>
   );

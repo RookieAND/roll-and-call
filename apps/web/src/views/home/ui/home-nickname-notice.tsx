@@ -22,7 +22,12 @@ export function HomeNicknameNotice({ nickname }: HomeNicknameNoticeProps) {
         />
       </Callout.Description>
       <Callout.Action>
-        <Button variant="ghost" size="sm" render={<ServerLink path="/me/edit" />}>
+        <Button
+          variant="solid"
+          colorPalette="warning"
+          size="sm"
+          render={<ServerLink path="/me/edit" />}
+        >
           닉네임 바꾸기
         </Button>
       </Callout.Action>
