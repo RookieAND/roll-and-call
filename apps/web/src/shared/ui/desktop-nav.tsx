@@ -81,7 +81,7 @@ export function DesktopNav({
         <div className="mt-auto flex flex-col gap-050 border-t border-gray-200 p-150">
           <Link
             href={`/help?from=${current.slug}`}
-            className="flex min-h-11 items-center gap-150 rounded-500 px-150 text-gray-600 hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
+            className="flex min-h-11 items-center gap-150 rounded-400 px-150 text-gray-600 hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
           >
             <CircleHelp size={22} strokeWidth={1.9} aria-hidden />
             <Text typography="body2" weight="medium" foreground="inherit">

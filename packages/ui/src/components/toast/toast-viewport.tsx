@@ -46,10 +46,10 @@ export function ToastViewport({
       offset={desktop ? desktopEdge : edge}
       mobileOffset={edge}
       icons={{
-        success: <CircleCheck size={18} className="text-toast-success" aria-hidden />,
-        warning: <TriangleAlert size={18} className="text-toast-warning" aria-hidden />,
-        error: <CircleAlert size={18} className="text-toast-danger" aria-hidden />,
-        info: <Info size={18} className="text-toast-muted" aria-hidden />,
+        success: <CircleCheck size={16} className="text-toast-success" aria-hidden />,
+        warning: <TriangleAlert size={16} className="text-toast-warning" aria-hidden />,
+        error: <CircleAlert size={16} className="text-toast-danger" aria-hidden />,
+        info: <Info size={16} className="text-toast-muted" aria-hidden />,
       }}
       toastOptions={{
         unstyled: true,

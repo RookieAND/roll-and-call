@@ -32,7 +32,7 @@ export function DesktopNavServer({ current, servers, memberCount }: DesktopNavSe
       {switchable && <ChevronsUpDown size={16} aria-hidden className="flex-none text-hint" />}
     </>
   );
-  const className = "w-full items-center gap-125 rounded-500 border border-gray-200 p-125";
+  const className = "w-full items-center gap-125 rounded-500 border border-gray-200 px-150 py-125";
   if (!switchable) return <HStack className={className}>{body}</HStack>;
   return (
     <ServerMenu
