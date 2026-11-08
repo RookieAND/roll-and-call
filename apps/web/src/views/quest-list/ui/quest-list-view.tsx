@@ -1,33 +1,31 @@
 import { getQuestClears } from "@roll-and-call/database/onboarding";
-import { isAllQuestsCleared, isOnboardingQuest } from "@roll-and-call/database/onboarding/model";
-import { Button, Container, FloatingBar, VStack } from "@roll-and-call/ui";
+import { isAllQuestsCleared } from "@roll-and-call/database/onboarding/model";
+import { Button, Card, Container, FloatingBar, VStack } from "@roll-and-call/ui";
 
 import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { AppBar, PageShell, ServerLink } from "@/shared/ui";
 
-import { QUEST_TRACK_LABEL, toQuestTracks } from "../model/quest-card";
+import { QUEST_STATE, toQuestTracks } from "../model/quest-card";
 import { AchievementSheet } from "./achievement-sheet";
 import { MarkOnboardedOnMount } from "./mark-onboarded-on-mount";
-import { QuestAchievementPreview } from "./quest-achievement-preview";
 import { QuestCard } from "./quest-card";
 import { QuestGlanceCard } from "./quest-glance-card";
+import { QuestHeroCard } from "./quest-hero-card";
 import { QuestPanel } from "./quest-panel";
 import { QuestProgress } from "./quest-progress";
-import { QuestSectionLabel } from "./quest-section-label";
 
 interface QuestListViewProps {
   // 마이페이지에서 다시 보러 왔으면 하단에 [나가기], 아니면 [나중에 하기]가 선다.
   review: boolean;
-  justCleared: string | null;
   achievement: boolean;
 }
 
-export async function QuestListView({ review, justCleared, achievement }: QuestListViewProps) {
+export async function QuestListView({ review, achievement }: QuestListViewProps) {
   const [server, user] = await Promise.all([getCurrentServer(), getCurrentSessionUser()]);
   const cleared = user ? await getQuestClears({ serverId: server.id, userId: user.id }) : [];
-  const tracks = toQuestTracks(cleared);
+  const cards = toQuestTracks(cleared).flatMap((track) => track.cards);
+  const heroCard = cards.find((card) => card.state === QUEST_STATE.open);
   const allCleared = isAllQuestsCleared(cleared);
-  const justClearedQuest = justCleared && isOnboardingQuest(justCleared) ? justCleared : null;
   const leave = review
     ? { label: "나가기", path: "/me" }
     : { label: "나중에 하기", path: "/games" };
@@ -43,25 +41,17 @@ export async function QuestListView({ review, justCleared, achievement }: QuestL
           <div className="desktop:hidden">
             <QuestProgress clearedCount={cleared.length} allCleared={allCleared} />
           </div>
+          {heroCard && <QuestHeroCard card={heroCard} />}
+          <Card.Root padding="none" radius={600} className="overflow-hidden">
+            {cards
+              .filter((card) => card !== heroCard)
+              .map((card) => (
+                <QuestCard key={card.quest} card={card} />
+              ))}
+          </Card.Root>
           <div className="desktop:hidden">
             <QuestGlanceCard defaultOpen={!review} />
           </div>
-          {tracks.map(({ track, cards }) => (
-            <VStack key={track} gap="100" render={<section />} className="pt-050">
-              <QuestSectionLabel>{QUEST_TRACK_LABEL[track]}</QuestSectionLabel>
-              {cards.map((card) => (
-                <QuestCard
-                  key={card.quest}
-                  card={card}
-                  justCleared={justClearedQuest === card.quest}
-                />
-              ))}
-            </VStack>
-          ))}
-          <VStack gap="100" render={<section />} className="pt-050 desktop:hidden">
-            <QuestSectionLabel>보상</QuestSectionLabel>
-            <QuestAchievementPreview earned={allCleared} />
-          </VStack>
         </VStack>
       </Container>
       <FloatingBar.Root elevated={false}>

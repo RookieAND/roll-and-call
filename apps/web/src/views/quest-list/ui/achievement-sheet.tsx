@@ -1,7 +1,7 @@
 "use client";
 
 import { ONBOARDING_QUESTS } from "@roll-and-call/database/onboarding/model";
-import { Button, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
+import { Badge, Button, HStack, Sheet, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
 import { useServerPath } from "@/shared/lib";
@@ -32,23 +32,18 @@ export function AchievementSheet({ open }: AchievementSheetProps) {
             🧭
           </span>
           <VStack align="center" gap="075">
-            <Text typography="body4" weight="extrabold" foreground="primary">
+            <Text typography="body3" weight="extrabold" foreground="primary">
               업적을 받았습니다
             </Text>
             <Sheet.Title className="text-heading1">견습 모험가</Sheet.Title>
-            <Text typography="body3" foreground="muted" render={<p />}>
+            <Text typography="body2" foreground="muted" render={<p />}>
               <span className="block">튜토리얼 퀘스트를 모두 마쳤습니다.</span>
               <span className="block">업적 도감에서 다시 볼 수 있습니다.</span>
             </Text>
           </VStack>
-          <Text
-            typography="body4"
-            weight="bold"
-            foreground="muted"
-            className="inline-flex min-h-9 items-center rounded-full bg-gray-50 px-150"
-          >
+          <Badge colorPalette="gray">
             튜토리얼 퀘스트 · {ONBOARDING_QUESTS.length} / {ONBOARDING_QUESTS.length} 클리어
-          </Text>
+          </Badge>
         </VStack>
         <HStack gap="100" className="pt-250">
           <Button

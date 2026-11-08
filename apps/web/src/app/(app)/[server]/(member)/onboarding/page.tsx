@@ -7,14 +7,8 @@ export const metadata: Metadata = { title: "튜토리얼 퀘스트" };
 export default async function QuestListPage({
   searchParams,
 }: {
-  searchParams: Promise<{ from?: string; cleared?: string; achievement?: string }>;
+  searchParams: Promise<{ from?: string; achievement?: string }>;
 }) {
-  const { from, cleared, achievement } = await searchParams;
-  return (
-    <QuestListView
-      review={from === "me"}
-      justCleared={cleared ?? null}
-      achievement={achievement === "1"}
-    />
-  );
+  const { from, achievement } = await searchParams;
+  return <QuestListView review={from === "me"} achievement={achievement === "1"} />;
 }

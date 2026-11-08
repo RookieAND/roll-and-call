@@ -53,11 +53,17 @@ export interface QuestCardData {
   path: string;
   state: QuestState;
   lockedReason: string | null;
+  lockedHint: string | null;
 }
 
 export interface QuestTrackCards {
   track: OnboardingTrack;
   cards: QuestCardData[];
+}
+
+// 목록 줄에는 잠긴 이유의 첫 문장만 보인다.
+function toLockedHint(lockedReason: string | null) {
+  return lockedReason?.match(/^[^.]*\./)?.[0] ?? null;
 }
 
 function questState({
@@ -78,6 +84,7 @@ export function toQuestTracks(cleared: readonly OnboardingQuest[]): QuestTrackCa
     cards: quests.map((quest) => ({
       quest,
       ...QUEST_META[quest],
+      lockedHint: toLockedHint(QUEST_META[quest].lockedReason),
       path: QUEST_PATH[quest],
       state: questState({ quest, cleared }),
     })),

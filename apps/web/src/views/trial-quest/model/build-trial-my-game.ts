@@ -22,7 +22,7 @@ export function buildTrialMyGame({
     ...base,
     id: TRIAL_MINE_GAME_ID,
     gmId: TRIAL_VIEWER_ID,
-    gm: { avatarUrl: null, username: "나", bio: null },
+    gm: { avatarUrl: null, username: "체험 GM", bio: null },
     title: recruit.title,
     recruitMethod: recruit.recruitMethod,
     maxPlayers: recruit.maxPlayers,
