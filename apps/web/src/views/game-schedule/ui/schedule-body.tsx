@@ -33,6 +33,7 @@ import { ScheduleOverlap } from "./schedule-overlap";
 import { ScheduleOverlapEmpty } from "./schedule-overlap-empty";
 import { ScheduleTabs } from "./schedule-tabs";
 import { useIsDesktop } from "./use-is-desktop";
+import { WeekPager } from "./week-pager";
 
 interface ScheduleBodyProps {
   appBar: ReactNode;
@@ -86,7 +87,11 @@ export function ScheduleBody({
     window.history.replaceState(null, "", `${pathname}?${params}`);
   };
   const pageDays = pages[pageIndex] ?? days;
-  const pager = <DayPager pages={pages} index={pageIndex} onChange={changePage} />;
+  const pager = isDesktop ? (
+    <WeekPager pages={pages} index={pageIndex} onChange={changePage} />
+  ) : (
+    <DayPager pages={pages} index={pageIndex} onChange={changePage} />
+  );
 
   const respondentCount = uniq(Object.values(aggregate.names).flat()).length;
   const hasResponses = respondentCount > 0;
@@ -130,7 +135,6 @@ export function ScheduleBody({
           <PickedSlotPanel
             picked={picked}
             names={aggregate.names}
-            capacity={capacity}
             gmName={gmName}
             interactive={isNull(confirmedAt)}
           />

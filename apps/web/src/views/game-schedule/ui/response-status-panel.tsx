@@ -1,4 +1,5 @@
 import { Avatar, Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { CircleCheck, Clock } from "lucide-react";
 
 import { responseStatuses, type ScheduleMember } from "../model/response-statuses";
 
@@ -19,7 +20,7 @@ export function ResponseStatusPanel({ members, names }: ResponseStatusPanelProps
             응답 현황
           </Text>
           <Text typography="body3" foreground="muted" numeric render={<span />}>
-            {respondedCount} / {statuses.length}명 냄
+            {respondedCount} / {statuses.length} 완료
           </Text>
         </HStack>
         <VStack render={<ul />}>
@@ -36,9 +37,21 @@ export function ResponseStatusPanel({ members, names }: ResponseStatusPanelProps
                 {name}
               </Text>
               {isGm && <Badge colorPalette="primary">GM</Badge>}
-              <Badge colorPalette={responded ? "gray" : "warning"}>
-                {responded ? "냄" : "아직"}
-              </Badge>
+              {responded ? (
+                <CircleCheck
+                  size={20}
+                  role="img"
+                  aria-label="응답 완료"
+                  className="flex-none text-success-600"
+                />
+              ) : (
+                <Clock
+                  size={20}
+                  role="img"
+                  aria-label="아직 응답 안 함"
+                  className="flex-none text-warning-600"
+                />
+              )}
             </HStack>
           ))}
         </VStack>

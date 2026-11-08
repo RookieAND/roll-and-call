@@ -58,11 +58,13 @@ export function Heatmap({
   return (
     <VStack gap="125">
       <SlotGrid days={days} timeRows={timeRows} renderCell={renderCell} />
-      {/* 1100px 이상에서는 범례와 고른 칸이 오른쪽 패널로 간다. */}
-      <VStack gap="125" className="desktop:hidden">
-        <HeatLegend capacity={capacity} />
-        {interactive && <PickedSlot picked={picked} names={names} gmName={gmName} />}
-      </VStack>
+      <HeatLegend capacity={capacity} />
+      {/* 1100px 이상에서는 고른 칸이 오른쪽 패널로 간다. */}
+      {interactive && (
+        <div className="desktop:hidden">
+          <PickedSlot picked={picked} names={names} gmName={gmName} />
+        </div>
+      )}
     </VStack>
   );
 }
