@@ -1,4 +1,4 @@
-import { Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Callout, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Dice5, Zap } from "lucide-react";
 
 import { RECRUIT_METHOD, recruitMethodLabel } from "@/entities/game";
@@ -41,7 +41,7 @@ export function HelpModeCard({ mode }: HelpModeCardProps) {
               {index + 1}
             </Text>
             <VStack className="min-w-0 flex-1">
-              <Text typography="body3" weight="bold" render={<span />}>
+              <Text typography="subtitle2" foreground="normal" render={<span />}>
                 {step.title}
               </Text>
               {step.body && (
@@ -54,23 +54,12 @@ export function HelpModeCard({ mode }: HelpModeCardProps) {
         ))}
       </VStack>
       {mode.foot && (
-        <HStack
-          align="start"
-          gap="125"
-          className="border-t border-gray-200 bg-gray-50 px-175 py-150"
-        >
-          <span className="mt-050 flex-none text-discord">
-            <BrandMark service="discord" size={16} />
-          </span>
-          <Text
-            typography="body3"
-            foreground="muted"
-            render={<p />}
-            className="min-w-0 flex-1 text-pretty"
-          >
-            {mode.foot}
-          </Text>
-        </HStack>
+        <Callout.Root colorPalette="gray" size="sm" className="m-175 mt-0">
+          <Callout.Icon>
+            <BrandMark service="discord" size={14} />
+          </Callout.Icon>
+          <Callout.Description>{mode.foot}</Callout.Description>
+        </Callout.Root>
       )}
     </Card.Root>
   );

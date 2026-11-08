@@ -11,7 +11,7 @@ export function HelpRelatedRow({ slug, title }: HelpRelatedRowProps) {
   return (
     <Card.Root radius={400} padding="sm" interactive render={<Link href={`/help/${slug}`} />}>
       <HStack align="center" gap="125">
-        <Text typography="body3" weight="bold" render={<span />} className="min-w-0 flex-1">
+        <Text typography="subtitle2" render={<span />} className="min-w-0 flex-1">
           {title}
         </Text>
         <ChevronRight size={16} className="flex-none text-hint" aria-hidden />
