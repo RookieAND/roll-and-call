@@ -25,11 +25,35 @@ const LOCKED_GUIDE = {
   },
 } as const;
 
+function openLines({
+  cancelledNames,
+  hasRemoved,
+}: {
+  cancelledNames: string[];
+  hasRemoved: boolean;
+}) {
+  if (cancelledNames.length > 0) {
+    return [`참석으로 확정하면 ${cancelledNames.join(", ")}님의 불참 기록이 취소됩니다.`];
+  }
+  if (hasRemoved) {
+    return [
+      "내보낸 사람은 불참으로 남습니다.",
+      "확인하지 않으면 나머지는 참석으로 자동 확정됩니다.",
+    ];
+  }
+  return [
+    "오지 않은 사람만 불참으로 바꿔 주세요.",
+    "확인하지 않으면 전원 참석으로 자동 확정됩니다.",
+  ];
+}
+
 interface AttendanceGuideProps {
   kind: AttendanceGuideKind;
   deadline: Date;
   attendanceConfirmedAt: Date | null;
+  // 내보냈다가 참석으로 바꾼 사람들의 이름. 확정하면 불참 기록이 취소된다.
   hasRemoved: boolean;
+  cancelledNames: string[];
 }
 
 export function AttendanceGuide({
@@ -37,16 +61,12 @@ export function AttendanceGuide({
   deadline,
   attendanceConfirmedAt,
   hasRemoved,
+  cancelledNames,
 }: AttendanceGuideProps) {
   const deadlineText = formatDateTime(deadline);
 
   if (kind === ATTENDANCE_GUIDE.open) {
-    const lines = hasRemoved
-      ? ["내보낸 사람은 불참으로 남습니다.", "확인하지 않으면 나머지는 참석으로 자동 확정됩니다."]
-      : [
-          "오지 않은 사람만 불참으로 바꿔 주세요.",
-          "확인하지 않으면 전원 참석으로 자동 확정됩니다.",
-        ];
+    const lines = openLines({ cancelledNames, hasRemoved });
     return (
       <Callout.Root colorPalette="primary">
         <Callout.Icon />
@@ -80,7 +100,12 @@ export function AttendanceGuide({
         <Callout.Icon />
         <Callout.Title>{formatDateTime(attendanceConfirmedAt)}에 출석을 확정했습니다</Callout.Title>
         <Callout.Description className="break-keep">
-          다시 고치기를 누르면 참석·불참을 다시 정할 수 있습니다.
+          <LineBreaks
+            lines={[
+              "다시 고치기를 누르면 참석·불참을 다시 정할 수 있습니다.",
+              `${deadlineText}까지 고칠 수 있습니다.`,
+            ]}
+          />
         </Callout.Description>
       </Callout.Root>
     );

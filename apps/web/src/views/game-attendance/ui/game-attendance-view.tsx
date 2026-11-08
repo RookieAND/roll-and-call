@@ -88,8 +88,7 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
       header={
         <AttendanceHeader
           title={game.title}
-          rule={game.rule}
-          confirmedCount={confirmed.length}
+          attendeeCount={attendees.length}
           attendanceConfirmed={Boolean(game.attendanceConfirmedAt)}
         />
       }

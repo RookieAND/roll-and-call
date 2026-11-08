@@ -47,16 +47,14 @@ export function AttendancePanel({
       ? "처음 값은 직전 결과입니다."
       : undefined;
 
-  const info = (
-    <>
-      {children}
-      <AttendanceGuide
-        kind={guideKind}
-        deadline={deadline}
-        attendanceConfirmedAt={attendanceConfirmedAt}
-        hasRemoved={attendees.some((attendee) => attendee.removed)}
-      />
-    </>
+  const renderGuide = (cancelledNames: string[]) => (
+    <AttendanceGuide
+      kind={guideKind}
+      deadline={deadline}
+      attendanceConfirmedAt={attendanceConfirmedAt}
+      hasRemoved={attendees.some((attendee) => attendee.removed)}
+      cancelledNames={cancelledNames}
+    />
   );
 
   if (editing && canEdit) {
@@ -68,6 +66,7 @@ export function AttendancePanel({
         attendees={attendees}
         onConfirmed={() => setEditing(false)}
         footnote={reeditNote}
+        renderGuide={renderGuide}
         inProgress={inProgress}
         onExpired={() => {
           setEditing(false);
@@ -75,7 +74,7 @@ export function AttendancePanel({
           router.refresh();
         }}
       >
-        {info}
+        {children}
       </AttendanceForm>
     );
   }
@@ -85,10 +84,10 @@ export function AttendancePanel({
       header={header}
       attendees={attendees}
       canReopen={canEdit && phase === ATTENDANCE_PHASE.confirmed}
-      deadline={deadline}
+      guide={renderGuide([])}
       onReopen={() => setEditing(true)}
     >
-      {info}
+      {children}
     </ConfirmedAttendance>
   );
 }

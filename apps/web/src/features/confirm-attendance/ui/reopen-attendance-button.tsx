@@ -6,12 +6,14 @@ import { toast } from "@/shared/ui";
 
 interface ReopenAttendanceButtonProps {
   onReopen: () => void;
+  colorPalette?: "gray";
 }
 
-export function ReopenAttendanceButton({ onReopen }: ReopenAttendanceButtonProps) {
+export function ReopenAttendanceButton({ onReopen, colorPalette }: ReopenAttendanceButtonProps) {
   return (
     <Button
       variant="outline"
+      colorPalette={colorPalette}
       size="lg"
       className="w-full"
       onClick={() => {

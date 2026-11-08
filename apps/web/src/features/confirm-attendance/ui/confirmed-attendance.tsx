@@ -1,12 +1,11 @@
-import { Card, Text, VStack } from "@roll-and-call/ui";
+import { Card, VStack } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
-
-import { formatDateTime } from "@/shared/lib";
 
 import type { Attendee } from "../model/attendee";
 import { AttendanceFrame } from "./attendance-frame";
 import { AttendanceRow } from "./attendance-row";
 import { AttendanceStats } from "./attendance-stats";
+import { AttendanceSummaryPanel } from "./attendance-summary-panel";
 import { ReopenAttendanceButton } from "./reopen-attendance-button";
 
 interface ConfirmedAttendanceProps {
@@ -14,7 +13,7 @@ interface ConfirmedAttendanceProps {
   header: ReactNode;
   attendees: Attendee[];
   canReopen: boolean;
-  deadline: Date;
+  guide: ReactNode;
   onReopen: () => void;
   children?: ReactNode;
 }
@@ -24,23 +23,33 @@ export function ConfirmedAttendance({
   header,
   attendees,
   canReopen,
-  deadline,
+  guide,
   onReopen,
   children,
 }: ConfirmedAttendanceProps) {
   const absentCount = attendees.filter(
     (attendee) => attendee.absent && !attendee.staffCancelled,
   ).length;
+  const presentCount = attendees.length - absentCount;
+
+  const panel = (
+    <AttendanceSummaryPanel
+      presentCount={presentCount}
+      absentCount={absentCount}
+      guide={guide}
+      action={canReopen && <ReopenAttendanceButton colorPalette="gray" onReopen={onReopen} />}
+    />
+  );
 
   return (
-    <AttendanceFrame appBar={appBar} header={header}>
+    <AttendanceFrame appBar={appBar} header={header} panel={panel}>
       <VStack gap="200">
         <VStack gap="100">
-          <AttendanceStats
-            presentCount={attendees.length - absentCount}
-            absentCount={absentCount}
-          />
+          <div className="desktop:hidden">
+            <AttendanceStats presentCount={presentCount} absentCount={absentCount} />
+          </div>
           {children}
+          <div className="desktop:hidden">{guide}</div>
         </VStack>
         <VStack gap="150">
           <Card.Root
@@ -58,12 +67,9 @@ export function ConfirmedAttendance({
             ))}
           </Card.Root>
           {canReopen && (
-            <VStack gap="100">
-              <Text typography="body4" foreground="hint">
-                {formatDateTime(deadline)}까지 고칠 수 있습니다.
-              </Text>
+            <div className="desktop:hidden">
               <ReopenAttendanceButton onReopen={onReopen} />
-            </VStack>
+            </div>
           )}
         </VStack>
       </VStack>

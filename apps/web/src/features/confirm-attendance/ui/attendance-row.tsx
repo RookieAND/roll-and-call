@@ -1,16 +1,7 @@
 "use client";
 
-import {
-  Avatar,
-  Badge,
-  HStack,
-  SegmentedControl,
-  Text,
-  TextInput,
-  VStack,
-} from "@roll-and-call/ui";
+import { Avatar, Badge, HStack, SegmentedControl, Text, VStack } from "@roll-and-call/ui";
 
-import { ABSENCE_REASON_MAX_LENGTH } from "../model/absences-error";
 import { ATTENDANCE_CHOICE, ATTENDANCE_OPTIONS } from "../model/attendance-choice";
 import { attendanceRowLine } from "../model/attendance-row-line";
 import type { Attendee } from "../model/attendee";
@@ -20,22 +11,17 @@ interface AttendanceRowProps {
   attendee: Attendee;
   absent: boolean;
   readOnly?: boolean;
-  reason?: string;
   onChange?: (absent: boolean) => void;
-  onReasonChange?: (reason: string) => void;
 }
 
 export function AttendanceRow({
   attendee,
   absent,
   readOnly = false,
-  reason = "",
   onChange,
-  onReasonChange,
 }: AttendanceRowProps) {
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
   const editable = !readOnly && !attendee.staffAdded;
-  const showsReason = editable && absent;
   const line = attendanceRowLine({ attendee, absent, editable });
 
   return (
@@ -82,19 +68,6 @@ export function AttendanceRow({
         </SegmentedControl.Root>
       </HStack>
       {editable && <AttendanceRowNote attendee={attendee} absent={absent} />}
-      {showsReason && (
-        <VStack className="px-150 pb-125">
-          <TextInput
-            value={reason}
-            autoComplete="off"
-            enterKeyHint="done"
-            maxLength={ABSENCE_REASON_MAX_LENGTH}
-            placeholder="사유(선택) · 운영진만 봅니다"
-            aria-label={`${attendee.username} 불참 사유`}
-            onChange={(event) => onReasonChange?.(event.target.value)}
-          />
-        </VStack>
-      )}
     </VStack>
   );
 }

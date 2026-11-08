@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Card, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState, type ReactNode } from "react";
 
 import { ConfirmDialog, toast, toastActionError, useAction } from "@/shared/ui";
@@ -9,9 +10,11 @@ import { confirmAttendance } from "../api/confirm-attendance";
 import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
 import type { Attendee } from "../model/attendee";
 import { confirmDescription } from "../model/confirm-description";
+import { AbsenceReasonDialog } from "./absence-reason-dialog";
 import { AttendanceFrame } from "./attendance-frame";
 import { AttendanceRow } from "./attendance-row";
 import { AttendanceStats } from "./attendance-stats";
+import { AttendanceSummaryPanel } from "./attendance-summary-panel";
 import { ConfirmAttendanceSummary } from "./confirm-attendance-summary";
 
 const IN_PROGRESS_LEAD = "불참한 사람만 골라 주세요.";
@@ -25,6 +28,7 @@ interface AttendanceFormProps {
   onConfirmed: () => void;
   onExpired: () => void;
   footnote?: string;
+  renderGuide: (cancelledNames: string[]) => ReactNode;
   // 세션이 끝나기 전에 연 화면. 불참한 사람만 고르면 된다는 안내와 고칠 수 있는 기한을 덧붙인다.
   inProgress?: boolean;
   children?: ReactNode;
@@ -38,6 +42,7 @@ export function AttendanceForm({
   onConfirmed,
   onExpired,
   footnote,
+  renderGuide,
   inProgress = false,
   children,
 }: AttendanceFormProps) {
@@ -52,6 +57,7 @@ export function AttendanceForm({
         attendees.map((attendee) => [attendee.userId, attendee.absenceReason ?? ""] as const),
       ),
   );
+  const [reasonTarget, setReasonTarget] = useState<Attendee | null>(null);
   const [confirming, setConfirming] = useState(false);
   const { pending, run } = useAction();
 
@@ -61,7 +67,13 @@ export function AttendanceForm({
   const named = counted.filter((attendee) => !attendee.staffAdded);
   const description = confirmDescription(named.map((attendee) => attendee.username));
 
-  function toggle(userId: string, absent: boolean) {
+  const cancelledNames = attendees
+    .filter(
+      (attendee) => attendee.removed && !attendee.staffCancelled && !absentIds.has(attendee.userId),
+    )
+    .map((attendee) => attendee.username);
+
+  function setAbsent(userId: string, absent: boolean) {
     setAbsentIds((previous) => {
       const next = new Set(previous);
       if (absent) next.add(userId);
@@ -70,8 +82,22 @@ export function AttendanceForm({
     });
   }
 
-  function changeReason(userId: string, reason: string) {
-    setReasons((previous) => new Map(previous).set(userId, reason));
+  // 불참으로 바꾸면 사유 창이 뜬다. 운영진이 취소한 불참은 기록되지 않으므로 묻지 않는다.
+  function toggle(attendee: Attendee, absent: boolean) {
+    setAbsent(attendee.userId, absent);
+    if (absent && !attendee.staffCancelled) setReasonTarget(attendee);
+  }
+
+  function confirmReason(reason: string) {
+    if (isNull(reasonTarget)) return;
+    setReasons((previous) => new Map(previous).set(reasonTarget.userId, reason));
+    setReasonTarget(null);
+  }
+
+  function cancelReason() {
+    if (isNull(reasonTarget)) return;
+    setAbsent(reasonTarget.userId, false);
+    setReasonTarget(null);
   }
 
   function requestConfirm() {
@@ -100,37 +126,32 @@ export function AttendanceForm({
     });
   }
 
-  const stats = (
-    <AttendanceStats
-      presentCount={attendees.length - counted.length}
-      absentCount={counted.length}
-    />
-  );
+  const presentCount = attendees.length - counted.length;
   const confirmButton = (
     <Button size="lg" className="w-full" loading={pending} onClick={requestConfirm}>
       출석 확정
     </Button>
   );
+  const guide = renderGuide(cancelledNames);
 
-  // 통계와 확정 버튼은 모바일에서는 본문 위·하단 바에, 1100px 이상에서는 우측 패널에 둔다.
   const panel = (
-    <Card.Root radius={600} padding="md">
-      <VStack gap="150">
-        <Text typography="subtitle2" render={<h2 />}>
-          출석 요약
-        </Text>
-        {stats}
-        <div className="border-t border-gray-200 pt-150">{confirmButton}</div>
-      </VStack>
-    </Card.Root>
+    <AttendanceSummaryPanel
+      presentCount={presentCount}
+      absentCount={counted.length}
+      guide={guide}
+      action={confirmButton}
+    />
   );
 
   return (
     <AttendanceFrame appBar={appBar} header={header} panel={panel}>
       <VStack gap="200">
         <VStack gap="100">
-          <div className="desktop:hidden">{stats}</div>
+          <div className="desktop:hidden">
+            <AttendanceStats presentCount={presentCount} absentCount={counted.length} />
+          </div>
           {children}
+          <div className="desktop:hidden">{guide}</div>
         </VStack>
 
         {inProgress && (
@@ -148,9 +169,7 @@ export function AttendanceForm({
               key={attendee.userId}
               attendee={attendee}
               absent={absentIds.has(attendee.userId)}
-              reason={reasons.get(attendee.userId)}
-              onChange={(absent) => toggle(attendee.userId, absent)}
-              onReasonChange={(reason) => changeReason(attendee.userId, reason)}
+              onChange={(absent) => toggle(attendee, absent)}
             />
           ))}
         </Card.Root>
@@ -181,12 +200,20 @@ export function AttendanceForm({
           onConfirm={submit}
         >
           <ConfirmAttendanceSummary
-            presentCount={attendees.length - counted.length}
+            presentCount={presentCount}
             absentNames={description.names}
             warningLines={description.warningLines}
-            notice={description.notice}
           />
         </ConfirmDialog>
+
+        <AbsenceReasonDialog
+          key={reasonTarget?.userId}
+          open={!isNull(reasonTarget)}
+          username={reasonTarget?.username ?? ""}
+          initialReason={reasons.get(reasonTarget?.userId ?? "") ?? ""}
+          onCancel={cancelReason}
+          onConfirm={confirmReason}
+        />
       </VStack>
     </AttendanceFrame>
   );
