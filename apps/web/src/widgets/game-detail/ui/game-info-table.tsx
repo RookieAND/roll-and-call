@@ -3,7 +3,7 @@ import { formatPlayRange } from "@roll-and-call/database/games/model";
 import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
-import { GAME_VISIBILITY, PrivateMark } from "@/entities/game";
+import { GAME_VISIBILITY } from "@/entities/game";
 import { MemberTitle } from "@/features/view-badge";
 import { formatDateTime, formatGameSchedule } from "@/shared/lib";
 import { ServerLink } from "@/shared/ui";
@@ -20,22 +20,20 @@ interface GameInfoTableProps {
 export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameInfoTableProps) {
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
   const isPrivate = game.visibility === GAME_VISIBILITY.private;
-  // 비공개 구인은 모집 마감이 없다. 같은 자리에 공개 범위를 둔다.
-  const deadlineOrVisibility = isPrivate
-    ? { label: "모집 유형", value: <PrivateMark /> }
-    : {
-        label: "모집 마감일",
-        value: (
-          <HStack align="center" gap="100" wrap className="min-w-0">
-            <span>{formatDateTime(game.endDate)}</span>
-            {deadlineBadge && (
-              <Badge colorPalette="primary" className="tabular-nums">
-                {deadlineBadge}
-              </Badge>
-            )}
-          </HStack>
-        ),
-      };
+  // 지정 구인은 모집 마감이 없어 이 줄을 두지 않는다.
+  const deadlineRow = {
+    label: "모집 마감일",
+    value: (
+      <HStack align="center" gap="100" wrap className="min-w-0">
+        <span>{formatDateTime(game.endDate)}</span>
+        {deadlineBadge && (
+          <Badge colorPalette="primary" className="tabular-nums">
+            {deadlineBadge}
+          </Badge>
+        )}
+      </HStack>
+    ),
+  };
   const rows: { label: string; value: ReactNode; top?: boolean }[] = [
     { label: "룰", value: game.rule },
     ...(game.supplements.length > 0
@@ -64,7 +62,7 @@ export function GameInfoTable({ game, isGm, deadlineBadge, sessionBadge }: GameI
       ),
     },
     ...(playRange ? [{ label: "플레이타임", value: playRange }] : []),
-    deadlineOrVisibility,
+    ...(isPrivate ? [] : [deadlineRow]),
     {
       label: "세션 일정",
       value: (
