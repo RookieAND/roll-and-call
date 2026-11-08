@@ -63,6 +63,7 @@ export function MakerReviewView({ review }: MakerReviewViewProps) {
           </Panel>
           <Panel title="심사 자료" bodyClassName="p-175">
             <ReviewMaterial
+              description={application.description}
               links={application.links}
               images={review.images}
               ruleName={application.name}

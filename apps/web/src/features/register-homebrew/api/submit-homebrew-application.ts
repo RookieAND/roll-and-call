@@ -55,6 +55,7 @@ export async function submitHomebrewApplication(
     name: parsed.data.name.trim(),
     edition: parsed.data.edition.trim(),
     summary: parsed.data.summary.trim(),
+    description: parsed.data.description.trim(),
   };
   const created = await createHomebrewApplication({
     serverId: server.id,

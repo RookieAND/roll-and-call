@@ -18,6 +18,7 @@ export async function getMyHomebrewApplication({
   const [row] = await db
     .select({
       ...myHomebrewColumns,
+      description: homebrewRuleApplications.description,
       links: homebrewRuleApplications.links,
       imageUrls: homebrewRuleApplications.imageUrls,
       approvedAt: homebrewRules.createdAt,

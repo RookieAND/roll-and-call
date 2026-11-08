@@ -2,6 +2,7 @@
 export const HOMEBREW_FIELD = {
   name: "name",
   summary: "summary",
+  description: "description",
   links: "links",
   images: "images",
   material: "material",

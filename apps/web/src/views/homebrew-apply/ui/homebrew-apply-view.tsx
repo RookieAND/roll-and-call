@@ -50,6 +50,7 @@ export async function HomebrewApplyView({ from }: HomebrewApplyViewProps) {
         name: application.name,
         edition: application.edition,
         summary: application.summary,
+        description: application.description,
         links: application.links,
         // 정리되어 서명하지 못한 이미지는 다시 보내지 않는다.
         images: application.imageUrls.flatMap((key) => {

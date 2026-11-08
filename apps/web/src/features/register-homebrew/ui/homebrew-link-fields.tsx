@@ -42,12 +42,12 @@ export function HomebrewLinkFields({ links, error, onChange }: HomebrewLinkField
               />
               {removable && (
                 <IconButton
-                  variant="ghost"
-                  size="lg"
+                  variant="outline"
+                  className="h-11 w-11"
                   aria-label="링크 빼기"
                   onClick={() => onChange(links.toSpliced(index, 1))}
                 >
-                  <X size={20} aria-hidden />
+                  <X size={15} aria-hidden />
                 </IconButton>
               )}
             </HStack>

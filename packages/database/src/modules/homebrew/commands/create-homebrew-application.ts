@@ -29,6 +29,7 @@ export async function createHomebrewApplication({
     name: string;
     edition: string;
     summary: string;
+    description: string;
     links: string[];
     imageUrls: string[];
     previousId: string | null;

@@ -1,6 +1,6 @@
 import { Badge, cn, Text } from "@roll-and-call/ui";
 
-import { WIZARD_STEP_STATE, type WizardStepState } from "../model/wizard-step-state";
+import { WIZARD_STEP_STATE, type WizardStepState } from "@/shared/lib";
 
 interface WizardStepRowProps {
   number: number;

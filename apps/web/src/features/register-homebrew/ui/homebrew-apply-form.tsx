@@ -1,14 +1,13 @@
 "use client";
 
 import { HOMEBREW_LIMIT } from "@roll-and-call/database/homebrew/model";
-import { Button, Callout, Field, FloatingBar, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Callout, Field, Text, Textarea, TextInput, VStack } from "@roll-and-call/ui";
 import { compact, isNull, omit } from "es-toolkit";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { isValueOf, useServerPath } from "@/shared/lib";
 import {
-  AppBar,
   ConfirmDialog,
   DESKTOP_CARD_CLASS,
   LARGE_DIALOG_TITLE_CLASS,
@@ -17,16 +16,20 @@ import {
   toast,
   useAction,
   useBeforeUnloadWarning,
+  WizardHeader,
 } from "@/shared/ui";
 
 import { submitHomebrewApplication } from "../api/submit-homebrew-application";
-import { canSubmitHomebrew } from "../model/can-submit-homebrew";
+import { canProceedHomebrew, canSubmitHomebrew } from "../model/can-submit-homebrew";
 import { filledLinks } from "../model/filled-links";
 import { HOMEBREW_ERROR } from "../model/homebrew-error";
 import { HOMEBREW_FIELD } from "../model/homebrew-field";
 import type { HomebrewImage } from "../model/homebrew-image";
+import { HOMEBREW_STEPS, homebrewStepOfField } from "../model/homebrew-steps";
+import { HomebrewApplyFooter } from "./homebrew-apply-footer";
 import { HomebrewImageField } from "./homebrew-image-field";
 import { HomebrewLinkFields } from "./homebrew-link-fields";
+import { HomebrewSidePanel } from "./homebrew-side-panel";
 
 type HomebrewField = (typeof HOMEBREW_FIELD)[keyof typeof HOMEBREW_FIELD];
 
@@ -42,6 +45,7 @@ interface HomebrewApplyFormProps {
     name: string;
     edition: string;
     summary: string;
+    description: string;
     links: string[];
     images: { key: string; previewUrl: string }[];
   } | null;
@@ -55,6 +59,8 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
   const [name, setName] = useState(previous?.name ?? "");
   const [edition, setEdition] = useState(previous?.edition ?? "");
   const [summary, setSummary] = useState(previous?.summary ?? "");
+  const [description, setDescription] = useState(previous?.description ?? "");
+  const [step, setStep] = useState(0);
   const [links, setLinks] = useState(initialLinks);
   const [images, setImages] = useState<HomebrewImage[]>(
     () => previous?.images.map((image) => ({ ...image, id: image.key, progress: 1 })) ?? [],
@@ -66,7 +72,11 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
   const imageKeys = compact(images.map((image) => image.key));
   const uploading = imageKeys.length < images.length;
   const materialCount = filledLinks(links).length + images.length;
-  const enabled = canSubmitHomebrew({ name, summary, links, imageCount: imageKeys.length });
+  const isLastStep = step === HOMEBREW_STEPS.length - 1;
+  const canProceed = canProceedHomebrew({ name, summary, description });
+  const enabled =
+    canSubmitHomebrew({ name, summary, description, links, imageCount: imageKeys.length }) &&
+    !uploading;
   // 이름·소개를 채웠는데 자료만 없을 때 버튼이 왜 꺼졌는지 알린다.
   const materialMissing =
     Boolean(errors.material) ||
@@ -75,6 +85,7 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
     name !== (previous?.name ?? "") ||
     edition !== (previous?.edition ?? "") ||
     summary !== (previous?.summary ?? "") ||
+    description !== (previous?.description ?? "") ||
     filledLinks(links).join() !== filledLinks(initialLinks).join() ||
     images.map((image) => image.key).join() !==
       (previous?.images ?? []).map((image) => image.key).join();
@@ -110,6 +121,7 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
           name,
           edition,
           summary,
+          description,
           links: filledLinks(links),
           imageUrls: imageKeys,
           previousId: previous?.id ?? null,
@@ -119,6 +131,7 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
         onError: (result) => {
           if (isHomebrewField(result.field)) {
             setErrors({ [result.field]: result.error });
+            setStep(homebrewStepOfField(result.field));
             return;
           }
           setFailure(KNOWN_ERRORS.includes(result.error) ? result.error : RETRY_LATER);
@@ -132,124 +145,166 @@ export function HomebrewApplyForm({ serverId, previous }: HomebrewApplyFormProps
     else router.push(leaveHref);
   }
 
+  function goToStep(index: number) {
+    setStep(index);
+    window.scrollTo({ top: 0 });
+  }
+
+  function goBack() {
+    if (step > 0) goToStep(step - 1);
+    else requestLeave();
+  }
+
   return (
-    <PageShell readable appBar={<AppBar title={title} onBack={requestLeave} />}>
-      <div className={DESKTOP_CARD_CLASS}>
-        <VStack render={<form onSubmit={submit} />} className="break-keep">
+    <VStack render={<form onSubmit={submit} />} className="break-keep">
+      <PageShell
+        readable
+        appBar={
+          <WizardHeader
+            step={step + 1}
+            total={HOMEBREW_STEPS.length}
+            title={title}
+            onBack={goBack}
+          />
+        }
+        panel={
+          <HomebrewSidePanel
+            steps={HOMEBREW_STEPS}
+            current={step}
+            name={name}
+            edition={edition}
+            onSelectStep={goToStep}
+          />
+        }
+      >
+        <div className={DESKTOP_CARD_CLASS}>
           <VStack gap="250" className="px-200 pt-200 pb-250">
-            <Field.Root
-              label="룰 이름"
-              htmlFor="homebrewName"
-              required
-              counter={`${name.length} / ${HOMEBREW_LIMIT.nameLength}`}
-              error={errors.name}
-            >
-              <TextInput
-                id="homebrewName"
-                placeholder="예: 달그림자 연대기"
-                maxLength={HOMEBREW_LIMIT.nameLength}
-                value={name}
-                invalid={Boolean(errors.name)}
-                onChange={(event) => {
-                  clearErrors([HOMEBREW_FIELD.name]);
-                  setName(event.target.value);
-                }}
-              />
-            </Field.Root>
-            <Field.Root label="판본" htmlFor="homebrewEdition" counter="선택">
-              <TextInput
-                id="homebrewEdition"
-                placeholder="예: 1.0"
-                maxLength={HOMEBREW_LIMIT.nameLength}
-                value={edition}
-                onChange={(event) => setEdition(event.target.value)}
-              />
-            </Field.Root>
-            <Field.Root
-              label="한 줄 소개"
-              htmlFor="homebrewSummary"
-              required
-              counter={`${summary.length} / ${HOMEBREW_LIMIT.summaryLength}`}
-              error={errors.summary}
-            >
-              <TextInput
-                id="homebrewSummary"
-                placeholder="어떤 룰인지 한 줄로 적어 주세요"
-                maxLength={HOMEBREW_LIMIT.summaryLength}
-                value={summary}
-                invalid={Boolean(errors.summary)}
-                onChange={(event) => {
-                  clearErrors([HOMEBREW_FIELD.summary]);
-                  setSummary(event.target.value);
-                }}
-              />
-            </Field.Root>
-            <VStack gap="200" className="pt-050">
-              <VStack gap="050">
-                <Text typography="subtitle2" render={<h2 />}>
-                  심사 자료
-                </Text>
-                <Text typography="body4" foreground="hint" render={<p />}>
-                  <LineBreaks
-                    lines={[
-                      "링크나 이미지를 하나 이상 넣어 주세요.",
-                      "운영진이 룰 내용을 확인하는 데 씁니다.",
-                    ]}
-                  />
-                </Text>
-              </VStack>
-              <HomebrewLinkFields links={links} error={errors.links} onChange={changeLinks} />
-              <HomebrewImageField
-                serverId={serverId}
-                images={images}
-                error={errors.images}
-                onImagesChange={setImages}
-                onErrorChange={changeImageError}
-              />
+            <VStack gap="250" className={step === 0 ? undefined : "hidden"}>
+              <Field.Root
+                label="룰 이름"
+                htmlFor="homebrewName"
+                required
+                counter={`${name.length} / ${HOMEBREW_LIMIT.nameLength}`}
+                error={errors.name}
+              >
+                <TextInput
+                  id="homebrewName"
+                  placeholder="예: 달그림자 연대기"
+                  maxLength={HOMEBREW_LIMIT.nameLength}
+                  value={name}
+                  invalid={Boolean(errors.name)}
+                  onChange={(event) => {
+                    clearErrors([HOMEBREW_FIELD.name]);
+                    setName(event.target.value);
+                  }}
+                />
+              </Field.Root>
+              <Field.Root label="판본" htmlFor="homebrewEdition">
+                <TextInput
+                  id="homebrewEdition"
+                  placeholder="예: 1.0"
+                  maxLength={HOMEBREW_LIMIT.nameLength}
+                  value={edition}
+                  onChange={(event) => setEdition(event.target.value)}
+                />
+              </Field.Root>
+              <Field.Root
+                label="한 줄 소개"
+                htmlFor="homebrewSummary"
+                required
+                counter={`${summary.length} / ${HOMEBREW_LIMIT.summaryLength}`}
+                error={errors.summary}
+              >
+                <TextInput
+                  id="homebrewSummary"
+                  placeholder="어떤 룰인지 한 줄로 적어 주세요"
+                  maxLength={HOMEBREW_LIMIT.summaryLength}
+                  value={summary}
+                  invalid={Boolean(errors.summary)}
+                  onChange={(event) => {
+                    clearErrors([HOMEBREW_FIELD.summary]);
+                    setSummary(event.target.value);
+                  }}
+                />
+              </Field.Root>
+              <Field.Root
+                label="룰북 설명"
+                htmlFor="homebrewDescription"
+                required
+                counter={`${description.length} / ${HOMEBREW_LIMIT.descriptionLength}`}
+                error={errors.description}
+              >
+                <Textarea
+                  id="homebrewDescription"
+                  rows={6}
+                  placeholder="룰의 세계관과 진행 방식을 자유롭게 적어 주세요"
+                  maxLength={HOMEBREW_LIMIT.descriptionLength}
+                  value={description}
+                  invalid={Boolean(errors.description)}
+                  onChange={(event) => {
+                    clearErrors([HOMEBREW_FIELD.description]);
+                    setDescription(event.target.value);
+                  }}
+                />
+              </Field.Root>
             </VStack>
-            {materialMissing && (
-              <Callout.Root colorPalette="warning" size="sm">
-                <Callout.Icon />
-                <Callout.Description>{HOMEBREW_ERROR.materialRequired}</Callout.Description>
-              </Callout.Root>
-            )}
+
+            {/* 언마운트하면 올리던 이미지 상태가 날아가서 1단계에서도 숨긴 채 마운트해 둔다. */}
+            <VStack gap="250" className={step === 1 ? undefined : "hidden"}>
+              <VStack gap="200">
+                <VStack gap="050">
+                  <Text typography="subtitle2" render={<h2 />}>
+                    심사 자료
+                  </Text>
+                  <Text typography="body4" foreground="hint" render={<p />}>
+                    <LineBreaks
+                      lines={[
+                        "링크나 이미지를 하나 이상 넣어 주세요.",
+                        "운영진이 룰 내용을 확인하는 데 씁니다.",
+                      ]}
+                    />
+                  </Text>
+                </VStack>
+                <HomebrewLinkFields links={links} error={errors.links} onChange={changeLinks} />
+                <HomebrewImageField
+                  serverId={serverId}
+                  images={images}
+                  error={errors.images}
+                  onImagesChange={setImages}
+                  onErrorChange={changeImageError}
+                />
+              </VStack>
+              {materialMissing && (
+                <Callout.Root colorPalette="warning" size="sm">
+                  <Callout.Icon />
+                  <Callout.Description>{HOMEBREW_ERROR.materialRequired}</Callout.Description>
+                </Callout.Root>
+              )}
+            </VStack>
           </VStack>
 
-          <FloatingBar.Root elevated={false}>
-            <FloatingBar.Content>
-              <VStack gap="100">
-                {failure && (
-                  <Callout.Root colorPalette="danger" size="sm">
-                    <Callout.Icon />
-                    <Callout.Description>{`신청하지 못했습니다. ${failure}`}</Callout.Description>
-                  </Callout.Root>
-                )}
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full"
-                  loading={pending}
-                  disabled={!enabled || uploading}
-                >
-                  신청하기
-                </Button>
-              </VStack>
-            </FloatingBar.Content>
-            <FloatingBar.Spacer />
-          </FloatingBar.Root>
-
-          <ConfirmDialog
-            open={confirmingLeave}
-            onOpenChange={setConfirmingLeave}
-            title="작성 중인 내용이 사라집니다."
-            titleClassName={LARGE_DIALOG_TITLE_CLASS}
-            cancelLabel="이어서 쓰기"
-            confirmLabel="나가기"
-            danger
-            onConfirm={() => router.push(leaveHref)}
+          <HomebrewApplyFooter
+            isLastStep={isLastStep}
+            pending={pending}
+            canProceed={canProceed}
+            canSubmit={enabled}
+            failure={failure}
+            onNext={() => goToStep(step + 1)}
+            onBack={goBack}
           />
-        </VStack>
-      </div>
-    </PageShell>
+        </div>
+      </PageShell>
+
+      <ConfirmDialog
+        open={confirmingLeave}
+        onOpenChange={setConfirmingLeave}
+        title="작성 중인 내용이 사라집니다."
+        titleClassName={LARGE_DIALOG_TITLE_CLASS}
+        cancelLabel="이어서 쓰기"
+        confirmLabel="나가기"
+        danger
+        onConfirm={() => router.push(leaveHref)}
+      />
+    </VStack>
   );
 }

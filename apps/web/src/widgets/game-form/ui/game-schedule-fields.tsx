@@ -1,15 +1,13 @@
 "use client";
 
-import { Field, Text, VStack } from "@roll-and-call/ui";
-import { Controller, type UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 
 import { GAME_VISIBILITY, SCHEDULE_MODE } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
-import { toKstDateInput } from "@/shared/lib";
-import { DateTimePicker } from "@/shared/ui";
 
 import { CoordinationRangeFields } from "./coordination-range-fields";
 import { CoordinationWindowField } from "./coordination-window-field";
+import { EndDateField } from "./end-date-field";
 import { FixedSessionField } from "./fixed-session-field";
 import { ScheduleModeField } from "./schedule-mode-field";
 
@@ -26,12 +24,7 @@ export function GameScheduleFields({
   endDateLocked = false,
   sessionLocked = false,
 }: GameScheduleFieldsProps) {
-  const {
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = form;
+  const { setValue, watch } = form;
   const mode = watch("scheduleMode");
   const isPrivate = watch("visibility") === GAME_VISIBILITY.private;
 
@@ -52,31 +45,7 @@ export function GameScheduleFields({
         </>
       )}
 
-      {!isPrivate && (
-        <VStack gap="075">
-          <Field.Root label="모집 마감" htmlFor="endDate" required error={errors.endDate?.message}>
-            <Controller
-              name="endDate"
-              control={control}
-              render={({ field }) => (
-                <DateTimePicker
-                  id="endDate"
-                  value={field.value}
-                  onChange={field.onChange}
-                  invalid={!!errors.endDate}
-                  min={toKstDateInput(new Date())}
-                  disabled={endDateLocked}
-                />
-              )}
-            />
-          </Field.Root>
-          {endDateLocked && (
-            <Text typography="body4" foreground="hint" render={<p />}>
-              추첨을 마친 구인은 모집 마감을 바꿀 수 없습니다.
-            </Text>
-          )}
-        </VStack>
-      )}
+      {!isPrivate && <EndDateField form={form} locked={endDateLocked} />}
     </>
   );
 }

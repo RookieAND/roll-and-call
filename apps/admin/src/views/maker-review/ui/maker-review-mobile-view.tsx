@@ -48,6 +48,7 @@ export function MakerReviewMobileView({ review }: MakerReviewMobileViewProps) {
         </MobileSection>
         <MobileSection title="심사 자료">
           <ReviewMaterial
+            description={application.description}
             links={application.links}
             images={review.images}
             ruleName={application.name}

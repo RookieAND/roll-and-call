@@ -1,6 +1,7 @@
 export const HOMEBREW_ERROR = {
   nameRequired: "룰 이름을 적어 주세요.",
   summaryRequired: "한 줄 소개를 적어 주세요.",
+  descriptionRequired: "룰북 설명을 적어 주세요.",
   nameTaken: "같은 이름의 룰이 이미 있습니다.",
   linkFormat: "http나 https로 시작하는 주소를 넣어 주세요.",
   linkDuplicate: "같은 링크가 이미 있습니다.",

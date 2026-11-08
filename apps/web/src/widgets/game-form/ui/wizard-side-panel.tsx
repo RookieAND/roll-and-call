@@ -1,15 +1,9 @@
 import { Badge, Callout, Card, Text, VStack } from "@roll-and-call/ui";
 
 import { GameStatusBadge, PrivateMark, type GameStatus } from "@/entities/game";
+import { WizardProgressSection, type WizardPanelStep } from "@/shared/ui";
 
 import { GAME_FORM_STEP_COUNT } from "../model/game-form-steps";
-import { isWizardStepSelectable, wizardStepState } from "../model/wizard-step-state";
-import { WizardStepRow } from "./wizard-step-row";
-
-export interface WizardPanelStep {
-  number: number;
-  label: string;
-}
 
 interface WizardSidePanelProps {
   steps: readonly WizardPanelStep[];
@@ -65,26 +59,12 @@ export function WizardSidePanel({
         </Card.Root>
       </VStack>
 
-      <VStack gap="125" render={<section />}>
-        <Text typography="subtitle2" foreground="muted" render={<h2 />}>
-          진행 상황
-        </Text>
-        <ol className="flex flex-col gap-025">
-          {steps.map((step, index) => {
-            const state = wizardStepState({ index, current });
-            return (
-              <WizardStepRow
-                key={step.number}
-                number={step.number}
-                label={step.label}
-                state={state}
-                editing={editing}
-                onSelect={isWizardStepSelectable(state) ? () => onSelectStep(index) : undefined}
-              />
-            );
-          })}
-        </ol>
-      </VStack>
+      <WizardProgressSection
+        steps={steps}
+        current={current}
+        editing={editing}
+        onSelectStep={onSelectStep}
+      />
 
       <Callout.Root colorPalette="gray" size="sm">
         <Callout.Icon />

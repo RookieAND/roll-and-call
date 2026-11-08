@@ -2,7 +2,7 @@
 
 import { Progress, Text } from "@roll-and-call/ui";
 
-import { AppBar } from "@/shared/ui";
+import { AppBar } from "./app-bar";
 
 interface WizardHeaderProps {
   step: number;
@@ -29,7 +29,7 @@ export function WizardHeader({ step, total, title, onBack }: WizardHeaderProps) 
         max={total}
         colorPalette="primary"
         aria-label={`${title} 진행`}
-        className="h-[3px] rounded-none"
+        className="h-[3px] rounded-none desktop:hidden"
       />
     </>
   );

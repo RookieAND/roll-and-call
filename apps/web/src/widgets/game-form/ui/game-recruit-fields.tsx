@@ -3,16 +3,13 @@
 import { Callout, Field, Stepper, VStack } from "@roll-and-call/ui";
 import type { UseFormReturn } from "react-hook-form";
 
-import { GAME_VISIBILITY, RECRUIT_METHOD, type GameVisibility } from "@/entities/game";
+import { GAME_VISIBILITY, type GameVisibility } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
-import { ApplicationNoteField } from "./application-note-field";
 import { MinPlayersField } from "./min-players-field";
+import { OpenRecruitFields } from "./open-recruit-fields";
 import { PreConfirmedField } from "./pre-confirmed-field";
-import { RecruitMethodField } from "./recruit-method-field";
-import { RecruitMethodNote } from "./recruit-method-note";
 import { VisibilityField } from "./visibility-field";
-import { WaitlistField } from "./waitlist-field";
 
 interface GameRecruitFieldsProps {
   form: UseFormReturn<GameFormValues>;
@@ -40,7 +37,6 @@ export function GameRecruitFields({
     formState: { errors },
   } = form;
   const method = watch("recruitMethod");
-  const isFirstCome = method === RECRUIT_METHOD.firstCome;
   const maxPlayers = Number(watch("maxPlayers"));
   const preConfirmed = watch("preConfirmed");
   const visibility = watch("visibility") ?? GAME_VISIBILITY.public;
@@ -119,43 +115,7 @@ export function GameRecruitFields({
         />
       )}
 
-      {!isPrivate && (
-        <>
-          <ApplicationNoteField
-            value={watch("applicationNoteEnabled")}
-            locked={locked}
-            onChange={(enabled) =>
-              setValue("applicationNoteEnabled", enabled, { shouldDirty: true })
-            }
-            question={watch("applicationQuestion")}
-            onQuestionChange={(question) =>
-              setValue("applicationQuestion", question, { shouldDirty: true, shouldValidate: true })
-            }
-            questionError={errors.applicationQuestion?.message}
-          />
-
-          <VStack gap="100">
-            <RecruitMethodField
-              value={method}
-              locked={locked}
-              onChange={(next) => {
-                setValue("recruitMethod", next, { shouldDirty: true });
-                if (next === RECRUIT_METHOD.selection) {
-                  setValue("applicationNoteEnabled", true, { shouldDirty: true });
-                }
-              }}
-            />
-
-            {!locked && <RecruitMethodNote method={method} />}
-            {isFirstCome && (
-              <WaitlistField
-                value={watch("waitlistEnabled")}
-                onChange={(enabled) => setValue("waitlistEnabled", enabled, { shouldDirty: true })}
-              />
-            )}
-          </VStack>
-        </>
-      )}
+      {!isPrivate && <OpenRecruitFields form={form} locked={locked} />}
     </>
   );
 }

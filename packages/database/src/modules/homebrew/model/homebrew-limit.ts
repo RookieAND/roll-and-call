@@ -2,6 +2,7 @@
 export const HOMEBREW_LIMIT = {
   nameLength: 40,
   summaryLength: 100,
+  descriptionLength: 2000,
   rejectReasonLength: 200,
   links: 3,
   images: 10,

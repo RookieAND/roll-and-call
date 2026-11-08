@@ -1,0 +1,2 @@
+ALTER TABLE "homebrew_rule_applications" ADD COLUMN "description" text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE "homebrew_rule_applications" ADD CONSTRAINT "homebrew_rule_applications_description_length" CHECK (char_length("homebrew_rule_applications"."description") <= 2000);

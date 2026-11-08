@@ -7,3 +7,7 @@ export { CoordinationRangeFields } from "./ui/coordination-range-fields";
 export { CoordinationWindowField } from "./ui/coordination-window-field";
 export { FixedSessionField } from "./ui/fixed-session-field";
 export { ScheduleModeField } from "./ui/schedule-mode-field";
+export { EndDateField } from "./ui/end-date-field";
+export { VisibilityField } from "./ui/visibility-field";
+export { MinPlayersField } from "./ui/min-players-field";
+export { OpenRecruitFields } from "./ui/open-recruit-fields";

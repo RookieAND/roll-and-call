@@ -11,7 +11,13 @@ import { GAME_VISIBILITY } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
 import { useServerPath } from "@/shared/lib";
 import { TrialContext, useTrialPush } from "@/shared/trial";
-import { ConfirmDialog, DESKTOP_CARD_CLASS, PageShell, useBeforeUnloadWarning } from "@/shared/ui";
+import {
+  ConfirmDialog,
+  DESKTOP_CARD_CLASS,
+  PageShell,
+  useBeforeUnloadWarning,
+  WizardHeader,
+} from "@/shared/ui";
 
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
@@ -29,7 +35,6 @@ import { GameScheduleFields } from "./game-schedule-fields";
 import { ReopenNotice } from "./reopen-notice";
 import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
-import { WizardHeader } from "./wizard-header";
 import { WizardIntro } from "./wizard-intro";
 import { WizardSidePanel } from "./wizard-side-panel";
 

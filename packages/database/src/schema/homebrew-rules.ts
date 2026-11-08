@@ -65,6 +65,8 @@ export const homebrewRuleApplications = pgTable(
     name: text("name").notNull(),
     edition: text("edition").notNull().default(""),
     summary: text("summary").notNull(),
+    // 심사 때 운영진이 읽는 룰북 설명. 제작자 화면에는 다시 보이지 않는다. 이전에 낸 신청은 빈 값이다.
+    description: text("description").notNull().default(""),
     links: text("links").array().notNull().default([]),
     // 인증 사진과 같은 cert-photos 버킷의 공개 URL 모양 키(certPhotoPathOf).
     imageUrls: text("image_urls").array().notNull().default([]),
@@ -100,6 +102,10 @@ export const homebrewRuleApplications = pgTable(
     check(
       "homebrew_rule_applications_summary_length",
       sql`char_length(${table.summary}) between 1 and ${sql.raw(String(HOMEBREW_LIMIT.summaryLength))}`,
+    ),
+    check(
+      "homebrew_rule_applications_description_length",
+      sql`char_length(${table.description}) <= ${sql.raw(String(HOMEBREW_LIMIT.descriptionLength))}`,
     ),
     check(
       "homebrew_rule_applications_reject_reason_length",

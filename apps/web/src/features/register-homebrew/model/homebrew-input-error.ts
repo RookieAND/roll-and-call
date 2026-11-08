@@ -19,6 +19,9 @@ export function homebrewInputError({
   if (!input.summary.trim()) {
     return { error: HOMEBREW_ERROR.summaryRequired, field: HOMEBREW_FIELD.summary };
   }
+  if (!input.description.trim()) {
+    return { error: HOMEBREW_ERROR.descriptionRequired, field: HOMEBREW_FIELD.description };
+  }
   if (!input.links.every(isWebLink)) {
     return { error: HOMEBREW_ERROR.linkFormat, field: HOMEBREW_FIELD.links };
   }

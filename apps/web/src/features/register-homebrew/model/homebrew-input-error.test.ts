@@ -9,6 +9,7 @@ const base: HomebrewInput = {
   name: "달그림자 연대기",
   edition: "",
   summary: "폐허가 된 여관에서 시작하는 미스터리 룰입니다.",
+  description: "폐허가 된 여관에서 하룻밤 동안 벌어지는 사건을 다룹니다.",
   links: ["https://docs.google.com/document/d/1"],
   imageUrls: [],
   previousId: null,
@@ -25,6 +26,7 @@ describe("homebrewInputError", () => {
   it("필수 입력과 자료 하나 이상을 본다", () => {
     expect(errorOf({ name: "  " })).toBe(HOMEBREW_ERROR.nameRequired);
     expect(errorOf({ summary: "" })).toBe(HOMEBREW_ERROR.summaryRequired);
+    expect(errorOf({ description: " " })).toBe(HOMEBREW_ERROR.descriptionRequired);
     expect(errorOf({ links: [] })).toBe(HOMEBREW_ERROR.materialRequired);
   });
 

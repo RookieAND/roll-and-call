@@ -10,6 +10,7 @@ export const homebrewInputSchema = z.object({
   name: z.string().max(HOMEBREW_LIMIT.nameLength),
   edition: z.string().max(HOMEBREW_LIMIT.nameLength),
   summary: z.string().max(HOMEBREW_LIMIT.summaryLength),
+  description: z.string().max(HOMEBREW_LIMIT.descriptionLength),
   links: z.array(z.string().max(TEXT_INPUT_MAX)).max(HOMEBREW_LIMIT.links),
   imageUrls: z.array(z.string().max(TEXT_INPUT_MAX)).max(HOMEBREW_LIMIT.images),
   previousId: idSchema.nullable(),
