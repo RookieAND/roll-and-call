@@ -60,7 +60,7 @@ export function TrialRecruitResult({ recruit, onBack, onOpenList }: TrialRecruit
               </VStack>
             </Card.Root>
             <Card.Root padding="none" className="overflow-hidden">
-              <Text typography="subtitle2" className="px-175 pt-150 pb-075">
+              <Text render={<div />} typography="subtitle2" className="px-175 pt-150 pb-075">
                 GM이 해야 할 일
               </Text>
               {GM_TASKS.map(([emoji, text]) => (

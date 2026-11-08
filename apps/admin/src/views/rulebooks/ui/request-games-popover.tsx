@@ -20,7 +20,13 @@ export function RequestGamesPopover({ games }: RequestGamesPopoverProps) {
         구인 {games.length}건 보기
       </Popover.Trigger>
       <Popover.Popup align="start" className="w-[300px] p-075">
-        <Text typography="body4" weight="bold" foreground="muted" className="px-100 pb-050">
+        <Text
+          render={<div />}
+          typography="body4"
+          weight="bold"
+          foreground="muted"
+          className="px-100 pb-050"
+        >
           이 이름을 적은 구인
         </Text>
         <VStack>

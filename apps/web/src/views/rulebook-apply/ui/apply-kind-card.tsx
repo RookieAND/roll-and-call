@@ -31,7 +31,14 @@ export function ApplyKindCard({
       className={cn("min-h-22", disabled && "cursor-not-allowed")}
     >
       <HStack align="center" gap="150">
-        <Icon size={24} strokeWidth={2} aria-hidden className="flex-none" />
+        <HStack
+          align="center"
+          justify="center"
+          aria-hidden
+          className="size-11 flex-none rounded-400 bg-tinted-bg text-tinted-ink"
+        >
+          <Icon size={22} strokeWidth={2.1} />
+        </HStack>
         <VStack gap="050" className={cn("min-w-0 flex-1", disabled && "opacity-45")}>
           <Text typography="subtitle2">{title}</Text>
           <Text typography="body3" foreground="muted" className="break-keep" render={<p />}>
