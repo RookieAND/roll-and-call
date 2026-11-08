@@ -34,9 +34,9 @@ export function HomeRecordGuide() {
     <Sheet.Root>
       <Sheet.Trigger
         aria-label="점수 기준 보기"
-        className="inline-flex size-6 items-center justify-center rounded-full text-hint hover:text-foreground focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none"
+        className="-my-150 -ml-100 flex size-11 flex-none items-center justify-center text-hint hover:text-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600"
       >
-        <Info size={16} aria-hidden />
+        <Info size={18} aria-hidden />
       </Sheet.Trigger>
       <Sheet.Popup>
         <Sheet.Handle />

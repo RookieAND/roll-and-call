@@ -1,6 +1,6 @@
 import { HStack, Text } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
-import { Bell, ChevronRight, CircleAlert } from "lucide-react";
+import { Bell, ChevronRight, TriangleAlert } from "lucide-react";
 
 import { ServerLink } from "@/shared/ui";
 import { type TodoList } from "@/widgets/session-list";
@@ -19,7 +19,7 @@ interface HomeTodoBannerProps {
 export async function HomeTodoBanner({ serverId, userId }: HomeTodoBannerProps) {
   const todos: TodoList | null = await loadTodos(serverId, userId).catch(() => null);
   if (!todos || todos.count === 0) return null;
-  const Icon = todos.blocked ? CircleAlert : Bell;
+  const Icon = todos.blocked ? TriangleAlert : Bell;
   const iconForeground = todos.blocked ? "danger" : "primary";
 
   return (

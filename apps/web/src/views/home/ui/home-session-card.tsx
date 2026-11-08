@@ -33,7 +33,7 @@ export function HomeSessionCard({ session, stacked = false }: HomeSessionCardPro
       padding="sm"
       radius={600}
       background="none"
-      className={cn(session.mine && "border-tinted-border bg-tinted-bg")}
+      className={cn(session.mine ? "border-tinted-border bg-tinted-bg" : "bg-surface")}
     >
       <HStack gap="150" align="start" className="px-025">
         <Text typography="subtitle2" weight="extrabold" numeric className="w-11 flex-none pt-025">
