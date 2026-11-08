@@ -6,7 +6,7 @@ import { SESSION_ROLE } from "@/entities/game";
 import { DepartedMemberScreen } from "@/entities/profile";
 import { serverPath } from "@/shared/lib";
 import { getCurrentSessionUser, getCurrentServer } from "@/shared/server";
-import { AppBar, DESKTOP_CARD_CLASS, EmptyState, PageShell } from "@/shared/ui";
+import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import {
   countableCards,
   PROFILE_SESSION_SECTIONS,
@@ -16,6 +16,7 @@ import {
 } from "@/widgets/session-list";
 import { loadProfile } from "@/widgets/session-list/server";
 
+import { UserSessionsEmptyCard } from "./user-sessions-empty-card";
 import { UserSessionsProfilePanel } from "./user-sessions-profile-panel";
 
 const EMPTY_IMAGE = {
@@ -46,7 +47,8 @@ export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
   const tabs = PROFILE_SESSION_SECTIONS.map((section) => ({
     key: section.key,
     label: section.title,
-    count: countableCards(sessions[section.key]).length,
+    // 탭 숫자는 숨김 카드와 취소된 구인을 뺀 수다(시안 05-5 유의 사항 2).
+    count: countableCards(sessions[section.key]).filter((card) => !card.hidden).length,
     href: serverPath({
       slug: server.slug,
       path: userSessionsHref({ userId: profile.id, role: section.key }),
@@ -67,9 +69,8 @@ export async function UserSessionsView({ id, tab }: UserSessionsViewProps) {
             {items.length > 0 ? (
               <SessionList items={items} />
             ) : (
-              <EmptyState
+              <UserSessionsEmptyCard
                 image={EMPTY_IMAGE[activeSection.key]}
-                size="section"
                 title={activeSection.empty}
               />
             )}
