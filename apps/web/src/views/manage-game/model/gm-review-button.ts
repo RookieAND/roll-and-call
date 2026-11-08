@@ -1,28 +1,28 @@
-import { ddayKst, formatDday } from "@/shared/lib";
+import { formatDate } from "@/shared/lib";
 
 import { MANAGE_REVIEW_BUTTON, type ManageReviewButton } from "./manage-review-button";
-import type { ManageRow } from "./manage-row-state";
+import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
 
-export function gmReviewButton({
+export function gmReviewRow({
   gmReview,
   gameId,
   deadline,
-  now,
 }: {
   gmReview: ManageReviewButton | null;
   gameId: string;
   deadline: Date;
-  now: Date;
-}): ManageRow["button"] {
+}): ManageRow | null {
+  const base = { key: "reviewWrite", icon: "pencil", state: MANAGE_ROW_STATE.open } as const;
   if (gmReview === MANAGE_REVIEW_BUTTON.write) {
     return {
-      label: "마스터링 후기 쓰기",
+      ...base,
+      label: "마스터링 후기 작성하기",
+      detail: `${formatDate(deadline)}까지 작성할 수 있습니다`,
       href: `/games/${gameId}/review`,
-      solid: true,
-      caption: `후기 마감 ${formatDday(ddayKst(deadline, now))}`,
     };
   }
   if (gmReview === MANAGE_REVIEW_BUTTON.view) {
-    return { label: "내 후기 보기", href: "/me/reviews", solid: false };
+    return { ...base, label: "내 마스터링 후기 보기", detail: "", href: "/me/reviews" };
   }
+  return null;
 }

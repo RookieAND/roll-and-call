@@ -29,15 +29,11 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
       ...base,
       state: overdue ? MANAGE_ROW_STATE.blocked : MANAGE_ROW_STATE.open,
       href: confirmPath,
-      detail: overdue
-        ? "조율 기한이 지났습니다 · 세션 일시를 빨리 정해 주세요"
-        : "받은 가능 시간을 겹쳐 보고 세션 일시를 정합니다",
+      detail: overdue ? "조율 기한이 지났습니다" : "겹치는 시간을 보고 세션 일시를 정합니다",
     };
   }
 
   const when = formatDateTime(game.confirmedAt);
-  const done = { ...base, icon: "check", state: MANAGE_ROW_STATE.done, href: null } as const;
-
   if (!isSessionStarted(game, now)) {
     return {
       ...base,
@@ -49,5 +45,10 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
   }
   const clock = toKst(game.confirmedAt).format("HH:mm");
   const particle = clockParticle({ clock, kind: CLOCK_PARTICLE_KIND.direction });
-  return { ...done, detail: `${when}${particle} 정했습니다` };
+  return {
+    ...base,
+    state: MANAGE_ROW_STATE.done,
+    href: null,
+    detail: `${when}${particle} 정했습니다`,
+  };
 }

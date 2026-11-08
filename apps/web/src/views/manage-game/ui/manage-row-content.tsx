@@ -1,9 +1,9 @@
 import { Text, VStack } from "@roll-and-call/ui";
 import {
-  Check,
   ChevronRight,
   ClipboardCheck,
   Clock,
+  Flag,
   MessageSquareText,
   Pencil,
   Users,
@@ -15,9 +15,9 @@ import type { ManageRow } from "../model/manage-row-state";
 
 const ICONS = {
   clipboard: ClipboardCheck,
+  flag: Flag,
   message: MessageSquareText,
   clock: Clock,
-  check: Check,
   users: Users,
   pencil: Pencil,
 };
@@ -39,7 +39,7 @@ const LABEL_FOREGROUND = {
 const DETAIL_FOREGROUND = {
   open: "muted",
   blocked: "danger",
-  done: "muted",
+  done: "success",
   locked: "hint",
 } as const;
 
@@ -56,14 +56,11 @@ export function ManageRowContent({ row, chevron }: ManageRowContentProps) {
         <Text typography="subtitle1" foreground={LABEL_FOREGROUND[row.state]}>
           {row.label}
         </Text>
-        <Text typography="body4" foreground={DETAIL_FOREGROUND[row.state]}>
-          {row.detail}
-        </Text>
-        {row.note?.map((line) => (
-          <Text key={line} typography="body4" foreground="hint">
-            {line}
+        {row.detail && (
+          <Text typography="body4" foreground={DETAIL_FOREGROUND[row.state]}>
+            {row.detail}
           </Text>
-        ))}
+        )}
       </VStack>
       {chevron && <ChevronRight size={17} className="flex-none text-hint" aria-hidden />}
     </>

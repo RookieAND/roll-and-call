@@ -6,8 +6,8 @@ import { useParams } from "next/navigation";
 
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
-// manageRows 5행 + CancelGameRow 1행.
-const ROW_COUNT = 6;
+// 세션 진행 3행 + 구인 관리 3행(취소 포함) + 후기 1행.
+const ROW_COUNT = 7;
 const STAT_COUNT = 3;
 
 export function ManageGameSkeleton() {

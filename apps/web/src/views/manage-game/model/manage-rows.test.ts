@@ -8,9 +8,9 @@ import {
   SCHEDULE_MODE,
 } from "@/entities/game";
 
-import { cancelRowLock } from "./cancel-row-lock";
+import { MANAGE_REVIEW_BUTTON } from "./manage-review-button";
 import { MANAGE_ROW_ACTION, MANAGE_ROW_STATE } from "./manage-row-state";
-import { manageRows } from "./manage-rows";
+import { manageRowGroups } from "./manage-rows";
 
 const NOW = new Date("2026-09-20T12:00:00+09:00");
 const HOUR = 60 * 60 * 1000;
@@ -44,186 +44,129 @@ const coordinating = {
 const gameWith = (patch: Record<string, unknown>) =>
   ({ ...coordinating, ...patch }) as unknown as GameDetailData;
 
-const byKey = (game: GameDetailData) => {
-  const [attendance, review, time, roster, edit] = manageRows({ game, reviewCount: 0, now: NOW });
-  return { attendance: attendance!, review: review!, time: time!, roster: roster!, edit: edit! };
-};
-
-describe("manageRows", () => {
-  it("줄 순서는 늘 같다", () => {
-    expect(
-      manageRows({ game: coordinating, reviewCount: 0, now: NOW }).map((row) => row.key),
-    ).toEqual(["attendance", "review", "time", "roster", "edit"]);
+const groupsOf = (
+  game: GameDetailData,
+  reviewCount = 0,
+  gmReview: "write" | "view" | null = null,
+) =>
+  manageRowGroups({
+    game,
+    reviewCount,
+    gmReview: gmReview === null ? null : MANAGE_REVIEW_BUTTON[gmReview],
+    now: NOW,
   });
 
-  it("조율 중에는 출석 확인을 잠그고 시간 정하기로 보낸다", () => {
-    const rows = byKey(coordinating);
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(rows.time.href).toBe("/games/game/confirm");
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.roster.detail).toBe("확정·대기 옮기기, 참여자 추가, 내보내기를 합니다");
-    expect(rows.edit.label).toBe("구인 수정");
+const rowOf = (game: GameDetailData, key: string) => {
+  const groups = groupsOf(game);
+  const row = [...groups.progress, ...groups.management, ...groups.review].find(
+    (candidate) => candidate.key === key,
+  );
+  if (!row) throw new Error(`no row ${key}`);
+  return row;
+};
+
+describe("manageRowGroups", () => {
+  it("그룹과 줄 순서는 늘 같다", () => {
+    const groups = groupsOf(coordinating);
+    expect(groups.progress.map((row) => row.key)).toEqual(["time", "attendance", "end"]);
+    expect(groups.management.map((row) => row.key)).toEqual(["roster", "edit"]);
+    expect(groups.review.map((row) => row.key)).toEqual(["review"]);
+  });
+
+  it("조율 중에는 시간 줄을 열고 세션 마치기는 잠근다", () => {
+    expect(rowOf(coordinating, "time").detail).toBe("겹치는 시간을 보고 세션 일시를 정합니다");
+    expect(rowOf(coordinating, "end")).toMatchObject({
+      state: MANAGE_ROW_STATE.locked,
+      detail: "세션이 시작되면 마칠 수 있습니다",
+    });
+    expect(rowOf(coordinating, "roster")).toMatchObject({
+      detail: "명단 옮기기·추가·내보내기",
+      state: MANAGE_ROW_STATE.open,
+    });
+    expect(rowOf(coordinating, "edit").detail).toBe("제목·소개·이미지·모집 조건을 고칩니다");
   });
 
   it("조율 기한이 지나면 시간 줄만 붉게 막힌다", () => {
-    const rows = byKey(gameWith({ endDate: at(-DAY) }));
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.blocked);
-    expect(rows.time.detail).toBe("조율 기한이 지났습니다 · 세션 일시를 빨리 정해 주세요");
-    expect(rows.roster.state).toBe(MANAGE_ROW_STATE.open);
-  });
-
-  it("추첨 전에는 세션 시간 줄을 잠근다", () => {
-    const rows = byKey(gameWith({ recruitMethod: RECRUIT_METHOD.lottery }));
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(rows.time.detail).toBe("추첨을 먼저 마쳐 주세요");
-  });
-
-  it("조율형 시각이 정해지고 시작 전이면 세션 시간 바꾸기가 열린다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(DAY) }));
-    expect(rows.time.label).toBe("세션 시간 바꾸기");
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.time.href).toBe("/games/game/confirm");
-    expect(rows.time.detail).toBe("9월 21일 (월) 12:00 · 시작 전까지 바꿀 수 있습니다");
-    expect(rows.edit.state).toBe(MANAGE_ROW_STATE.open);
-  });
-
-  it("조율형 시작 뒤에는 정한 시각만 보인다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-0.5 * HOUR) }));
-    expect(rows.time.label).toBe("세션 시간 정하기");
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.done);
-    expect(rows.time.detail).toBe("9월 20일 (일) 11:30으로 정했습니다");
-  });
-
-  it("일시 지정형도 시작 전이면 추첨 전이어도 세션 시간 바꾸기가 열린다", () => {
-    const rows = byKey(
-      gameWith({
-        scheduleMode: SCHEDULE_MODE.fixed,
-        recruitMethod: RECRUIT_METHOD.lottery,
-        confirmedAt: at(DAY),
-      }),
-    );
-    expect(rows.time.label).toBe("세션 시간 바꾸기");
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.time.href).toBe("/games/game/confirm");
-    expect(rows.time.detail).toBe("9월 21일 (월) 12:00 · 시작 전까지 바꿀 수 있습니다");
-  });
-
-  it("일시 지정형 시작 뒤에는 정한 시각만 보인다", () => {
-    const rows = byKey(
-      gameWith({ scheduleMode: SCHEDULE_MODE.fixed, confirmedAt: at(-0.5 * HOUR) }),
-    );
-    expect(rows.time.state).toBe(MANAGE_ROW_STATE.done);
-    expect(rows.time.href).toBeNull();
-    expect(rows.time.detail).toBe("9월 20일 (일) 11:30으로 정했습니다");
-  });
-
-  it("진행 중이고 확정 1명 이상이면 출석 확인 줄이 선택 시트를 연다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-0.5 * HOUR) }));
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.attendance.action).toBe(MANAGE_ROW_ACTION.endSession);
-    expect(rows.attendance.detail).toBe(
-      "세션이 진행 중입니다 · 불참한 참여자가 있으면 입력해 주세요",
-    );
-    expect(rows.attendance.note).toEqual([
-      "세션을 마치지 않으면 예정된 종료 시각에 세션이 끝난 것으로 봅니다.",
-      "종료 후 24시간 안에 입력하지 않으면 모두 참석으로 확정됩니다.",
-    ]);
-    expect(rows.attendance.href).toBeNull();
-    expect(rows.edit.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(rows.edit.detail).toBe("시작한 세션은 고칠 수 없습니다");
-    expect(rows.roster.state).toBe(MANAGE_ROW_STATE.open);
-  });
-
-  it("진행 중이어도 확정 0명이면 출석 확인은 잠긴다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-0.5 * HOUR), participants: [] }));
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(rows.attendance.detail).toBe("세션이 끝난 뒤에 쓸 수 있습니다");
-  });
-
-  it("끝나면 출석 확인이 열리고 명단·수정은 닫힌다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-DAY) }));
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.attendance.href).toBe("/games/game/attendance");
-    expect(rows.roster.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(rows.edit.state).toBe(MANAGE_ROW_STATE.locked);
-  });
-
-  it("끝났고 출석 명단이 없으면 확정 참여자가 없다고 잠근다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-DAY), participants: [] }));
-    expect(rows.attendance.detail).toBe("확정 참여자가 없습니다");
-  });
-
-  it("출석 기한이 지나면 확정 전이어도 정리한 것으로 본다", () => {
-    const rows = byKey(gameWith({ confirmedAt: at(-10 * DAY) }));
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.done);
-    expect(rows.attendance.detail).toBe("출석을 정리했습니다");
-  });
-
-  it("세션 후기는 시작 시각부터 열리고 받는 기한을 적는다", () => {
-    expect(byKey(coordinating).review.state).toBe(MANAGE_ROW_STATE.locked);
-    expect(byKey(gameWith({ confirmedAt: at(DAY) })).review.state).toBe(MANAGE_ROW_STATE.locked);
-    const rows = byKey(gameWith({ confirmedAt: at(-2 * DAY) }));
-    expect(rows.review.state).toBe(MANAGE_ROW_STATE.open);
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 25일까지 받습니다");
-  });
-
-  it("출석 확정 시각과 상관없이 후기 기한은 종료 판정 + 7일이다", () => {
-    const rows = byKey(
-      gameWith({
-        confirmedAt: at(-5 * DAY),
-        attendanceFirstConfirmedAt: at(-4 * DAY),
-        attendanceConfirmedAt: at(-DAY),
-      }),
-    );
-    expect(rows.review.detail).toBe("후기 0개가 달렸습니다 · 9월 22일까지 받습니다");
-  });
-
-  it("취소한 구인은 여섯 줄이 모두 잠긴다", () => {
-    const cancelled = gameWith({ cancelledAt: at(-HOUR), cancelKind: GAME_CANCEL_KIND.gm });
-    const rows = manageRows({ game: cancelled, reviewCount: 0, now: NOW });
-    expect(rows.every((row) => row.state === MANAGE_ROW_STATE.locked && !row.href)).toBe(true);
-    expect(rows.every((row) => row.detail === "취소한 구인입니다")).toBe(true);
-    expect(cancelRowLock({ game: cancelled, now: NOW })).toBe("취소한 구인입니다");
-  });
-
-  it("구인 취소 줄은 세션이 끝나기 전까지 열린다", () => {
-    expect(cancelRowLock({ game: gameWith({ confirmedAt: at(HOUR) }), now: NOW })).toBeUndefined();
-    expect(
-      cancelRowLock({ game: gameWith({ confirmedAt: at(-HOUR / 2) }), now: NOW }),
-    ).toBeUndefined();
-    expect(cancelRowLock({ game: gameWith({ confirmedAt: at(-HOUR) }), now: NOW })).toBe(
-      "끝난 세션은 취소할 수 없습니다",
-    );
-  });
-});
-
-describe("manageRows GM 마스터링 후기 버튼", () => {
-  const recorded = gameWith({
-    confirmedAt: at(-2 * DAY),
-    attendanceConfirmedAt: at(-DAY),
-    attendanceFirstConfirmedAt: at(-DAY),
-  });
-  const reviewRow = (gmReview: "write" | "view" | null) =>
-    manageRows({ game: recorded, reviewCount: 0, gmReview, now: NOW })[1]!;
-
-  it("쓸 수 있으면 마감일수를 단 쓰기 버튼을, 이미 썼으면 보기 버튼을 붙인다", () => {
-    expect(reviewRow("write").button).toMatchObject({
-      label: "마스터링 후기 쓰기",
-      solid: true,
-      caption: "후기 마감 D-5",
+    const overdue = gameWith({ endDate: at(-DAY) });
+    expect(rowOf(overdue, "time")).toMatchObject({
+      state: MANAGE_ROW_STATE.blocked,
+      detail: "조율 기한이 지났습니다",
     });
-    expect(reviewRow("view").button).toMatchObject({ label: "내 후기 보기", solid: false });
-    expect(reviewRow(null).button).toBeUndefined();
   });
-});
 
-describe("manageRows 진행 중 출석 확정", () => {
-  it("진행 중에 출석을 확정했다면 기존 확정됨 상태를 보인다", () => {
-    const rows = byKey(
-      gameWith({ confirmedAt: at(-0.5 * HOUR), attendanceConfirmedAt: at(-0.1 * HOUR) }),
-    );
-    expect(rows.attendance.state).toBe(MANAGE_ROW_STATE.done);
-    expect(rows.attendance.detail).toBe("출석을 정리했습니다");
-    expect(rows.attendance.action).toBeUndefined();
+  it("진행 중이고 확정 1명 이상이면 출석 입력과 세션 마치기가 열린다", () => {
+    const live = gameWith({
+      confirmedAt: at(-HOUR / 2),
+      scheduleMode: SCHEDULE_MODE.fixed,
+      endDate: at(-DAY),
+    });
+    expect(rowOf(live, "attendance")).toMatchObject({
+      state: MANAGE_ROW_STATE.open,
+      href: "/games/game/attendance",
+      detail: "참석·불참을 표시합니다",
+    });
+    expect(rowOf(live, "end")).toMatchObject({
+      state: MANAGE_ROW_STATE.open,
+      detail: "세션을 지금 마칩니다",
+      action: MANAGE_ROW_ACTION.endSession,
+    });
+    expect(rowOf(live, "edit").detail).toBe("시작한 세션은 고칠 수 없습니다");
+  });
+
+  it("진행 중이어도 확정 0명이면 출석 입력과 세션 마치기는 잠긴다", () => {
+    const empty = gameWith({
+      confirmedAt: at(-HOUR / 2),
+      scheduleMode: SCHEDULE_MODE.fixed,
+      participants: [],
+    });
+    expect(rowOf(empty, "attendance").detail).toBe("확정 참여자가 없습니다");
+    expect(rowOf(empty, "end")).toMatchObject({
+      state: MANAGE_ROW_STATE.locked,
+      detail: "확정 참여자가 없습니다",
+    });
+  });
+
+  it("세션 후기는 시작 뒤 열리고 개수를 보인다", () => {
+    const live = gameWith({ confirmedAt: at(-HOUR / 2), scheduleMode: SCHEDULE_MODE.fixed });
+    expect(rowOf(live, "review")).toMatchObject({
+      label: "세션 후기 보기",
+      detail: "아직 후기가 없습니다",
+      state: MANAGE_ROW_STATE.open,
+    });
+    expect(groupsOf(live, 2).review[0]?.detail).toBe("후기 2개");
+    expect(rowOf(coordinating, "review").detail).toBe("세션이 시작되면 열립니다");
+  });
+
+  it("마스터링 후기를 쓸 수 있으면 작성 줄을, 이미 썼으면 보기 줄을 더한다", () => {
+    const ended = gameWith({
+      confirmedAt: at(-2 * DAY),
+      scheduleMode: SCHEDULE_MODE.fixed,
+      endDate: at(-3 * DAY),
+    });
+    const writable = groupsOf(ended, 0, "write").review[1];
+    expect(writable).toMatchObject({
+      label: "마스터링 후기 작성하기",
+      href: "/games/game/review",
+      state: MANAGE_ROW_STATE.open,
+    });
+    expect(writable?.detail).toMatch(/까지 작성할 수 있습니다$/);
+    expect(groupsOf(ended, 0, "view").review[1]).toMatchObject({
+      label: "내 마스터링 후기 보기",
+      detail: "",
+    });
+    expect(groupsOf(ended, 0, null).review).toHaveLength(1);
+  });
+
+  it("취소한 구인은 모든 줄이 잠기고 후기는 한 줄만 남는다", () => {
+    const cancelled = gameWith({
+      cancelledAt: at(-HOUR),
+      cancelKind: GAME_CANCEL_KIND.gm,
+      confirmedAt: at(-2 * HOUR),
+    });
+    const groups = groupsOf(cancelled, 0, "write");
+    const rows = [...groups.progress, ...groups.management, ...groups.review];
+    expect(rows.every((row) => row.detail === "취소한 구인입니다")).toBe(true);
+    expect(rows.every((row) => row.state === MANAGE_ROW_STATE.locked)).toBe(true);
+    expect(groups.review.map((row) => row.label)).toEqual(["세션 후기"]);
   });
 });

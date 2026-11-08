@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Text, VStack } from "@roll-and-call/ui";
-import { Ban, ChevronRight } from "lucide-react";
+import { ChevronRight, CircleX } from "lucide-react";
 import { useState } from "react";
 
 import { IconTile } from "@/shared/ui";
@@ -29,7 +29,7 @@ export function CancelGameRow({ gameId, notifyCount, detail, lockedReason }: Can
         disabled={locked}
         onClick={() => setConfirming(true)}
       >
-        <IconTile icon={Ban} tone={iconTone} />
+        <IconTile icon={CircleX} tone={iconTone} />
         <VStack gap="025" render={<span />} className="min-w-0 flex-1 text-left">
           <Text typography="subtitle1" foreground={labelForeground}>
             구인 취소

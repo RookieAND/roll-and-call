@@ -17,7 +17,7 @@ import {
 import { GmOnlyNotice } from "@/features/auth";
 import { CancelGameRow } from "@/features/cancel-game";
 import { GameVisibilityRow, VISIBILITY_SWITCH_MESSAGE } from "@/features/make-game-private";
-import { canReopenGame, ReopenGameLink } from "@/features/reopen-game";
+import { canReopenGame } from "@/features/reopen-game";
 import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { reviewStatusOf } from "@/widgets/game-detail";
@@ -25,16 +25,26 @@ import { reviewStatusOf } from "@/widgets/game-detail";
 import { cancelRowDetail } from "../model/cancel-row-detail";
 import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageReviewButtonOf } from "../model/manage-review-button-of";
-import { manageRows } from "../model/manage-rows";
+import { manageRowGroups } from "../model/manage-rows";
+import { manageSessionInfo } from "../model/manage-session-info";
 import { manageSummary } from "../model/manage-summary";
+import { manageTimeline } from "../model/manage-timeline";
 import { ManageCancelNote } from "./manage-cancel-note";
 import { ManageDeadlineLine } from "./manage-deadline-line";
 import { ManageGameStat } from "./manage-game-stat";
+import { ManageGroup } from "./manage-group";
+import { ManageReopenSection } from "./manage-reopen-section";
 import { ManageRow } from "./manage-row";
+import { ManageSessionInfo } from "./manage-session-info";
+import { ManageTimeline } from "./manage-timeline";
 
 interface ManageGameViewProps {
   id: string;
 }
+
+const SCHEDULE_LABEL = "세션 일시";
+const SCHEDULE_KEY_LABELS = [SCHEDULE_LABEL, "확정 인원"];
+const ATTENDANCE_LABEL = "출석";
 
 export async function ManageGameView({ id }: ManageGameViewProps) {
   const server = await getCurrentServer();
@@ -69,8 +79,10 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     roster: game.participants,
   }).length;
   const { stage, stats, cancelNote, deadlineNote } = manageSummary({ game, responses });
+  const summaryStats = stats.some((stat) => stat.label === SCHEDULE_LABEL)
+    ? stats.filter((stat) => SCHEDULE_KEY_LABELS.includes(stat.label))
+    : stats;
   const canReopen = canReopenGame({ game, userId: user.id, serverId: server.id });
-  const showNextSessionHint = isNil(game.cancelledAt) && isSessionEnded(game);
   const reviewTarget = await getReviewDraftTarget({
     serverId: server.id,
     gameId: id,
@@ -85,71 +97,101 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     game.visibility === GAME_VISIBILITY.public && visibilityBlock
       ? VISIBILITY_SWITCH_MESSAGE[visibilityBlock]
       : null;
-  const rows = manageRows({ game, reviewCount: reviews.length, gmReview });
+  const groups = manageRowGroups({ game, reviewCount: reviews.length, gmReview });
+  const timeline = manageTimeline({
+    game,
+    attendance: stats.find((stat) => stat.label === ATTENDANCE_LABEL)?.value,
+  });
+  const sessionInfo = manageSessionInfo({ game, reviewCount: reviews.length });
+  const isCancelled = !isNil(game.cancelledAt);
+  const endAt = plannedEndAt(game);
+  const reviewFirst = isSessionEnded(game) && !isCancelled;
+
+  const progressGroup = (
+    <ManageGroup key="progress" title="세션 진행">
+      {groups.progress.map((row) => (
+        <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={endAt} />
+      ))}
+    </ManageGroup>
+  );
+  const managementGroup = (
+    <ManageGroup key="management" title="구인 관리">
+      {groups.management.map((row) => (
+        <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={endAt} />
+      ))}
+      <GameVisibilityRow
+        gameId={id}
+        visibility={game.visibility}
+        blockedReason={visibilityBlockedReason}
+      />
+      <CancelGameRow
+        gameId={id}
+        notifyCount={notifyCount}
+        detail={cancelRowDetail({ game, notifyCount })}
+        lockedReason={cancelRowLock({ game })}
+      />
+    </ManageGroup>
+  );
+  const reviewGroup = (
+    <ManageGroup key="review" title="후기">
+      {groups.review.map((row) => (
+        <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={endAt} />
+      ))}
+    </ManageGroup>
+  );
+  const groupNodes = reviewFirst
+    ? [reviewGroup, progressGroup, managementGroup]
+    : [progressGroup, managementGroup, reviewGroup];
 
   return (
     <PageShell appBar={<AppBar back={`/games/${id}`} title="운영 관리" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <Container
           size="sm"
-          className="px-0 desktop:grid desktop:max-w-none desktop:grid-cols-2 desktop:items-start"
+          className="flex flex-col gap-200 px-200 pt-200 pb-200 desktop:grid desktop:max-w-none desktop:grid-cols-[minmax(0,1fr)_320px] desktop:items-start desktop:p-200"
         >
-          <div className="px-200 pt-200">
-            <Card.Root padding="md" radius={600}>
-              <HStack align="start" gap="100">
-                <Text
-                  typography="heading3"
-                  weight="extrabold"
-                  render={<h2 />}
-                  className="min-w-0 flex-1 truncate"
-                >
-                  {game.title}
-                </Text>
-                <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
-              </HStack>
-              <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
-                {isNil(cancelNote) ? (
-                  stats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
-                ) : (
-                  <ManageCancelNote note={cancelNote} />
-                )}
-              </HStack>
-              {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
-              {canReopen && (
-                <div className="mt-150">
-                  <ReopenGameLink gameId={id} variant="solid" />
-                </div>
-              )}
-            </Card.Root>
+          <div className="contents desktop:flex desktop:min-w-0 desktop:flex-col desktop:gap-200">
+            <div className="order-1">
+              <Card.Root padding="md" radius={600}>
+                <HStack align="start" gap="100">
+                  <Text
+                    typography="heading3"
+                    weight="extrabold"
+                    render={<h2 />}
+                    className="min-w-0 flex-1 truncate"
+                  >
+                    {game.title}
+                  </Text>
+                  <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
+                </HStack>
+                <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
+                  {isNil(cancelNote) ? (
+                    summaryStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
+                  ) : (
+                    <ManageCancelNote note={cancelNote} />
+                  )}
+                </HStack>
+                {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
+              </Card.Root>
+            </div>
+            <div className="order-3 flex flex-col gap-200">{groupNodes}</div>
           </div>
 
-          <div className="p-200">
-            <Card.Root
-              radius={600}
-              padding="none"
-              className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
-            >
-              <GameVisibilityRow
-                gameId={id}
-                visibility={game.visibility}
-                blockedReason={visibilityBlockedReason}
-              />
-              {rows.map((row) => (
-                <ManageRow key={row.key} row={row} gameId={id} plannedEndAt={plannedEndAt(game)} />
-              ))}
-              <CancelGameRow
-                gameId={id}
-                notifyCount={notifyCount}
-                detail={cancelRowDetail({ game, notifyCount })}
-                lockedReason={cancelRowLock({ game })}
-              />
-            </Card.Root>
-            {showNextSessionHint && (
-              <Text typography="body4" foreground="hint" className="mt-150 px-100">
-                다음 세션은 새 구인을 열고 참여자로 확정해 초대해 주세요
-              </Text>
+          <aside className="contents desktop:flex desktop:min-w-0 desktop:flex-col desktop:gap-150">
+            {!isCancelled && (
+              <div className="order-1 hidden desktop:block">
+                <ManageTimeline steps={timeline} />
+              </div>
             )}
-          </div>
+            {canReopen && (
+              <div className="order-2">
+                <ManageReopenSection gameId={id} />
+              </div>
+            )}
+            <div className="order-3 hidden desktop:block">
+              <ManageSessionInfo info={sessionInfo} />
+            </div>
+          </aside>
         </Container>
       </div>
     </PageShell>

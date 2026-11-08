@@ -3,18 +3,24 @@ import { isNil } from "es-toolkit";
 
 import { countConfirmed, isSessionEnded, isSessionStarted } from "@/entities/game";
 import { reviewWriteDeadline } from "@/entities/review";
-import { formatDate } from "@/shared/lib";
 
 import { attendanceRow } from "./attendance-row";
-import { gmReviewButton } from "./gm-review-button";
+import { endSessionRow } from "./end-session-row";
+import { gmReviewRow } from "./gm-review-button";
 import type { ManageReviewButton } from "./manage-review-button";
 import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
 import { timeRow } from "./time-row";
 
 export const CANCELLED_ROW_DETAIL = "취소한 구인입니다";
 
+export type ManageRowGroups = {
+  progress: ManageRow[];
+  management: ManageRow[];
+  review: ManageRow[];
+};
+
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
-export function manageRows({
+export function manageRowGroups({
   game,
   reviewCount,
   gmReview = null,
@@ -24,68 +30,94 @@ export function manageRows({
   reviewCount: number;
   gmReview?: ManageReviewButton | null;
   now?: Date;
-}): ManageRow[] {
+}): ManageRowGroups {
   const ended = isSessionEnded(game, now);
   const started = isSessionStarted(game, now);
-  const open = { state: MANAGE_ROW_STATE.open } as const;
-  const locked = { state: MANAGE_ROW_STATE.locked, href: null } as const;
+  const confirmedCount = countConfirmed(game.participants);
 
-  const attendance = attendanceRow({
-    game,
-    confirmedCount: countConfirmed(game.participants),
-    now,
-  });
+  const progress = [
+    timeRow({ game, now }),
+    attendanceRow({ game, confirmedCount, now }),
+    endSessionRow({ game, confirmedCount, now }),
+  ];
 
-  const reviewBase = {
-    key: "review",
-    icon: "message",
-    label: "세션 후기",
-    href: `/games/${game.id}/reviews`,
-  } as const;
-  const reviewDeadline = started ? reviewWriteDeadline(game) : null;
-  const review: ManageRow = !reviewDeadline
+  const reviewBase: ManageRow = started
     ? {
-        ...reviewBase,
-        ...locked,
-        detail: "세션이 시작되면 열립니다",
+        key: "review",
+        icon: "message",
+        label: "세션 후기 보기",
+        detail: reviewCount > 0 ? `후기 ${reviewCount}개` : "아직 후기가 없습니다",
+        href: `/games/${game.id}/reviews`,
+        state: MANAGE_ROW_STATE.open,
       }
     : {
-        ...reviewBase,
-        ...open,
-        detail:
-          reviewDeadline.getTime() > now.getTime()
-            ? `후기 ${reviewCount}개가 달렸습니다 · ${formatDate(reviewDeadline)}까지 받습니다`
-            : `후기 ${reviewCount}개가 달렸습니다`,
-        button: gmReviewButton({ gmReview, gameId: game.id, deadline: reviewDeadline, now }),
+        key: "review",
+        icon: "message",
+        label: "세션 후기",
+        detail: "세션이 시작되면 열립니다",
+        href: null,
+        state: MANAGE_ROW_STATE.locked,
       };
+  const reviewDeadline = started ? reviewWriteDeadline(game) : null;
+  const masteringRow = reviewDeadline
+    ? gmReviewRow({ gmReview, gameId: game.id, deadline: reviewDeadline })
+    : null;
+  const review = masteringRow ? [reviewBase, masteringRow] : [reviewBase];
 
-  const rosterBase = { key: "roster", icon: "users", label: "참여자 관리" } as const;
-  const roster: ManageRow = ended
-    ? { ...rosterBase, ...locked, detail: "끝난 세션은 명단을 고칠 수 없습니다" }
-    : {
-        ...rosterBase,
-        ...open,
-        detail: "확정·대기 옮기기, 참여자 추가, 내보내기를 합니다",
-        href: `/games/${game.id}/participants`,
-      };
+  const management: ManageRow[] = [
+    ended
+      ? {
+          key: "roster",
+          icon: "users",
+          label: "참여자 관리",
+          detail: "끝난 세션은 명단을 고칠 수 없습니다",
+          href: null,
+          state: MANAGE_ROW_STATE.locked,
+        }
+      : {
+          key: "roster",
+          icon: "users",
+          label: "참여자 관리",
+          detail: "명단 옮기기·추가·내보내기",
+          href: `/games/${game.id}/participants`,
+          state: MANAGE_ROW_STATE.open,
+        },
+    started
+      ? {
+          key: "edit",
+          icon: "pencil",
+          label: "구인 수정",
+          detail: "시작한 세션은 고칠 수 없습니다",
+          href: null,
+          state: MANAGE_ROW_STATE.locked,
+        }
+      : {
+          key: "edit",
+          icon: "pencil",
+          label: "구인 수정",
+          detail: "제목·소개·이미지·모집 조건을 고칩니다",
+          href: `/games/${game.id}/edit`,
+          state: MANAGE_ROW_STATE.open,
+        },
+  ];
 
-  const editBase = { key: "edit", icon: "pencil", label: "구인 수정" } as const;
-  const edit: ManageRow = started
-    ? { ...editBase, ...locked, detail: "시작한 세션은 고칠 수 없습니다" }
-    : {
-        ...editBase,
-        ...open,
-        detail: "구인 글의 제목과 소개, 이미지, 모집 조건을 고칩니다",
-        href: `/games/${game.id}/edit`,
-      };
+  if (isNil(game.cancelledAt)) return { progress, management, review };
+  return {
+    progress: progress.map((row) =>
+      cancelledRow(row, row.key === "time" ? "세션 시간 정하기" : row.label),
+    ),
+    management: management.map((row) => cancelledRow(row, row.label)),
+    review: [cancelledRow(reviewBase, "세션 후기")],
+  };
+}
 
-  const rows = [attendance, review, timeRow({ game, now }), roster, edit];
-  if (isNil(game.cancelledAt)) return rows;
-  return rows.map((row) => ({
+function cancelledRow(row: ManageRow, label: string): ManageRow {
+  return {
     key: row.key,
-    icon: row.icon === "check" ? "clock" : row.icon,
-    label: row.key === "time" ? "세션 시간 정하기" : row.label,
-    ...locked,
+    icon: row.icon,
+    label,
     detail: CANCELLED_ROW_DETAIL,
-  }));
+    href: null,
+    state: MANAGE_ROW_STATE.locked,
+  };
 }

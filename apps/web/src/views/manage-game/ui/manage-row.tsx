@@ -3,9 +3,12 @@ import { cva } from "class-variance-authority";
 
 import { ServerLink } from "@/shared/ui";
 
-import { MANAGE_ROW_ACTION, type ManageRow as Row } from "../model/manage-row-state";
-import { AttendanceRowButton } from "./attendance-row-button";
-import { ManageRowButton } from "./manage-row-button";
+import {
+  MANAGE_ROW_ACTION,
+  MANAGE_ROW_STATE,
+  type ManageRow as Row,
+} from "../model/manage-row-state";
+import { ManageEndSessionRow } from "./manage-end-session-row";
 import { ManageRowContent } from "./manage-row-content";
 
 const manageRow = cva("min-h-16 px-175 py-150", {
@@ -24,30 +27,25 @@ interface ManageRowProps {
 export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
   if (row.action === MANAGE_ROW_ACTION.endSession && plannedEndAt) {
     return (
-      <AttendanceRowButton gameId={gameId} plannedEndAt={plannedEndAt}>
+      <ManageEndSessionRow gameId={gameId} plannedEndAt={plannedEndAt}>
         <ManageRowContent row={row} chevron />
-      </AttendanceRowButton>
+      </ManageEndSessionRow>
     );
   }
 
   const container = row.href ? <ServerLink path={row.href} /> : <div />;
 
-  const content = (
+  return (
     <HStack
       align="center"
       gap="150"
       render={container}
-      className={manageRow({ interactive: Boolean(row.href), blocked: row.state === "blocked" })}
+      className={manageRow({
+        interactive: Boolean(row.href),
+        blocked: row.state === MANAGE_ROW_STATE.blocked,
+      })}
     >
       <ManageRowContent row={row} chevron={Boolean(row.href)} />
     </HStack>
-  );
-  if (!row.button) return content;
-
-  return (
-    <div>
-      {content}
-      <ManageRowButton button={row.button} />
-    </div>
   );
 }
