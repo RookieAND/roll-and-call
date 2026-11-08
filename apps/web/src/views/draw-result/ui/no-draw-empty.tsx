@@ -15,7 +15,7 @@ export function NoDrawEmpty({ gameId }: NoDrawEmptyProps) {
           <Text typography="subtitle1" render={<h2 />}>
             추첨 없이 확정된 구인입니다
           </Text>
-          <Text typography="body3" foreground="muted" render={<p />}>
+          <Text typography="body2" foreground="muted" render={<p />}>
             신청자가 모두 확정되어 추첨을 하지 않았습니다.
             <br />
             추첨 결과는 추첨을 한 구인에만 있습니다.
