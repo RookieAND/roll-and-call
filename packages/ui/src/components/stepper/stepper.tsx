@@ -13,7 +13,7 @@ const frame = cva(
   {
     variants: {
       invalid: {
-        true: "border-[1.5px] border-danger-400 bg-danger-50 focus-within:ring-danger-600",
+        true: "border-danger-400 bg-danger-50 focus-within:ring-danger-600",
         false: "border-input focus-within:ring-focus",
       },
     },

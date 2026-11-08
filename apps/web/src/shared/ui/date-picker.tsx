@@ -36,8 +36,8 @@ export function DatePicker({
   const [open, setOpen] = useState(false);
   const fieldAria = useFieldControlAria({ invalid });
   const toneClass = invalid
-    ? "border-[1.5px] border-danger-400 bg-danger-50 focus:ring-danger-600"
-    : "border-input focus:border-primary-500 focus:ring-focus";
+    ? "border-danger-400 bg-danger-50 focus:ring-danger-600"
+    : "border-input focus:ring-focus";
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
