@@ -78,21 +78,16 @@ export function ReviewPhotosField({ photos }: ReviewPhotosFieldProps) {
           />
         ))}
       </Grid>
-      {photos.error ? (
+      {photos.error && (
         <Callout.Root colorPalette="danger" size="sm">
           <Callout.Icon />
           <Callout.Description>{photos.error}</Callout.Description>
         </Callout.Root>
-      ) : (
-        <Text typography="body4" foreground="hint" render={<p />}>
-          장당 5MB까지 올릴 수 있습니다.
-        </Text>
       )}
-      {photos.items.length > 1 && (
-        <Text typography="body4" foreground="hint" render={<p />}>
-          길게 눌러 끌면 순서가 바뀝니다.
-        </Text>
-      )}
+      <Text typography="body4" foreground="hint" render={<p />}>
+        <span className="block">이미지는 장당 5MB까지 업로드할 수 있습니다.</span>
+        <span className="block">이미지를 길게 눌러 드래그하면 순서를 바꿀 수 있습니다.</span>
+      </Text>
       <input
         ref={inputRef}
         type="file"

@@ -168,9 +168,18 @@ export function ReviewForm({
             {draft.restored && (
               <Callout.Root colorPalette="primary" size="sm">
                 <Callout.Icon />
-                <Callout.Description>쓰던 후기를 불러왔습니다</Callout.Description>
+                <Callout.Title>쓰던 후기를 불러왔습니다</Callout.Title>
+                <Callout.Description>
+                  마지막에 임시 저장한 내용이 채워져 있습니다.
+                </Callout.Description>
                 <Callout.Action>
-                  <Button type="button" variant="ghost" size="sm" onClick={startOver}>
+                  <Button
+                    type="button"
+                    variant="solid"
+                    colorPalette="primary"
+                    size="sm"
+                    onClick={startOver}
+                  >
                     새로 쓰기
                   </Button>
                 </Callout.Action>
@@ -194,7 +203,7 @@ export function ReviewForm({
                 id="reviewBody"
                 value={body}
                 onChange={changeBody}
-                placeholder={`${REVIEW_BODY_MIN_LENGTH}자 이상 적어 주세요`}
+                placeholder={`어떤 세션이었는지 적어 주세요. ${REVIEW_BODY_MIN_LENGTH}자 이상 적어야 남길 수 있습니다.`}
                 limit={REVIEW_BODY_MAX_LENGTH}
                 invalid={!isNull(bodyError)}
               />
@@ -208,7 +217,8 @@ export function ReviewForm({
               <Callout.Root colorPalette="danger" size="sm">
                 <Callout.Icon />
                 <Callout.Description>
-                  등록하지 못했습니다. 쓴 내용은 저장되어 있습니다.
+                  등록하지 못했습니다.
+                  <br />쓴 내용은 저장되어 있습니다.
                 </Callout.Description>
               </Callout.Root>
             )}
@@ -216,6 +226,17 @@ export function ReviewForm({
 
           <FloatingBar.Root elevated={false}>
             <FloatingBar.Content>
+              {photos.uploading && (
+                <Text
+                  typography="body4"
+                  foreground="hint"
+                  render={<p />}
+                  role="status"
+                  className="mb-075 text-center"
+                >
+                  사진을 올리는 중입니다.
+                </Text>
+              )}
               <Button
                 type="submit"
                 size="lg"
@@ -225,17 +246,6 @@ export function ReviewForm({
               >
                 {submitLabel}
               </Button>
-              {photos.uploading && (
-                <Text
-                  typography="body4"
-                  foreground="hint"
-                  render={<p />}
-                  role="status"
-                  className="mt-075 text-center"
-                >
-                  사진을 올리는 중입니다.
-                </Text>
-              )}
             </FloatingBar.Content>
             <FloatingBar.Spacer />
           </FloatingBar.Root>
@@ -249,7 +259,7 @@ export function ReviewForm({
                 ? "고친 내용과 새로 올린 사진은 지워집니다."
                 : "글은 저장되고 사진은 지워집니다."
             }
-            cancelLabel={editing ? "이어서 고치기" : "이어서 쓰기"}
+            cancelLabel="이어서 쓰기"
             confirmLabel="나가기"
             onConfirm={leave}
           />
