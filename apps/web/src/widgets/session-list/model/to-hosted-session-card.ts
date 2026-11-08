@@ -3,6 +3,9 @@ import {
   GAME_STATUS,
   gameStatusColor,
   gameStatusLabel,
+  isSessionInProgress,
+  MANAGE_STAGE_LABEL,
+  MANAGE_STAGE_TONE,
   type SessionGame,
 } from "@/entities/game";
 
@@ -13,6 +16,7 @@ import { hostScheduleIcon } from "./host-schedule-icon";
 import { hostScheduleTone } from "./host-schedule-tone";
 import { hostSessionChip } from "./host-session-chip";
 import { hostTodo } from "./host-todo";
+import { inProgressSchedule } from "./in-progress-schedule";
 import { type SessionCardBase, type SessionContext } from "./session-card-model";
 
 export function toHostedSessionCard({
@@ -42,6 +46,7 @@ export function toHostedSessionCard({
     ? null
     : hostTodo({ game, facts, responses, now: context.now ?? new Date() });
   const gmTodo = !facts.awaitingResult && (todo?.blocked ?? false);
+  const inProgress = !facts.awaitingResult && isSessionInProgress(game, context.now ?? new Date());
   const timeShown = timeSet && !facts.awaitingResult;
   const scheduleTone = hostScheduleTone({ gmTodo, timeSet: timeShown });
   const scheduleIcon = hostScheduleIcon({ gmTodo, timeSet: timeShown });
@@ -50,9 +55,11 @@ export function toHostedSessionCard({
     ...base,
     urgent: gmTodo,
     chip: hostChip,
-    badge: gameStatusLabel[badgeStatus],
-    badgeColor: gameStatusColor[badgeStatus],
-    schedule: hostSchedule({ facts, endDate: game.endDate, readOnly: context.readOnly }),
+    badge: inProgress ? MANAGE_STAGE_LABEL.inProgress : gameStatusLabel[badgeStatus],
+    badgeColor: inProgress ? MANAGE_STAGE_TONE.inProgress : gameStatusColor[badgeStatus],
+    schedule: inProgress
+      ? inProgressSchedule({ game, facts })
+      : hostSchedule({ facts, endDate: game.endDate, readOnly: context.readOnly }),
     scheduleTone,
     scheduleIcon,
     gm: null,

@@ -472,3 +472,15 @@ describe("남의 세션 기록 카드(readOnly)", () => {
     expect(card).toMatchObject({ hidden: true, title: "", schedule: "", gm: null });
   });
 });
+
+describe("운영 카드 진행 중", () => {
+  it("시작했고 끝나지 않은 확정 세션은 진행 중 칩과 종료 예정 시각을 보인다", () => {
+    const card = hostCard({
+      confirmedAt: new Date("2026-09-15T11:00:00+09:00"),
+      endDate: at(-3),
+      participants: [other, other, other, other],
+    });
+    expect(card.badge).toBe("진행 중");
+    expect(card.schedule).toBe("오늘 11:00 시작 · 14:00 종료 예정");
+  });
+});
