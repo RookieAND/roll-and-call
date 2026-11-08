@@ -24,7 +24,7 @@ export function GameAttendanceSkeleton() {
             </HStack>
             <VStack gap="200">
               <VStack gap="100">
-                <Grid cols={2} gap="100">
+                <Grid cols={2} gap="100" className="desktop:hidden">
                   <Skeleton height={68} rounded={500} />
                   <Skeleton height={68} rounded={500} />
                 </Grid>
