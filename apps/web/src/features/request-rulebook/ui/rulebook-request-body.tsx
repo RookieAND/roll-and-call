@@ -1,9 +1,9 @@
 "use client";
 
 import { RULEBOOK_REQUEST_MAX_BOOKS } from "@roll-and-call/database/rulebooks/model";
-import { Button, Field, Text, TextInput, VStack } from "@roll-and-call/ui";
-import { Plus } from "lucide-react";
-import { useRef, useState, type ReactNode } from "react";
+import { Button, Field, IconButton, Text, TextInput, VStack } from "@roll-and-call/ui";
+import { Plus, Trash2 } from "lucide-react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 import { toast, useAction } from "@/shared/ui";
 
@@ -39,21 +39,25 @@ export function RulebookRequestBody({
   renderLayout,
 }: RulebookRequestBodyProps) {
   const [drafts, setDrafts] = useState<RequestDraft[]>([newRequestDraft("first", initialName)]);
-  const [activeId, setActiveId] = useState("first");
   const [errors, setErrors] = useState<RequestItemError[]>([]);
   const [submitError, setSubmitError] = useState("");
   const editorRoot = useRef<HTMLDivElement>(null);
+  const addedBookId = useRef<string | null>(null);
   const { pending, run } = useAction();
-  const active = drafts.find((draft) => draft.clientId === activeId)!;
-  const activeIndex = drafts.findIndex((draft) => draft.clientId === activeId);
   const duplicates = duplicateRequestErrors(drafts, pendingRequestNames);
   const allErrors = [...errors, ...duplicates];
-  const activeError = allErrors.find((error) => error.clientId === activeId)?.message;
-
-  const selectBook = (id: string) => {
-    setActiveId(id);
-    editorRoot.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+  const navigateToBook = (id: string, focusInput = false) => {
+    const section = editorRoot.current?.querySelector<HTMLElement>(`#request-book-${id}`);
+    section?.scrollIntoView({ block: "start", behavior: "smooth" });
+    if (focusInput)
+      section?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+    else section?.focus({ preventScroll: true });
   };
+  useLayoutEffect(() => {
+    if (!addedBookId.current) return;
+    navigateToBook(addedBookId.current, true);
+    addedBookId.current = null;
+  }, [drafts.length]);
   const showErrors = (itemErrors: RequestItemError[], message: string) => {
     setErrors(itemErrors);
     setSubmitError(message);
@@ -61,13 +65,12 @@ export function RulebookRequestBody({
       itemErrors.some((error) => error.clientId === draft.clientId),
     );
     if (first) {
-      selectBook(first.clientId);
-      editorRoot.current?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+      navigateToBook(first.clientId, true);
     }
   };
-  const changeActive = (patch: Partial<Omit<RequestDraft, "clientId">>) => {
+  const changeBook = (id: string, patch: Partial<Omit<RequestDraft, "clientId">>) => {
     setDrafts((current) =>
-      current.map((draft) => (draft.clientId === activeId ? { ...draft, ...patch } : draft)),
+      current.map((draft) => (draft.clientId === id ? { ...draft, ...patch } : draft)),
     );
     // 한 책의 이름·판본을 고치면 다른 책의 중복 오류도 해소될 수 있다.
     setErrors([]);
@@ -75,22 +78,23 @@ export function RulebookRequestBody({
   };
   const addBook = () => {
     if (pending || drafts.length >= RULEBOOK_REQUEST_MAX_BOOKS) return;
-    const parsed = rulebookRequestSchema.safeParse(active);
-    const error = parsed.success
-      ? duplicates.find((entry) => entry.clientId === activeId)?.message
-      : parsed.error.issues[0]?.message;
-    if (error) {
-      showErrors(
-        [{ clientId: activeId, message: error }],
-        "작성 중인 룰북 정보를 먼저 확인해 주세요.",
-      );
-      return;
+    for (const draft of drafts) {
+      const parsed = rulebookRequestSchema.safeParse(draft);
+      const error = parsed.success
+        ? duplicates.find((entry) => entry.clientId === draft.clientId)?.message
+        : parsed.error.issues[0]?.message;
+      if (error) {
+        showErrors(
+          [{ clientId: draft.clientId, message: error }],
+          "작성 중인 룰북 정보를 먼저 확인해 주세요.",
+        );
+        return;
+      }
     }
     const draft = newRequestDraft(crypto.randomUUID());
+    addedBookId.current = draft.clientId;
     setDrafts((current) => [...current, draft]);
     setSubmitError("");
-    selectBook(draft.clientId);
-    editorRoot.current?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
   };
   const submit = () => {
     if (pending) return;
@@ -123,42 +127,72 @@ export function RulebookRequestBody({
       <fieldset disabled={pending} className="m-0 min-w-0 border-0 p-0">
         <VStack gap="250">
           {intro}
-          <VStack gap="175">
-            <Text typography="subtitle1" render={<h2 />}>
-              {activeIndex + 1}번째 룰북
-            </Text>
-            <Field.Root label="룰북 이름" htmlFor="request-book-name" required>
-              <TextInput
-                id="request-book-name"
-                placeholder="예: 크툴루 나우"
-                maxLength={100}
-                value={active.name}
-                invalid={Boolean(activeError && !active.name.trim())}
-                onChange={(event) => changeActive({ name: event.target.value })}
-              />
-            </Field.Root>
-            <RequestDetailFields
-              key={activeId}
-              id="request-book"
-              value={active}
-              categoryNames={categoryNames}
-              onChange={changeActive}
-            />
-            {activeError && (
-              <Text
-                id="request-book-error"
-                role="alert"
-                typography="body4"
-                foreground="danger"
-                render={<p />}
+          {drafts.map((draft, index) => {
+            const id = `request-book-${draft.clientId}`;
+            const error = allErrors.find((entry) => entry.clientId === draft.clientId)?.message;
+            return (
+              <section
+                key={draft.clientId}
+                id={id}
+                tabIndex={-1}
+                aria-labelledby={`${id}-heading`}
+                className="scroll-mt-[calc(var(--rc-size-appbar)+1rem)] border-t border-gray-100 pt-200 outline-none first-of-type:border-t-0 first-of-type:pt-0 desktop:scroll-mt-200"
               >
-                {activeError}
-              </Text>
-            )}
-            <Text typography="body4" foreground="muted">
-              정확히 모르는 정보는 비워 두셔도 괜찮아요.
-            </Text>
-          </VStack>
+                <VStack gap="175">
+                  <div className="flex items-center justify-between gap-100">
+                    <Text id={`${id}-heading`} typography="subtitle1" render={<h2 />}>
+                      {index + 1}번째 룰북
+                    </Text>
+                    {drafts.length > 1 && (
+                      <IconButton
+                        size="sm"
+                        aria-label={`${index + 1}번째 룰북 삭제`}
+                        onClick={() => {
+                          setDrafts((current) =>
+                            current.filter((book) => book.clientId !== draft.clientId),
+                          );
+                          setErrors([]);
+                          setSubmitError("");
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </IconButton>
+                    )}
+                  </div>
+                  <Field.Root label="룰북 이름" htmlFor={`${id}-name`} required>
+                    <TextInput
+                      id={`${id}-name`}
+                      placeholder="예: 크툴루 나우"
+                      maxLength={100}
+                      value={draft.name}
+                      invalid={Boolean(error && !draft.name.trim())}
+                      onChange={(event) => changeBook(draft.clientId, { name: event.target.value })}
+                    />
+                  </Field.Root>
+                  <RequestDetailFields
+                    id={id}
+                    value={draft}
+                    categoryNames={categoryNames}
+                    onChange={(patch) => changeBook(draft.clientId, patch)}
+                  />
+                  {error && (
+                    <Text
+                      id={`${id}-error`}
+                      role="alert"
+                      typography="body4"
+                      foreground="danger"
+                      render={<p />}
+                    >
+                      {error}
+                    </Text>
+                  )}
+                  <Text typography="body4" foreground="muted">
+                    정확히 모르는 정보는 비워 두셔도 괜찮아요.
+                  </Text>
+                </VStack>
+              </section>
+            );
+          })}
           <div className="border-t border-gray-100 pt-200">
             <Button
               variant="outline"
@@ -177,19 +211,10 @@ export function RulebookRequestBody({
   const list = (
     <RequestBookList
       drafts={drafts}
-      activeId={activeId}
       errors={allErrors}
       pending={pending}
       submitError={submitError}
-      onSelect={selectBook}
-      onRemove={(id) => {
-        if (pending || drafts.length === 1) return;
-        const remaining = drafts.filter((draft) => draft.clientId !== id);
-        setDrafts(remaining);
-        setErrors([]);
-        setSubmitError("");
-        if (id === activeId) selectBook(remaining[0]!.clientId);
-      }}
+      onNavigate={navigateToBook}
       onSubmit={submit}
     />
   );
