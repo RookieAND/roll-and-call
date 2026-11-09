@@ -53,11 +53,24 @@ export const rulebookRequestsSchema = z.object({
 
 export type RulebookRequestsInput = z.infer<typeof rulebookRequestsSchema>;
 export type RequestItemError = { clientId: string; message: string };
-export type RequestDetails = Omit<RulebookRequestValues, "name">;
-export type RequestDraft = RulebookRequestsInput["items"][number];
+export type RequestDefaults = Omit<RulebookRequestValues, "name">;
+export type RequestDraft = { clientId: string; name: string; overrides: Partial<RequestDefaults> };
+export const EMPTY_REQUEST_DEFAULTS: RequestDefaults = {
+  category: "",
+  edition: "",
+  kind: UNKNOWN,
+  link: "",
+};
 
-export function newRequestDraft(clientId: string, name = ""): RequestDraft {
-  return { clientId, name, category: "", edition: "", kind: UNKNOWN, link: "" };
+export function resolveRequestDraft(draft: RequestDraft, defaults: RequestDefaults) {
+  return { ...defaults, ...draft.overrides, name: draft.name, clientId: draft.clientId };
+}
+
+export function requestNamesFromText(text: string) {
+  return text
+    .split(/\r?\n/)
+    .map((name) => name.trim())
+    .filter(Boolean);
 }
 
 export function duplicateRequestErrors(

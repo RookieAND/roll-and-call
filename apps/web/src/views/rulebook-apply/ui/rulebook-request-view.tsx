@@ -35,10 +35,19 @@ export async function RulebookRequestView({ query }: RulebookRequestViewProps) {
   const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
   if (data.sanction) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
   return (
-    <RulebookRequestScreen
-      categoryNames={uniq(data.rulebooks.map((rulebook) => rulebook.categoryName))}
-      pendingRequestNames={data.pendingRequestNames}
-      query={query}
-    />
+    <PageShell
+      readable
+      appBar={
+        <AppBar back="/me/rulebooks/apply?step=books" title="룰북 추가 요청" heading={false} />
+      }
+    >
+      <div className={DESKTOP_CARD_CLASS}>
+        <RulebookRequestScreen
+          categoryNames={uniq(data.rulebooks.map((rulebook) => rulebook.categoryName))}
+          pendingRequestNames={data.pendingRequestNames}
+          query={query}
+        />
+      </div>
+    </PageShell>
   );
 }
