@@ -1,3 +1,4 @@
+import { GAME_VISIBILITY } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
 import { CONFIRMED_LEAVE_BLOCK, confirmedLeaveBlock } from "./confirmed-leave-block";
@@ -22,6 +23,7 @@ const firstCome: LeaveGame = {
   maxPlayers: 4,
   playMinutes: 180,
   endedAt: null,
+  visibility: GAME_VISIBILITY.public,
 };
 const lottery: LeaveGame = { ...firstCome, recruitMethod: RECRUIT_METHOD.lottery };
 
@@ -59,6 +61,11 @@ describe("confirmedLeaveBlock", () => {
     expect(leave(firstCome, { confirmedCount: 4, waitingCount: 0 })).toBe(
       CONFIRMED_LEAVE_BLOCK.full,
     );
+  });
+
+  it("지정 모집은 정원이 차고 대기자가 없어도 시작 전까지 취소할 수 있다", () => {
+    const designated = { ...firstCome, visibility: GAME_VISIBILITY.private };
+    expect(leave(designated, { confirmedCount: 4, waitingCount: 0 })).toBeNull();
   });
 
   it("정원이 찼어도 대기자가 있으면 취소할 수 있다", () => {
