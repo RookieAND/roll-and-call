@@ -69,7 +69,8 @@ export function RulebookRequestBody({
     setDrafts((current) =>
       current.map((draft) => (draft.clientId === activeId ? { ...draft, ...patch } : draft)),
     );
-    setErrors((current) => current.filter((error) => error.clientId !== activeId));
+    // 한 책의 이름·판본을 고치면 다른 책의 중복 오류도 해소될 수 있다.
+    setErrors([]);
     setSubmitError("");
   };
   const addBook = () => {
@@ -193,7 +194,7 @@ export function RulebookRequestBody({
         if (pending || drafts.length === 1) return;
         const remaining = drafts.filter((draft) => draft.clientId !== id);
         setDrafts(remaining);
-        setErrors((current) => current.filter((error) => error.clientId !== id));
+        setErrors([]);
         setSubmitError("");
         if (id === activeId) selectBook(remaining[0]!.clientId);
       }}
