@@ -2,14 +2,17 @@
 
 import { useEffect } from "react";
 
+import { AUTH_ERROR_MESSAGE, type AuthError } from "@/shared/lib";
 import { toast } from "@/shared/ui";
 
-const MESSAGE = "디스코드 로그인을 마치지 못했습니다. 다시 시도해 주세요.";
+interface JoinAuthErrorNoticeProps {
+  error: AuthError;
+}
 
-export function JoinAuthErrorNotice() {
+export function JoinAuthErrorNotice({ error }: JoinAuthErrorNoticeProps) {
   // toast id가 문구라 StrictMode에서 두 번 불려도 한 번만 보인다.
   useEffect(() => {
-    toast.danger(MESSAGE);
-  }, []);
+    toast.danger(AUTH_ERROR_MESSAGE[error]);
+  }, [error]);
   return null;
 }

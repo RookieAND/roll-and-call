@@ -1,16 +1,17 @@
 import { serverPath } from "@roll-and-call/app-kit/lib";
 import { isServerSlug } from "@roll-and-call/database/servers/model";
 
+import { AUTH_ERROR, type AuthError } from "./auth-error";
 import { serverJoinPath } from "./server-join-path";
 
 const AUTH_ERROR_PARAM = "auth_error";
 const BASE = "http://localhost";
 
 // 로그인에 실패하면 출발한 곳에서 안내한다(D105). 서버 화면은 비로그인이 머물 수 없어 그 서버 가입 화면으로 보내고, 원래 주소는 next로 남긴다.
-export function authFailurePath(next: string): string {
+export function authFailurePath(next: string, error: AuthError = AUTH_ERROR.failed): string {
   const withAuthError = (path: string) => {
     const url = new URL(path, BASE);
-    url.searchParams.set(AUTH_ERROR_PARAM, "1");
+    url.searchParams.set(AUTH_ERROR_PARAM, error);
     return `${url.pathname}${url.search}`;
   };
   const { pathname } = new URL(next, BASE);

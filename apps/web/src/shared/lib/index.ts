@@ -59,3 +59,5 @@ export {
   wizardStepState,
   type WizardStepState,
 } from "./wizard-step-state";
+export { AUTH_ERROR, AUTH_ERROR_MESSAGE, type AuthError } from "./auth-error";
+export { parseAuthError } from "./parse-auth-error";

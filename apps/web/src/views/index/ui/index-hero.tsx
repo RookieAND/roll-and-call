@@ -2,6 +2,7 @@ import { Badge, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { LockKeyhole } from "lucide-react";
 
+import type { AuthError } from "@/shared/lib";
 import type { MenuServer } from "@/shared/ui";
 
 import { HERO_CTA_ID } from "../model/hero-cta-id";
@@ -13,7 +14,7 @@ interface IndexHeroProps {
   // null이면 비로그인
   servers: MenuServer[] | null;
   joinable: MenuServer[];
-  authError: boolean;
+  authError: AuthError | null;
 }
 
 // 헤더(h-16)가 위에 겹쳐 있어 그만큼 위쪽 여백을 더 둔다.

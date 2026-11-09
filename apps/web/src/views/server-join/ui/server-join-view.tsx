@@ -1,7 +1,8 @@
+import { isNull } from "es-toolkit";
 import { redirect } from "next/navigation";
 
 import { LoginButton } from "@/features/auth";
-import { serverJoinPath } from "@/shared/lib";
+import { type AuthError, serverJoinPath } from "@/shared/lib";
 import { getCurrentMembership, getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 
 import { JoinAuthErrorNotice } from "./join-auth-error-notice";
@@ -10,7 +11,7 @@ import { MemberJoinCheck } from "./member-join-check";
 
 interface ServerJoinViewProps {
   next: string;
-  authError: boolean;
+  authError: AuthError | null;
 }
 
 export async function ServerJoinView({ next, authError }: ServerJoinViewProps) {
@@ -31,7 +32,7 @@ export async function ServerJoinView({ next, authError }: ServerJoinViewProps) {
 
   return (
     <>
-      {authError && <JoinAuthErrorNotice />}
+      {!isNull(authError) && <JoinAuthErrorNotice error={authError} />}
       <JoinLayout
         target={target}
         status="signedOut"

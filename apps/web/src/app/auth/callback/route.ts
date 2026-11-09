@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { authFailurePath, safeNextPath } from "@/shared/lib";
+import { AUTH_ERROR, authFailurePath, safeNextPath } from "@/shared/lib";
 import { createSupabaseServerClient } from "@/shared/server";
 
 const DISCORD_CANCELLED = "access_denied";
@@ -27,5 +27,7 @@ export async function GET(request: Request) {
     if (!error) return redirectTo(next);
   }
 
-  return redirectTo(authFailurePath(next));
+  // 디스코드가 이메일을 주지 않으면 Supabase가 이 문구로 돌려보낸다.
+  const isEmailMissing = (searchParams.get("error_description") ?? "").includes("email");
+  return redirectTo(authFailurePath(next, isEmailMissing ? AUTH_ERROR.emailMissing : undefined));
 }

@@ -32,4 +32,11 @@ describe("authFailurePath", () => {
     );
     expect(authFailurePath("/trpia/join")).toBe("/trpia/join?auth_error=1");
   });
+
+  it("이메일이 없어서 실패했으면 그 사유를 붙인다", () => {
+    expect(authFailurePath("/", "email")).toBe("/?auth_error=email");
+    expect(authFailurePath("/trpia/games", "email")).toBe(
+      "/trpia/join?next=%2Ftrpia%2Fgames&auth_error=email",
+    );
+  });
 });

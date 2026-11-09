@@ -1,12 +1,16 @@
 import { Callout } from "@roll-and-call/ui";
 
-export function AuthErrorNotice() {
+import { AUTH_ERROR_MESSAGE, type AuthError } from "@/shared/lib";
+
+interface AuthErrorNoticeProps {
+  error: AuthError;
+}
+
+export function AuthErrorNotice({ error }: AuthErrorNoticeProps) {
   return (
     <Callout.Root colorPalette="danger" size="sm">
       <Callout.Icon />
-      <Callout.Description>
-        로그인하지 못했습니다. 아래 버튼으로 다시 시도해 주세요.
-      </Callout.Description>
+      <Callout.Description>{AUTH_ERROR_MESSAGE[error]}</Callout.Description>
     </Callout.Root>
   );
 }
