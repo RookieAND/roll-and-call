@@ -130,6 +130,7 @@ export function RulebookRequestBody({
           {drafts.map((draft, index) => {
             const id = `request-book-${draft.clientId}`;
             const error = allErrors.find((entry) => entry.clientId === draft.clientId)?.message;
+            const nameError = !draft.name.trim() ? error : undefined;
             return (
               <section
                 key={draft.clientId}
@@ -159,13 +160,13 @@ export function RulebookRequestBody({
                       </IconButton>
                     )}
                   </div>
-                  <Field.Root label="룰북 이름" htmlFor={`${id}-name`} required>
+                  <Field.Root label="룰북 이름" htmlFor={`${id}-name`} required error={nameError}>
                     <TextInput
                       id={`${id}-name`}
                       placeholder="예: 크툴루 나우"
                       maxLength={100}
                       value={draft.name}
-                      invalid={Boolean(error && !draft.name.trim())}
+                      invalid={Boolean(nameError)}
                       onChange={(event) => changeBook(draft.clientId, { name: event.target.value })}
                     />
                   </Field.Root>
@@ -175,7 +176,7 @@ export function RulebookRequestBody({
                     categoryNames={categoryNames}
                     onChange={(patch) => changeBook(draft.clientId, patch)}
                   />
-                  {error && (
+                  {error && !nameError && (
                     <Text
                       id={`${id}-error`}
                       role="alert"
