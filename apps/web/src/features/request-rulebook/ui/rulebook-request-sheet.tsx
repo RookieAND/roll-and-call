@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Sheet, Text } from "@roll-and-call/ui";
+import { Sheet, Text } from "@roll-and-call/ui";
 
 import { RulebookRequestBody } from "./rulebook-request-body";
 import { SheetTitleRow } from "./sheet-title-row";
@@ -37,19 +37,6 @@ export function RulebookRequestSheet({
               </Text>
             }
             onSent={() => onOpenChange(false)}
-            renderFooter={({ submit, pending, disabled, count }) => (
-              <div className="-mx-200 mt-200 border-t border-gray-100 px-200 pt-150">
-                <Button
-                  size="lg"
-                  className="w-full"
-                  disabled={disabled}
-                  loading={pending}
-                  onClick={submit}
-                >
-                  {count}권 추가 요청 보내기
-                </Button>
-              </div>
-            )}
           />
         </Sheet.Body>
       </Sheet.Popup>

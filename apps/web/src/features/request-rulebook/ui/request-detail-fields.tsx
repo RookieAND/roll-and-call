@@ -9,14 +9,14 @@ import {
   NEW_CATEGORY,
   REQUEST_KIND_CARDS,
   UNKNOWN,
-  type RequestDefaults,
+  type RequestDetails,
 } from "../model/rulebook-request-form";
 
 interface RequestDetailFieldsProps {
   id: string;
-  value: RequestDefaults;
+  value: RequestDetails;
   categoryNames: string[];
-  onChange: (patch: Partial<RequestDefaults>) => void;
+  onChange: (patch: Partial<RequestDetails>) => void;
 }
 
 export function RequestDetailFields({
