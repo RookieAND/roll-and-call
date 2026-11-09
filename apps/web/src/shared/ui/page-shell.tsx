@@ -41,8 +41,11 @@ export function PageShell({
 }: PageShellProps) {
   const barStyle = {
     "--bar-body": bodyWidth(!!panel),
+    "--nav-w": NAV_WIDTH,
     "--bar-w": readable ? "min(640px, var(--bar-body))" : "var(--bar-body)",
-    "--bar-left": `calc(${NAV_WIDTH} + ${FRAME_PAD} + (var(--bar-body) - var(--bar-w)) / 2)`,
+    "--bar-pad-l": `calc(${FRAME_PAD} + (var(--bar-body) - var(--bar-w)) / 2)`,
+    "--bar-left": `calc(${NAV_WIDTH} + var(--bar-pad-l))`,
+    "--bar-pad-r": `calc(100% - ${NAV_WIDTH} - var(--bar-pad-l) - var(--bar-w))`,
   } as CSSProperties;
   return (
     <div

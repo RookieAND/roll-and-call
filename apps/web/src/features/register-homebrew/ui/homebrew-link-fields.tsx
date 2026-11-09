@@ -59,12 +59,7 @@ export function HomebrewLinkFields({ links, error, onChange }: HomebrewLinkField
           </VStack>
         ))}
         {addable && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="self-start"
-            onClick={() => onChange([...links, ""])}
-          >
+          <Button variant="outline" className="w-full" onClick={() => onChange([...links, ""])}>
             <Plus size={16} aria-hidden />
             링크 추가
           </Button>
