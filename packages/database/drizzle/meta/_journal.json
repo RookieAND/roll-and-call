@@ -890,6 +890,13 @@
       "when": 1799900200000,
       "tag": "0132_homebrew_summary_200",
       "breakpoints": true
+    },
+    {
+      "idx": 133,
+      "version": "7",
+      "when": 1799900200001,
+      "tag": "0133_bulk_rulebook_requests",
+      "breakpoints": true
     }
   ]
 }

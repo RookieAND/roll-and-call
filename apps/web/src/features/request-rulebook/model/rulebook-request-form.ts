@@ -1,3 +1,7 @@
+import {
+  RULEBOOK_REQUEST_MAX_BOOKS,
+  rulebookRequestKey,
+} from "@roll-and-call/database/rulebooks/model";
 import { z } from "zod";
 
 export const UNKNOWN = "unknown" as const;
@@ -32,3 +36,62 @@ export const rulebookRequestSchema = z.object({
 });
 
 export type RulebookRequestValues = z.infer<typeof rulebookRequestSchema>;
+
+export const rulebookRequestsSchema = z.object({
+  items: z
+    .array(rulebookRequestSchema.extend({ clientId: z.string().min(1).max(100) }))
+    .min(1, "요청할 책을 추가해 주세요.")
+    .max(
+      RULEBOOK_REQUEST_MAX_BOOKS,
+      `한 번에 ${RULEBOOK_REQUEST_MAX_BOOKS}권까지 요청할 수 있습니다.`,
+    )
+    .refine(
+      (items) => new Set(items.map((item) => item.clientId)).size === items.length,
+      "입력 항목을 확인해 주세요.",
+    ),
+});
+
+export type RulebookRequestsInput = z.infer<typeof rulebookRequestsSchema>;
+export type RequestItemError = { clientId: string; message: string };
+export type RequestDefaults = Omit<RulebookRequestValues, "name">;
+export type RequestDraft = { clientId: string; name: string; overrides: Partial<RequestDefaults> };
+export const EMPTY_REQUEST_DEFAULTS: RequestDefaults = {
+  category: "",
+  edition: "",
+  kind: UNKNOWN,
+  link: "",
+};
+
+export function resolveRequestDraft(draft: RequestDraft, defaults: RequestDefaults) {
+  return { ...defaults, ...draft.overrides, name: draft.name, clientId: draft.clientId };
+}
+
+export function requestNamesFromText(text: string) {
+  return text
+    .split(/\r?\n/)
+    .map((name) => name.trim())
+    .filter(Boolean);
+}
+
+export function duplicateRequestErrors(
+  items: RulebookRequestsInput["items"],
+  pendingNames: string[] = [],
+): RequestItemError[] {
+  const counts = new Map<string, number>();
+  const pending = new Set(pendingNames.map((name) => name.trim().toLowerCase()));
+  for (const item of items) {
+    const key = rulebookRequestKey({ name: item.name.trim(), edition: item.edition.trim() });
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return items.flatMap((item) => {
+    const key = rulebookRequestKey({ name: item.name.trim(), edition: item.edition.trim() });
+    if (!item.name.trim()) return [];
+    if (pending.has(key))
+      return [
+        { clientId: item.clientId, message: "이미 검토 중인 룰북입니다. 이 항목을 제외해 주세요." },
+      ];
+    if ((counts.get(key) ?? 0) > 1)
+      return [{ clientId: item.clientId, message: "같은 이름과 판본의 책이 두 번 들어 있습니다." }];
+    return [];
+  });
+}

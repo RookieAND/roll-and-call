@@ -103,6 +103,8 @@ export const rulebookRequests = pgTable(
     }),
     categoryName: text("category_name"),
     source: rulebookRequestSource("source").notNull().default("user"),
+    // 한 번에 제출한 책을 묶는다. 심사와 결과는 각 행에서 따로 관리한다.
+    groupId: uuid("group_id"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
     processedBy: uuid("processed_by").references(() => profiles.id, {
@@ -117,6 +119,7 @@ export const rulebookRequests = pgTable(
   },
   (table) => [
     index("rulebook_requests_user_id_idx").on(table.userId),
+    index("rulebook_requests_server_group_idx").on(table.serverId, table.groupId),
     check("rulebook_requests_reject_reason_length", sql`char_length(${table.rejectReason}) <= 200`),
   ],
 ).enableRLS();

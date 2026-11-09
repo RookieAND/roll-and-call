@@ -33,11 +33,11 @@ export function RulebookRequestSheet({
             initialName={initialName}
             intro={
               <Text typography="body3" foreground="muted" render={<p />}>
-                추가되면 알림 탭으로 알립니다.
+                여러 권을 한 번에 요청할 수 있어요. 검토 결과는 책마다 알려 드립니다.
               </Text>
             }
             onSent={() => onOpenChange(false)}
-            renderFooter={({ submit, pending, disabled }) => (
+            renderFooter={({ submit, pending, disabled, count }) => (
               <div className="-mx-200 mt-200 border-t border-gray-100 px-200 pt-150">
                 <Button
                   size="lg"
@@ -46,7 +46,7 @@ export function RulebookRequestSheet({
                   loading={pending}
                   onClick={submit}
                 >
-                  추가 요청 보내기
+                  {count}권 추가 요청 보내기
                 </Button>
               </div>
             )}

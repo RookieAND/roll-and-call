@@ -4,6 +4,8 @@ import { supplementNameKey } from "#db/modules/games/model";
 import type { Transaction } from "#db/modules/transaction";
 import { rulebookRequestGames, rulebookRequests } from "#db/schema";
 
+import { lockRulebookRequests } from "./lock-rulebook-requests";
+
 // 구인에 직접 입력한 서플리먼트마다 룰북 추가 요청을 붙인다. 같은 분류·판본에 같은 이름의 대기 요청이 있으면 그 요청에 묶고,
 // 반려된 이름이면 다시 요청하지 않는다. 구인에서 지운 이름의 연결은 빼고, 남은 구인이 없는 자동 요청은 트리거가 지운다.
 // 룰의 분류를 모르면(룰북이 숨겨진 옛 구인) 새 요청은 만들지 않고 지운 이름의 연결만 정리한다.
@@ -24,6 +26,7 @@ export async function syncGameSupplementRequests({
   edition: string;
   names: string[];
 }) {
+  await lockRulebookRequests(transaction, serverId);
   const candidates = categoryId
     ? await transaction
         .select({

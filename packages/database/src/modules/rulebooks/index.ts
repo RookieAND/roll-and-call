@@ -5,6 +5,7 @@ export {
   type ApproveRequestResult,
 } from "./commands/approve-rulebook-request";
 export { createRulebookRequest } from "./commands/create-rulebook-request";
+export { createRulebookRequests } from "./commands/create-rulebook-requests";
 export { saveRulebookRequestStaffMessage } from "./commands/save-rulebook-request-staff-message";
 export { hideRulebook } from "./commands/hide-rulebook";
 export { linkRulebookRequest, type RulebookLinkInput } from "./commands/link-rulebook-request";

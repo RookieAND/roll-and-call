@@ -30,20 +30,18 @@ export function RulebookRequestScreen({
           initialName={query}
           intro={
             <VStack gap="050">
-              {query && (
-                <Text typography="heading1" render={<h1 />} className="break-keep">
-                  "{query}"에 맞는 룰북이 없습니다
-                </Text>
-              )}
+              <Text typography="heading2" render={<h1 />} className="break-keep">
+                {query ? `"${query}"에 맞는 룰북이 없습니다` : "찾는 룰북을 알려 주세요"}
+              </Text>
               <Text typography="body2" foreground="muted" render={<p />}>
-                아래 내용을 보내 주시면 운영진이 확인합니다.
+                기본 룰북부터 서플리먼트까지, 여러 권을 한 번에 요청하세요.
                 <br />
-                추가되면 알림 탭으로 알립니다.
+                검토 결과는 책마다 알림으로 알려 드립니다.
               </Text>
             </VStack>
           }
           onSent={() => router.replace(toServerPath("/me/rulebooks/apply?step=books"))}
-          renderFooter={({ submit, pending, disabled }) => (
+          renderFooter={({ submit, pending, disabled, count }) => (
             <FloatingBar.Root elevated={false}>
               <FloatingBar.Content>
                 <Container size="sm">
@@ -54,7 +52,7 @@ export function RulebookRequestScreen({
                     loading={pending}
                     onClick={submit}
                   >
-                    추가 요청 보내기
+                    {count}권 추가 요청 보내기
                   </Button>
                 </Container>
               </FloatingBar.Content>
