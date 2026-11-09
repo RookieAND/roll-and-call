@@ -82,10 +82,8 @@ export const serverMembers = pgTable(
     bio: text("bio"),
     // 프로필의 플레이 스타일 칸에 줄바꿈 그대로 보이는 긴 글(600자 이내).
     playStyle: text("play_style"),
-    // 프로필 맨 위 3:1 배너. 게임 이미지 버킷의 공개 주소다. 없으면 강조색 면으로 보인다.
+    // 프로필 맨 위 3:1 배너. 게임 이미지 버킷의 공개 주소다. 없으면 기본 면으로 보인다.
     bannerUrl: text("banner_url"),
-    // #RRGGBB. 배너가 없을 때의 면과 아바타 테두리에 쓴다.
-    accentColor: text("accent_color"),
     keywords: text("keywords").array().notNull().default([]),
     availability: jsonb("availability").$type<AvailabilityInterval[]>().notNull().default([]),
     links: jsonb("links").$type<ProfileLink[]>().notNull().default([]),

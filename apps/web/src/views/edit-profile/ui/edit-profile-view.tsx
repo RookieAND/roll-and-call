@@ -37,7 +37,6 @@ export async function EditProfileView() {
                 defaultBio={profile?.bio ?? ""}
                 defaultPlayStyle={profile?.playStyle ?? ""}
                 defaultBannerUrl={profile?.bannerUrl ?? ""}
-                defaultAccentColor={profile?.accentColor ?? ""}
                 defaultKeywords={profile?.keywords ?? []}
                 defaultLinks={profile?.links ?? []}
                 availability={profile?.availability ?? []}

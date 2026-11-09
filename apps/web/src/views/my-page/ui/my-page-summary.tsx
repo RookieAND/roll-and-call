@@ -57,7 +57,6 @@ export async function MyPageSummary() {
       bio={profile?.bio ?? null}
       playStyle={profile?.playStyle ?? null}
       bannerUrl={profile?.bannerUrl ?? null}
-      accentColor={profile?.accentColor ?? null}
       links={profile?.links ?? []}
       discordId={profile?.discordId}
       featuredBadges={featuredBadges}

@@ -5,6 +5,5 @@ export const PROFILE_FIELD = {
   username: "username",
   bio: "bio",
   playStyle: "playStyle",
-  accentColor: "accentColor",
 } as const;
 export type ProfileField = (typeof PROFILE_FIELD)[keyof typeof PROFILE_FIELD];

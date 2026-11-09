@@ -9,9 +9,7 @@ import {
   KEYWORD_MAX_COUNT,
   KEYWORD_MAX_LENGTH,
   LINK_MAX_COUNT,
-  ACCENT_COLOR_ERROR,
   editNicknameTakenMessage,
-  normalizeAccentColor,
   normalizePlayStyle,
   PLAY_STYLE_MAX_LENGTH,
   linkError,
@@ -30,7 +28,6 @@ export type UpdateProfileInput = {
   bio: string;
   playStyle: string;
   bannerUrl: string;
-  accentColor: string;
   keywords: string[];
   links: ProfileLink[];
 };
@@ -42,7 +39,6 @@ const updateProfileSchema = z.object({
   bio: z.string().max(BIO_MAX_LENGTH * 10),
   playStyle: z.string().max(PLAY_STYLE_MAX_LENGTH * 10),
   bannerUrl: z.string().max(1000),
-  accentColor: z.string().max(50),
   keywords: z.array(z.string().max(KEYWORD_MAX_LENGTH * 10)).max(KEYWORD_MAX_COUNT * 10),
   links: z
     .array(
@@ -87,10 +83,6 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
       field: PROFILE_FIELD.playStyle,
     };
   }
-  const accentColor = normalizeAccentColor(values.accentColor);
-  if (accentColor === undefined) {
-    return { error: ACCENT_COLOR_ERROR, field: PROFILE_FIELD.accentColor };
-  }
   const bannerUrl = values.bannerUrl.trim();
   if (bannerUrl && !isGameImageUrl(bannerUrl)) {
     return { error: "배너 이미지를 다시 올려 주세요." };
@@ -108,7 +100,6 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     bio: bio || null,
     playStyle,
     bannerUrl: bannerUrl || null,
-    accentColor,
     keywords: normalizeKeywords(values.keywords),
     links: normalizeLinks(values.links),
   });

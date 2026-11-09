@@ -1,0 +1,1 @@
+ALTER TABLE "server_members" DROP COLUMN "accent_color";

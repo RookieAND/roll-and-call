@@ -46,7 +46,6 @@ export async function ProfileSummary({
         name={profile.username}
         avatarUrl={profile.avatarUrl}
         bannerUrl={profile.bannerUrl}
-        accentColor={profile.accentColor}
       />
       <VStack gap="025" className="mt-175 min-w-0">
         <HStack align="center" gap="075" className="min-w-0">

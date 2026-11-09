@@ -876,6 +876,13 @@
       "when": 1799900000000,
       "tag": "0130_homebrew_description",
       "breakpoints": true
+    },
+    {
+      "idx": 131,
+      "version": "7",
+      "when": 1799900100000,
+      "tag": "0131_drop_accent_color",
+      "breakpoints": true
     }
   ]
 }

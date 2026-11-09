@@ -21,7 +21,7 @@ export function ProfileRoleMark({ role }: ProfileRoleMarkProps) {
         role="img"
         aria-label={label}
         tabIndex={0}
-        className="flex-none text-[color:var(--profile-ink,var(--rc-color-fg-primary))]"
+        className="flex-none text-[color:var(--rc-color-fg-primary)]"
       >
         <Icon size={18} aria-hidden />
       </span>

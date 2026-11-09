@@ -30,7 +30,6 @@ import {
   PROFILE_PREVIEW_PANEL_SLOT_ID,
   PROFILE_PREVIEW_SLOT_ID,
 } from "../model/profile-preview-slot";
-import { AccentColorField } from "./accent-color-field";
 import { AvailabilitySummaryField } from "./availability-summary-field";
 import { AvatarRefreshField } from "./avatar-refresh-field";
 import { ProfileLinksField } from "./profile-links-field";
@@ -43,7 +42,6 @@ interface EditProfileFormProps {
   defaultBio?: string;
   defaultPlayStyle?: string;
   defaultBannerUrl?: string;
-  defaultAccentColor?: string;
   defaultKeywords?: string[];
   defaultLinks?: ProfileLink[];
   availability?: AvailabilityInterval[];
@@ -59,7 +57,6 @@ export function EditProfileForm({
   defaultBio = "",
   defaultPlayStyle = "",
   defaultBannerUrl = "",
-  defaultAccentColor = "",
   defaultKeywords = [],
   defaultLinks = [],
   availability = [],
@@ -73,7 +70,6 @@ export function EditProfileForm({
   const [bio, setBio] = useState(defaultBio);
   const [playStyle, setPlayStyle] = useState(defaultPlayStyle);
   const [bannerUrl, setBannerUrl] = useState(defaultBannerUrl);
-  const [accentColor, setAccentColor] = useState(defaultAccentColor);
   const [keywords, setKeywords] = useState(defaultKeywords);
   const [links, setLinks] = useState(defaultLinks);
   const [failure, setFailure] = useState<{ error: string; field?: string } | null>(null);
@@ -85,20 +81,16 @@ export function EditProfileForm({
     bio !== defaultBio ||
     playStyle !== defaultPlayStyle ||
     bannerUrl !== defaultBannerUrl ||
-    accentColor !== defaultAccentColor ||
     keywords.join() !== defaultKeywords.join() ||
     JSON.stringify(links) !== JSON.stringify(defaultLinks);
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setFailure(null);
-    run(
-      () => updateProfile({ username, bio, playStyle, bannerUrl, accentColor, keywords, links }),
-      {
-        onSuccess: () => toast.success("프로필을 저장했습니다"),
-        onError: (result) => setFailure({ error: result.error, field: result.field }),
-      },
-    );
+    run(() => updateProfile({ username, bio, playStyle, bannerUrl, keywords, links }), {
+      onSuccess: () => toast.success("프로필을 저장했습니다"),
+      onError: (result) => setFailure({ error: result.error, field: result.field }),
+    });
   }
 
   // 미리보기는 모바일 앱바 버튼과 데스크톱 오른쪽 패널에 있다. 입력값은 이 폼이 쥐고 있어서 그 자리에 끼워 그린다.
@@ -117,7 +109,6 @@ export function EditProfileForm({
   const usernameError = failure?.field === PROFILE_FIELD.username ? failure.error : undefined;
   const bioError = failure?.field === PROFILE_FIELD.bio ? failure.error : undefined;
   const playStyleError = failure?.field === PROFILE_FIELD.playStyle ? failure.error : undefined;
-  const accentColorError = failure?.field === PROFILE_FIELD.accentColor ? failure.error : undefined;
   const formError = failure && !failure.field ? failure.error : null;
 
   const preview = (
@@ -128,7 +119,6 @@ export function EditProfileForm({
       keywords={keywords}
       playStyle={playStyle}
       bannerUrl={bannerUrl}
-      accentColor={accentColor}
     />
   );
 
@@ -142,7 +132,6 @@ export function EditProfileForm({
             avatarUrl={avatarUrl}
             bio={bio}
             bannerUrl={bannerUrl}
-            accentColor={accentColor}
           />,
           previewPanelSlot,
         )}
@@ -150,8 +139,6 @@ export function EditProfileForm({
         <AvatarRefreshField defaultUrl={avatarUrl} name={username} />
 
         {renderBannerField({ value: bannerUrl, onChange: setBannerUrl })}
-
-        <AccentColorField value={accentColor} error={accentColorError} onChange={setAccentColor} />
 
         <Field.Root
           label="닉네임"

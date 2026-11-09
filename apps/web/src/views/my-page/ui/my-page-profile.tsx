@@ -3,8 +3,8 @@ import { Pencil } from "lucide-react";
 import type { ReactNode } from "react";
 
 import {
-  ACCENT_TINT_HOVER,
-  ACCENT_TINT_TEXT,
+  PROFILE_TINT_HOVER,
+  PROFILE_TINT_TEXT,
   KeywordChips,
   PlayStyleBlock,
   ProfileHero,
@@ -25,7 +25,6 @@ interface MyPageProfileProps {
   bio: string | null;
   playStyle: string | null;
   bannerUrl: string | null;
-  accentColor: string | null;
   links: ProfileLink[];
   discordId?: string;
   featuredBadges: FeaturedBadge[];
@@ -43,7 +42,6 @@ export function MyPageProfile({
   bio,
   playStyle,
   bannerUrl,
-  accentColor,
   links,
   discordId,
   featuredBadges,
@@ -64,7 +62,6 @@ export function MyPageProfile({
         name={name}
         avatarUrl={avatarUrl}
         bannerUrl={bannerUrl}
-        accentColor={accentColor}
         action={
           <IconButton
             render={<ServerLink path={"/me/edit"} />}
@@ -73,8 +70,8 @@ export function MyPageProfile({
             aria-label="프로필 편집"
             className={cn(
               "-mb-075 h-10 w-10 rounded-500 desktop:mb-0 desktop:h-11 desktop:w-11",
-              ACCENT_TINT_TEXT,
-              ACCENT_TINT_HOVER,
+              PROFILE_TINT_TEXT,
+              PROFILE_TINT_HOVER,
             )}
           >
             <Pencil size={18} aria-hidden />

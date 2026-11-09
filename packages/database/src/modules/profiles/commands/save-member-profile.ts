@@ -13,7 +13,6 @@ export async function saveMemberProfile({
   bio,
   playStyle,
   bannerUrl,
-  accentColor,
   keywords,
   links,
 }: {
@@ -23,7 +22,6 @@ export async function saveMemberProfile({
   bio: string | null;
   playStyle: string | null;
   bannerUrl: string | null;
-  accentColor: string | null;
   keywords: ProfileKeyword[];
   links: ProfileLink[];
 }) {
@@ -32,7 +30,7 @@ export async function saveMemberProfile({
     if (!saved.ok) return saved;
     await transaction
       .update(serverMembers)
-      .set({ bio, playStyle, bannerUrl, accentColor, keywords, links })
+      .set({ bio, playStyle, bannerUrl, keywords, links })
       .where(and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, userId)));
     return saved;
   });

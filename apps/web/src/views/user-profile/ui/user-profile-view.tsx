@@ -15,8 +15,6 @@ import { getCurrentSessionUser, getUserBadges, getCurrentServer } from "@/shared
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 import { loadProfile } from "@/widgets/session-list/server";
 
-import { PROFILE_APP_BAR_TINT_CLASS } from "../model/profile-tint";
-import { ProfileAccentFrame } from "./profile-accent-frame";
 import { ProfileAvailability } from "./profile-availability";
 import { ProfileReviews } from "./profile-reviews";
 import { ProfileRulebooks } from "./profile-rulebooks";
@@ -68,17 +66,11 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
   );
 
   return (
-    <ProfileAccentFrame accentColor={profile.accentColor}>
+    <div className="min-h-[calc(100dvh-var(--rc-bottom-nav-height,0px))] desktop:min-h-dvh">
       <PageShell
         readable
         scrollTop
-        appBar={
-          <AppBar
-            back="/games"
-            title={`${profile.username}님의 프로필`}
-            className={profile.accentColor ? PROFILE_APP_BAR_TINT_CLASS : undefined}
-          />
-        }
+        appBar={<AppBar back="/games" title={`${profile.username}님의 프로필`} />}
         panel={
           <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
             <ProfileSide profile={profile} signedIn={!!viewer} memo={memo} />
@@ -116,6 +108,6 @@ export async function UserProfileView({ id }: UserProfileViewProps) {
           </Container>
         </div>
       </PageShell>
-    </ProfileAccentFrame>
+    </div>
   );
 }

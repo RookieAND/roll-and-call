@@ -3,14 +3,14 @@
 import { HStack, Text, Tooltip, cn } from "@roll-and-call/ui";
 import { Link2 } from "lucide-react";
 
-import { ACCENT_TINT_HOVER, ACCENT_TINT_TEXT } from "../model/accent-tint";
 import { linkHref, linkLabel, linkServiceOf, type ProfileLink } from "../model/link-services";
+import { PROFILE_TINT_HOVER, PROFILE_TINT_TEXT } from "../model/profile-tint";
 import { BrandMark } from "./brand-mark";
 
 const ICON_CLASS = {
   square: "flex h-10 w-10 items-center justify-center rounded-full text-muted",
   // 마이페이지: 테두리 없이 강조색 아이콘만
-  circle: cn("flex h-10 w-10 items-center justify-center rounded-full", ACCENT_TINT_TEXT),
+  circle: cn("flex h-10 w-10 items-center justify-center rounded-full", PROFILE_TINT_TEXT),
 } as const;
 
 interface ProfileLinksProps {
@@ -55,7 +55,7 @@ export function ProfileLinks({ links, discordId, variant = "square" }: ProfileLi
               className={cn(
                 ICON_CLASS[variant],
                 "transition-colors",
-                variant === "circle" ? ACCENT_TINT_HOVER : "hover:bg-gray-50",
+                variant === "circle" ? PROFILE_TINT_HOVER : "hover:bg-gray-50",
               )}
             >
               {mark}

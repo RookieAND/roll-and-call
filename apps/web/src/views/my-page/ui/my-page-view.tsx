@@ -1,12 +1,10 @@
 import { cn, Container, VStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
-import { AccentScope } from "@/entities/profile";
 import { LoginRequired } from "@/features/auth";
 import { getCurrentSessionUser } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, HelpButton, PageShell } from "@/shared/ui";
 
-import { loadMyProfile } from "../api/load-my-profile";
 import { MyPageAccount } from "./my-page-account";
 import { MyPageAccountSkeleton } from "./my-page-account-skeleton";
 import { MyPageBadgesSection } from "./my-page-badges-section";
@@ -17,15 +15,14 @@ import { MyPageRulebooksSection } from "./my-page-rulebooks-section";
 import { MyPageSummary } from "./my-page-summary";
 import { MyPageSummarySkeleton } from "./my-page-summary-skeleton";
 
-// 화면 틀 전체에 강조색을 7% 섞는다. 모바일은 기본 면에, 데스크톱은 움푹 들어간 면에 섞는다.
-const ACCENT_FRAME_CLASS =
-  "bg-[color-mix(in_oklch,var(--acc,var(--rc-color-bg-primary))_7%,var(--rc-color-bg-canvas-base))] desktop:bg-[color-mix(in_oklch,var(--acc,var(--rc-color-bg-primary))_7%,var(--rc-color-bg-canvas-sunken))]";
+// 화면 틀 전체에 primary를 7% 섞는다. 모바일은 기본 면에, 데스크톱은 움푹 들어간 면에 섞는다.
+const PAGE_TINT_CLASS =
+  "bg-[color-mix(in_oklch,var(--rc-color-bg-primary)_7%,var(--rc-color-bg-canvas-base))] desktop:bg-[color-mix(in_oklch,var(--rc-color-bg-primary)_7%,var(--rc-color-bg-canvas-sunken))]";
 
 export async function MyPageView() {
   const user = await getCurrentSessionUser();
-  const profile = user ? await loadMyProfile(user.id) : null;
   return (
-    <AccentScope accentColor={profile?.accentColor} className={cn(user && ACCENT_FRAME_CLASS)}>
+    <div className={cn(user && PAGE_TINT_CLASS)}>
       <PageShell
         readable
         scrollTop
@@ -72,6 +69,6 @@ export async function MyPageView() {
           </Container>
         </div>
       </PageShell>
-    </AccentScope>
+    </div>
   );
 }

@@ -8,7 +8,7 @@ interface BannerImageProps {
   alt?: string;
 }
 
-// 주소가 깨져 못 불러오면 엑스박스 대신 그라데이션을 그린다. 강조색(--acc)이 있으면 그 색을 따른다.
+// 주소가 깨져 못 불러오면 엑스박스 대신 그라데이션을 그린다.
 export function BannerImage({ src, alt = "" }: BannerImageProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
@@ -18,8 +18,8 @@ export function BannerImage({ src, alt = "" }: BannerImageProps) {
         aria-hidden
         className={cn(
           "size-full bg-linear-to-br",
-          "from-[color-mix(in_srgb,var(--acc,var(--color-primary-400))_55%,var(--rc-color-gray-000))]",
-          "to-[color-mix(in_srgb,var(--acc,var(--color-primary-500))_85%,var(--rc-color-gray-950))]",
+          "from-[color-mix(in_srgb,var(--color-primary-400)_55%,var(--rc-color-gray-000))]",
+          "to-[color-mix(in_srgb,var(--color-primary-500)_85%,var(--rc-color-gray-950))]",
         )}
       />
     );

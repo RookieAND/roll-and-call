@@ -26,7 +26,6 @@ export async function findMemberProfile({
       bio: serverMembers.bio,
       playStyle: serverMembers.playStyle,
       bannerUrl: serverMembers.bannerUrl,
-      accentColor: serverMembers.accentColor,
       keywords: serverMembers.keywords,
       availability: serverMembers.availability,
       links: serverMembers.links,

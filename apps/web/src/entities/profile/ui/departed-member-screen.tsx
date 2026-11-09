@@ -15,13 +15,7 @@ export function DepartedMemberScreen({ name, avatarUrl }: DepartedMemberScreenPr
     <PageShell readable appBar={<AppBar back="/games" title="프로필" />}>
       <div className={DESKTOP_CARD_CLASS}>
         <div className="px-200 pb-200">
-          <ProfileHero
-            name={name}
-            avatarUrl={avatarUrl}
-            bannerUrl={null}
-            accentColor={null}
-            departed
-          />
+          <ProfileHero name={name} avatarUrl={avatarUrl} bannerUrl={null} departed />
           <HStack align="center" gap="100" className="mt-175 min-w-0">
             <Text truncate typography="heading2" render={<h2 />}>
               {name}
