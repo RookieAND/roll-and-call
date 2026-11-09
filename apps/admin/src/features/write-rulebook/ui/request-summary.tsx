@@ -1,4 +1,4 @@
-import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
+import { RULEBOOK_KIND_LABEL, RequestGroupNotice } from "@/entities/rulebook";
 import type { RulebookRequestRow } from "@/entities/rulebook/server";
 import { formatFullDate } from "@/shared/lib";
 import { FactRows, Panel } from "@/shared/ui";
@@ -10,6 +10,7 @@ interface RequestSummaryProps {
 export function RequestSummary({ request }: RequestSummaryProps) {
   return (
     <Panel title="요청 내용" bodyClassName="px-175 py-050">
+      <RequestGroupNotice request={request} />
       <FactRows
         items={[
           { label: "요청자", value: request.requesterNickname },

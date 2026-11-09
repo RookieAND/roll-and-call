@@ -24,6 +24,7 @@ import {
 } from "@/shared/ui";
 
 import { RULEBOOKS_TAB, type RulebooksTab } from "../model/rulebooks-tab";
+import { RequestGroupPanel } from "./request-group-panel";
 import { RequestPanel } from "./request-panel";
 import { RulebookTable } from "./rulebook-table";
 import { SellersPanel } from "./sellers-panel";
@@ -38,6 +39,7 @@ interface RulebooksViewProps {
   };
   allRulebooks: RulebookRow[];
   requests: RulebookRequestRow[];
+  groupRequests?: RulebookRequestRow[];
   sellers: CertSellerRow[];
   query: Record<string, string | undefined>;
   viewerId: string;
@@ -48,6 +50,7 @@ export function RulebooksView({
   rulebooks,
   allRulebooks,
   requests,
+  groupRequests = [],
   sellers,
   query,
   viewerId,
@@ -64,6 +67,7 @@ export function RulebooksView({
     tab: tab === RULEBOOKS_TAB.list ? undefined : tab,
     q: query.q,
     page: query.page,
+    group: query.group,
   };
   const closeHref = withQuery("/rules", pageQuery, {});
   const openedRequest = requests.find((request) => request.id === query.request) ?? null;
@@ -97,7 +101,14 @@ export function RulebooksView({
       <AdminHeader title="룰북 카탈로그" trail={[{ href: "/rules", label: "룰북" }]} />
       <RouteTabs label="룰북 화면" items={tabs} value={tabHref} />
       <VStack gap="200" className="flex-1 p-200">
-        {tab === RULEBOOKS_TAB.requests ? (
+        {tab === RULEBOOKS_TAB.requests && groupRequests.length > 0 ? (
+          <RequestGroupPanel
+            requests={groupRequests}
+            selectedId={query.request}
+            actionHref={actionHref}
+          />
+        ) : null}
+        {tab === RULEBOOKS_TAB.requests && groupRequests.length === 0 ? (
           <RequestPanel requests={requests} actionHref={actionHref} />
         ) : null}
         {tab === RULEBOOKS_TAB.sellers ? <SellersPanel sellers={sellers} /> : null}

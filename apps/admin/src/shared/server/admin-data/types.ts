@@ -124,6 +124,9 @@ export interface CertSeller {
 
 export interface RulebookRequest {
   id: string;
+  groupId: string | null;
+  outcome: "added" | "linked" | "rejected" | null;
+  rejectReason: string | null;
   userId: string;
   name: string;
   bookName: string;

@@ -6,6 +6,12 @@ import { loadAdminData } from "@/shared/server";
 
 export interface RulebookRequestRow {
   id: string;
+  groupId: string | null;
+  groupTotal: number;
+  groupCompleted: number;
+  outcome: "added" | "linked" | "rejected" | null;
+  rejectReason: string | null;
+  processed?: { by: string; at: Date };
   name: string;
   bookName: string;
   edition: string;
@@ -27,10 +33,20 @@ export interface RequestGame {
   gmNickname: string;
 }
 
-export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
+export async function listRulebookRequests({ includeProcessed = false } = {}): Promise<
+  RulebookRequestRow[]
+> {
   const db = await loadAdminData(["users", "rulebookRequests", "sessions"]);
+  const groupCounts = new Map<string, { total: number; completed: number }>();
+  for (const request of db.rulebookRequests) {
+    if (!request.groupId) continue;
+    const counts = groupCounts.get(request.groupId) ?? { total: 0, completed: 0 };
+    counts.total++;
+    if (request.processed) counts.completed++;
+    groupCounts.set(request.groupId, counts);
+  }
   return db.rulebookRequests
-    .filter((request) => !request.processed)
+    .filter((request) => includeProcessed || !request.processed)
     .toSorted((a, b) => a.requestedAt.getTime() - b.requestedAt.getTime())
     .map((request) => {
       const games = request.gameIds.flatMap((gameId) => {
@@ -43,6 +59,14 @@ export async function listRulebookRequests(): Promise<RulebookRequestRow[]> {
       gmIds.delete(request.userId);
       return {
         id: request.id,
+        groupId: request.groupId,
+        groupTotal: request.groupId ? groupCounts.get(request.groupId)!.total : 1,
+        groupCompleted: request.groupId
+          ? groupCounts.get(request.groupId)!.completed
+          : Number(Boolean(request.processed)),
+        outcome: request.outcome,
+        rejectReason: request.rejectReason,
+        processed: request.processed,
         name: request.name,
         bookName: request.bookName,
         edition: request.edition,

@@ -58,9 +58,9 @@ export function RulebookRequestBody({
     navigateToBook(addedBookId.current, true);
     addedBookId.current = null;
   }, [drafts.length]);
-  const showErrors = (itemErrors: RequestItemError[], message: string) => {
+  const showErrors = (itemErrors: RequestItemError[], message = "") => {
     setErrors(itemErrors);
-    setSubmitError(message);
+    setSubmitError(itemErrors.length ? "" : message);
     const first = drafts.find((draft) =>
       itemErrors.some((error) => error.clientId === draft.clientId),
     );
@@ -84,10 +84,7 @@ export function RulebookRequestBody({
         ? duplicates.find((entry) => entry.clientId === draft.clientId)?.message
         : parsed.error.issues[0]?.message;
       if (error) {
-        showErrors(
-          [{ clientId: draft.clientId, message: error }],
-          "작성 중인 룰북 정보를 먼저 확인해 주세요.",
-        );
+        showErrors([{ clientId: draft.clientId, message: error }]);
         return;
       }
     }
@@ -108,7 +105,7 @@ export function RulebookRequestBody({
         });
     const itemErrors = [...validationErrors, ...duplicates];
     if (!parsed.success || itemErrors.length) {
-      showErrors(itemErrors, "표시된 룰북을 확인해 주세요. 아직 요청을 보내지 않았습니다.");
+      showErrors(itemErrors, "입력 내용을 확인해 주세요.");
       return;
     }
     setErrors([]);
@@ -127,6 +124,11 @@ export function RulebookRequestBody({
       <fieldset disabled={pending} className="m-0 min-w-0 border-0 p-0">
         <VStack gap="250">
           {intro}
+          {submitError && (
+            <Text role="alert" typography="body4" foreground="danger" render={<p />}>
+              {submitError}
+            </Text>
+          )}
           {drafts.map((draft, index) => {
             const id = `request-book-${draft.clientId}`;
             const error = allErrors.find((entry) => entry.clientId === draft.clientId)?.message;
@@ -212,9 +214,7 @@ export function RulebookRequestBody({
   const list = (
     <RequestBookList
       drafts={drafts}
-      errors={allErrors}
       pending={pending}
-      submitError={submitError}
       onNavigate={navigateToBook}
       onSubmit={submit}
     />

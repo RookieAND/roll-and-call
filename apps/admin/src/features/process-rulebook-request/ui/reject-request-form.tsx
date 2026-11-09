@@ -7,6 +7,7 @@ import { RotateCcw } from "lucide-react";
 import { useState } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
+import { RequestGroupNotice } from "@/entities/rulebook";
 import type { RulebookRequestRow } from "@/entities/rulebook/server";
 import {
   conflictToastText,
@@ -65,6 +66,7 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
       </ResponsiveDialog.Header>
       <ResponsiveDialog.Body>
         <VStack gap="150">
+          <RequestGroupNotice request={request} />
           {networkError ? <ActionNetworkError /> : null}
           <Field.Root
             label="사용자에게 보이는 사유"
@@ -113,7 +115,9 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
           disabled={!canConfirm}
           onClick={() => void confirm()}
         >
+          <RequestGroupNotice request={request} />
           {networkError ? <RotateCcw size={16} aria-hidden /> : null}
+          <RequestGroupNotice request={request} />
           {networkError ? "다시 시도" : "반려"}
         </Button>
       </ResponsiveDialog.Footer>

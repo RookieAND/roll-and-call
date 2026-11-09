@@ -3,3 +3,4 @@ export { RulebooksView } from "./ui/rulebooks-view";
 export { RulebooksLoading } from "./ui/rulebooks-loading";
 export { RulebooksMobileView } from "./ui/rulebooks-mobile-view";
 export { RulebooksMobileLoading } from "./ui/rulebooks-mobile-loading";
+export { RulebookRequestsPreview } from "./ui/rulebook-requests-preview";

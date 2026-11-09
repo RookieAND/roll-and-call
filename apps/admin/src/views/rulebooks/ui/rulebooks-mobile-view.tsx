@@ -26,6 +26,7 @@ import { BookRow } from "./mobile/book-row";
 import { CategoryHead } from "./mobile/category-head";
 import { RequestDetail } from "./mobile/request-detail";
 import { RequestList } from "./mobile/request-list";
+import { RequestGroupPanel } from "./request-group-panel";
 
 interface RulebooksMobileViewProps {
   tab: RulebooksTab;
@@ -36,6 +37,7 @@ interface RulebooksMobileViewProps {
     editionsWithoutCore: string[];
   };
   requests: RulebookRequestRow[];
+  groupRequests?: RulebookRequestRow[];
   sellers: CertSellerRow[];
   query: Record<string, string | undefined>;
 }
@@ -45,10 +47,15 @@ export function RulebooksMobileView({
   tab,
   rulebooks,
   requests,
+  groupRequests = [],
   sellers,
   query,
 }: RulebooksMobileViewProps) {
-  const pageQuery = { tab: tab === RULEBOOKS_TAB.list ? undefined : tab, q: query.q };
+  const pageQuery = {
+    tab: tab === RULEBOOKS_TAB.list ? undefined : tab,
+    q: query.q,
+    group: query.group,
+  };
   const actionHref = (action: RequestAction, requestId: string) =>
     action === REQUEST_ACTION.add
       ? withQuery("/rules/new", {}, { request: requestId })
@@ -57,6 +64,22 @@ export function RulebooksMobileView({
     tab === RULEBOOKS_TAB.requests
       ? (requests.find((request) => request.id === query.request) ?? null)
       : null;
+  if (tab === RULEBOOKS_TAB.requests && groupRequests.length)
+    return (
+      <>
+        <AdminHeader
+          title="묶음 요청 검토"
+          trail={[{ href: "/rules?tab=requests", label: "추가 요청" }]}
+        />
+        <div className="p-150">
+          <RequestGroupPanel
+            requests={groupRequests}
+            selectedId={query.request}
+            actionHref={actionHref}
+          />
+        </div>
+      </>
+    );
   if (openedRequest) return <RequestDetail request={openedRequest} actionHref={actionHref} />;
 
   const groups = rulebooks.categories

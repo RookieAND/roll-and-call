@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
-import { conflictToastText, useActionSubmit } from "@/shared/lib";
+import { conflictToastText, useActionSubmit, withQuery } from "@/shared/lib";
 import { useServerPath } from "@/shared/ui";
 
 import { submitRulebookNew } from "../api/submit-rulebook-new";
@@ -46,7 +46,9 @@ export function useAddRulebookForm({
   const [reason, setReason] = useState(request ? "추가 요청 승인" : "");
   const [duplicate, setDuplicate] = useState(false);
 
-  const backHref = request ? "/rules?tab=requests" : "/rules";
+  const backHref = request
+    ? withQuery("/rules", { tab: "requests" }, { group: request.groupId })
+    : "/rules";
   const categories = uniq(rulebooks.map((rulebook) => rulebook.category));
   const category = draftCategory(draft, rulebooks);
   const help =

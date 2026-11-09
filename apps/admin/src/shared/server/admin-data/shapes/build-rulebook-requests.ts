@@ -22,6 +22,9 @@ export function buildRulebookRequests({
   const gamesOf = groupBy(tables.requestGameRows, (link) => link.requestId);
   return tables.requestRows.map((row) => ({
     id: row.id,
+    groupId: row.groupId,
+    outcome: row.outcome,
+    rejectReason: row.rejectReason,
     userId: row.userId,
     name: rulebookLabel(row),
     bookName: row.name,

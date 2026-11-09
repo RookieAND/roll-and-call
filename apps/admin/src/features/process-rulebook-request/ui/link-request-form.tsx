@@ -17,6 +17,7 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 import { NotificationPreview } from "@/entities/notification";
+import { RequestGroupNotice } from "@/entities/rulebook";
 import { RULEBOOK_KIND_LABEL } from "@/entities/rulebook";
 import type { RulebookRequestRow, RulebookRow } from "@/entities/rulebook/server";
 import {
@@ -90,6 +91,7 @@ export function LinkRequestForm({ request, rulebooks, viewerId, onDone }: LinkRe
       </ResponsiveDialog.Header>
       <ResponsiveDialog.Body>
         <VStack gap="150">
+          <RequestGroupNotice request={request} />
           {networkError ? <ActionNetworkError /> : null}
           <VStack gap="075">
             <Text typography="body4" weight="bold" id="link-rulebook-label">

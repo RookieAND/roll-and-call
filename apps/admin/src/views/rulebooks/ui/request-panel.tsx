@@ -17,8 +17,10 @@ import {
   Tag,
   TABLE_COLUMN,
   EmptyDash,
+  ServerLink,
 } from "@/shared/ui";
 
+import { groupRulebookRequests } from "../model/group-rulebook-requests";
 import { requesterOf } from "../model/requester-of";
 import { RequestGamesPopover } from "./request-games-popover";
 
@@ -67,65 +69,111 @@ export function RequestPanel({ requests, actionHref }: RequestPanelProps) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {requests.map((request) => (
-            <Table.Row key={request.id}>
-              <Table.Cell>
-                <VStack gap="025" className="min-w-0">
-                  <Text typography="body3" weight="bold" className="break-keep">
-                    {request.name}
-                  </Text>
-                  {request.similarTo ? (
-                    <Text typography="body4" foreground="hint" truncate>
-                      비슷한 룰북: {request.similarTo}
+          {groupRulebookRequests(requests).map((books) => {
+            const request = books[0]!;
+            if (request.groupId && request.groupTotal > 1)
+              return (
+                <Table.Row key={request.groupId}>
+                  <Table.Cell>
+                    <ServerLink
+                      path={`/rules?tab=requests&group=${request.groupId}`}
+                      className="text-body3 font-bold underline"
+                    >
+                      {request.requesterNickname}님의 룰북 {request.groupTotal}권
+                    </ServerLink>
+                    <Text typography="body4" foreground="hint" className="mt-050 line-clamp-2">
+                      {books.map((book) => book.name).join(", ")}
                     </Text>
-                  ) : null}
-                </VStack>
-              </Table.Cell>
-              <Table.Cell>
-                <Text typography="body3" foreground="hint" numeric>
-                  {`${formatFullDate(request.requestedAt)} · ${request.waitedDays}일째`}
-                </Text>
-              </Table.Cell>
-              <Table.Cell>
-                {request.category ? (
-                  <Text typography="body3">{request.category}</Text>
-                ) : (
-                  <EmptyDash />
-                )}
-              </Table.Cell>
-              <Table.Cell>
-                <Tag>{request.kind ? RULEBOOK_KIND_LABEL[request.kind] : "잘 모름"}</Tag>
-              </Table.Cell>
-              <Table.Cell>
-                <Text typography="body3" truncate title={requesterOf(request)}>
-                  {requesterOf(request)}
-                </Text>
-              </Table.Cell>
-              <Table.Cell>
-                {request.games ? (
-                  <VStack align="start" gap="025">
-                    <Text typography="body3">구인에서 직접 입력</Text>
-                    <RequestGamesPopover games={request.games} />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text typography="body3" foreground="hint">
+                      {formatFullDate(request.requestedAt)} · {request.waitedDays}일째
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Tag>묶음 요청</Tag>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text typography="body3">대기 {books.length}권</Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text typography="body3">{request.requesterNickname}</Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text typography="body3">
+                      전체 {request.groupTotal}권 · 완료 {request.groupCompleted}권
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell align="end">
+                    <ServerLink
+                      path={`/rules?tab=requests&group=${request.groupId}`}
+                      className="text-body3 underline"
+                    >
+                      검토
+                    </ServerLink>
+                  </Table.Cell>
+                </Table.Row>
+              );
+            return (
+              <Table.Row key={request.id}>
+                <Table.Cell>
+                  <VStack gap="025" className="min-w-0">
+                    <Text typography="body3" weight="bold" className="break-keep">
+                      {request.name}
+                    </Text>
+                    {request.similarTo ? (
+                      <Text typography="body4" foreground="hint" truncate>
+                        비슷한 룰북: {request.similarTo}
+                      </Text>
+                    ) : null}
                   </VStack>
-                ) : null}
-                {!request.games && request.note ? (
-                  <Text typography="body3">{request.note}</Text>
-                ) : null}
-                {!request.games && !request.note ? <EmptyDash /> : null}
-              </Table.Cell>
-              <Table.Cell align="end">
-                <RequestActions
-                  label={request.name}
-                  similar={Boolean(request.similarTo)}
-                  actionHrefs={{
-                    [REQUEST_ACTION.add]: actionHref(REQUEST_ACTION.add, request.id),
-                    [REQUEST_ACTION.link]: actionHref(REQUEST_ACTION.link, request.id),
-                    [REQUEST_ACTION.reject]: actionHref(REQUEST_ACTION.reject, request.id),
-                  }}
-                />
-              </Table.Cell>
-            </Table.Row>
-          ))}
+                </Table.Cell>
+                <Table.Cell>
+                  <Text typography="body3" foreground="hint" numeric>
+                    {`${formatFullDate(request.requestedAt)} · ${request.waitedDays}일째`}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  {request.category ? (
+                    <Text typography="body3">{request.category}</Text>
+                  ) : (
+                    <EmptyDash />
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  <Tag>{request.kind ? RULEBOOK_KIND_LABEL[request.kind] : "잘 모름"}</Tag>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text typography="body3" truncate title={requesterOf(request)}>
+                    {requesterOf(request)}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  {request.games ? (
+                    <VStack align="start" gap="025">
+                      <Text typography="body3">구인에서 직접 입력</Text>
+                      <RequestGamesPopover games={request.games} />
+                    </VStack>
+                  ) : null}
+                  {!request.games && request.note ? (
+                    <Text typography="body3">{request.note}</Text>
+                  ) : null}
+                  {!request.games && !request.note ? <EmptyDash /> : null}
+                </Table.Cell>
+                <Table.Cell align="end">
+                  <RequestActions
+                    label={request.name}
+                    similar={Boolean(request.similarTo)}
+                    actionHrefs={{
+                      [REQUEST_ACTION.add]: actionHref(REQUEST_ACTION.add, request.id),
+                      [REQUEST_ACTION.link]: actionHref(REQUEST_ACTION.link, request.id),
+                      [REQUEST_ACTION.reject]: actionHref(REQUEST_ACTION.reject, request.id),
+                    }}
+                  />
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </Table.Root>
     </Panel>
