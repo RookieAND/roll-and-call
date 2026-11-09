@@ -883,6 +883,13 @@
       "when": 1799900100000,
       "tag": "0131_drop_accent_color",
       "breakpoints": true
+    },
+    {
+      "idx": 132,
+      "version": "7",
+      "when": 1799900200000,
+      "tag": "0132_homebrew_summary_200",
+      "breakpoints": true
     }
   ]
 }
