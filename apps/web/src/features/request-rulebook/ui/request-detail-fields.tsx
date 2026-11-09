@@ -30,7 +30,7 @@ export function RequestDetailFields({
     customCategory || Boolean(value.category && !categoryNames.includes(value.category));
   return (
     <div className="grid gap-150 sm:grid-cols-2">
-      <Field.Root label="카테고리" htmlFor={`${id}-category`}>
+      <Field.Root label="카테고리" htmlFor={`${id}-category`} className="sm:col-span-2">
         <OptionSelect
           id={`${id}-category`}
           placeholder="카테고리 선택"
@@ -57,7 +57,7 @@ export function RequestDetailFields({
           />
         )}
       </Field.Root>
-      <Field.Root label="판본" htmlFor={`${id}-edition`}>
+      <Field.Root label="판본" htmlFor={`${id}-edition`} className="sm:col-span-2">
         <TextInput
           id={`${id}-edition`}
           placeholder="예: 7판 · 모르면 비워 두세요"

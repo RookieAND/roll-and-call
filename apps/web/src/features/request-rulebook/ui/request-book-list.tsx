@@ -1,6 +1,5 @@
 "use client";
 
-import { RULEBOOK_REQUEST_MAX_BOOKS } from "@roll-and-call/database/rulebooks/model";
 import { Badge, Button, IconButton, Text, cn } from "@roll-and-call/ui";
 import { BookOpen, Trash2 } from "lucide-react";
 
@@ -42,9 +41,6 @@ export function RequestBookList({
         </Text>
         <Badge colorPalette="primary">{drafts.length}권</Badge>
       </div>
-      <Text typography="body4" foreground="muted" render={<p />}>
-        목록에서 책을 선택해 내용을 수정할 수 있어요.
-      </Text>
       <fieldset disabled={pending} className="m-0 min-w-0 border-0 p-0">
         <ol className="my-175 max-h-[50dvh] space-y-075 overflow-y-auto" aria-label="작성한 룰북">
           {drafts.map((draft, index) => {
@@ -101,9 +97,6 @@ export function RequestBookList({
           })}
         </ol>
       </fieldset>
-      <Text typography="body5" foreground="hint" render={<p />} className="mb-175">
-        최대 {RULEBOOK_REQUEST_MAX_BOOKS}권까지 함께 요청할 수 있어요.
-      </Text>
       {submitError && (
         <Text role="alert" typography="body4" foreground="danger" render={<p />} className="mb-125">
           {submitError}
@@ -118,9 +111,6 @@ export function RequestBookList({
       >
         {drafts.length}권 추가 요청 보내기
       </Button>
-      <Text typography="body5" foreground="muted" render={<p />} className="mt-125 break-keep">
-        운영진은 책마다 따로 검토하고, 결과를 알림으로 알려 드립니다.
-      </Text>
     </section>
   );
 }

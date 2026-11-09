@@ -1,5 +1,6 @@
 "use client";
 
+import { RULEBOOK_REQUEST_MAX_BOOKS } from "@roll-and-call/database/rulebooks/model";
 import { Container, Text, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 
@@ -33,7 +34,9 @@ export function RulebookRequestScreen({
             {query ? `"${query}"에 맞는 룰북이 없습니다` : "찾는 룰북을 알려 주세요"}
           </Text>
           <Text typography="body2" foreground="muted" render={<p />}>
-            룰북마다 정보를 입력하고, 작성한 책을 한 번에 요청하세요.
+            최대 {RULEBOOK_REQUEST_MAX_BOOKS}권까지 함께 요청할 수 있어요.
+            <br />
+            운영진은 책마다 따로 검토하고, 결과를 알림으로 알려 드립니다.
           </Text>
         </VStack>
       }

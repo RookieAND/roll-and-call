@@ -1,5 +1,6 @@
 "use client";
 
+import { RULEBOOK_REQUEST_MAX_BOOKS } from "@roll-and-call/database/rulebooks/model";
 import { Sheet, Text } from "@roll-and-call/ui";
 
 import { RulebookRequestBody } from "./rulebook-request-body";
@@ -33,7 +34,9 @@ export function RulebookRequestSheet({
             initialName={initialName}
             intro={
               <Text typography="body3" foreground="muted" render={<p />}>
-                여러 권을 한 번에 요청할 수 있어요. 검토 결과는 책마다 알려 드립니다.
+                최대 {RULEBOOK_REQUEST_MAX_BOOKS}권까지 함께 요청할 수 있어요.
+                <br />
+                운영진은 책마다 따로 검토하고, 결과를 알림으로 알려 드립니다.
               </Text>
             }
             onSent={() => onOpenChange(false)}

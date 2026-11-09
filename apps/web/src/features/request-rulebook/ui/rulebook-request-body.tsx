@@ -169,14 +169,6 @@ export function RulebookRequestBody({
               <Plus size={18} />
               다음 룰북 작성
             </Button>
-            <Text
-              typography="body4"
-              foreground="muted"
-              render={<p />}
-              className="mt-125 break-keep"
-            >
-              작성한 내용은 목록에 보관됩니다. 다른 책의 정보를 이어서 입력할 수 있어요.
-            </Text>
           </div>
         </VStack>
       </fieldset>
