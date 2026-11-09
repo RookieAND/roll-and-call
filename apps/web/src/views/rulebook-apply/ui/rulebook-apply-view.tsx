@@ -1,5 +1,5 @@
 import { getRulebookRecords } from "@roll-and-call/database/certifications";
-import { Container, Progress, Text } from "@roll-and-call/ui";
+import { Container } from "@roll-and-call/ui";
 import { redirect } from "next/navigation";
 
 import { toMyRulebooks } from "@/entities/rulebook";
@@ -34,26 +34,5 @@ export async function RulebookApplyView({ rulebookIds }: RulebookApplyViewProps)
   }
   const data = toMyRulebooks(await getRulebookRecords({ serverId: server.id, userId: user.id }));
   if (data.sanction) redirect(serverPath({ slug: server.slug, path: "/me/rulebooks" }));
-  return (
-    <PageShell
-      readable
-      appBar={
-        <AppBar
-          back="/me/rulebooks/apply"
-          title="인증 신청"
-          heading={false}
-          action={
-            <Text typography="body4" foreground="hint" numeric className="px-100">
-              2 / 3
-            </Text>
-          }
-        />
-      }
-    >
-      <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={2} max={3} className="h-[3px] rounded-none" aria-label="진행" />
-        <BookPicker rulebooks={data.rulebooks} initialRulebookIds={rulebookIds} />
-      </div>
-    </PageShell>
-  );
+  return <BookPicker rulebooks={data.rulebooks} initialRulebookIds={rulebookIds} />;
 }

@@ -7,3 +7,4 @@ export { RulebookRequestView } from "./ui/rulebook-request-view";
 export { RulebookRequestSkeleton } from "./ui/rulebook-request-skeleton";
 export { RulebookApplyStartView } from "./ui/rulebook-apply-start-view";
 export { RulebookApplyStartSkeleton } from "./ui/rulebook-apply-start-skeleton";
+export { BookPickerPreview } from "./ui/book-picker-preview";
