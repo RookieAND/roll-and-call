@@ -15,6 +15,17 @@ const base = {
 const texts = (input: Parameters<typeof seatCount>[0]) => seatCount(input).map((cell) => cell.text);
 
 describe("seatCount", () => {
+  it("일정이 확정된 구인도 모집 방식 대신 참여자와 확정 인원을 표시한다", () => {
+    expect(
+      texts({
+        ...base,
+        status: GAME_STATUS.scheduled,
+        recruitMethod: RECRUIT_METHOD.lottery,
+        confirmed: 5,
+        maxPlayers: 5,
+      }),
+    ).toEqual(["참여자", "확정 5"]);
+  });
   it("참여 확정 카드에서는 모집 방식 대신 참여자와 굵은 확정 인원을 표시한다", () => {
     const cells = seatCount({
       ...base,
@@ -41,13 +52,14 @@ describe("seatCount", () => {
         waiting: 5,
         status: GAME_STATUS.closed,
       }),
-    ).toEqual(["추첨", "2"]);
+    ).toEqual(["참여자", "확정 2"]);
   });
-  it("종료된 지난 구인도 사람 아이콘과 참여자 수만 표시한다", () => {
+  it("종료된 지난 구인은 정원 없이 확정 참여자 수만 표시한다", () => {
     expect(seatCount({ ...base, past: true, ended: true })[1]).toMatchObject({
-      text: "2",
-      icon: "participants",
+      text: "확정 2",
+      tone: "strong",
     });
+    expect(texts({ ...base, past: true, isPrivate: true })).toEqual(["참여자", "확정 2"]);
   });
   it("종료한 지정 모집은 선착순 대신 지정 모집과 참여 수를 적는다", () => {
     expect(texts({ ...base, isPrivate: true, ended: true })).toEqual(["지정 모집", "참여 2"]);
