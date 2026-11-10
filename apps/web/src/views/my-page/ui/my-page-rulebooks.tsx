@@ -33,9 +33,6 @@ export function MyPageRulebooks({
         <Text typography="heading3" render={<h2 />} className="flex-1">
           인증한 룰북
         </Text>
-        <Text typography="body4" foreground="hint" numeric>
-          {certifiedRows.length}
-        </Text>
       </HStack>
 
       {showBand && (

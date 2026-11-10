@@ -21,9 +21,6 @@ export function MyPageBadges({ heldCount, goal, recent }: MyPageBadgesProps) {
         <Text typography="heading3" render={<h2 />}>
           업적
         </Text>
-        <Text typography="body4" foreground="hint" numeric className="ml-auto">
-          {heldCount}개
-        </Text>
       </HStack>
       <div className={MY_PAGE_GROUP_CLASS}>
         {goal && (
