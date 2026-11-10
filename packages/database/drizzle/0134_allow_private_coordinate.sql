@@ -1,0 +1,1 @@
+ALTER TABLE "games" DROP CONSTRAINT "games_private_fixed";

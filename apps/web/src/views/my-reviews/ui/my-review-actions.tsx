@@ -23,7 +23,7 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
     <>
       <HStack align="center" gap="050" className="mt-025 border-t border-gray-200 pt-100">
         {card.caption && (
-          <Badge colorPalette="primary">
+          <Badge colorPalette="primary" className="gap-050">
             <Clock size={12} aria-hidden />
             {card.caption}
           </Badge>

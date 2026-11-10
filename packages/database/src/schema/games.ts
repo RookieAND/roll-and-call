@@ -211,10 +211,6 @@ export const games = pgTable(
         sql`recruit_method = 'selection' and selection_finished_at is null and cancelled_at is null`,
       ),
     check("games_briefing_voice", sql`${table.kind} <> 'briefing' or ${table.playType} = 'voice'`),
-    check(
-      "games_private_fixed",
-      sql`${table.visibility} = 'public' or ${table.scheduleMode} = 'fixed'`,
-    ),
     check("games_max_players_positive", sql`${table.maxPlayers} >= 1`),
     check(
       "games_application_question_length",

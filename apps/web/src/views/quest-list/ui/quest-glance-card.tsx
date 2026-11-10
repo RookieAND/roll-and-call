@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, Collapsible, HStack, Text, VStack } from "@roll-and-call/ui";
 import { ChevronDown } from "lucide-react";
 
