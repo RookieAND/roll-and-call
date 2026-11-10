@@ -13,6 +13,8 @@ export function seatCount({
   waiting,
   maxPlayers,
   ended,
+  isPrivate = false,
+  past = false,
 }: {
   status: GameStatus;
   recruitMethod: RecruitMethod;
@@ -20,9 +22,15 @@ export function seatCount({
   waiting: number;
   maxPlayers: number;
   ended: boolean;
+  isPrivate?: boolean;
+  past?: boolean;
 }): SeatCell[] {
-  const method: SeatCell = { text: recruitMethodLabel(recruitMethod), tone: SEAT_TONE.method };
+  const method: SeatCell = {
+    text: isPrivate ? "지정 모집" : recruitMethodLabel(recruitMethod),
+    tone: SEAT_TONE.method,
+  };
   if (ended) return [method, { text: `참여 ${confirmed}`, tone: SEAT_TONE.plain }];
+  if (past) return [method, { text: `확정 ${confirmed}/${maxPlayers}`, tone: SEAT_TONE.plain }];
 
   const open = status === GAME_STATUS.recruiting || status === GAME_STATUS.confirmed;
   if (recruitMethod === RECRUIT_METHOD.lottery) {

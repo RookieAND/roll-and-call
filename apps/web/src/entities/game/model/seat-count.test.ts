@@ -15,6 +15,20 @@ const base = {
 const texts = (input: Parameters<typeof seatCount>[0]) => seatCount(input).map((cell) => cell.text);
 
 describe("seatCount", () => {
+  it("지난 추첨 구인도 대기자를 빼고 확정 인원을 표시한다", () => {
+    expect(
+      texts({
+        ...base,
+        past: true,
+        recruitMethod: RECRUIT_METHOD.lottery,
+        waiting: 5,
+        status: GAME_STATUS.closed,
+      }),
+    ).toEqual(["추첨", "확정 2/4"]);
+  });
+  it("종료한 지정 모집은 선착순 대신 지정 모집과 참여 수를 적는다", () => {
+    expect(texts({ ...base, isPrivate: true, ended: true })).toEqual(["지정 모집", "참여 2"]);
+  });
   it("선착순 자리 있음", () => {
     expect(texts(base)).toEqual(["선착순", "확정 2/4"]);
   });

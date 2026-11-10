@@ -38,7 +38,8 @@ describe("pastGameCardView", () => {
       now,
     );
     expect(view.grayBadge).toBe("취소됨");
-    expect(view.meta).toBe("CoC 7th · 9월 10일 취소");
+    expect(view.meta).toBe("CoC 7th");
+    expect(view.schedule).toBe("9월 10일 취소");
   });
 
   it("세션이 끝났으면 「종료」, 아니면 구인 상태 배지", () => {
@@ -51,12 +52,15 @@ describe("pastGameCardView", () => {
       now,
     );
     expect(ended.grayBadge).toBe("종료");
-    expect(ended.meta).toBe("CoC 7th · 8월 3일 세션 · 1명");
+    expect(ended.meta).toBe("CoC 7th");
+    expect(ended.schedule).toBe("8월 3일 (월) 20:00");
+    expect(ended.confirmedCount).toBe(1);
 
     const closed = pastGameCardView(pastGame({}), now);
     expect(closed.grayBadge).toBeNull();
     expect(closed.status).toBe(GAME_STATUS.closed);
-    expect(closed.meta).toBe("CoC 7th · 9월 12일 마감");
+    expect(closed.meta).toBe("CoC 7th");
+    expect(closed.schedule).toBe("9월 12일 마감");
   });
 
   it("썸네일: 있으면 그 이미지, 없으면 기본 이미지, 스포일러면 빈 칸", () => {

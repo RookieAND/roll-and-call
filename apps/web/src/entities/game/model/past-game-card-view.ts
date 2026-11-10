@@ -1,6 +1,7 @@
 import type { Game } from "@roll-and-call/database";
 import {
   deriveGameStatus,
+  formatPlayRange,
   GAME_VISIBILITY,
   isSessionEnded,
   type GameStatus,
@@ -10,6 +11,7 @@ import { compact, isNil } from "es-toolkit";
 import { formatDate, OG_IMAGE } from "@/shared/lib";
 
 import { countConfirmed, type ParticipantStatus } from "./participant";
+import { scheduleLine } from "./schedule-line";
 
 type PastGame = Game & { participants: { userId: string; status: ParticipantStatus }[] };
 
@@ -19,6 +21,8 @@ export interface PastGameCardView {
   status: GameStatus;
   meta: string;
   isPrivate: boolean;
+  schedule: string;
+  confirmedCount: number;
   // null이면 스포일러라 회색 빈 칸을 그린다.
   thumbnailUrl: string | null;
 }
@@ -37,24 +41,29 @@ export function pastGameCardView(game: PastGame, now: Date = new Date()): PastGa
     cancelledAt: game.cancelledAt,
   });
   const thumbnailUrl = game.thumbnailSpoiler ? null : (game.thumbnailUrl ?? OG_IMAGE.url);
+  const meta = compact([game.rule, formatPlayRange(game.playMinutesMin, game.playMinutes)]).join(
+    " · ",
+  );
 
   if (!isNil(game.cancelledAt)) {
     return {
       grayBadge: "취소됨",
       status,
-      meta: compact([game.rule, `${formatDate(game.cancelledAt)} 취소`]).join(" · "),
+      meta,
+      schedule: `${formatDate(game.cancelledAt)} 취소`,
+      confirmedCount: count,
       isPrivate,
       thumbnailUrl,
     };
   }
 
-  const when = game.confirmedAt
-    ? `${formatDate(game.confirmedAt)} 세션 · ${count}명`
-    : `${formatDate(game.endDate)} 마감`;
+  const when = game.confirmedAt ? scheduleLine(game, now).text : `${formatDate(game.endDate)} 마감`;
   return {
     grayBadge: isSessionEnded(game, now) ? "종료" : null,
     status,
-    meta: compact([game.rule, when]).join(" · "),
+    meta,
+    schedule: when,
+    confirmedCount: count,
     isPrivate,
     thumbnailUrl,
   };
