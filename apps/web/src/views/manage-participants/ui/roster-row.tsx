@@ -16,6 +16,7 @@ interface RosterRowProps {
   badge?: ReactNode;
   quote?: string | null;
   dimmed?: boolean;
+  borderTop?: boolean;
   action?: ReactNode;
   onOpenQuote?: () => void;
 }
@@ -28,11 +29,15 @@ export function RosterRow({
   badge,
   quote,
   dimmed = false,
+  borderTop = false,
   action,
   onOpenQuote,
 }: RosterRowProps) {
   return (
-    <VStack gap={0} className={cn(dimmed && "opacity-60")}>
+    <VStack
+      gap={0}
+      className={cn(borderTop && "border-t border-gray-200", dimmed && "opacity-60")}
+    >
       <HStack align="center" gap="125" className="min-h-15 py-100 pr-075 pl-175">
         <ServerLink
           path={`/users/${member.userId}`}

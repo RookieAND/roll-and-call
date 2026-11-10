@@ -132,10 +132,11 @@ export function RosterQueues({
           footnote={<RosterHint lines={waitingHintLines(summary)} />}
         >
           <ExpandableRows>
-            {waiting.map((member) => (
+            {waiting.map((member, index) => (
               <RosterRow
                 key={member.userId}
                 member={member}
+                borderTop={index > 0}
                 rank={beforeDraw ? null : member.waitlistRank}
                 note={`${toKst(member.joinedAt).format("M월 D일 HH:mm:ss")} 신청`}
                 noteForeground="hint"
