@@ -36,7 +36,7 @@ export function sessionCardContent({
     !past &&
     ((game.recruitMethod === RECRUIT_METHOD.lottery && !game.drawnAt) ||
       (game.recruitMethod === RECRUIT_METHOD.selection && !game.selectionFinishedAt));
-  let notice = card.cancelled || card.titleDanger ? (card.scheduleNote ?? null) : null;
+  let notice = card.titleDanger && !card.cancelled ? (card.scheduleNote ?? null) : null;
   let primaryAction = card.action;
 
   if (!context.readOnly) {

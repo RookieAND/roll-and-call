@@ -182,6 +182,7 @@ describe("취소된 구인", () => {
       expect(card.action).toBeNull();
       expect(card.todo).toBeNull();
       expect(card).toMatchObject({ schedule: "9/13", scheduleNote: "GM 사정" });
+      expect(card.content?.notice).toBeNull();
     }
   });
 

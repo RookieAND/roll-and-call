@@ -2,6 +2,7 @@ import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
 import { CalendarDays, CircleAlert } from "lucide-react";
 
 import { GameCapacity, GameThumbnail } from "@/entities/game";
+import { ReopenGameLink } from "@/features/reopen-game";
 import { ServerLink } from "@/shared/ui";
 
 import {
@@ -11,7 +12,6 @@ import {
 } from "../model/session-card-model";
 import { HiddenSessionCard } from "./hidden-session-card";
 import { SessionCardAction } from "./session-card-action";
-import { SessionCardMenu } from "./session-card-menu";
 
 interface SessionCardProps {
   model: SessionCardModel;
@@ -23,6 +23,8 @@ export function SessionCard({ model }: SessionCardProps) {
   const past = model.chip === SESSION_CHIP.ended;
   const primary = content ? content.primaryAction : model.action;
   const notice = content ? content.notice : model.scheduleNote;
+  const secondary =
+    !model.canReopen && model.action && model.action.href !== primary?.href ? model.action : null;
 
   return (
     <Card.Root
@@ -75,7 +77,6 @@ export function SessionCard({ model }: SessionCardProps) {
             </Text>
           </VStack>
         </ServerLink>
-        <SessionCardMenu model={model} />
       </div>
 
       <ServerLink
@@ -96,6 +97,7 @@ export function SessionCard({ model }: SessionCardProps) {
             {content?.calendar ?? model.schedule}
           </Text>
         </HStack>
+        {content && <GameCapacity {...content.capacity} />}
       </ServerLink>
 
       {notice && (
@@ -113,14 +115,25 @@ export function SessionCard({ model }: SessionCardProps) {
         </HStack>
       )}
       <div className="mt-auto">
-        {content && (
-          <div className="mx-175 mb-150 flex justify-end">
-            <GameCapacity {...content.capacity} />
-          </div>
-        )}
-        {primary && (
-          <div className="border-t border-gray-200 px-175 py-150">
-            <SessionCardAction model={{ ...model, action: primary }} />
+        {(primary || secondary || model.canReopen) && (
+          <div
+            className={cn(
+              "grid gap-100 border-t border-gray-200 px-175 py-150 *:min-w-0",
+              primary &&
+                (secondary || model.canReopen) &&
+                "grid-cols-2 [&>[data-slot=button]]:px-125",
+            )}
+          >
+            {primary && <SessionCardAction model={{ ...model, action: primary }} />}
+            {secondary && <SessionCardAction model={{ ...model, action: secondary }} />}
+            {model.canReopen && (
+              <ReopenGameLink
+                gameId={model.id}
+                size="lg"
+                variant="outline"
+                colorPalette="primary"
+              />
+            )}
           </div>
         )}
       </div>
