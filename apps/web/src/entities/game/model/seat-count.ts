@@ -25,14 +25,17 @@ export function seatCount({
   ended: boolean;
   isPrivate?: boolean;
   past?: boolean;
-  display?: "default" | "ratio";
+  display?: "default" | "confirmed";
 }): SeatCell[] {
   const method: SeatCell = {
     text: isPrivate ? "지정 모집" : recruitMethodLabel(recruitMethod),
     tone: SEAT_TONE.method,
   };
-  if (display === "ratio")
-    return [method, { text: `${confirmed}/${maxPlayers}`, tone: SEAT_TONE.plain }];
+  if (display === "confirmed")
+    return [
+      { text: "참여자", tone: SEAT_TONE.method },
+      { text: `확정 ${confirmed}`, tone: SEAT_TONE.strong },
+    ];
   if (past)
     return [method, { text: String(confirmed), tone: SEAT_TONE.plain, icon: "participants" }];
   if (ended) return [method, { text: `참여 ${confirmed}`, tone: SEAT_TONE.plain }];

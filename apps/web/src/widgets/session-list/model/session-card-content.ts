@@ -78,7 +78,7 @@ export function sessionCardContent({
     ended: past && !card.cancelled,
     past,
     isPrivate: game.visibility === GAME_VISIBILITY.private,
-    display: !beforeResult && (host || confirmedViewer) ? "ratio" : "default",
+    display: !beforeResult && (host || confirmedViewer) ? "confirmed" : "default",
   };
   return {
     rule: game.rule,

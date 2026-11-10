@@ -109,7 +109,11 @@ describe("참여 카드", () => {
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
     expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
     expect(card.schedule).toMatch(/ · 모레$/);
-    expect(card.content?.capacity).toMatchObject({ display: "ratio", confirmed: 1, maxPlayers: 4 });
+    expect(card.content?.capacity).toMatchObject({
+      display: "confirmed",
+      confirmed: 1,
+      maxPlayers: 4,
+    });
   });
 });
 
