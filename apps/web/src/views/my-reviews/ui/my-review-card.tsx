@@ -12,8 +12,8 @@ interface MyReviewCardProps {
 
 export function MyReviewCard({ card }: MyReviewCardProps) {
   return (
-    <Card.Root padding="md" radius={500} render={<article />}>
-      <VStack gap="100">
+    <Card.Root padding="md" radius={500} render={<article />} className="desktop:h-full">
+      <VStack gap="100" className="desktop:h-full">
         <HStack align="start" gap="100">
           <VStack gap="025" className="min-w-0 flex-1">
             <HStack align="center" gap="075" className="min-w-0">

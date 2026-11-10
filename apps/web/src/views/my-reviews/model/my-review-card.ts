@@ -27,6 +27,8 @@ export type MyReviewCardModel = {
   callout: { palette: Palette; title: string; lines: string[] } | null;
   actions: MyReviewActions;
   editHref: string;
+  gameHref: string;
+  reviewsHref: string;
   subject: string;
 };
 
@@ -54,6 +56,8 @@ export function toMyReviewCard(row: MyReviewRow, now: Date = new Date()): MyRevi
     caption: null,
     callout: null,
     editHref: `/games/${row.gameId}/review`,
+    gameHref: `/games/${row.gameId}`,
+    reviewsHref: `/games/${row.gameId}/reviews`,
     subject: `${row.gameTitle} · ${sessionDate} 세션`,
   };
 

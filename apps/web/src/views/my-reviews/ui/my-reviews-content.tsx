@@ -22,7 +22,7 @@ export function MyReviewsContent({ signedIn, cards }: MyReviewsContentProps) {
       />
     );
   return (
-    <VStack gap="150" className="desktop:grid desktop:grid-cols-2 desktop:items-start">
+    <VStack gap="150" className="desktop:grid desktop:auto-rows-fr desktop:grid-cols-2">
       {cards.map((card) => (
         <MyReviewCard key={card.id} card={card} />
       ))}
