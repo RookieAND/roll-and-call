@@ -13,16 +13,25 @@ interface HomeSessionCardProps {
 
 export function HomeSessionCard({ session, stacked = false }: HomeSessionCardProps) {
   const time = toKst(session.startsAt).format("HH:mm");
-  const seats = (
+  const seatLabel = `참여 인원 ${session.players.length}/${session.maxPlayers}`;
+  const seats = stacked ? (
+    <Badge
+      colorPalette="gray"
+      aria-label={seatLabel}
+      className="flex-none gap-050"
+    >
+      <User size={12} aria-hidden />
+      {session.players.length}/{session.maxPlayers}
+    </Badge>
+  ) : (
     <Text
       typography="body4"
       weight="bold"
       foreground="hint"
       numeric
-      aria-label={`참여 인원 ${session.players.length}/${session.maxPlayers}`}
+      aria-label={seatLabel}
       className="flex flex-none items-center gap-050"
     >
-      {!stacked && <User size={12} aria-hidden />}
       {session.players.length}/{session.maxPlayers}
     </Text>
   );
