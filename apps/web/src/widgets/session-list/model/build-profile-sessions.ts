@@ -51,7 +51,15 @@ export function buildProfileSessions({
   const marked = (role: SessionRole) =>
     sessions[role].map((card) =>
       hiddenIds.has(card.id)
-        ? { ...card, hidden: true, title: "", schedule: "", scheduleNote: null, gm: null }
+        ? {
+            ...card,
+            hidden: true,
+            title: "",
+            schedule: "",
+            scheduleNote: null,
+            gm: null,
+            content: null,
+          }
         : card,
     );
 

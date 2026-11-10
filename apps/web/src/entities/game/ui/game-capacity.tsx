@@ -1,4 +1,5 @@
 import { HStack, Text, cn } from "@roll-and-call/ui";
+import { Users } from "lucide-react";
 
 import { seatCount } from "../model/seat-count";
 import { SEAT_CELL_CLASS } from "./seat-cell-class";
@@ -15,8 +16,10 @@ export function GameCapacity(input: Parameters<typeof seatCount>[0]) {
           typography="body4"
           numeric
           render={<span />}
-          className={cn("flex items-center px-100", SEAT_CELL_CLASS[cell.tone])}
+          aria-label={cell.icon === "participants" ? `참여자 ${cell.text}명` : undefined}
+          className={cn("flex items-center gap-050 px-100", SEAT_CELL_CLASS[cell.tone])}
         >
+          {cell.icon === "participants" && <Users size={14} aria-hidden className="shrink-0" />}
           {cell.text}
         </Text>
       ))}

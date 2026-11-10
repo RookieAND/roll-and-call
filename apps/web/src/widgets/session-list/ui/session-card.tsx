@@ -1,34 +1,13 @@
-import { Avatar, Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
-import { CalendarDays, CircleAlert, Clock } from "lucide-react";
+import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
+import { CalendarDays, CircleAlert, Users } from "lucide-react";
 
-import { GameThumbnail, PrivateMark } from "@/entities/game";
-import { ReopenGameLink } from "@/features/reopen-game";
+import { GameThumbnail, SESSION_ROLE } from "@/entities/game";
 import { ServerLink } from "@/shared/ui";
 
-import {
-  SESSION_CHIP,
-  SESSION_ICON,
-  SESSION_TONE,
-  type SessionCardModel,
-  type SessionIcon,
-  type SessionTone,
-} from "../model/session-card-model";
-import { sessionTitleForeground } from "../model/session-title-foreground";
+import { SESSION_CHIP, type SessionCardModel } from "../model/session-card-model";
 import { HiddenSessionCard } from "./hidden-session-card";
 import { SessionCardAction } from "./session-card-action";
-
-const TONE_CLASS: Record<SessionTone, string> = {
-  [SESSION_TONE.strong]: "font-semibold text-gray-900",
-  [SESSION_TONE.muted]: "text-gray-600",
-  [SESSION_TONE.warning]: "font-semibold text-warning-600",
-  [SESSION_TONE.danger]: "font-semibold text-danger-600",
-};
-
-const SCHEDULE_ICON: Record<SessionIcon, typeof Clock> = {
-  [SESSION_ICON.calendar]: CalendarDays,
-  [SESSION_ICON.clock]: Clock,
-  [SESSION_ICON.alert]: CircleAlert,
-};
+import { SessionCardMenu } from "./session-card-menu";
 
 interface SessionCardProps {
   model: SessionCardModel;
@@ -36,120 +15,113 @@ interface SessionCardProps {
 
 export function SessionCard({ model }: SessionCardProps) {
   if (model.hidden) return <HiddenSessionCard />;
-
-  const ScheduleIcon = SCHEDULE_ICON[model.scheduleIcon];
-  const titleForeground = sessionTitleForeground(model);
-  // 취소됨·불참은 붉은 카드와 꽉 찬 붉은 배지로 끝난 이유를 먼저 보인다.
-  const dangerCard = model.urgent || model.titleDanger;
-  const badgeVariant = model.titleDanger ? "solid" : "soft";
-
-  const captionForeground = model.caption?.strong ? "primary" : "hint";
-  const captionWeight = model.caption?.strong ? "bold" : "regular";
+  const content = model.content;
+  const past = model.chip === SESSION_CHIP.ended;
+  const primary = content ? content.primaryAction : model.action;
+  const notice = content ? content.notice : model.scheduleNote;
 
   return (
     <Card.Root
-      padding="sm"
+      padding="none"
       radius={600}
-      background="none"
       className={cn(
-        "desktop:flex desktop:h-full desktop:flex-col desktop:overflow-hidden desktop:p-0",
-        dangerCard ? "border-danger-200 bg-danger-50" : "bg-surface",
+        "flex h-full flex-col overflow-hidden bg-surface",
+        model.urgent && "border-danger-200",
       )}
     >
-      {/* 1100px 이상: 위 16:9 썸네일. 끝났거나 취소된 세션은 흑백이고, 스포일러는 회색 칸이다. */}
-      {model.thumbnailSpoiler ? (
-        <span className="hidden aspect-video w-full flex-none bg-gray-100 desktop:block" />
-      ) : (
-        <GameThumbnail
-          url={model.thumbnailUrl}
-          sizes="412px"
-          className={cn(
-            "hidden aspect-video w-full flex-none desktop:block",
-            (model.cancelled || model.chip === SESSION_CHIP.ended) && "grayscale",
-          )}
-        />
-      )}
-      <VStack
-        gap={model.chip === SESSION_CHIP.ended ? "075" : "100"}
-        className="p-025 desktop:flex-1 desktop:px-175 desktop:pt-175 desktop:pb-175"
-      >
-        <ServerLink path={`/games/${model.id}`} className="flex flex-col gap-100 desktop:flex-1">
-          {/* 데스크톱은 배지 줄이 제목 위로 올라간다: 줄바꿈 + order로 순서만 바꾼다. */}
-          <HStack align="start" gap="100" className="desktop:flex-wrap desktop:gap-075">
-            <Text
-              truncate
-              typography="heading3"
-              foreground={titleForeground}
-              className="min-w-0 flex-1 desktop:order-2 desktop:min-h-11 desktop:basis-full desktop:overflow-visible desktop:text-clip desktop:whitespace-normal desktop:text-pretty"
-            >
-              {model.title}
-            </Text>
-            <Badge
-              colorPalette={model.badgeColor}
-              variant={badgeVariant}
-              className="desktop:order-1"
-            >
-              {model.badge}
-            </Badge>
-          </HStack>
-          <Text
-            typography="body4"
-            foreground="inherit"
-            render={<p />}
-            className={cn("flex items-center gap-075", TONE_CLASS[model.scheduleTone])}
-          >
-            <ScheduleIcon size={13} strokeWidth={2.2} aria-hidden className="shrink-0" />
-            <span className="min-w-0 truncate">{model.schedule}</span>
-          </Text>
-          {model.scheduleNote && (
-            <Text
-              typography="body4"
-              foreground="muted"
-              render={<p />}
-              className="-mt-050 pl-[calc(13px+var(--spacing-075))] break-keep"
-            >
-              {model.scheduleNote}
-            </Text>
-          )}
-          {(model.gm || model.isPrivate) && (
-            <HStack align="center" gap="100" className="flex-wrap">
-              {model.gm && (
-                <HStack align="center" gap="075">
-                  <Avatar src={model.gm.avatarUrl} name={model.gm.username} size="sm" />
-                  <Text typography="body4" foreground="muted" truncate>
-                    GM {model.gm.username}
-                  </Text>
-                </HStack>
-              )}
-              {model.isPrivate && <PrivateMark />}
-            </HStack>
-          )}
-          {model.caption && (
-            <Text
-              typography="body4"
-              foreground={captionForeground}
-              weight={captionWeight}
-              numeric
-              render={<p />}
-            >
-              {model.caption.text}
-            </Text>
-          )}
-        </ServerLink>
-        {(model.action || model.canReopen) && (
-          <HStack gap="100" className="mt-050 [&>*]:mt-0 [&>*]:min-w-0 *:flex-1">
-            <SessionCardAction model={model} />
-            {model.canReopen && (
-              <ReopenGameLink
-                gameId={model.id}
-                variant={model.action ? "outline" : "solid"}
-                colorPalette={model.action ? "gray" : "primary"}
-                size="md"
+      <div className="flex items-start gap-075 px-175 pt-175">
+        <ServerLink
+          path={`/games/${model.id}`}
+          className="min-w-0 flex-1 rounded-300 focus-visible:outline-2 focus-visible:outline-tinted-ink"
+        >
+          <HStack align="start" gap="125">
+            {model.thumbnailSpoiler ? (
+              <span className="size-14 shrink-0 rounded-300 bg-gray-100 desktop:size-18" />
+            ) : (
+              <GameThumbnail
+                url={model.thumbnailUrl}
+                sizes="72px"
+                className={cn("size-14 shrink-0 rounded-300 desktop:size-18", past && "grayscale")}
               />
             )}
+            <VStack gap="050" className="min-w-0 flex-1">
+              <HStack align="center" gap="050" className="flex-wrap">
+                {model.isPrivate && <Badge colorPalette="gray">지정 모집</Badge>}
+                <Badge colorPalette={model.badgeColor}>{model.badge}</Badge>
+              </HStack>
+              <Text
+                typography="heading3"
+                foreground={past ? "muted" : "normal"}
+                className="line-clamp-2 break-keep"
+              >
+                {model.title}
+              </Text>
+              <Text typography="body4" foreground="muted" className="line-clamp-2 break-keep">
+                {content?.rule}
+                {content?.rule && model.gm && " · "}
+                {model.gm && `GM ${model.gm.username}`}
+              </Text>
+            </VStack>
+          </HStack>
+        </ServerLink>
+        <SessionCardMenu model={model} />
+      </div>
+
+      <ServerLink
+        path={`/games/${model.id}`}
+        className="mx-175 mt-150 mb-175 flex flex-wrap items-center gap-x-150 gap-y-075 rounded-200"
+      >
+        <HStack align="center" gap="075" className="min-w-0 flex-1">
+          <CalendarDays size={14} aria-hidden className="shrink-0 text-hint" />
+          <Text
+            typography="body3"
+            foreground={past ? "muted" : "normal"}
+            weight="medium"
+            className="min-w-0 break-keep"
+          >
+            {content?.calendar ?? model.schedule}
+          </Text>
+        </HStack>
+        {model.role === SESSION_ROLE.host && content && (
+          <HStack
+            align="center"
+            gap="050"
+            className="text-hint"
+            aria-label={`${content.peopleLabel} ${content.people}명`}
+          >
+            <Users size={14} aria-hidden />
+            <Text typography="body4" foreground="inherit" numeric>
+              {content.peopleLabel} {content.people}
+            </Text>
           </HStack>
         )}
-      </VStack>
+      </ServerLink>
+
+      {(notice || primary) && (
+        <VStack
+          gap="125"
+          className={cn(
+            "mt-auto border-t border-gray-200 px-175 py-150",
+            model.urgent && "border-danger-200 bg-danger-50",
+          )}
+        >
+          {notice && (
+            <HStack align="start" gap="075">
+              {model.urgent && (
+                <CircleAlert size={14} aria-hidden className="mt-025 shrink-0 text-danger-600" />
+              )}
+              <Text
+                typography="body4"
+                foreground={model.urgent ? "danger" : "muted"}
+                className="break-keep"
+              >
+                {notice}
+              </Text>
+            </HStack>
+          )}
+          {primary && <SessionCardAction model={{ ...model, action: primary }} />}
+        </VStack>
+      )}
     </Card.Root>
   );
 }

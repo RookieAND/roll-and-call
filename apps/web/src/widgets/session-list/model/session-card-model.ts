@@ -68,6 +68,14 @@ export type SessionTodo = Omit<SessionAction, "kind"> & {
 };
 
 export type SessionCardModel = {
+  content?: {
+    rule: string;
+    calendar: string;
+    notice: string | null;
+    people: number;
+    peopleLabel: string;
+    primaryAction: SessionAction | null;
+  } | null;
   id: string;
   title: string;
   role: SessionRole;

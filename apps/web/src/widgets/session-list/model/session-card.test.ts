@@ -75,6 +75,18 @@ const hostCard = (partial: Partial<SessionGame>) =>
   toSessionCard({ game: game(partial), role: SESSION_ROLE.host, context: context() });
 
 describe("참여 카드", () => {
+  it("일정과 제출 안내를 분리하고 입력 행동 하나를 보여 준다", () => {
+    const card = playerCard({ participants: [confirmedMe] });
+    expect(card.content?.calendar).toBe("9월 20일 ~ 9월 24일 중 조율");
+    expect(card.content?.notice).toContain("가능 시간을 입력");
+    expect(card.content?.primaryAction?.label).toBe("가능 시간 입력");
+  });
+  it("가능 시간을 제출하면 일정은 유지하고 완료 안내만 바뀐다", () => {
+    const card = playerCard({ participants: [confirmedMe] }, ["g"]);
+    expect(card.content?.calendar).toBe("9월 20일 ~ 9월 24일 중 조율");
+    expect(card.content?.notice).toContain("가능 시간 제출 완료");
+    expect(card.content?.primaryAction).toBeNull();
+  });
   it("가능 시간을 내지 않았으면 막힌 카드로 칠하고 일정 조율이 할 일로 남는다", () => {
     const card = playerCard({ participants: [confirmedMe] });
     expect(card.chip).toBe(SESSION_CHIP.scheduling);
@@ -97,6 +109,11 @@ describe("참여 카드", () => {
 });
 
 describe("대기 카드", () => {
+  it("취소는 주요 행동에서 빼되 기존 확인 절차를 위한 동작은 남긴다", () => {
+    const card = playerCard({ participants: [other, me(PARTICIPANT_STATUS.waiting)] });
+    expect(card.content?.primaryAction).toBeNull();
+    expect(card.action?.kind).toBe(SESSION_ACTION_KIND.cancelWaitlist);
+  });
   it("선착순 대기는 마감 전에도 대기 N번이고 버튼은 대기 취소 하나다", () => {
     const card = playerCard({ participants: [other, me(PARTICIPANT_STATUS.waiting)] });
     expect(card.chip).toBe(SESSION_CHIP.waiting);
@@ -212,6 +229,12 @@ describe("운영 카드 · 추첨 글", () => {
 });
 
 describe("운영 카드", () => {
+  it("기한이 지난 조율은 운영 관리 대신 시간 정하기를 먼저 보여 준다", () => {
+    const card = hostCard({ endDate: at(-1), participants: [other] });
+    expect(card.content?.calendar).toBe("9월 20일 ~ 9월 24일 중 조율");
+    expect(card.content?.primaryAction?.href).toBe("/games/g/confirm");
+    expect(card.action?.label).toBe("운영 관리");
+  });
   it("기한이 지났는데 시간이 없으면 무산이 아니라 조율 중인 GM 할 일이다", () => {
     const card = hostCard({ endDate: at(-1), participants: [other] });
     expect(card.chip).toBe(SESSION_CHIP.scheduling);
@@ -348,6 +371,8 @@ describe("buildProfileSessions", () => {
   it("보는 사람 기준 문구와 할 일 버튼을 뺀 기록만 남는다", () => {
     const upcoming = profile[SESSION_ROLE.player][0]!;
     expect(upcoming.action).toBeNull();
+    expect(upcoming.content?.primaryAction).toBeNull();
+    expect(upcoming.content?.notice).toBeNull();
     expect(upcoming.urgent).toBe(false);
     expect(upcoming.schedule).not.toMatch(/미제출/);
     expect(profile[SESSION_ROLE.host]).toHaveLength(1);
@@ -469,7 +494,7 @@ describe("남의 세션 기록 카드(readOnly)", () => {
       viewerId: "stranger",
       now: NOW,
     })[SESSION_ROLE.player];
-    expect(card).toMatchObject({ hidden: true, title: "", schedule: "", gm: null });
+    expect(card).toMatchObject({ hidden: true, title: "", schedule: "", gm: null, content: null });
   });
 });
 

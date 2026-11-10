@@ -4,7 +4,7 @@ import { RECRUIT_METHOD, type RecruitMethod } from "./recruit-method";
 import { recruitMethodLabel } from "./recruit-method-label";
 import { SEAT_TONE, type SeatTone } from "./seat-tone";
 
-export type SeatCell = { text: string; tone: SeatTone };
+export type SeatCell = { text: string; tone: SeatTone; icon?: "participants" };
 
 export function seatCount({
   status,
@@ -29,8 +29,9 @@ export function seatCount({
     text: isPrivate ? "지정 모집" : recruitMethodLabel(recruitMethod),
     tone: SEAT_TONE.method,
   };
+  if (past)
+    return [method, { text: String(confirmed), tone: SEAT_TONE.plain, icon: "participants" }];
   if (ended) return [method, { text: `참여 ${confirmed}`, tone: SEAT_TONE.plain }];
-  if (past) return [method, { text: `확정 ${confirmed}/${maxPlayers}`, tone: SEAT_TONE.plain }];
 
   const open = status === GAME_STATUS.recruiting || status === GAME_STATUS.confirmed;
   if (recruitMethod === RECRUIT_METHOD.lottery) {

@@ -14,6 +14,7 @@ interface GameDetailHeaderProps {
   kind: GameKind;
   status: GameStatus;
   ended: boolean;
+  isPrivate: boolean;
   adultOnly: boolean;
   statusLine: ScheduleLine;
   deadlineBadge: string | null;
@@ -25,6 +26,7 @@ export function GameDetailHeader({
   kind,
   status,
   ended,
+  isPrivate,
   adultOnly,
   statusLine,
   deadlineBadge,
@@ -41,7 +43,8 @@ export function GameDetailHeader({
           </Badge>
         )}
         {deadlineBadge && <Badge className="mt-025 tabular-nums">{deadlineBadge}</Badge>}
-        <span className="mt-025">
+        <span className="mt-025 inline-flex shrink-0 items-center gap-075">
+          {isPrivate && <Badge colorPalette="gray">지정 모집</Badge>}
           {ended ? <Badge colorPalette="gray">종료</Badge> : <GameStatusBadge status={status} />}
         </span>
         {adultOnly && (

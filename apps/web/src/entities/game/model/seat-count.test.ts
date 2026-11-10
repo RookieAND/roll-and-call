@@ -24,7 +24,13 @@ describe("seatCount", () => {
         waiting: 5,
         status: GAME_STATUS.closed,
       }),
-    ).toEqual(["추첨", "확정 2/4"]);
+    ).toEqual(["추첨", "2"]);
+  });
+  it("종료된 지난 구인도 사람 아이콘과 참여자 수만 표시한다", () => {
+    expect(seatCount({ ...base, past: true, ended: true })[1]).toMatchObject({
+      text: "2",
+      icon: "participants",
+    });
   });
   it("종료한 지정 모집은 선착순 대신 지정 모집과 참여 수를 적는다", () => {
     expect(texts({ ...base, isPrivate: true, ended: true })).toEqual(["지정 모집", "참여 2"]);

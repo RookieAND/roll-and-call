@@ -164,6 +164,7 @@ export function GameDetail({
               kind={game.kind}
               status={status}
               ended={ended}
+              isPrivate={isPrivate}
               adultOnly={game.adultOnly}
               statusLine={statusLine}
               deadlineBadge={deadlineBadge}

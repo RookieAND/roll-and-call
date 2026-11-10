@@ -4,6 +4,7 @@ import { GAME_VISIBILITY, SESSION_ROLE, type SessionRole, type SessionGame } fro
 import { canReopenGame } from "@/features/reopen-game";
 
 import { deriveSessionFacts } from "./derive-session-facts";
+import { sessionCardContent } from "./session-card-content";
 import type { SessionCardBase, SessionCardModel, SessionContext } from "./session-card-model";
 import { toCancelledSessionCard } from "./to-cancelled-session-card";
 import { toHostedSessionCard } from "./to-hosted-session-card";
@@ -19,8 +20,10 @@ export function toSessionCard({
   role: SessionRole;
   context: SessionContext;
 }): SessionCardModel {
+  const base = buildSessionCard({ game, role, context });
   const card = {
-    ...buildSessionCard({ game, role, context }),
+    ...base,
+    content: sessionCardContent({ game, card: base, context }),
     thumbnailUrl: game.thumbnailUrl,
     thumbnailSpoiler: game.thumbnailSpoiler,
     isPrivate: game.visibility === GAME_VISIBILITY.private,
