@@ -23,7 +23,6 @@ import { cancelRowDetail } from "../model/cancel-row-detail";
 import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageReviewButtonOf } from "../model/manage-review-button-of";
 import { manageRowGroups } from "../model/manage-rows";
-import { manageSessionInfo } from "../model/manage-session-info";
 import { manageSummary } from "../model/manage-summary";
 import { manageTimeline } from "../model/manage-timeline";
 import { ManageCancelNote } from "./manage-cancel-note";
@@ -32,7 +31,6 @@ import { ManageGameStat } from "./manage-game-stat";
 import { ManageGroup } from "./manage-group";
 import { ManageReopenSection } from "./manage-reopen-section";
 import { ManageRow } from "./manage-row";
-import { ManageSessionInfo } from "./manage-session-info";
 import { ManageTimeline } from "./manage-timeline";
 
 interface ManageGameViewProps {
@@ -91,7 +89,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     game,
     attendance: stats.find((stat) => stat.label === ATTENDANCE_LABEL)?.value,
   });
-  const sessionInfo = manageSessionInfo({ game, reviewCount: reviews.length });
   const isCancelled = !isNil(game.cancelledAt);
   const endAt = plannedEndAt(game);
   const reviewFirst = isSessionEnded(game) && !isCancelled;
@@ -172,9 +169,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                 <ManageReopenSection gameId={id} />
               </div>
             )}
-            <div className="order-3 hidden desktop:block">
-              <ManageSessionInfo info={sessionInfo} />
-            </div>
           </aside>
         </Container>
       </div>

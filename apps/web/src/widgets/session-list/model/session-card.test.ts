@@ -78,14 +78,18 @@ describe("참여 카드", () => {
   it("일정과 제출 안내를 분리하고 입력 행동 하나를 보여 준다", () => {
     const card = playerCard({ participants: [confirmedMe] });
     expect(card.content?.calendar).toBe("9월 20일 ~ 9월 24일 중 조율");
-    expect(card.content?.notice).toContain("가능 시간을 입력");
+    expect(card.content?.notice).toContain("까지 입력");
     expect(card.content?.primaryAction?.label).toBe("가능 시간 입력");
   });
-  it("가능 시간을 제출하면 일정은 유지하고 완료 안내만 바뀐다", () => {
+  it("가능 시간을 제출하면 설명 없이 상세 보기 행동을 보여 준다", () => {
     const card = playerCard({ participants: [confirmedMe] }, ["g"]);
     expect(card.content?.calendar).toBe("9월 20일 ~ 9월 24일 중 조율");
-    expect(card.content?.notice).toContain("가능 시간 제출 완료");
-    expect(card.content?.primaryAction).toBeNull();
+    expect(card.content?.notice).toBeNull();
+    expect(card.content?.primaryAction).toMatchObject({
+      kind: SESSION_ACTION_KIND.viewGame,
+      label: "구인글 상세 보기",
+      href: "/games/g",
+    });
   });
   it("가능 시간을 내지 않았으면 막힌 카드로 칠하고 일정 조율이 할 일로 남는다", () => {
     const card = playerCard({ participants: [confirmedMe] });
@@ -109,9 +113,10 @@ describe("참여 카드", () => {
 });
 
 describe("대기 카드", () => {
-  it("취소는 주요 행동에서 빼되 기존 확인 절차를 위한 동작은 남긴다", () => {
+  it("대기 취소를 카드 하단의 주요 행동으로 둔다", () => {
     const card = playerCard({ participants: [other, me(PARTICIPANT_STATUS.waiting)] });
-    expect(card.content?.primaryAction).toBeNull();
+    expect(card.content?.primaryAction?.kind).toBe(SESSION_ACTION_KIND.cancelWaitlist);
+    expect(card.content?.notice).toBeNull();
     expect(card.action?.kind).toBe(SESSION_ACTION_KIND.cancelWaitlist);
   });
   it("선착순 대기는 마감 전에도 대기 N번이고 버튼은 대기 취소 하나다", () => {
@@ -216,6 +221,8 @@ describe("운영 카드 · 추첨 글", () => {
     expect(card.schedule).toBe("9월 18일 19:00 마감 때 추첨합니다");
     expect(card.urgent).toBe(false);
     expect(card.action?.label).toBe("운영 관리");
+    expect(card.content?.notice).toBeNull();
+    expect(card.content?.primaryAction?.label).toBe("참여자 관리");
   });
 
   it("마감 뒤에도 모집 중 배지이고 붉지 않다", () => {

@@ -40,6 +40,7 @@ export const SESSION_ACTION_KIND = {
   fillVacancy: "fill-vacancy",
   writeReview: "write-review",
   viewReview: "view-review",
+  viewGame: "view-game",
 } as const;
 
 export type SessionActionKind = (typeof SESSION_ACTION_KIND)[keyof typeof SESSION_ACTION_KIND];
@@ -48,7 +49,7 @@ export type SessionAction = {
   kind: SessionActionKind;
   label: string;
   href: string;
-  // 버튼 안 오른쪽 알약(후기 마감 D-n 등)
+  // 카드 상태 줄에 표시할 기한 배지(후기 마감 D-n 등).
   badge?: string;
 };
 

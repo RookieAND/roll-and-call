@@ -32,50 +32,32 @@ export function sessionCardContent({
     !past &&
     ((game.recruitMethod === RECRUIT_METHOD.lottery && !game.drawnAt) ||
       (game.recruitMethod === RECRUIT_METHOD.selection && !game.selectionFinishedAt));
-  let notice = card.scheduleNote ?? card.caption?.text ?? null;
-  let primaryAction = card.action?.kind === SESSION_ACTION_KIND.cancelWaitlist ? null : card.action;
-
-  if (!past && card.chip === SESSION_CHIP.waiting) {
-    if (beforeResult) {
-      notice = line.deadlinePassed
-        ? "결과를 기다리고 있습니다"
-        : `${formatDateClock(game.endDate)} 신청 마감`;
-    } else {
-      notice = "자리가 나면 알려드립니다";
-    }
-  } else if (!past && card.chip === SESSION_CHIP.scheduling && !game.confirmedAt) {
-    if (host && !context.readOnly) {
-      notice = `가능 시간 제출 ${context.responseCounts.get(game.id) ?? 0}명`;
-    } else if (!context.readOnly) {
-      if (context.respondedGameIds.has(game.id)) {
-        notice = "가능 시간 제출 완료";
-      } else {
-        notice = line.deadlinePassed
-          ? "GM이 세션 시간을 정하고 있습니다"
-          : `${formatDateClock(game.endDate)}까지 가능 시간을 입력해 주세요`;
-      }
-    }
-  }
+  let notice = card.cancelled || card.titleDanger ? (card.scheduleNote ?? null) : null;
+  let primaryAction = card.action;
 
   if (!context.readOnly) {
     if (card.todo) {
       primaryAction = { kind: card.todo.kind, label: card.todo.label, href: card.todo.href };
-      if (card.todo.kind === SESSION_ACTION_KIND.submitAvailability)
+      if (card.todo.kind === SESSION_ACTION_KIND.submitAvailability) {
         primaryAction.label = "가능 시간 입력";
+        notice = `${formatDateClock(game.endDate)}까지 입력`;
+      }
       if (card.todo.kind === SESSION_ACTION_KIND.confirmTime)
-        notice = `가능 시간 제출 ${context.responseCounts.get(game.id) ?? 0}명 · 세션 시간을 정해 주세요`;
+        notice = `가능 시간 ${context.responseCounts.get(game.id) ?? 0}명 제출`;
       if (card.todo.kind === SESSION_ACTION_KIND.fillVacancy)
-        notice = `대기 ${card.waitingCount}명 · 빈자리를 채울 수 있습니다`;
+        notice = `대기 ${card.waitingCount}명`;
     } else if (host && !past && beforeResult) {
-      notice = line.deadlinePassed
-        ? "모집 마감 · 참여자를 확인해 주세요"
-        : `${formatDateClock(game.endDate)} 모집 마감`;
       primaryAction = {
         kind: SESSION_ACTION_KIND.fillVacancy,
         label: "참여자 관리",
         href: `/games/${game.id}/participants`,
       };
     }
+    primaryAction ??= {
+      kind: SESSION_ACTION_KIND.viewGame,
+      label: "구인글 상세 보기",
+      href: `/games/${game.id}`,
+    };
   } else {
     primaryAction = null;
   }
