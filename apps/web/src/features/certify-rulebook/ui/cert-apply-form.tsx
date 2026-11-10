@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Callout, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
+import { Button, Callout, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
@@ -119,14 +119,6 @@ export function CertApplyForm({
     >
       <div className={DESKTOP_CARD_CLASS}>
         {belowAppBar}
-        {!retry && !trial && (
-          <Progress
-            value={step}
-            max={totalSteps}
-            className="h-[3px] rounded-none"
-            aria-label="진행"
-          />
-        )}
         {rejection && !onQuiz && (
           <div className="sticky top-(--rc-size-appbar) desktop:top-0 z-(--rc-z-sticky) border-b border-gray-100 bg-surface px-200 py-150">
             <Callout.Root colorPalette="warning">

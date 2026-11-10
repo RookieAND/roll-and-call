@@ -1,7 +1,15 @@
 "use client";
 
 import { BULK_CERT_MAX_BOOKS } from "@roll-and-call/database/certifications/model";
-import { Button, Container, Progress, Text, TextInput, UiImage, VStack } from "@roll-and-call/ui";
+import {
+  Button,
+  Container,
+  FloatingBar,
+  Text,
+  TextInput,
+  UiImage,
+  VStack,
+} from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import Link from "next/link";
 import { useState } from "react";
@@ -84,11 +92,11 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
         />
       }
       panel={
-        !choosingMode && (
+        !choosingMode &&
+        bulk && (
           <BookPickerPanel
             books={selectedBooks}
             bulk={bulk}
-            requestHref={requestHref}
             applyHref={bulkApplyHref}
             onRemove={toggle}
             onContinue={persist}
@@ -97,11 +105,10 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={2} max={3} className="h-[3px] rounded-none" aria-label="진행" />
-        {/* 모바일에서만 하단 안내가 탭바 위에 오도록 높이를 채운다. 데스크톱 안내는 우측 패널에 둔다. */}
+        {/* 모바일 안내는 탭바 위, 데스크톱 안내는 본문 열의 화면 하단에 고정한다. */}
         <Container
           size="sm"
-          className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col desktop:min-h-0"
+          className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom))] flex-col desktop:min-h-0"
         >
           <VStack gap="200" className="pt-250 pb-250">
             <VStack gap="050">
@@ -190,6 +197,18 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
             </div>
           )}
         </Container>
+        {!choosingMode && (
+          <div className="hidden desktop:block">
+            <FloatingBar.Root elevated={false}>
+              <FloatingBar.Content>
+                <Container size="sm">
+                  <MissingRulebookCallout href={requestHref} />
+                </Container>
+              </FloatingBar.Content>
+              <FloatingBar.Spacer />
+            </FloatingBar.Root>
+          </div>
+        )}
       </div>
     </PageShell>
   );

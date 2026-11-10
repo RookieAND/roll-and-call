@@ -6,7 +6,6 @@ import Link from "next/link";
 interface BookPickerPanelProps {
   books: { id: string; label: string; categoryName: string }[];
   bulk: boolean;
-  requestHref: string;
   applyHref: string;
   onRemove: (id: string) => void;
   onContinue: () => void;
@@ -33,7 +32,6 @@ export function MissingRulebookCallout({ href }: { href: string }) {
 export function BookPickerPanel({
   books,
   bulk,
-  requestHref,
   applyHref,
   onRemove,
   onContinue,
@@ -94,7 +92,6 @@ export function BookPickerPanel({
           </VStack>
         </Card.Root>
       )}
-      <MissingRulebookCallout href={requestHref} />
     </VStack>
   );
 }

@@ -54,6 +54,7 @@ describe("monthlyCard", () => {
       description: "이번 달 참여 수 1위가 다음 달 한 달 동안 답니다.",
       monthLine: null,
       history: "아직 받은 적이 없습니다",
+      standing: { month: "10월", label: "내 참여", count: 0, topCount: 0, unit: "회", rank: null },
     });
   });
 });
@@ -80,6 +81,14 @@ describe("monthlyCard 포인트제", () => {
       mode: "points",
     });
     expect(card.status).toBe("10월 100점 · 2위 · 1위 300점");
+    expect(card.standing).toEqual({
+      month: "10월",
+      label: "내 점수",
+      count: 100,
+      topCount: 300,
+      unit: "점",
+      rank: "2위",
+    });
     expect(card.description).toBe("이번 달 점수 1위가 다음 달 한 달 동안 답니다.");
   });
 

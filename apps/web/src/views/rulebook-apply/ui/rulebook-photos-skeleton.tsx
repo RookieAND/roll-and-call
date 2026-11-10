@@ -1,4 +1,4 @@
-import { Container, FloatingBar, Grid, Progress, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Container, FloatingBar, Grid, Skeleton, Text, VStack } from "@roll-and-call/ui";
 
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
@@ -19,7 +19,6 @@ export function RulebookPhotosSkeleton() {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={3} max={3} className="h-[3px] rounded-none" aria-label="진행" />
         <Container size="sm">
           <VStack gap="200" aria-busy className="pt-200 pb-250">
             <VStack gap="050">

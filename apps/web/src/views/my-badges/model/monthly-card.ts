@@ -87,6 +87,15 @@ export function monthlyCard({
       : `이번 달 ${goal} 1위가 다음 달 한 달 동안 답니다.`,
     monthLine: heldMonth ? monthLine : null,
     monthLines,
+    standing: {
+      month,
+      label: points ? "내 점수" : `내 ${verb}`,
+      count: standing.count,
+      topCount: standing.topCount,
+      unit: points ? "점" : "회",
+      rank: points ? rankLabel : null,
+    },
+    condition: `이번 달 ${goal} 1위가 다음 달 한 달 동안 답니다.`,
     history:
       months.length > 0
         ? `×${months.length} · ${monthListLabel(months)}`

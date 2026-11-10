@@ -1,4 +1,4 @@
-import { Container, Progress, Skeleton, Text, VStack } from "@roll-and-call/ui";
+import { Container, Skeleton, Text, VStack } from "@roll-and-call/ui";
 import { range } from "es-toolkit";
 
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
@@ -21,10 +21,9 @@ export function RulebookApplySkeleton() {
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress value={2} max={3} className="h-[3px] rounded-none" aria-label="진행" />
         <Container
           size="sm"
-          className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom)-3px)] flex-col desktop:min-h-0"
+          className="flex min-h-[calc(100dvh-var(--rc-size-appbar)-var(--rc-size-tabbar)-var(--rc-safe-bottom))] flex-col desktop:min-h-0"
         >
           <VStack gap="200" aria-busy className="pt-250 pb-250">
             <VStack gap="050">

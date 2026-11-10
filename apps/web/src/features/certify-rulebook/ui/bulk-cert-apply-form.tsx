@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, FloatingBar, Progress, Text, VStack } from "@roll-and-call/ui";
+import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { useEffect, useRef, useState } from "react";
 
@@ -93,13 +93,6 @@ export function BulkCertApplyForm({
       }
     >
       <div className={DESKTOP_CARD_CLASS}>
-        <Progress
-          value={step}
-          max={totalSteps}
-          className="h-[3px] rounded-none"
-          aria-label="진행"
-        />
-
         <Container size="sm">
           <div className="pt-200 pb-250">
             {onQuiz ? (
