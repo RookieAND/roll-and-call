@@ -22,6 +22,8 @@ const ACTION_LOOK: Partial<Record<SessionActionKind, ActionLook>> = {
   [SESSION_ACTION_KIND.viewGame]: { variant: "outline", colorPalette: "gray" },
 };
 const DEFAULT_LOOK: ActionLook = { variant: "tinted", colorPalette: "primary" };
+// 하단 액션은 링크·취소 여부와 관계없이 같은 높이·글자 크기를 쓴다.
+const ACTION_SIZE = "lg";
 
 interface SessionCardActionProps {
   model: SessionCardModel;
@@ -38,7 +40,8 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
         title={model.title}
         label={action.label}
         waitlistRank={model.waitlistRank}
-        className="min-h-12 w-full"
+        size={ACTION_SIZE}
+        className="w-full"
       />
     );
   }
@@ -49,7 +52,7 @@ export function SessionCardAction({ model }: SessionCardActionProps) {
       render={<ServerLink path={action.href} />}
       variant={look.variant}
       colorPalette={look.colorPalette}
-      size="lg"
+      size={ACTION_SIZE}
       className="w-full"
     >
       {action.label}

@@ -109,6 +109,7 @@ describe("참여 카드", () => {
     expect(card.chip).toBe(SESSION_CHIP.confirmed);
     expect(card.scheduleIcon).toBe(SESSION_ICON.calendar);
     expect(card.schedule).toMatch(/ · 모레$/);
+    expect(card.content?.capacity).toMatchObject({ display: "ratio", confirmed: 1, maxPlayers: 4 });
   });
 });
 
@@ -138,6 +139,12 @@ describe("대기 카드", () => {
     expect(card.waitlistRank).toBeNull();
     expect(card.action?.label).toBe("신청 취소");
     expect(card.schedule).toMatch(/신청 마감 · 마감 때 추첨합니다$/);
+    expect(card.content?.capacity).toMatchObject({
+      display: "default",
+      confirmed: 1,
+      waiting: 1,
+      recruitMethod: "lottery",
+    });
   });
 
   it("추첨 글 마감이 지나 아직 추첨 전이면 곧 추첨한다고 적는다", () => {

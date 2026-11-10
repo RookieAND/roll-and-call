@@ -50,6 +50,7 @@ export function LeaveConfirmButton({
     <>
       <Button
         variant="outline"
+        colorPalette="danger"
         size={size}
         className={className}
         onClick={() => setConfirming(true)}

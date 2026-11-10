@@ -15,6 +15,13 @@ const base = {
 const texts = (input: Parameters<typeof seatCount>[0]) => seatCount(input).map((cell) => cell.text);
 
 describe("seatCount", () => {
+  it("참여 확정 카드에서는 문구 없이 현재 인원/정원을 표시한다", () => {
+    expect(texts({ ...base, display: "ratio" })).toEqual(["선착순", "2/4"]);
+    expect(texts({ ...base, display: "ratio", ended: true, past: true })).toEqual([
+      "선착순",
+      "2/4",
+    ]);
+  });
   it("지난 추첨 구인도 대기자를 빼고 확정 인원을 표시한다", () => {
     expect(
       texts({

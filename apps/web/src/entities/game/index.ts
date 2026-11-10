@@ -27,6 +27,7 @@ export {
   type ParticipationStanding,
 } from "./model/participation-conditions";
 export { GameCard } from "./ui/game-card";
+export { GameCapacity, type GameCapacityProps } from "./ui/game-capacity";
 export { PastGameCard } from "./ui/past-game-card";
 export { PrivateMark } from "./ui/private-mark";
 export { GameThumbnail } from "./ui/game-thumbnail";

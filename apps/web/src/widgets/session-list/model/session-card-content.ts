@@ -1,9 +1,12 @@
 import {
   countConfirmed,
+  deriveGameStatus,
+  GAME_VISIBILITY,
   RECRUIT_METHOD,
   scheduleLine,
   SESSION_ROLE,
   type SessionGame,
+  type GameCapacityProps,
 } from "@/entities/game";
 import { formatDateClock } from "@/shared/lib";
 
@@ -28,6 +31,7 @@ export function sessionCardContent({
   const line = scheduleLine(game, context.now);
   const host = card.role === SESSION_ROLE.host;
   const confirmed = countConfirmed(game.participants);
+  const waiting = game.participants.filter((p) => p.status === "waiting").length;
   const beforeResult =
     !past &&
     ((game.recruitMethod === RECRUIT_METHOD.lottery && !game.drawnAt) ||
@@ -62,14 +66,25 @@ export function sessionCardContent({
     primaryAction = null;
   }
 
+  const confirmedViewer = game.participants.some(
+    (p) => p.userId === context.viewerId && p.status === "confirmed",
+  );
+  const capacity: GameCapacityProps = {
+    status: deriveGameStatus({ ...game, participantCount: confirmed }),
+    recruitMethod: game.recruitMethod,
+    confirmed,
+    waiting,
+    maxPlayers: game.maxPlayers,
+    ended: past && !card.cancelled,
+    past,
+    isPrivate: game.visibility === GAME_VISIBILITY.private,
+    display: !beforeResult && (host || confirmedViewer) ? "ratio" : "default",
+  };
   return {
     rule: game.rule,
     calendar: past ? card.schedule : line.text,
     notice,
-    people: beforeResult
-      ? game.participants.filter((p) => p.status === "confirmed" || p.status === "waiting").length
-      : confirmed,
-    peopleLabel: beforeResult ? "신청" : "참여자",
+    capacity,
     primaryAction,
   };
 }

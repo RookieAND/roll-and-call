@@ -1,7 +1,7 @@
 import { Badge, Card, HStack, Text, VStack, cn } from "@roll-and-call/ui";
-import { CalendarDays, CircleAlert, Users } from "lucide-react";
+import { CalendarDays, CircleAlert } from "lucide-react";
 
-import { GameThumbnail, SESSION_ROLE } from "@/entities/game";
+import { GameCapacity, GameThumbnail } from "@/entities/game";
 import { ServerLink } from "@/shared/ui";
 
 import {
@@ -96,19 +96,6 @@ export function SessionCard({ model }: SessionCardProps) {
             {content?.calendar ?? model.schedule}
           </Text>
         </HStack>
-        {model.role === SESSION_ROLE.host && content && (
-          <HStack
-            align="center"
-            gap="050"
-            className="text-hint"
-            aria-label={`${content.peopleLabel} ${content.people}명`}
-          >
-            <Users size={14} aria-hidden />
-            <Text typography="body4" foreground="inherit" numeric>
-              {content.peopleLabel} {content.people}
-            </Text>
-          </HStack>
-        )}
       </ServerLink>
 
       {notice && (
@@ -125,11 +112,18 @@ export function SessionCard({ model }: SessionCardProps) {
           </Text>
         </HStack>
       )}
-      {primary && (
-        <div className="mt-auto border-t border-gray-200 px-175 py-150">
-          <SessionCardAction model={{ ...model, action: primary }} />
-        </div>
-      )}
+      <div className="mt-auto">
+        {content && (
+          <div className="mx-175 mb-150 flex justify-end">
+            <GameCapacity {...content.capacity} />
+          </div>
+        )}
+        {primary && (
+          <div className="border-t border-gray-200 px-175 py-150">
+            <SessionCardAction model={{ ...model, action: primary }} />
+          </div>
+        )}
+      </div>
     </Card.Root>
   );
 }

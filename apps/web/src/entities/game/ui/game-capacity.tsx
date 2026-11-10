@@ -4,7 +4,9 @@ import { Users } from "lucide-react";
 import { seatCount } from "../model/seat-count";
 import { SEAT_CELL_CLASS } from "./seat-cell-class";
 
-export function GameCapacity(input: Parameters<typeof seatCount>[0]) {
+export type GameCapacityProps = Parameters<typeof seatCount>[0];
+
+export function GameCapacity(input: GameCapacityProps) {
   return (
     <HStack
       align="stretch"

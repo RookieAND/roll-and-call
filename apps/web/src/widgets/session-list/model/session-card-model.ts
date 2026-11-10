@@ -1,6 +1,6 @@
 import type { ReviewedGames } from "@roll-and-call/database/reviews";
 
-import type { SessionRole } from "@/entities/game";
+import type { GameCapacityProps, SessionRole } from "@/entities/game";
 
 export const SESSION_CHIP = {
   scheduling: "scheduling",
@@ -73,8 +73,7 @@ export type SessionCardModel = {
     rule: string;
     calendar: string;
     notice: string | null;
-    people: number;
-    peopleLabel: string;
+    capacity: GameCapacityProps;
     primaryAction: SessionAction | null;
   } | null;
   id: string;

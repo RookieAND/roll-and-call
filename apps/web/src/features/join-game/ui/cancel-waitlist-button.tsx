@@ -1,5 +1,6 @@
 "use client";
 
+import type { ButtonProps } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 
 import { LEAVE_KIND } from "../model/leave-kind";
@@ -11,6 +12,7 @@ interface CancelWaitlistButtonProps {
   label: string;
   waitlistRank: number | null;
   className?: string;
+  size?: ButtonProps["size"];
 }
 
 // 마이페이지 내 세션 카드의 대기·신청 취소. 순번이 없으면 추첨 신청자다. 창은 구인 상세와 같다(D2·D3).
@@ -19,6 +21,7 @@ export function CancelWaitlistButton({
   label,
   waitlistRank,
   className,
+  size,
 }: CancelWaitlistButtonProps) {
   const kind = isNull(waitlistRank) ? LEAVE_KIND.lottery : LEAVE_KIND.waitlist;
   return (
@@ -28,6 +31,7 @@ export function CancelWaitlistButton({
       waitlistRank={waitlistRank}
       label={label}
       className={className}
+      size={size}
     />
   );
 }
