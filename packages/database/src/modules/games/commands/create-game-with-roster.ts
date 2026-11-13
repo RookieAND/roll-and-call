@@ -1,8 +1,9 @@
 import { db } from "#db/client";
 import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
+import type { NewRoundRow } from "#db/modules/games/model/build-new-rounds";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import type { Transaction } from "#db/modules/transaction";
-import { games, participants, type NewGame } from "#db/schema";
+import { gameRounds, games, participants, type NewGame } from "#db/schema";
 
 // 대기로 넣는 사람은 넘긴 순서를 지키도록 waitlistedAt을 now + 순번 밀리초로 둔다. applicationNotes는 사용자 id별로 이어받는 신청글이다.
 export async function createGameWithRoster({
@@ -12,6 +13,7 @@ export async function createGameWithRoster({
   confirmedUserIds,
   waitingUserIds = [],
   applicationNotes = new Map(),
+  rounds,
   now = new Date(),
 }: {
   transaction?: Transaction;
@@ -20,6 +22,8 @@ export async function createGameWithRoster({
   confirmedUserIds: string[];
   waitingUserIds?: string[];
   applicationNotes?: ReadonlyMap<string, string | null>;
+  // 여러 번 진행하는 구인의 회차 행(columns.roundCount가 2 이상). 단발은 비워 두면 games 행에서 회차 1을 만든다.
+  rounds?: readonly NewRoundRow[];
   now?: Date;
 }) {
   const work = async (executor: Transaction) => {
@@ -28,7 +32,13 @@ export async function createGameWithRoster({
       .values({ ...columns, serverId })
       .returning({ id: games.id });
     const gameId = created!.id;
-    await syncFirstRound({ transaction: executor, gameId });
+    if (rounds && rounds.length > 0) {
+      await executor
+        .insert(gameRounds)
+        .values(rounds.map((round) => ({ ...round, serverId, gameId })));
+    } else {
+      await syncFirstRound({ transaction: executor, gameId });
+    }
     const rows = [
       ...confirmedUserIds.map((userId) => ({
         serverId,

@@ -145,3 +145,13 @@ export {
   REMINDER_LEAD_MS,
   START_NOTICE_WINDOW_MS,
 } from "./private-notice-window";
+export { buildNewRounds, type NewRoundRow } from "./build-new-rounds";
+export { buildRepeatRounds } from "./build-repeat-rounds";
+export { repeatRuleOf } from "./repeat-rule-of";
+export { ROUND_COUNT_MAX, ROUND_COUNT_MIN, ROUND_MAX_HOURS } from "./round-limits";
+export {
+  ROUND_SCHEDULE_ERROR,
+  ROUND_SCHEDULE_ERROR_MESSAGE,
+  roundScheduleError,
+  type RoundScheduleErrorCode,
+} from "./round-schedule-error";
