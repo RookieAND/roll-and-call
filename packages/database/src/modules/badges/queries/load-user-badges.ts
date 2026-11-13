@@ -1,6 +1,7 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { games, rulebookCategories, userBadges } from "#db/schema";
 
 // 회수되지 않은 뱃지. 이달의 GM·PL은 지난 달 것도 기록으로 함께 온다(지금 붙어 있는지는 entities/badge가 가린다).
@@ -17,7 +18,7 @@ export async function loadUserBadges({ serverId, userId }: { serverId: string; u
       >`coalesce(${rulebookCategories.alias}, ${rulebookCategories.name})`,
       sourceGameId: userBadges.sourceGameId,
       sourceTitle: games.title,
-      sourceStartsAt: games.confirmedAt,
+      sourceStartsAt: firstRoundStartSql,
       sourceHiddenAt: games.hiddenAt,
     })
     .from(userBadges)

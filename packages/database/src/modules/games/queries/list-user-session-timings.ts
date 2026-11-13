@@ -6,6 +6,7 @@ import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import type { Transaction } from "#db/modules/transaction";
 import { games, participants } from "#db/schema";
 
+import { firstRoundEndedAtSql, firstRoundStartSql } from "./first-round-sql";
 import { sessionEndAtSql } from "./session-end-at-sql";
 
 // 신청 겹침 검사용: 시간이 정해졌고 아직 끝나지 않은 내 세션(GM이거나 확정·대기·추첨 신청 중). 같은 서버의 세션만 본다.
@@ -25,9 +26,9 @@ export async function listUserSessionTimings({
   const rows = await (transaction ?? db)
     .selectDistinct({
       id: games.id,
-      confirmedAt: games.confirmedAt,
+      confirmedAt: firstRoundStartSql,
       playMinutes: games.playMinutes,
-      endedAt: games.endedAt,
+      endedAt: firstRoundEndedAtSql,
     })
     .from(games)
     .leftJoin(
@@ -43,7 +44,7 @@ export async function listUserSessionTimings({
         eq(games.serverId, serverId),
         ne(games.id, excludeGameId),
         isNull(games.cancelledAt),
-        isNotNull(games.confirmedAt),
+        sql`${firstRoundStartSql} is not null`,
         // 식 쪽에는 컬럼 타입이 없어 Date를 직렬화하지 못하므로 문자열로 넘긴다.
         sql`${sessionEndAtSql} > ${now.toISOString()}::timestamptz`,
         or(eq(games.gmId, userId), isNotNull(participants.userId)),

@@ -1,9 +1,11 @@
-import { and, asc, eq, gt, isNull, lte, not, or } from "drizzle-orm";
+import { and, asc, eq, isNull, lte, not, or, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
 import { SCHEDULE_MODE } from "#db/modules/games/model/schedule-mode";
 import { games } from "#db/schema";
+
+import { firstRoundStartSql } from "./first-round-sql";
 
 // 마감 때 추첨 크론이 집는 글: 마감이 지났는데 아직 추첨하지 않은 추첨 글(games_lottery_due_idx).
 // 신청이 닫힌 글(isApplicationClosed)은 추첨할 수 없어 고르지 않고 stuck으로 개수만 센다.
@@ -15,8 +17,11 @@ export async function listDueLotteries({ now, limit = 50 }: { now: Date; limit?:
     lte(games.endDate, now),
   );
   const applicationOpen = or(
-    isNull(games.confirmedAt),
-    and(eq(games.scheduleMode, SCHEDULE_MODE.fixed), gt(games.confirmedAt, now)),
+    sql`${firstRoundStartSql} is null`,
+    and(
+      eq(games.scheduleMode, SCHEDULE_MODE.fixed),
+      sql`${firstRoundStartSql} > ${now.toISOString()}::timestamptz`,
+    ),
   );
   const [due, stuck] = await Promise.all([
     db

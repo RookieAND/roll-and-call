@@ -3,6 +3,11 @@ import { isNull } from "es-toolkit";
 
 import { db } from "#db/client";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundEndedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { findActiveSanction } from "#db/modules/moderation";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games, participants, profiles, sessionReviews } from "#db/schema";
@@ -23,11 +28,11 @@ export async function getReviewDraftTarget({
       rule: games.rule,
       gmId: games.gmId,
       gmName: memberNicknameSql(serverId),
-      confirmedAt: games.confirmedAt,
+      confirmedAt: firstRoundStartSql,
       playMinutes: games.playMinutes,
-      endedAt: games.endedAt,
+      endedAt: firstRoundEndedAtSql,
       cancelledAt: games.cancelledAt,
-      attendanceConfirmedAt: games.attendanceConfirmedAt,
+      attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
     })
     .from(games)
     .innerJoin(profiles, eq(profiles.id, games.gmId))

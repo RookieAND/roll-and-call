@@ -1,7 +1,8 @@
-import { and, asc, eq, isNotNull, isNull, lte, sql } from "drizzle-orm";
+import { and, asc, eq, isNull, lte, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { sessionEndAtSql } from "#db/modules/games/queries/session-end-at-sql";
 import { createNotifications } from "#db/modules/notifications";
 import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
@@ -22,14 +23,14 @@ export async function notifyReviewAvailable({
     .from(games)
     .where(
       and(
-        isNotNull(games.confirmedAt),
+        sql`${firstRoundStartSql} is not null`,
         isNull(games.reviewNotifiedAt),
         isNull(games.cancelledAt),
         isNull(games.hiddenAt),
         lte(sessionEndAtSql, sql`${now.toISOString()}::timestamptz`),
       ),
     )
-    .orderBy(asc(games.confirmedAt))
+    .orderBy(asc(firstRoundStartSql))
     .limit(limit);
 
   let notified = 0;

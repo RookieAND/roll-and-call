@@ -1,8 +1,13 @@
-import { and, eq, inArray, isNull, or } from "drizzle-orm";
+import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 
 import { departedGmGameAction } from "#db/modules/games/model/departed-gm-game-action";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import { isSessionInProgress } from "#db/modules/games/model/session-timing";
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundEndedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { listSeatOpenedRecipients } from "#db/modules/games/queries/list-seat-opened-recipients";
 import { notStartedGamesWhere } from "#db/modules/games/queries/not-started-games-where";
 import { createNotifications } from "#db/modules/notifications";
@@ -61,10 +66,10 @@ export async function releaseMemberGames({
   const hosted = await transaction
     .select({
       id: games.id,
-      confirmedAt: games.confirmedAt,
+      confirmedAt: firstRoundStartSql,
       playMinutes: games.playMinutes,
-      endedAt: games.endedAt,
-      attendanceConfirmedAt: games.attendanceConfirmedAt,
+      endedAt: firstRoundEndedAtSql,
+      attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
       cancelledAt: games.cancelledAt,
     })
     .from(games)
@@ -73,7 +78,7 @@ export async function releaseMemberGames({
         eq(games.serverId, serverId),
         eq(games.gmId, userId),
         isNull(games.cancelledAt),
-        or(isNull(games.attendanceConfirmedAt), isNull(games.confirmedAt)),
+        or(sql`${firstRoundAttendanceConfirmedAtSql} is null`, sql`${firstRoundStartSql} is null`),
       ),
     );
   const now = new Date();

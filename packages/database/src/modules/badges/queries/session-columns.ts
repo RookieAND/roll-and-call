@@ -1,5 +1,10 @@
 import { sql } from "drizzle-orm";
 
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundEndedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { games, homebrewRules, participants, rulebookCategories, rulebooks } from "#db/schema";
 
 // attendedWhere와 같은 조건. 참여 쿼리가 participants를 이미 조인하므로 별칭으로 센다.
@@ -16,10 +21,10 @@ const isHomebrew = sql`exists (select 1 from ${homebrewRules} where ${homebrewRu
 export const sessionColumns = {
   gameId: games.id,
   title: games.title,
-  confirmedAt: games.confirmedAt,
+  confirmedAt: firstRoundStartSql,
   playMinutes: games.playMinutes,
-  endedAt: games.endedAt,
-  attendanceConfirmedAt: games.attendanceConfirmedAt,
+  endedAt: firstRoundEndedAtSql,
+  attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
   hiddenAt: games.hiddenAt,
   cancelledAt: games.cancelledAt,
   categoryId: sql<

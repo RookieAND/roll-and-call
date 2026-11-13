@@ -11,6 +11,10 @@ import {
 } from "#db/modules/games/model";
 import { isAbsenceActive } from "#db/modules/games/model";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games, participants, profiles } from "#db/schema";
@@ -60,8 +64,8 @@ export async function addNoShow({
   return db.transaction(async (tx) => {
     const [game] = await tx
       .select({
-        confirmedAt: games.confirmedAt,
-        attendanceConfirmedAt: games.attendanceConfirmedAt,
+        confirmedAt: firstRoundStartSql,
+        attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
       })
       .from(games)
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));

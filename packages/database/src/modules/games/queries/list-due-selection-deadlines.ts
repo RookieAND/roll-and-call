@@ -6,6 +6,8 @@ import { SCHEDULE_MODE } from "#db/modules/games/model/schedule-mode";
 import { selectionDeadline } from "#db/modules/games/model/selection-deadline";
 import { games } from "#db/schema";
 
+import { firstRoundStartSql } from "./first-round-sql";
+
 // 선발 기한 크론이 집는 글: 선발을 마치지 않은 선발 글 가운데 기한이 지난 것(games_selection_due_idx).
 // 기한은 selectionDeadline이 정한다. SQL은 같은 규칙으로 후보를 좁히고, 정확한 판정은 함수로 다시 한다(한 번에 limit건).
 export async function listDueSelectionDeadlines({
@@ -21,7 +23,7 @@ export async function listDueSelectionDeadlines({
       serverId: games.serverId,
       endDate: games.endDate,
       scheduleMode: games.scheduleMode,
-      confirmedAt: games.confirmedAt,
+      confirmedAt: firstRoundStartSql,
       rangeEnd: games.rangeEnd,
     })
     .from(games)
@@ -33,7 +35,10 @@ export async function listDueSelectionDeadlines({
         lte(games.endDate, now),
         or(
           sql`${games.endDate} + interval '7 days' <= ${now}`,
-          and(eq(games.scheduleMode, SCHEDULE_MODE.fixed), lte(games.confirmedAt, now)),
+          and(
+            eq(games.scheduleMode, SCHEDULE_MODE.fixed),
+            sql`${firstRoundStartSql} <= ${now.toISOString()}::timestamptz`,
+          ),
           and(
             eq(games.scheduleMode, SCHEDULE_MODE.coordinate),
             sql`(${games.rangeEnd}::timestamp + interval '1 day') at time zone 'Asia/Seoul' <= ${now}`,

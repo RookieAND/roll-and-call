@@ -1,7 +1,6 @@
 import { sql } from "drizzle-orm";
 
-import { DEFAULT_PLAY_MINUTES } from "#db/modules/games/model/session-timing";
-import { games } from "#db/schema";
+import { firstRoundEndedAtSql, firstRoundPlannedEndSql } from "./first-round-sql";
 
-// sessionEndAt의 SQL판. 실제 종료 시각, 없으면 시작 + 플레이타임이다.
-export const sessionEndAtSql = sql`coalesce(${games.endedAt}, ${games.confirmedAt} + coalesce(${games.playMinutes}, ${DEFAULT_PLAY_MINUTES}) * interval '1 minute')`;
+// sessionEndAt의 SQL판. 회차 1의 실제 종료 시각, 없으면 예정 종료(시작 + 플레이타임)다.
+export const sessionEndAtSql = sql`coalesce(${firstRoundEndedAtSql}, ${firstRoundPlannedEndSql})`;

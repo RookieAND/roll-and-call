@@ -1,9 +1,10 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { miniRuleOf } from "#db/modules/badges/model/mini-rule-of";
 import { type MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
 import { recordAppearances } from "#db/modules/badges/model/record-appearances";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { RANKING_MODE, type RankingMode } from "#db/modules/servers/model";
 import { servers } from "#db/schema";
 
@@ -33,10 +34,10 @@ export async function loadMonthlyAppearances({
       hiddenAt: true,
       cancelledAt: true,
     },
-    where: (game, { and, isNotNull, isNull }) =>
+    where: (game, { and, isNull }) =>
       and(
         eq(game.serverId, serverId),
-        isNotNull(game.confirmedAt),
+        sql`${firstRoundStartSql} is not null`,
         isNull(game.hiddenAt),
         isNull(game.cancelledAt),
       ),

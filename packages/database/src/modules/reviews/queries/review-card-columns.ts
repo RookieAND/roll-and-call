@@ -1,3 +1,4 @@
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games, profiles, sessionReviews } from "#db/schema";
 
@@ -16,6 +17,6 @@ export function reviewCardColumns(serverId: string) {
     authorName: memberNicknameSql(serverId),
     authorAvatarUrl: profiles.avatarUrl,
     gameTitle: games.title,
-    sessionAt: games.confirmedAt,
+    sessionAt: firstRoundStartSql,
   };
 }

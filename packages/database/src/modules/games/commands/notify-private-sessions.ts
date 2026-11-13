@@ -1,9 +1,10 @@
-import { and, eq, gt, inArray, isNull, lte } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { GAME_VISIBILITY } from "#db/modules/games/model/game-visibility";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import { privateNoticeWindows } from "#db/modules/games/model/private-notice-window";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { createNotifications } from "#db/modules/notifications";
 import {
   NOTIFICATION_KIND,
@@ -101,8 +102,8 @@ async function claim({
         isNull(games[mark]),
         isNull(games.cancelledAt),
         isNull(games.hiddenAt),
-        gt(games.confirmedAt, window.from),
-        lte(games.confirmedAt, window.to),
+        sql`${firstRoundStartSql} > ${window.from.toISOString()}::timestamptz`,
+        sql`${firstRoundStartSql} <= ${window.to.toISOString()}::timestamptz`,
       ),
     )
     .returning({ id: games.id, serverId: games.serverId, gmId: games.gmId, title: games.title });

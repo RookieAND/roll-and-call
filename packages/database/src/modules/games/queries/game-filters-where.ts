@@ -1,4 +1,4 @@
-import { and, isNotNull, isNull, or, sql, type SQL } from "drizzle-orm";
+import { and, isNull, or, sql, type SQL } from "drizzle-orm";
 import { range, uniq } from "es-toolkit";
 
 import {
@@ -8,9 +8,11 @@ import {
 } from "#db/modules/games/model/games-filter";
 import { games, rulebooks } from "#db/schema";
 
+import { firstRoundStartSql } from "./first-round-sql";
+
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const startKstSql = sql`(${games.confirmedAt} at time zone 'Asia/Seoul')`;
+const startKstSql = sql`(${firstRoundStartSql} at time zone 'Asia/Seoul')`;
 
 // 룰은 언제나 건다. 요일·시간대는 세션 시작 시각(KST) 기준이고, includeUnscheduled가 켜져 있으면 시작 시각이 없는 구인은 요일·시간대와 상관없이 보인다.
 export function gameFiltersWhere(filter: GamesFilter): SQL | undefined {
@@ -49,10 +51,12 @@ export function gameFiltersWhere(filter: GamesFilter): SQL | undefined {
   }
   const includeUnscheduled = filter.includeUnscheduled !== false;
   if (scheduleConditions.length > 0) {
-    const scheduled = and(isNotNull(games.confirmedAt), ...scheduleConditions)!;
-    conditions.push(includeUnscheduled ? or(isNull(games.confirmedAt), scheduled)! : scheduled);
+    const scheduled = and(sql`${firstRoundStartSql} is not null`, ...scheduleConditions)!;
+    conditions.push(
+      includeUnscheduled ? or(sql`${firstRoundStartSql} is null`, scheduled)! : scheduled,
+    );
   } else if (!includeUnscheduled) {
-    conditions.push(isNotNull(games.confirmedAt));
+    conditions.push(sql`${firstRoundStartSql} is not null`);
   }
 
   return conditions.length > 0 ? and(...conditions) : undefined;
