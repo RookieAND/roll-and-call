@@ -7,7 +7,7 @@ import { drizzle } from "drizzle-orm/pglite";
 
 import * as schema from "#db/schema";
 
-const GUARD_MIGRATIONS = ["0136_game_round_guards.sql"];
+const GUARD_MIGRATIONS = ["0136_game_round_guards.sql", "0137_backfill_game_rounds.sql"];
 
 // 테스트 전용 메모리 Postgres. 마이그레이션 SQL(Supabase 전용 auth·cron 포함)이 아니라 drizzle 스키마에서 표를 만든다.
 // drizzle이 표현하지 못하는 제약·트리거만 손으로 쓴 마이그레이션 파일을 그대로 얹는다.
