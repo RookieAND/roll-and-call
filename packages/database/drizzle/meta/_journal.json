@@ -904,6 +904,20 @@
       "when": 1799900200002,
       "tag": "0134_allow_private_coordinate",
       "breakpoints": true
+    },
+    {
+      "idx": 135,
+      "version": "7",
+      "when": 1799900300000,
+      "tag": "0135_game_rounds",
+      "breakpoints": true
+    },
+    {
+      "idx": 136,
+      "version": "7",
+      "when": 1799900300001,
+      "tag": "0136_game_round_guards",
+      "breakpoints": true
     }
   ]
 }

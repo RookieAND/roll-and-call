@@ -12,6 +12,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+import { gameRounds } from "./game-rounds";
 import { games } from "./games";
 import { profiles } from "./profiles";
 import { serverId } from "./server-id";
@@ -27,6 +28,8 @@ export const sessionReviews = pgTable(
     gameId: uuid("game_id")
       .notNull()
       .references(() => games.id, { onDelete: "cascade" }),
+    // 후기가 속한 회차. 백필 전에는 null이다. 회차를 생략하면 후기도 함께 지워진다.
+    roundId: uuid("round_id").references(() => gameRounds.id, { onDelete: "cascade" }),
     authorId: uuid("author_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
@@ -57,6 +60,10 @@ export const sessionReviews = pgTable(
     discordThreadId: text("discord_thread_id"),
   },
   (table) => [
+    // 회차마다 한 사람이 후기를 하나 쓴다. 옛 (구인, 작성자) 유일 조건은 다회차 후기를 여는 C36-7에서 지운다.
+    uniqueIndex("session_reviews_round_id_author_id_unique")
+      .on(table.roundId, table.authorId)
+      .where(sql`round_id is not null`),
     uniqueIndex("session_reviews_game_id_author_id_unique").on(table.gameId, table.authorId),
     unique("session_reviews_id_server_id_unique").on(table.id, table.serverId),
     foreignKey({
@@ -64,6 +71,7 @@ export const sessionReviews = pgTable(
       foreignColumns: [games.id, games.serverId],
       name: "session_reviews_game_server_fk",
     }).onDelete("cascade"),
+    index("session_reviews_round_id_idx").on(table.roundId),
     index("session_reviews_author_id_idx").on(table.authorId),
     check(
       "session_reviews_body_length",

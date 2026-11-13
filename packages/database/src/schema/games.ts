@@ -22,6 +22,14 @@ import { profiles } from "./profiles";
 import { rulebookRequests, rulebooks } from "./rulebooks";
 import { serverId } from "./server-id";
 
+// 지정형 다회차를 만든 반복 규칙. weekday는 0(일)~6(토), 시각은 KST "HH:mm", 직접 입력한 일정은 규칙이 없다.
+export interface GameRepeatRule {
+  weekday: number;
+  startTime: string;
+  endTime: string;
+  intervalWeeks: number;
+}
+
 export interface GameSupplement {
   name: string;
   rulebookId: string | null;
@@ -33,6 +41,17 @@ export const scheduleMode = pgEnum("schedule_mode", ["fixed", "coordinate"]);
 // selection은 정원과 무관하게 받고 GM이 신청자 중에서 확정자를 직접 골라 [선발 마치기]로 끝낸다.
 // private은 모집 공지·신청 없이 GM이 참여자를 직접 지정하는 구인이다.
 export const gameVisibility = pgEnum("game_visibility", ["public", "private"]);
+
+// 다회차의 일정 방식. designated는 등록 때 모든 회차 일시를 정하고, coordinated는 1회차만 정한 뒤 GM이 회차마다 잡는다.
+// 1회차 자체의 방식(일시 지정·범위 조율)은 scheduleMode가 그대로 맡는다. 단발에서는 쓰지 않는다.
+export const roundScheduleKind = pgEnum("round_schedule_kind", ["designated", "coordinated"]);
+
+// 내보내거나 떠난 참여자의 사유. removed는 불참 기록을 남긴 내보내기, mutual은 합의 하차, server_left는 서버 이탈이다.
+export const participantLeftReason = pgEnum("participant_left_reason", [
+  "removed",
+  "mutual",
+  "server_left",
+]);
 
 export const recruitMethod = pgEnum("recruit_method", ["first_come", "lottery", "selection"]);
 
@@ -111,6 +130,16 @@ export const games = pgTable(
     // true면 이 구인의 룰북을 인증한 사람만 신청할 수 있다.
     requireRulebookCert: boolean("require_rulebook_cert").notNull().default(false),
     scheduleMode: scheduleMode("schedule_mode").notNull(),
+    // 예정 회차 수. 단발은 1이다. 지정형은 생략하면 1 줄고 조율형은 그대로다.
+    roundCount: smallint("round_count").notNull().default(1),
+    roundScheduleKind: roundScheduleKind("round_schedule_kind").notNull().default("designated"),
+    repeatRule: jsonb("repeat_rule").$type<GameRepeatRule>(),
+    // 회차들의 마지막 시작 시각. game_rounds 트리거가 맞춘다.
+    lastStartAt: timestamp("last_start_at", { withTimezone: true }),
+    // 구인 단위 종료(마지막 회차 종료 또는 조기 종결). 진행 중·지난 구인 탭의 기준이다.
+    finishedAt: timestamp("finished_at", { withTimezone: true }),
+    // 조기 종결한 시각. 값이 있으면 finishedAt도 같이 채워진다.
+    incompleteAt: timestamp("incomplete_at", { withTimezone: true }),
     endDate: timestamp("end_date", { withTimezone: true }).notNull(),
     rangeStart: date("range_start"),
     rangeEnd: date("range_end"),
@@ -220,6 +249,7 @@ export const games = pgTable(
       "games_min_players_range",
       sql`${table.minPlayers} is null or (${table.minPlayers} >= 1 and ${table.minPlayers} <= ${table.maxPlayers})`,
     ),
+    check("games_round_count_range", sql`${table.roundCount} between 1 and 52`),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),
     check(
       "games_play_minutes_min_range",
@@ -292,6 +322,9 @@ export const participants = pgTable(
     }),
     absenceAddedTag: text("absence_added_tag"),
     absenceAddedReason: text("absence_added_reason"),
+    // 1회차가 시작된 뒤 합류한 사람. 완주로 세지 않는다.
+    lateJoined: boolean("late_joined").notNull().default(false),
+    leftReason: participantLeftReason("left_reason"),
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),
@@ -368,10 +401,12 @@ export const availabilities = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    // 조율하는 회차 번호. 단발과 1회차는 1이다.
+    roundNo: smallint("round_no").notNull().default(1),
     slotStart: timestamp("slot_start", { withTimezone: true }).notNull(),
   },
   (table) => [
-    primaryKey({ columns: [table.gameId, table.userId, table.slotStart] }),
+    primaryKey({ columns: [table.gameId, table.roundNo, table.userId, table.slotStart] }),
     foreignKey({
       columns: [table.gameId, table.serverId],
       foreignColumns: [games.id, games.serverId],
