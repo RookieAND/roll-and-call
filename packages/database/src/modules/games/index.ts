@@ -54,7 +54,14 @@ export { getResponseCounts } from "./queries/get-response-counts";
 export { getScheduleAvailabilityRows } from "./queries/get-schedule-availability-rows";
 export { getUserConfirmedSlots } from "./queries/get-user-confirmed-slots";
 export { hasAnsweredAvailability } from "./queries/has-answered-availability";
-export { listUserSessionTimings } from "./queries/list-user-session-timings";
+export {
+  findScheduleConflicts,
+  type ScheduleConflict,
+  type ScheduleOverlap,
+  type SchedulePerson,
+  type ScheduleRole,
+} from "./queries/find-schedule-conflicts";
+export { listDatedRounds } from "./queries/list-dated-rounds";
 export { hasSessionsBetween } from "./queries/has-sessions-between";
 export { getApplicationNote } from "./queries/get-application-note";
 export { getApplicationNotes } from "./queries/get-application-notes";

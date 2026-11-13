@@ -16,7 +16,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { GAME_VISIBILITY, PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
-import { removeUnusedGameFiles } from "@/entities/game/server";
+import { checkScheduleConflicts, removeUnusedGameFiles } from "@/entities/game/server";
 import { isCertEnforced, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -103,6 +103,38 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       previous: game.confirmedAt,
       next: columns.confirmedAt,
     });
+    // 일시나 플레이타임이 바뀌면 GM과 확정·대기 신청자 각자의 다른 세션과 겹치는지 본다. 바꾸지 않은 저장은 소급해서 막지 않는다.
+    if (
+      columns.confirmedAt &&
+      (game.confirmedAt?.getTime() !== columns.confirmedAt.getTime() ||
+        game.playMinutes !== (columns.playMinutes ?? null))
+    ) {
+      const [confirmedUserIds, waitingUserIds] = await Promise.all([
+        listParticipantUserIds({
+          transaction,
+          serverId: server.id,
+          gameId: id,
+          status: PARTICIPANT_STATUS.confirmed,
+        }),
+        listParticipantUserIds({
+          transaction,
+          serverId: server.id,
+          gameId: id,
+          status: PARTICIPANT_STATUS.waiting,
+        }),
+      ]);
+      const conflict = await checkScheduleConflicts({
+        transaction,
+        serverId: server.id,
+        gameId: id,
+        gmId: user.id,
+        confirmedUserIds,
+        waitingUserIds,
+        startsAt: columns.confirmedAt,
+        playMinutes: columns.playMinutes ?? null,
+      });
+      if (conflict) return conflict;
+    }
     // 마감을 미래로 고치면 새 마감 때 최소 인원을 다시 판정한다.
     const reopensJudgement = reopensMinPlayersJudgement({
       previousEndDate: game.endDate,

@@ -50,7 +50,11 @@ export {
 export { hasGameFilters } from "./has-game-filters";
 export { gameFilterCount } from "./game-filter-count";
 export { hidesPrivateGames } from "./hides-private-games";
-export { findOverlappingGame, type MySessionTiming } from "./find-overlapping-game";
+export {
+  overlappingRoundNumbers,
+  type RoundSpan,
+  type TargetRound,
+} from "./overlapping-round-numbers";
 export { APPLICATION_NOTE_MAX_LENGTH, normalizeApplicationNote } from "./application-note";
 export {
   APPLICATION_QUESTION_DEFAULT,

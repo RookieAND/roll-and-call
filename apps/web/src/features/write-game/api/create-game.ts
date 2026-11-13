@@ -13,6 +13,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { GAME_VISIBILITY } from "@/entities/game";
+import { checkScheduleConflicts } from "@/entities/game/server";
 import { RULE_GATE, isCertEnforced, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -94,7 +95,20 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   });
 
   const supplements = supplementCheck.supplements;
-  const gameId = await withTransaction(async (transaction) => {
+  const created = await withTransaction(async (transaction) => {
+    // GM과 직접 확정한 사람의 다른 세션과 일시가 겹치면 등록하지 않는다.
+    if (columns.confirmedAt) {
+      const conflict = await checkScheduleConflicts({
+        transaction,
+        serverId: server.id,
+        gameId: null,
+        gmId: user.id,
+        confirmedUserIds: invitedIds,
+        startsAt: columns.confirmedAt,
+        playMinutes: columns.playMinutes ?? null,
+      });
+      if (conflict) return conflict;
+    }
     const createdId = await createGameWithRoster({
       transaction,
       serverId: server.id,
@@ -137,6 +151,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     });
     return createdId;
   });
+  if (typeof created !== "string") return created;
+  const gameId = created;
 
   after(() =>
     announceGameOpened({

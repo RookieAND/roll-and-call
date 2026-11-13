@@ -14,6 +14,7 @@ import { after } from "next/server";
 import { z } from "zod";
 
 import { PARTICIPANT_STATUS } from "@/entities/game";
+import { checkScheduleConflicts } from "@/entities/game/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
 import {
@@ -46,6 +47,32 @@ export async function confirmSession(input: z.input<typeof inputSchema>): Promis
     const block = confirmBlockReason({ game, userId: user.id, startsAt: confirmedAt });
     if (block || !game) return block ?? { error: CONFIRM_FORBIDDEN_MESSAGE };
 
+    const [confirmedUserIds, waitingUserIds] = await Promise.all([
+      listParticipantUserIds({
+        transaction,
+        serverId: server.id,
+        gameId,
+        status: PARTICIPANT_STATUS.confirmed,
+      }),
+      listParticipantUserIds({
+        transaction,
+        serverId: server.id,
+        gameId,
+        status: PARTICIPANT_STATUS.waiting,
+      }),
+    ]);
+    const conflict = await checkScheduleConflicts({
+      transaction,
+      serverId: server.id,
+      gameId,
+      gmId: user.id,
+      confirmedUserIds,
+      waitingUserIds,
+      startsAt: confirmedAt,
+      playMinutes: game.playMinutes,
+    });
+    if (conflict) return conflict;
+
     const updated = await confirmGameSession({
       transaction,
       serverId: server.id,
@@ -57,12 +84,6 @@ export async function confirmSession(input: z.input<typeof inputSchema>): Promis
 
     const previousConfirmedAt = game.confirmedAt;
     if (previousConfirmedAt?.getTime() !== confirmedAt.getTime()) {
-      const confirmedIds = await listParticipantUserIds({
-        transaction,
-        serverId: server.id,
-        gameId,
-        status: PARTICIPANT_STATUS.confirmed,
-      });
       const startsAt = confirmedAt.toISOString();
       const notification = previousConfirmedAt
         ? {
@@ -82,7 +103,7 @@ export async function confirmSession(input: z.input<typeof inputSchema>): Promis
         executor: transaction,
         serverId: server.id,
         actorId: user.id,
-        notifications: confirmedIds.map((userId) => ({ userId, ...notification })),
+        notifications: confirmedUserIds.map((userId) => ({ userId, ...notification })),
       });
     }
     return { previousConfirmedAt };

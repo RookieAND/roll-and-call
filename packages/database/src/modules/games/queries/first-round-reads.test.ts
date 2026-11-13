@@ -14,7 +14,6 @@ import { getMonthSessions } from "./get-month-sessions";
 import { getUserConfirmedSlots } from "./get-user-confirmed-slots";
 import { hasSessionsBetween } from "./has-sessions-between";
 import { listDueLotteries } from "./list-due-lotteries";
-import { listUserSessionTimings } from "./list-user-session-timings";
 import { notStartedGamesWhere } from "./not-started-games-where";
 
 vi.mock("server-only", () => ({}));
@@ -130,14 +129,7 @@ describe("회차 1에서 읽는 쿼리", () => {
     expect(await idsWhere(other!)).not.toContain(ids.upcoming);
   });
 
-  it("겹침 검사용 내 세션과 확정 칸", async () => {
-    const timings = await listUserSessionTimings({
-      serverId: SERVER_ID,
-      userId: PLAYER_ID,
-      excludeGameId: ids.upcoming,
-      now: new Date(NOW),
-    });
-    expect(timings.map((row) => row.id).toSorted()).toEqual([ids.running, ids.lottery].toSorted());
+  it("확정 칸은 회차 1의 시각으로 막는다", async () => {
     const slots = await getUserConfirmedSlots({
       serverId: SERVER_ID,
       userId: PLAYER_ID,
