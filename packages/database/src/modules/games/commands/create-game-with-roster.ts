@@ -1,4 +1,5 @@
 import { db } from "#db/client";
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import type { Transaction } from "#db/modules/transaction";
 import { games, participants, type NewGame } from "#db/schema";
@@ -27,6 +28,7 @@ export async function createGameWithRoster({
       .values({ ...columns, serverId })
       .returning({ id: games.id });
     const gameId = created!.id;
+    await syncFirstRound({ transaction: executor, gameId });
     const rows = [
       ...confirmedUserIds.map((userId) => ({
         serverId,

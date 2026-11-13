@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import { GAME_VISIBILITY } from "#db/modules/games/model/game-visibility";
 import { PRIVATE_GAME_COLUMNS, privateEndDate } from "#db/modules/games/model/private-game-columns";
 import {
@@ -52,5 +53,6 @@ export async function makeGamePrivate({
       discordThreadId: null,
     })
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+  await syncFirstRound({ transaction, gameId });
   return { type: "changed", removedThreadId: game.discordThreadId };
 }

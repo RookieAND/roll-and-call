@@ -1,5 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import type { Transaction } from "#db/modules/transaction";
 import { games } from "#db/schema";
 
@@ -19,4 +20,5 @@ export async function setSessionEndedAt({
     .update(games)
     .set({ endedAt })
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+  await syncFirstRound({ transaction, gameId });
 }

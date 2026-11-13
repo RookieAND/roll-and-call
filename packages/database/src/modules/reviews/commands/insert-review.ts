@@ -1,6 +1,8 @@
+import { sql } from "drizzle-orm";
+
 import { db } from "#db/client";
 import type { ReviewAuthorRole } from "#db/modules/games/model";
-import { sessionReviews } from "#db/schema";
+import { gameRounds, sessionReviews } from "#db/schema";
 
 // 같은 세션에 두 번 쓰면 유니크 제약 위반(23505)을 그대로 던진다. 막는 문구는 앱이 고른다.
 export async function insertReview({
@@ -22,7 +24,16 @@ export async function insertReview({
 }) {
   const [created] = await db
     .insert(sessionReviews)
-    .values({ serverId, gameId, authorId, authorRole, body, spoiler, photoUrls })
+    .values({
+      serverId,
+      gameId,
+      roundId: sql`(select id from ${gameRounds} where ${gameRounds.gameId} = ${gameId} and ${gameRounds.roundNo} = 1)`,
+      authorId,
+      authorRole,
+      body,
+      spoiler,
+      photoUrls,
+    })
     .returning({ id: sessionReviews.id });
   return created?.id;
 }

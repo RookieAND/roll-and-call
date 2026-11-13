@@ -42,6 +42,14 @@ async function createGame(values: Partial<typeof games.$inferInsert>) {
   return game!;
 }
 
+// PGlite는 { rows }를 돌려주고 postgres-js는 배열을 돌려준다. 테스트 DB 쪽 모양으로 읽는다.
+async function runBackfill() {
+  const result = (await db.execute(sql`select * from backfill_game_rounds()`)) as unknown as {
+    rows: { rounds_created: number; attendances_created: number; reviews_linked: number }[];
+  };
+  return result.rows;
+}
+
 async function roundOf(gameId: string) {
   const [row] = await db.select().from(gameRounds).where(eq(gameRounds.gameId, gameId));
   return row!;
@@ -91,11 +99,7 @@ it("구인마다 회차 1개를 만들고 상태를 계산하며 출석·후기�
     body: "후기 본문은 스무 글자를 넘겨야 합니다 정말로요",
   });
 
-  const [first] = (await db.execute(sql`select * from backfill_game_rounds()`)).rows as {
-    rounds_created: number;
-    attendances_created: number;
-    reviews_linked: number;
-  }[];
+  const [first] = await runBackfill();
   expect(first).toEqual({ rounds_created: 7, attendances_created: 2, reviews_linked: 1 });
 
   expect((await roundOf(upcoming.id)).status).toBe("scheduled");
@@ -130,7 +134,7 @@ it("구인마다 회차 1개를 만들고 상태를 계산하며 출석·후기�
   const [stillOpen] = await db.select().from(games).where(eq(games.id, cancelled.id));
   expect(stillOpen!.finishedAt).toBeNull();
 
-  const [second] = (await db.execute(sql`select * from backfill_game_rounds()`)).rows;
+  const [second] = await runBackfill();
   expect(second).toEqual({ rounds_created: 0, attendances_created: 0, reviews_linked: 0 });
   expect((await db.select().from(gameRounds)).length).toBe(7);
 });
