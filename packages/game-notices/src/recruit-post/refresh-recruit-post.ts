@@ -55,14 +55,15 @@ export async function refreshRecruitPost({
     });
   };
 
+  const closed = confirmedCount >= game.maxPlayers;
   await Promise.all([
     updateMessage(),
     target &&
       syncRecruitThread({
         target,
         threadId,
-        name: recruitPostTitle({ title: game.title, gmName, ruleLabel }),
-        closed: confirmedCount >= game.maxPlayers,
+        name: recruitPostTitle({ title: game.title, gmName, ruleLabel, closed }),
+        closed,
         categoryId,
         kind: game.kind,
         playType: game.playType,
