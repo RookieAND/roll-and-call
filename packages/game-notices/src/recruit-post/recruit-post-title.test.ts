@@ -7,7 +7,7 @@ it("제목 뒤에 GM을 붙이고 취소면 표시한다", () => {
     "달그림자 여관 [GM 새벽세시]",
   );
   expect(recruitPostTitle({ title: "달그림자 여관", gmName: "새벽세시", cancelled: true })).toBe(
-    "달그림자 여관 [GM 새벽세시] (취소됨)",
+    "(취소됨) 달그림자 여관 [GM 새벽세시]",
   );
 });
 
@@ -22,7 +22,7 @@ it("룰 분류가 있으면 제목 앞에 붙인다", () => {
       ruleLabel: "크툴루의 부름",
       cancelled: true,
     }),
-  ).toBe("[크툴루의 부름] 21세기 바벨탑 [GM rullu] (취소됨)");
+  ).toBe("(취소됨) [크툴루의 부름] 21세기 바벨탑 [GM rullu]");
 });
 
 it("룰 분류가 비어 있으면 붙이지 않는다", () => {
@@ -40,4 +40,13 @@ it("100자를 넘으면 제목만 줄인다", () => {
   expect(result).toHaveLength(100);
   expect(result.startsWith("[크툴루의 부름] ")).toBe(true);
   expect(result.endsWith(" [GM 새벽세시]")).toBe(true);
+});
+
+it("마감이면 맨 앞에 표시하고, 취소가 우선한다", () => {
+  expect(recruitPostTitle({ title: "달그림자 여관", gmName: "새벽세시", closed: true })).toBe(
+    "[마감] 달그림자 여관 [GM 새벽세시]",
+  );
+  expect(
+    recruitPostTitle({ title: "여관", gmName: "새벽세시", closed: true, cancelled: true }),
+  ).toBe("(취소됨) 여관 [GM 새벽세시]");
 });
