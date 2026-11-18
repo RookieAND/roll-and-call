@@ -9,10 +9,13 @@ import {
   participationConditions,
   type ParticipationStanding,
   GAME_STATUS,
+  PARTICIPANT_STATUS,
   isApplicationClosed,
   GAME_VISIBILITY,
   isGameGm,
   isSessionEnded,
+  isSessionStarted,
+  type RoundScheduleRound,
   scheduleLine,
   splitRoster,
 } from "@/entities/game";
@@ -47,6 +50,8 @@ interface GameDetailProps {
   now: Date;
   // 서버가 성인 전용 구인 표기를 쓰는지. 쓰는 서버에서는 전체 이용가 구인에도 항목이 보인다.
   adultOnlyEnabled?: boolean;
+  // 여러 번 진행하는 구인의 모든 회차. 한 번 구인이면 읽지 않아 null이다.
+  rounds?: readonly RoundScheduleRound[] | null;
   // 앱바 바로 아래에 붙는 줄. 체험 환경의 「체험 중」 표시가 쓴다.
   belowAppBar?: ReactNode;
 }
@@ -59,6 +64,7 @@ export function GameDetail({
   review,
   now,
   adultOnlyEnabled = false,
+  rounds = null,
   belowAppBar,
 }: GameDetailProps) {
   const isGm = isGameGm({ gmId: game.gmId, userId: viewerId });
@@ -120,6 +126,11 @@ export function GameDetail({
       <GameConditionsSection conditions={conditions} />
     </VStack>
   );
+  // 1회차가 시작된 뒤에는 확정 참여자에게 빠지는 방법을 알려 준다.
+  const showAbsenceNotice =
+    game.roundCount > 1 &&
+    viewerParticipant?.status === PARTICIPANT_STATUS.confirmed &&
+    isSessionStarted(game, now);
   const roster = (
     <GameRosterSection
       gm={{ userId: game.gmId, ...game.gm }}
@@ -129,6 +140,7 @@ export function GameDetail({
       minPlayers={minPlayersBadge}
       awaitingResult={isAwaitingResult(game)}
       viewerId={viewerId}
+      showAbsenceNotice={showAbsenceNotice}
     />
   );
 
@@ -148,7 +160,7 @@ export function GameDetail({
           {recruitMethod}
           {roster}
           <ErrorBoundary display={ERROR_DISPLAY.toast}>
-            <GameActionZone game={game} view={actionView} />
+            <GameActionZone game={game} view={actionView} rounds={rounds} />
           </ErrorBoundary>
         </VStack>
       }
@@ -175,6 +187,7 @@ export function GameDetail({
               isGm={isGm}
               deadlineBadge={deadlineBadge}
               sessionBadge={sessionBadge}
+              rounds={rounds}
             />
 
             {game.synopsis && <GameSynopsis synopsis={game.synopsis} />}
@@ -189,7 +202,7 @@ export function GameDetail({
           </VStack>
 
           <div className="desktop:hidden">
-            <GameDetailActions game={game} view={actionView} />
+            <GameDetailActions game={game} view={actionView} rounds={rounds} />
           </div>
         </VStack>
       </Container>

@@ -8,7 +8,7 @@ import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { getActingMember, notMemberError } from "@/shared/server";
 
 import { NOTE_REQUIRED_REASON } from "../model/note-required-rejection";
-import { type OverlapRejection } from "../model/overlap-rejection";
+import type { OverlapFields } from "../model/overlap-rejection";
 import { applyToGame } from "./apply-to-game";
 import { finishApplication } from "./finish-application";
 
@@ -25,12 +25,11 @@ export async function joinGame(
   gameId: string,
   applicationNote?: string,
 ): Promise<
-  ActionResult & {
-    waiting?: boolean;
-    application?: boolean;
-    reason?: OverlapRejection["reason"];
-    overlapGameId?: string;
-  }
+  ActionResult &
+    Partial<OverlapFields> & {
+      waiting?: boolean;
+      application?: boolean;
+    }
 > {
   const parsed = parseActionInput(joinGameSchema, { gameId, applicationNote });
   if (!parsed.ok) return parsed.result;

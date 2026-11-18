@@ -62,6 +62,7 @@ export {
   type ScheduleRole,
 } from "./queries/find-schedule-conflicts";
 export { listDatedRounds } from "./queries/list-dated-rounds";
+export { listGameRounds, type GameRoundRow } from "./queries/list-game-rounds";
 export { hasSessionsBetween } from "./queries/has-sessions-between";
 export { getApplicationNote } from "./queries/get-application-note";
 export { getApplicationNotes } from "./queries/get-application-notes";

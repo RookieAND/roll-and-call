@@ -88,7 +88,13 @@ describe("findScheduleConflicts", () => {
       { userId: WAITING, role: "waiting", roundNos: [1] },
     ]);
     expect(conflicts[0]!.overlaps).toMatchObject([
-      { targetRoundNo: 1, gameTitle: "game", roundNo: 1, startsAt: at(24 * 9 + 12) },
+      {
+        targetRoundNo: 1,
+        gameTitle: "game",
+        gameRoundCount: 1,
+        roundNo: 1,
+        startsAt: at(24 * 9 + 12),
+      },
     ]);
   });
 

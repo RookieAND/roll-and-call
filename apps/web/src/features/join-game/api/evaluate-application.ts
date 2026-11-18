@@ -31,7 +31,8 @@ import {
   type ActionResult,
 } from "@/shared/api";
 
-import { OVERLAP_MESSAGE, OVERLAP_REASON, type OverlapRejection } from "../model/overlap-rejection";
+import { buildOverlapRejection } from "../model/build-overlap-rejection";
+import type { OverlapRejection } from "../model/overlap-rejection";
 
 export type Rejection = (ActionResult & { error: string }) | OverlapRejection;
 
@@ -95,9 +96,12 @@ export async function evaluateApplication({
       people: [{ userId, role: "confirmed" }],
       target,
     });
-    const overlapping = conflict?.overlaps[0];
-    if (overlapping) {
-      return { error: OVERLAP_MESSAGE, reason: OVERLAP_REASON, overlapGameId: overlapping.gameId };
+    const [first, ...rest] = conflict?.overlaps ?? [];
+    if (first) {
+      return buildOverlapRejection({
+        targetRoundCount: game.roundCount,
+        overlaps: [first, ...rest],
+      });
     }
   }
 

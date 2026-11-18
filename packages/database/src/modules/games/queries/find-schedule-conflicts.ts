@@ -20,6 +20,8 @@ export type ScheduleOverlap = {
   targetRoundNo: number;
   gameId: string;
   gameTitle: string;
+  // 상대 구인의 예정 회차 수. 1이면 단발이다.
+  gameRoundCount: number;
   roundNo: number;
   startsAt: Date;
   endsAt: Date;
@@ -66,6 +68,7 @@ export async function findScheduleConflicts({
     const span = {
       gameId: games.id,
       gameTitle: games.title,
+      gameRoundCount: games.roundCount,
       roundNo: gameRounds.roundNo,
       startsAt: gameRounds.startAt,
       endsAt: sql<Date>`coalesce(${gameRounds.endedAt}, ${gameRounds.plannedEndAt})`.mapWith(
@@ -99,6 +102,7 @@ export async function findScheduleConflicts({
       others.push({
         gameId: row.gameId,
         gameTitle: row.gameTitle,
+        gameRoundCount: row.gameRoundCount,
         roundNo: row.roundNo,
         startsAt: row.startsAt!,
         endsAt: row.endsAt,
