@@ -46,6 +46,7 @@ export function GameCard({ game }: GameCardProps) {
           line: current,
           endsAt: ended ? sessionEndAt(game) : null,
           endDate: game.endDate,
+          roundCount: game.roundCount,
         })
       : current;
 

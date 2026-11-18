@@ -7,12 +7,13 @@ import { GamesAppBar } from "./games-app-bar";
 interface GamesViewProps {
   page?: number;
   filter: GamesFilter;
+  showRounds: boolean;
 }
 
-export function GamesView({ page, filter }: GamesViewProps) {
+export function GamesView({ page, filter, showRounds }: GamesViewProps) {
   return (
     <PageShell appBar={<GamesAppBar />} bare stickyAppBar>
-      <GameBoard page={page} filter={filter} />
+      <GameBoard page={page} filter={filter} showRounds={showRounds} />
     </PageShell>
   );
 }

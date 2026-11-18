@@ -129,6 +129,16 @@ describe("회차 1에서 읽는 쿼리", () => {
     expect(await idsWhere(other!)).not.toContain(ids.upcoming);
   });
 
+  it("진행 횟수 필터는 round_count로 한 번과 여러 번을 가른다", async () => {
+    await db.update(games).set({ roundCount: 3 }).where(eq(games.id, ids.upcoming));
+    const multi = await idsWhere(gameFiltersWhere({ rounds: "multi" })!);
+    const once = await idsWhere(gameFiltersWhere({ rounds: "once" })!);
+    await db.update(games).set({ roundCount: 1 }).where(eq(games.id, ids.upcoming));
+    expect(multi).toEqual([ids.upcoming]);
+    expect(once).not.toContain(ids.upcoming);
+    expect(once).toContain(ids.running);
+  });
+
   it("확정 칸은 회차 1의 시각으로 막는다", async () => {
     const slots = await getUserConfirmedSlots({
       serverId: SERVER_ID,

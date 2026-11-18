@@ -120,7 +120,14 @@ export {
   ROUND_REPEAT,
   ROUND_REPEATS,
   ROUND_REPEAT_WEEKS,
+  ROUND_REPEAT_WORD,
   type RoundRepeat,
+  type RoundRepeatWord,
 } from "./model/round-repeat";
 export { roundClockLabel } from "./model/round-clock-label";
 export { roundTimeRange } from "./model/round-time-range";
+export { roundTotalLabel } from "./model/round-total-label";
+export { repeatScheduleText } from "./model/repeat-schedule-text";
+export { datedScheduleText } from "./model/dated-schedule-text";
+export { coordinatingScheduleText } from "./model/coordinating-schedule-text";
+export { multiRoundScheduleText } from "./model/multi-round-schedule-text";

@@ -27,6 +27,7 @@ interface GamesToolbarProps {
   // 탭 건수는 검색어·필터와 무관하다.
   tabCounts?: GamesCounts;
   ruleOptions?: RuleOption[];
+  showRounds?: boolean;
 }
 
 // 탭 줄만 AppBar 아래에 고정하고 검색·필터·칩 줄은 목록과 함께 스크롤된다(시안 05 F). top = AppBar 높이 토큰.
@@ -37,6 +38,7 @@ export function GamesToolbar({
   counts,
   tabCounts,
   ruleOptions = [],
+  showRounds = false,
 }: GamesToolbarProps) {
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
   const chipCounts = counts ? statusCounts({ counts, tab }) : undefined;
@@ -58,6 +60,7 @@ export function GamesToolbar({
             <GameFilterSheet
               filter={filter}
               ruleOptions={ruleOptions}
+              showRounds={showRounds}
               count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
             />
           ) : (

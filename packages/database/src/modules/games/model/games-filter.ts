@@ -44,6 +44,14 @@ export const GAME_TIME_SLOT_HOURS = {
 // 룰 필터의 「기타」: 룰북이 연결되지 않은 구인.
 export const GAME_RULE_OTHER = "other";
 
+// 진행 횟수 필터. once는 한 번, multi는 여러 번(round_count > 1)이다.
+export const GAME_ROUNDS = {
+  once: "once",
+  multi: "multi",
+} as const;
+
+export type GameRounds = (typeof GAME_ROUNDS)[keyof typeof GAME_ROUNDS];
+
 export type GamesFilter = {
   q?: string;
   sort?: GameSort;
@@ -54,6 +62,8 @@ export type GamesFilter = {
   // 0 = 일요일 ~ 6 = 토요일
   days?: number[];
   times?: GameTimeSlot[];
+  // 없으면 한 번·여러 번 모두 본다.
+  rounds?: GameRounds;
   // 없으면 true로 본다.
   includeUnscheduled?: boolean;
   // false면 지난 구인 목록과 지난 구인 건수에서 지정(비공개) 구인을 뺀다. 없으면 true로 본다.

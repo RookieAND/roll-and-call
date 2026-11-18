@@ -6,6 +6,7 @@ export function hasGameFilters(filter: GamesFilter): boolean {
     filter.rules?.length ||
     filter.days?.length ||
     filter.times?.length ||
+    filter.rounds ||
     filter.includeUnscheduled === false ||
     hidesPrivateGames(filter),
   );

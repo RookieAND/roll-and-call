@@ -10,6 +10,7 @@ import {
 } from "@roll-and-call/database/games/model";
 
 export {
+  GAME_ROUNDS,
   GAME_RULE_OTHER,
   GAME_SORT,
   GAME_STATUS_FILTER,
@@ -18,6 +19,7 @@ export {
   gameFilterCount,
   hasGameFilters,
   hidesPrivateGames,
+  type GameRounds,
   type GameSort,
   type GameStatusFilter,
   type GameTab,

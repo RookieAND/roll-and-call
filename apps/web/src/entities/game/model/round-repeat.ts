@@ -16,3 +16,10 @@ export const ROUND_REPEAT_WEEKS = {
   [ROUND_REPEAT.weekly]: 1,
   [ROUND_REPEAT.biweekly]: 2,
 } as const;
+
+export const ROUND_REPEAT_WORD = {
+  [ROUND_REPEAT.weekly]: "매주",
+  [ROUND_REPEAT.biweekly]: "격주",
+} as const;
+
+export type RoundRepeatWord = keyof typeof ROUND_REPEAT_WORD;

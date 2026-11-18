@@ -15,6 +15,7 @@ export function filterParams({
   rules,
   days,
   times,
+  rounds,
   includeUnscheduled,
   includePrivate,
   page,
@@ -29,6 +30,7 @@ export function filterParams({
     time: GAME_TIME_SLOTS.filter((slot) => times?.includes(slot.key))
       .map((slot) => slot.key)
       .join(","),
+    rounds,
     unscheduled: includeUnscheduled === false ? "0" : undefined,
     designated: includePrivate === false ? "0" : undefined,
     page: page && page > 1 ? page : undefined,

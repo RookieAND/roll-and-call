@@ -2,6 +2,7 @@ import { and, isNull, or, sql, type SQL } from "drizzle-orm";
 import { range, uniq } from "es-toolkit";
 
 import {
+  GAME_ROUNDS,
   GAME_RULE_OTHER,
   GAME_TIME_SLOT_HOURS,
   type GamesFilter,
@@ -57,6 +58,14 @@ export function gameFiltersWhere(filter: GamesFilter): SQL | undefined {
     );
   } else if (!includeUnscheduled) {
     conditions.push(sql`${firstRoundStartSql} is not null`);
+  }
+
+  if (filter.rounds) {
+    conditions.push(
+      filter.rounds === GAME_ROUNDS.multi
+        ? sql`${games.roundCount} > 1`
+        : sql`${games.roundCount} = 1`,
+    );
   }
 
   return conditions.length > 0 ? and(...conditions) : undefined;

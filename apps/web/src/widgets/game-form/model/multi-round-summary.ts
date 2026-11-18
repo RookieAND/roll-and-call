@@ -1,14 +1,17 @@
 import {
+  coordinatingScheduleText,
+  datedScheduleText,
   GAME_KIND,
+  repeatScheduleText,
   ROUND_MODE,
   ROUND_REPEAT,
+  ROUND_REPEAT_WORD,
   ROUND_SCHEDULE_KIND,
-  roundClockLabel,
   roundTimeRange,
   SCHEDULE_MODE,
 } from "@/entities/game";
 import type { GameFormValues } from "@/features/write-game";
-import { formatDateWeekday, fromKstDateTimeInput, toKst } from "@/shared/lib";
+import { fromKstDateTimeInput, toKst } from "@/shared/lib";
 
 type SummaryValues = Pick<
   GameFormValues,
@@ -22,11 +25,6 @@ type SummaryValues = Pick<
   | "firstRoundEndAt"
 >;
 
-const REPEAT_WORD = {
-  [ROUND_REPEAT.weekly]: "매주",
-  [ROUND_REPEAT.biweekly]: "격주",
-} as const;
-
 function parse(value: string | undefined) {
   if (!value) return null;
   const date = fromKstDateTimeInput(value);
@@ -38,14 +36,14 @@ export function repeatResultLine(values: SummaryValues) {
   const span = repeatSpan(values);
   if (!span) return null;
   const weekday = toKst(span.startsAt).format("dd");
-  return `${span.word} ${weekday}요일 ${roundTimeRange(span)}로 만들어집니다.`;
+  return `${ROUND_REPEAT_WORD[span.repeat]} ${weekday}요일 ${roundTimeRange(span)}로 만들어집니다.`;
 }
 
 function repeatSpan({ roundRepeat, confirmedAt, firstRoundEndAt }: SummaryValues) {
   const startsAt = parse(confirmedAt);
   const endsAt = parse(firstRoundEndAt);
   if (!roundRepeat || roundRepeat === ROUND_REPEAT.custom || !startsAt || !endsAt) return null;
-  return { word: REPEAT_WORD[roundRepeat], startsAt, endsAt };
+  return { repeat: roundRepeat, startsAt, endsAt };
 }
 
 // 위저드 요약과 확인 줄의 일정 값. 여러 번 진행이 아니거나 아직 알 수 없으면 null이다.
@@ -54,17 +52,15 @@ function repeatSpan({ roundRepeat, confirmedAt, firstRoundEndAt }: SummaryValues
 //   범위 조율    「일정 조율 · 총 6회」
 export function multiRoundSummary(values: SummaryValues) {
   if (values.roundMode !== ROUND_MODE.multi || values.kind === GAME_KIND.briefing) return null;
-  const total = `총 ${values.roundCount}회`;
+  const { roundCount } = values;
+  if (!roundCount) return null;
   const isDesignated = values.roundScheduleKind !== ROUND_SCHEDULE_KIND.coordinated;
   const isCoordinatedRange = !isDesignated && values.scheduleMode === SCHEDULE_MODE.coordinate;
-  if (isCoordinatedRange) return `일정 조율 · ${total}`;
+  if (isCoordinatedRange) return coordinatingScheduleText(roundCount);
 
   const repeat = repeatSpan(values);
-  if (isDesignated && repeat) {
-    const weekday = toKst(repeat.startsAt).format("dd");
-    return `${repeat.word} ${weekday} ${roundTimeRange(repeat)} · ${total}`;
-  }
+  if (isDesignated && repeat) return repeatScheduleText({ ...repeat, roundCount });
   const startsAt = parse(values.confirmedAt);
   if (!startsAt) return null;
-  return `${formatDateWeekday(startsAt)} ${roundClockLabel(startsAt)}부터 · ${total}`;
+  return datedScheduleText({ startsAt, roundCount });
 }

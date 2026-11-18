@@ -11,6 +11,7 @@ import { compact, isNil } from "es-toolkit";
 import { formatDate, OG_IMAGE } from "@/shared/lib";
 
 import { countConfirmed, type ParticipantStatus } from "./participant";
+import { roundTotalLabel } from "./round-total-label";
 import { scheduleLine } from "./schedule-line";
 
 type PastGame = Game & { participants: { userId: string; status: ParticipantStatus }[] };
@@ -57,7 +58,11 @@ export function pastGameCardView(game: PastGame, now: Date = new Date()): PastGa
     };
   }
 
-  const when = game.confirmedAt ? scheduleLine(game, now).text : `${formatDate(game.endDate)} 마감`;
+  // 여러 번 진행이면 일시가 있을 때 scheduleLine이 이미 「· 총 N회」까지 붙여 준다.
+  const closedText = `${formatDate(game.endDate)} 마감`;
+  const closedWhen =
+    game.roundCount > 1 ? `${closedText} · ${roundTotalLabel(game.roundCount)}` : closedText;
+  const when = game.confirmedAt ? scheduleLine(game, now).text : closedWhen;
   return {
     grayBadge: isSessionEnded(game, now) ? "종료" : null,
     status,

@@ -21,10 +21,11 @@ import { PastGameListSkeleton } from "./past-game-list-skeleton";
 interface GameBoardProps {
   page?: number;
   filter: GamesFilter;
+  showRounds: boolean;
 }
 
 // 검색 이동 중(검색 입력의 aria-busy)에는 툴바는 그대로 두고 목록 자리만 뼈대로 바꾼다.
-export async function GameBoard({ page = 1, filter }: GameBoardProps) {
+export async function GameBoard({ page = 1, filter, showRounds }: GameBoardProps) {
   const server = await getCurrentServer();
   const gamesPage = getRecruitingGamesPage({ serverId: server.id, page, filter });
   const tab = filter.tab ?? GAME_TAB_DEFAULT;
@@ -51,9 +52,10 @@ export async function GameBoard({ page = 1, filter }: GameBoardProps) {
           counts={counts}
           tabCounts={allCounts ?? counts}
           ruleOptions={ruleOptions}
+          showRounds={showRounds}
         />
       }
-      panel={<GamesFilterPanel filter={filter} ruleOptions={ruleOptions} />}
+      panel={<GamesFilterPanel filter={filter} ruleOptions={ruleOptions} showRounds={showRounds} />}
       list={
         <>
           <div className="hidden group-has-[input[aria-busy=true]]/games:contents">

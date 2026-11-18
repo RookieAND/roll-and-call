@@ -4,6 +4,7 @@ import { isNull } from "es-toolkit";
 import { ddayKst, formatDate, formatDateTime, formatDday } from "@/shared/lib";
 
 import { isDeadlinePassed } from "./is-deadline-passed";
+import { multiRoundScheduleText } from "./multi-round-schedule-text";
 import { SCHEDULE_MODE } from "./schedule-mode";
 
 const DEADLINE_WARN_DAYS = 3;
@@ -11,15 +12,27 @@ const DEADLINE_WARN_DAYS = 3;
 type ScheduleGame = Pick<
   Game,
   "scheduleMode" | "confirmedAt" | "rangeStart" | "rangeEnd" | "endDate"
->;
+> &
+  Partial<Pick<Game, "roundCount" | "roundScheduleKind" | "repeatRule">>;
 
 // D-n은 KST 날짜 차이로 센다(날짜 경계에서 서버·클라이언트 값이 갈리지 않게).
 // 확정 표시는 일시가 정해졌는지로 본다(D266). 글자 끝 「확정」은 조율형만 붙인다.
 export function scheduleLine(game: ScheduleGame, now: Date = new Date()) {
   const confirmed = !isNull(game.confirmedAt);
 
+  const multiText = multiRoundScheduleText({
+    roundCount: game.roundCount ?? 1,
+    roundScheduleKind: game.roundScheduleKind ?? "designated",
+    repeatRule: game.repeatRule ?? null,
+    confirmedAt: game.confirmedAt,
+    rangeStart: game.rangeStart,
+    rangeEnd: game.rangeEnd,
+  });
+
   let text: string;
-  if (game.confirmedAt) {
+  if (multiText) {
+    text = multiText;
+  } else if (game.confirmedAt) {
     text =
       game.scheduleMode === SCHEDULE_MODE.coordinate
         ? `${formatDateTime(game.confirmedAt)} 확정`
