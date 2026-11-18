@@ -1,5 +1,5 @@
 import { getHolidayPreset } from "@hyunbinseo/holidays-kr";
-import { getMonthSessions } from "@roll-and-call/database/games";
+import { getMonthRoundSessions } from "@roll-and-call/database/games";
 import { getServerByGuildId } from "@roll-and-call/database/servers";
 import { after } from "next/server";
 
@@ -43,7 +43,7 @@ export function handleCalendarCommand(interaction: DiscordInteraction): DiscordI
         return;
       }
       const [rows, holidays] = await Promise.all([
-        getMonthSessions({
+        getMonthRoundSessions({
           serverId: server.id,
           from: monthStart.toDate(),
           to: monthStart.add(1, "month").toDate(),

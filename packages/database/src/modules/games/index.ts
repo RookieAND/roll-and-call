@@ -46,6 +46,10 @@ export { getGamesByGm } from "./queries/get-games-by-gm";
 export { getGamesCounts, type GamesCounts } from "./queries/get-games-counts";
 export { getJoinedGames } from "./queries/get-joined-games";
 export { getMonthSessions, type MonthSessionRow } from "./queries/get-month-sessions";
+export {
+  getMonthRoundSessions,
+  type MonthRoundSessionRow,
+} from "./queries/get-month-round-sessions";
 export { getRecruitingGamesPage } from "./queries/get-recruiting-games-page";
 export { getRespondedGameIds } from "./queries/get-responded-game-ids";
 export { getRespondedUserIds } from "./queries/get-responded-user-ids";

@@ -1,22 +1,22 @@
-import type { MonthSessionRow } from "@roll-and-call/database/games";
+import type { MonthRoundSessionRow } from "@roll-and-call/database/games";
 
 import { isDeadlinePassed, PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
 
 export type CalendarSession = ReturnType<typeof toCalendarSessions>[number];
 
-// 시간이 정해진 세션은 모집 중이어도 달력에 오른다. 일시 지정형이 아무도 없이 마감되면(무산) 세션 뒤에도 뺀다.
+// 회차마다 한 항목이다. 시간이 정해진 세션은 모집 중이어도 달력에 오른다. 일시 지정형이 아무도 없이 마감되면(무산) 세션 뒤에도 뺀다.
 // 취소된 구인은 달력과 날짜 목록에서 뺀다.
 export function toCalendarSessions({
   rows,
   viewerId,
   now = new Date(),
 }: {
-  rows: MonthSessionRow[];
+  rows: MonthRoundSessionRow[];
   viewerId: string | null;
   now?: Date;
 }) {
   return rows.flatMap((game) => {
-    if (!game.confirmedAt || game.cancelledAt) return [];
+    if (game.cancelledAt) return [];
     const players = game.participants
       .filter((participant) => participant.status === PARTICIPANT_STATUS.confirmed)
       .map((participant) => participant.user);
@@ -31,7 +31,9 @@ export function toCalendarSessions({
         id: game.id,
         title: game.title,
         rule: game.rule,
-        startsAt: game.confirmedAt,
+        startsAt: game.roundStartAt,
+        roundNo: game.roundNo,
+        roundCount: game.roundCount,
         maxPlayers: game.maxPlayers,
         gm: game.gm,
         players,

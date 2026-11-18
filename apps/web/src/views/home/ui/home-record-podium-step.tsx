@@ -6,7 +6,7 @@ import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordRow } from "../model/rank-people";
-import { recordUnit } from "./home-record-unit";
+import { HomeRecordCount } from "./home-record-count";
 import { PodiumRankMark } from "./podium-rank-mark";
 
 interface HomeRecordPodiumStepProps {
@@ -40,12 +40,12 @@ export function HomeRecordPodiumStep({ row, position, mode }: HomeRecordPodiumSt
           </Text>
           <MemberTitle userId={row.person.id} size="md" />
           <span className={`flex items-baseline gap-025 ${scoreTone}`}>
-            <Text typography="heading2" weight="extrabold" numeric foreground="inherit">
-              {row.count}
-            </Text>
-            <Text typography="body4" weight="bold" foreground="inherit">
-              {recordUnit(mode)}
-            </Text>
+            <HomeRecordCount
+              count={row.count}
+              mode={mode}
+              typography="heading2"
+              weight="extrabold"
+            />
           </span>
         </ServerLink>
       ) : (

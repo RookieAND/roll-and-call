@@ -4,7 +4,6 @@ import type { RecordRanking } from "../model/rank-people";
 import { HomeRecordLeader } from "./home-record-leader";
 import { HomeRecordPodium } from "./home-record-podium";
 import { HomeRecordRow } from "./home-record-row";
-import { recordUnit } from "./home-record-unit";
 
 interface HomeRecordRankingProps {
   label: string;
@@ -31,7 +30,7 @@ export function HomeRecordRanking({ label, ranking, first, mode }: HomeRecordRan
           label={label}
           people={[first, ...leaders.slice(1)]}
           count={leaderCount}
-          unit={recordUnit(mode)}
+          mode={mode}
         />
         <div className="divide-y divide-gray-100 px-025">
           {runnersUp.map((row, index) => (

@@ -99,7 +99,7 @@ export function HomeCalendarCell({
           {!overflow &&
             splitDotRows(dots).map((row) => (
               <HStack
-                key={row[0]?.id}
+                key={row[0] && `${row[0].id}-${row[0].roundNo}`}
                 align="center"
                 justify="center"
                 gap="050"
@@ -108,7 +108,7 @@ export function HomeCalendarCell({
               >
                 {row.map((session) => (
                   <span
-                    key={session.id}
+                    key={`${session.id}-${session.roundNo}`}
                     className={cn("size-1.5 rounded-full", dotTone(session))}
                   />
                 ))}
@@ -136,7 +136,7 @@ export function HomeCalendarCell({
           <VStack gap="050" render={<span />}>
             {dots.slice(0, nameCount).map((session) => (
               <HStack
-                key={session.id}
+                key={`${session.id}-${session.roundNo}`}
                 align="center"
                 gap="050"
                 render={<span />}

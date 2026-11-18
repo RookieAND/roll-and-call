@@ -1,4 +1,4 @@
-import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { cn, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import { ProfileRow } from "@/entities/profile";
@@ -6,6 +6,7 @@ import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordRow } from "../model/rank-people";
+import { formatRecordCount } from "./format-record-count";
 
 interface HomeRecordRowProps {
   row: RecordRow | null;
@@ -14,7 +15,6 @@ interface HomeRecordRowProps {
 }
 
 export function HomeRecordRow({ row, position, mode }: HomeRecordRowProps) {
-  const points = mode === RANKING_MODE.points;
   const rank = row?.rank ?? position;
   const rankTone = rank === 3 ? "text-rank-bronze" : "text-hint";
   const rankNumber = (
@@ -53,7 +53,7 @@ export function HomeRecordRow({ row, position, mode }: HomeRecordRowProps) {
       />
       <VStack align="end" className="flex-none">
         <Text typography="body4" weight="extrabold" numeric>
-          {points ? `${row.count}점` : row.count}
+          {formatRecordCount(row.count, mode)}
         </Text>
       </VStack>
     </ServerLink>

@@ -1,5 +1,9 @@
 import { loadReviewAppearances, listRankingHiddenUserIds } from "@roll-and-call/database/badges";
-import { getMonthSessions, hasSessionsBetween } from "@roll-and-call/database/games";
+import {
+  getMonthRoundSessions,
+  getMonthSessions,
+  hasSessionsBetween,
+} from "@roll-and-call/database/games";
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
 import { HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
@@ -41,9 +45,14 @@ export async function HomeView({ date }: HomeViewProps) {
   const server = await getCurrentServer();
   const nextMonthStart = monthStart.add(1, "month");
   const mode = server.rankingMode as RankingMode;
-  const [user, rows, hasNextMonthSessions, reviews, hiddenUserIds] = await Promise.all([
+  const [user, rows, roundRows, hasNextMonthSessions, reviews, hiddenUserIds] = await Promise.all([
     getCurrentSessionUser(),
     getMonthSessions({
+      serverId: server.id,
+      from: monthStart.toDate(),
+      to: nextMonthStart.toDate(),
+    }),
+    getMonthRoundSessions({
       serverId: server.id,
       from: monthStart.toDate(),
       to: nextMonthStart.toDate(),
@@ -64,7 +73,7 @@ export async function HomeView({ date }: HomeViewProps) {
   ]);
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
-  const sessions = toCalendarSessions({ rows, viewerId: user?.id ?? null, now });
+  const sessions = toCalendarSessions({ rows: roundRows, viewerId: user?.id ?? null, now });
   const record = buildMonthRecord({ rows, now, mode, reviews, hiddenUserIds });
   const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
