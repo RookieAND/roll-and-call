@@ -9,6 +9,10 @@ import { fitsFrameExactly, stageAspectRatio } from "../model/stage-aspect-ratio"
 import { BannerCropStage } from "./banner-crop-stage";
 
 interface BannerCropSheetProps {
+  // 자를 틀의 가로세로비와 화면에 쓸 이름(배너·썸네일), 만들어질 파일 이름.
+  ratio: number;
+  subject: string;
+  fileName: string;
   // 자를 이미지의 주소. 없으면 닫힌다.
   imageUrl: string | null;
   onApply: (file: File) => void;
@@ -16,7 +20,14 @@ interface BannerCropSheetProps {
 }
 
 // 모바일은 아래 시트, 1100px 이상은 가운데 Dialog로 열린다(Sheet가 알아서 바꾼다).
-export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetProps) {
+export function BannerCropSheet({
+  imageUrl,
+  ratio,
+  subject,
+  fileName,
+  onApply,
+  onClose,
+}: BannerCropSheetProps) {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
   const [zoom, setZoom] = useState(ZOOM_MIN);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -43,11 +54,12 @@ export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetP
     const { source } = bannerCrop({
       natural: { width: image.naturalWidth, height: image.naturalHeight },
       frameWidth,
+      ratio,
       zoom,
       offset,
     });
     try {
-      const file = await cropBannerFile({ image, source });
+      const file = await cropBannerFile({ image, source, ratio, fileName });
       if (file) onApply(file);
       else setFailed(true);
     } catch (error) {
@@ -60,9 +72,11 @@ export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetP
     <Sheet.Root open={imageUrl !== null} onOpenChange={(open) => !open && onClose()}>
       <Sheet.Popup className="gap-0 desktop:w-140">
         <Sheet.Handle />
-        <Sheet.Title className="mb-075 text-heading3 font-extrabold">배너 위치 조정</Sheet.Title>
+        <Sheet.Title className="mb-075 text-heading3 font-extrabold">
+          {subject} 위치 조정
+        </Sheet.Title>
         <Text typography="body4" foreground="muted" render={<p />} className="mb-200">
-          밝은 틀 안이 배너로 보입니다.
+          밝은 틀 안이 {subject}로 보입니다.
           <br />
           이미지를 끌어 위치를 맞추고, 필요하면 확대하세요.
         </Text>
@@ -77,14 +91,18 @@ export function BannerCropSheet({ imageUrl, onApply, onClose }: BannerCropSheetP
                 image={image}
                 zoom={zoom}
                 offset={offset}
+                ratio={ratio}
                 onOffsetChange={setOffset}
                 onFrameWidthChange={handleFrameWidth}
-                aspectRatio={stageAspectRatio({
-                  width: image.naturalWidth,
-                  height: image.naturalHeight,
-                })}
+                aspectRatio={stageAspectRatio(
+                  { width: image.naturalWidth, height: image.naturalHeight },
+                  ratio,
+                )}
               />
-              {fitsFrameExactly({ width: image.naturalWidth, height: image.naturalHeight }) &&
+              {fitsFrameExactly(
+                { width: image.naturalWidth, height: image.naturalHeight },
+                ratio,
+              ) &&
                 zoom === ZOOM_MIN && (
                   <Text typography="body4" foreground="hint" render={<p />} className="mt-100">
                     이미 틀에 꼭 맞는 이미지입니다. 확대하면 위치를 옮길 수 있습니다.

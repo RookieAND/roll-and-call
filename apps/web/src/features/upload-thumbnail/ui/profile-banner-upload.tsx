@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import { BannerImage } from "@/shared/ui";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
+import { BANNER_RATIO } from "../model/banner-crop";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
 import { BANNER_ACCEPT } from "../model/upload-rules";
@@ -113,6 +114,9 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
       />
       <BannerCropSheet
         imageUrl={cropping}
+        ratio={BANNER_RATIO}
+        subject="배너"
+        fileName="banner.jpg"
         onApply={(file) => void upload(file)}
         onClose={() => setCropping(null)}
       />

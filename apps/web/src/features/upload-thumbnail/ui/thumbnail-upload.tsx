@@ -5,9 +5,11 @@ import { isNull } from "es-toolkit";
 import { useRef, useState } from "react";
 
 import { uploadThumbnail } from "../api/upload-thumbnail";
+import { THUMBNAIL_RATIO } from "../model/banner-crop";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
 import { IMAGE_ACCEPT } from "../model/upload-rules";
+import { BannerCropSheet } from "./banner-crop-sheet";
 import { ThumbnailDropzone } from "./thumbnail-dropzone";
 import { ThumbnailError } from "./thumbnail-error";
 import { ThumbnailHint } from "./thumbnail-hint";
@@ -28,15 +30,29 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
   const [dragging, setDragging] = useState(false);
   const [picked, setPicked] = useState<{ name: string; size: number } | null>(null);
 
-  const pick = () => inputRef.current?.click();
+  const [original, setOriginal] = useState<string | null>(null);
+  const [cropping, setCropping] = useState<string | null>(null);
+  // 고른 원본의 파일 이름. 잘린 파일은 이름이 늘 같아서 따로 기억한다.
+  const [pickedName, setPickedName] = useState("");
 
-  async function upload(file: File) {
+  const openPicker = () => inputRef.current?.click();
+
+  function pick(file: File) {
     setError(null);
     const invalid = imageFileError(file);
     if (invalid) {
       setError(invalid);
       return;
     }
+    const url = URL.createObjectURL(file);
+    setOriginal(url);
+    setPickedName(file.name);
+    setCropping(url);
+  }
+
+  async function upload(file: File) {
+    setCropping(null);
+    setError(null);
     setPercent(0);
     setUploading(true);
     try {
@@ -50,7 +66,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
         return;
       }
       onChange(result.url);
-      setPicked({ name: file.name, size: file.size });
+      setPicked({ name: pickedName, size: file.size });
     } catch (uploadError) {
       console.error(uploadError);
       setError(uploadFailedMessage());
@@ -62,6 +78,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
   function remove() {
     onChange("");
     setPicked(null);
+    setOriginal(null);
   }
 
   return (
@@ -75,7 +92,8 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
           url={value}
           picked={picked}
           uploading={uploading}
-          onReplace={pick}
+          onAdjust={() => setCropping(original ?? value)}
+          onReplace={openPicker}
           onRemove={remove}
         />
       ) : (
@@ -83,14 +101,14 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
           uploading={uploading}
           dragging={dragging}
           invalid={!isNull(error)}
-          onPick={pick}
+          onPick={openPicker}
           onDraggingChange={setDragging}
-          onDrop={(file) => void upload(file)}
+          onDrop={pick}
         />
       )}
 
       {uploading && <UploadingMessage percent={percent} />}
-      {error ? <ThumbnailError message={error} onRetry={pick} /> : <ThumbnailHint />}
+      {error ? <ThumbnailError message={error} onRetry={openPicker} /> : <ThumbnailHint />}
 
       <input
         ref={inputRef}
@@ -101,8 +119,16 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
           const file = event.target.files?.[0];
           // 같은 파일을 지웠다가 다시 고를 수 있게 비운다.
           event.target.value = "";
-          if (file) void upload(file);
+          if (file) pick(file);
         }}
+      />
+      <BannerCropSheet
+        imageUrl={cropping}
+        ratio={THUMBNAIL_RATIO}
+        subject="썸네일"
+        fileName="thumbnail.jpg"
+        onApply={(file) => void upload(file)}
+        onClose={() => setCropping(null)}
       />
     </VStack>
   );
