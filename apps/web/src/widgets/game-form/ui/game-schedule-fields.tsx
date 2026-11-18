@@ -15,6 +15,7 @@ import type { GameFormValues } from "@/features/write-game";
 import type { MultiRoundOptions } from "../model/game-form-layout";
 import { nextFirstRoundEnd } from "../model/later-rounds";
 import { EndDateField } from "./end-date-field";
+import { InProgressLock } from "./in-progress-lock";
 import { MultiRoundFields } from "./multi-round-fields";
 import { RoundModeField } from "./round-mode-field";
 import { SingleScheduleFields } from "./single-schedule-fields";
@@ -24,6 +25,8 @@ interface GameScheduleFieldsProps {
   modeLocked?: boolean;
   endDateLocked?: boolean;
   sessionLocked?: boolean;
+  multiRoundEdit?: boolean;
+  inProgress?: boolean;
   // 있으면 새 구인에서 여러 번 진행 칸을 연다. 수정·팀 나누기는 넘기지 않는다.
   multiRound?: MultiRoundOptions;
 }
@@ -33,6 +36,8 @@ export function GameScheduleFields({
   modeLocked = false,
   endDateLocked = false,
   sessionLocked = false,
+  multiRoundEdit = false,
+  inProgress = false,
   multiRound,
 }: GameScheduleFieldsProps) {
   const { setValue, getValues, watch } = form;
@@ -79,10 +84,20 @@ export function GameScheduleFields({
       {multiOptions ? (
         <MultiRoundFields form={form} multiRound={multiOptions} />
       ) : (
-        <SingleScheduleFields form={form} modeLocked={modeLocked} sessionLocked={sessionLocked} />
+        <SingleScheduleFields
+          form={form}
+          modeLocked={modeLocked}
+          sessionLocked={sessionLocked}
+          multiLocked={multiRoundEdit}
+          inProgress={inProgress}
+        />
       )}
 
-      {!isPrivate && <EndDateField form={form} locked={endDateLocked} />}
+      {!isPrivate && (
+        <InProgressLock locked={inProgress}>
+          <EndDateField form={form} locked={endDateLocked} />
+        </InProgressLock>
+      )}
     </>
   );
 }

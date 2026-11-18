@@ -17,6 +17,9 @@ export type GameEditContext = {
   minPlayers: number | null;
   // 저장된 구인의 상태. 위저드 요약 뱃지가 쓴다.
   status: GameStatus;
+  isMultiRound: boolean;
+  // 다회차의 1회차가 시작해 주의 사항·시놉시스·이미지만 고칠 수 있는 상태.
+  inProgress: boolean;
 };
 
 // 여러 번 진행 칸을 열 때만 넘긴다. coordinated는 조율형 선택지를 보일지다.

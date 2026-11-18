@@ -8,37 +8,45 @@ import type { GameFormValues } from "@/features/write-game";
 import { CoordinationRangeFields } from "./coordination-range-fields";
 import { CoordinationWindowField } from "./coordination-window-field";
 import { FixedSessionField } from "./fixed-session-field";
+import { InProgressLock } from "./in-progress-lock";
 import { ScheduleModeField } from "./schedule-mode-field";
 
 interface SingleScheduleFieldsProps {
   form: UseFormReturn<GameFormValues>;
   modeLocked: boolean;
   sessionLocked: boolean;
+  // 다회차는 수정이 회차를 맞추지 않아 일정을 언제나 읽기만 한다. 진행 중이면 일정 방식 아래에 한 줄이 붙는다.
+  multiLocked?: boolean;
+  inProgress?: boolean;
 }
 
 export function SingleScheduleFields({
   form,
   modeLocked,
   sessionLocked,
+  multiLocked = false,
+  inProgress = false,
 }: SingleScheduleFieldsProps) {
   const { setValue, watch } = form;
   const mode = watch("scheduleMode");
 
   return (
     <>
-      <ScheduleModeField
-        value={mode}
-        locked={modeLocked}
-        onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
-      />
+      <InProgressLock locked={multiLocked} note={inProgress}>
+        <ScheduleModeField
+          value={mode}
+          locked={modeLocked}
+          onChange={(next) => setValue("scheduleMode", next, { shouldDirty: true })}
+        />
+      </InProgressLock>
 
       {mode === SCHEDULE_MODE.fixed ? (
         <FixedSessionField form={form} locked={sessionLocked} />
       ) : (
-        <>
+        <InProgressLock locked={multiLocked}>
           <CoordinationRangeFields form={form} />
           <CoordinationWindowField form={form} locked={modeLocked} />
-        </>
+        </InProgressLock>
       )}
     </>
   );

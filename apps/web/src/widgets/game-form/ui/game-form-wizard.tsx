@@ -34,6 +34,7 @@ import { GameMediaFields } from "./game-media-fields";
 import { GamePreflightFields } from "./game-preflight-fields";
 import { GameRecruitFields } from "./game-recruit-fields";
 import { GameScheduleFields } from "./game-schedule-fields";
+import { InProgressEditNotice } from "./in-progress-edit-notice";
 import { ReopenNotice } from "./reopen-notice";
 import { WizardDraftSummary } from "./wizard-draft-summary";
 import { WizardFooter } from "./wizard-footer";
@@ -69,6 +70,7 @@ export function GameFormWizard({
   const leaveHref = toServerPath(edit ? `/games/${edit.gameId}` : "/games");
   const applicants = edit?.applicantCount ?? 0;
   const locked = applicants > 0;
+  const inProgress = edit?.inProgress ?? false;
   const visibilityLockReason = visibilityLockReasonOf({
     started: edit?.started ?? false,
     hasApplicants: locked,
@@ -135,6 +137,7 @@ export function GameFormWizard({
             editing={!!edit}
             kindLocked={locked}
             ruleNotice={reopen?.failed ? null : reopen?.ruleNotice}
+            inProgress={inProgress}
           />
         );
       case FORM_SECTION.preflight:
@@ -144,6 +147,7 @@ export function GameFormWizard({
             rulebooks={rulebooks ?? supplementRulebooks}
             hasApplicants={applicants > 0}
             adultOnlyEnabled={adultOnlyEnabled}
+            inProgress={inProgress}
           />
         );
       case FORM_SECTION.media:
@@ -158,6 +162,7 @@ export function GameFormWizard({
             locked={locked}
             preConfirmable={!edit && !trial}
             visibilityEdit={edit ? { reason: visibilityLockReason } : undefined}
+            inProgress={inProgress}
           />
         );
       case FORM_SECTION.schedule:
@@ -167,6 +172,8 @@ export function GameFormWizard({
             modeLocked={locked}
             endDateLocked={edit?.drawn ?? false}
             sessionLocked={!!edit}
+            multiRoundEdit={edit?.isMultiRound ?? false}
+            inProgress={inProgress}
             multiRound={edit ? undefined : multiRound}
           />
         );
@@ -225,9 +232,12 @@ export function GameFormWizard({
                 </Callout.Root>
               )}
 
+              {inProgress && <InProgressEditNotice />}
               {reopen && step === 0 && <ReopenNotice reopen={reopen} />}
-              {edit && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
-              {edit && step === 0 && applicants === 0 && <EditWithoutApplicantsNotice />}
+              {edit && !inProgress && step === 0 && applicants > 0 && <EditWithApplicantsNotice />}
+              {edit && !inProgress && step === 0 && applicants === 0 && (
+                <EditWithoutApplicantsNotice />
+              )}
 
               {!edit && step > 0 && (
                 <div className="desktop:hidden">

@@ -18,6 +18,8 @@ interface EditGameFormProps {
 
 export function EditGameForm({ serverId, game, rulebooks, adultOnlyEnabled }: EditGameFormProps) {
   const confirmedCount = countConfirmed(game.participants);
+  const isMultiRound = game.roundCount > 1;
+  const started = isSessionStarted(game);
   return (
     <GameForm
       serverId={serverId}
@@ -30,7 +32,9 @@ export function EditGameForm({ serverId, game, rulebooks, adultOnlyEnabled }: Ed
       edit={{
         gameId: game.id,
         applicantCount: game.participants.length,
-        started: isSessionStarted(game),
+        started,
+        isMultiRound,
+        inProgress: isMultiRound && started,
         confirmedCount,
         drawn: !isNull(game.drawnAt),
         minPlayers: game.minPlayers,

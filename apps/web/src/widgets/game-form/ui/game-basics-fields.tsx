@@ -13,6 +13,7 @@ import { richTextLength } from "@/shared/lib";
 import { GameKindField } from "./game-kind-field";
 import { GameRulebookField } from "./game-rulebook-field";
 import { GameSupplementField } from "./game-supplement-field";
+import { InProgressLock } from "./in-progress-lock";
 import { PlayTimeField } from "./play-time-field";
 
 interface GameBasicsFieldsProps {
@@ -22,6 +23,7 @@ interface GameBasicsFieldsProps {
   editing?: boolean;
   kindLocked?: boolean;
   ruleNotice?: RuleNotice | null;
+  inProgress?: boolean;
 }
 
 export function GameBasicsFields({
@@ -31,6 +33,7 @@ export function GameBasicsFields({
   editing = false,
   kindLocked = false,
   ruleNotice,
+  inProgress = false,
 }: GameBasicsFieldsProps) {
   const {
     register,
@@ -44,33 +47,41 @@ export function GameBasicsFields({
 
   return (
     <>
-      <Field.Root label="구인 제목" htmlFor="title" required error={errors.title?.message}>
-        <TextInput
-          id="title"
-          autoComplete="off"
-          enterKeyHint="next"
-          placeholder="예: 마지막 열차"
-          maxLength={100}
-          invalid={!!errors.title}
-          {...register("title")}
+      <InProgressLock locked={inProgress}>
+        <Field.Root label="구인 제목" htmlFor="title" required error={errors.title?.message}>
+          <TextInput
+            id="title"
+            autoComplete="off"
+            enterKeyHint="next"
+            placeholder="예: 마지막 열차"
+            maxLength={100}
+            invalid={!!errors.title}
+            {...register("title")}
+          />
+        </Field.Root>
+      </InProgressLock>
+
+      <InProgressLock locked={inProgress} note>
+        <GameRulebookField form={form} rulebooks={rulebooks} ruleNotice={ruleNotice} />
+      </InProgressLock>
+
+      <InProgressLock locked={inProgress}>
+        <GameSupplementField form={form} rulebooks={supplementRulebooks} editing={editing} />
+      </InProgressLock>
+
+      <InProgressLock locked={inProgress} note>
+        <PlayTimeField
+          min={watch("playMinutesMin")}
+          max={watch("playMinutes")}
+          error={errors.playMinutesMin?.message ?? errors.playMinutes?.message}
+          onChangeMin={(value) =>
+            setValue("playMinutesMin", value, { shouldDirty: true, shouldValidate: true })
+          }
+          onChangeMax={(value) =>
+            setValue("playMinutes", value, { shouldDirty: true, shouldValidate: true })
+          }
         />
-      </Field.Root>
-
-      <GameRulebookField form={form} rulebooks={rulebooks} ruleNotice={ruleNotice} />
-
-      <GameSupplementField form={form} rulebooks={supplementRulebooks} editing={editing} />
-
-      <PlayTimeField
-        min={watch("playMinutesMin")}
-        max={watch("playMinutes")}
-        error={errors.playMinutesMin?.message ?? errors.playMinutes?.message}
-        onChangeMin={(value) =>
-          setValue("playMinutesMin", value, { shouldDirty: true, shouldValidate: true })
-        }
-        onChangeMax={(value) =>
-          setValue("playMinutes", value, { shouldDirty: true, shouldValidate: true })
-        }
-      />
+      </InProgressLock>
 
       <Field.Root
         label="시놉시스"
@@ -88,16 +99,18 @@ export function GameBasicsFields({
         />
       </Field.Root>
 
-      <GameKindField
-        value={kind}
-        locked={kindLocked}
-        onChange={(next) => {
-          setValue("kind", next, { shouldDirty: true });
-          if (next === GAME_KIND.briefing) {
-            setValue("playType", PLAY_TYPE.voice, { shouldDirty: true });
-          }
-        }}
-      />
+      <InProgressLock locked={inProgress}>
+        <GameKindField
+          value={kind}
+          locked={kindLocked}
+          onChange={(next) => {
+            setValue("kind", next, { shouldDirty: true });
+            if (next === GAME_KIND.briefing) {
+              setValue("playType", PLAY_TYPE.voice, { shouldDirty: true });
+            }
+          }}
+        />
+      </InProgressLock>
     </>
   );
 }

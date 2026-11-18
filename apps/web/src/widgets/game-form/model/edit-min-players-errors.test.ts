@@ -12,6 +12,8 @@ const edit: GameEditContext = {
   gameId: "g",
   applicantCount: 0,
   started: false,
+  isMultiRound: false,
+  inProgress: false,
   confirmedCount: 0,
   drawn: false,
   minPlayers: 4,
