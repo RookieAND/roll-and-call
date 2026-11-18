@@ -17,17 +17,20 @@ interface BannerCropStageProps {
   image: HTMLImageElement;
   zoom: number;
   offset: { x: number; y: number };
+  // 가운데 틀의 가로세로비(가로/세로).
+  ratio: number;
   onOffsetChange: (offset: { x: number; y: number }) => void;
   onFrameWidthChange: (width: number) => void;
   // 마당(스테이지)의 가로세로비. 이미지가 틀보다 크면 틀 밖이 어둡게 보인다.
   aspectRatio: number;
 }
 
-// 원본을 끌어 움직이고, 가운데 3:1 틀 안이 배너가 된다. 틀 밖은 어둡게 덮는다.
+// 원본을 끌어 움직이고, 가운데 틀 안이 결과물이 된다. 틀 밖은 어둡게 덮는다.
 export function BannerCropStage({
   image,
   zoom,
   offset,
+  ratio,
   onOffsetChange,
   onFrameWidthChange,
   aspectRatio,
@@ -49,7 +52,7 @@ export function BannerCropStage({
     return () => observer.disconnect();
   }, [onFrameWidthChange]);
 
-  const crop = frameWidth > 0 ? bannerCrop({ natural, frameWidth, zoom, offset }) : null;
+  const crop = frameWidth > 0 ? bannerCrop({ natural, frameWidth, ratio, zoom, offset }) : null;
 
   function move(event: PointerEvent) {
     if (!drag.current || !crop) return;
@@ -57,6 +60,7 @@ export function BannerCropStage({
       bannerCrop({
         natural,
         frameWidth,
+        ratio,
         zoom,
         offset: {
           x: event.clientX - drag.current.x,
@@ -95,8 +99,8 @@ export function BannerCropStage({
       )}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/2 flex aspect-[3/1] -translate-y-1/2 items-center justify-center border-2 border-white shadow-[0_0_0_999px_rgb(0_0_0/0.55)]"
-        style={{ background: GRID_BACKGROUND }}
+        className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 items-center justify-center border-2 border-white shadow-[0_0_0_999px_rgb(0_0_0/0.55)]"
+        style={{ background: GRID_BACKGROUND, aspectRatio: ratio }}
       >
         <span className="flex items-center gap-050 rounded-full bg-black/65 px-125 py-075 text-body4 font-bold text-white">
           <Move size={14} aria-hidden />
