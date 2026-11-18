@@ -35,7 +35,9 @@ export { GameStatusBadge } from "./ui/game-status-badge";
 export {
   SCHEDULE_CONFLICT_MESSAGE,
   SCHEDULE_CONFLICT_REASON,
+  isScheduleConflictRejection,
   scheduleConflictRejection,
+  type GmOverlap,
   type ScheduleConflictRejection,
 } from "./model/schedule-conflict-rejection";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
@@ -120,3 +122,5 @@ export {
   ROUND_REPEAT_WEEKS,
   type RoundRepeat,
 } from "./model/round-repeat";
+export { roundClockLabel } from "./model/round-clock-label";
+export { roundTimeRange } from "./model/round-time-range";

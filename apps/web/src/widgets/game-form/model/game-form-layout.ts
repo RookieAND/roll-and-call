@@ -19,6 +19,9 @@ export type GameEditContext = {
   status: GameStatus;
 };
 
+// 여러 번 진행 칸을 열 때만 넘긴다. coordinated는 조율형 선택지를 보일지다.
+export type MultiRoundOptions = { coordinated: boolean };
+
 export interface GameFormLayoutProps {
   serverId: string;
   form: UseFormReturn<GameFormValues>;
@@ -32,4 +35,5 @@ export interface GameFormLayoutProps {
   // 서플리먼트 목록을 만들 룰북. 수정은 룰을 바꿀 수 없어 rulebooks가 없으므로 따로 받는다.
   supplementRulebooks?: MyRulebooks;
   reopen?: ReopenContext;
+  multiRound?: MultiRoundOptions;
 }

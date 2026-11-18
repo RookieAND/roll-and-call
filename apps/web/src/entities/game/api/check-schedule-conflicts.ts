@@ -54,5 +54,5 @@ export async function checkScheduleConflicts({
     people,
     target,
   });
-  return conflicts.length > 0 ? scheduleConflictRejection(conflicts) : null;
+  return conflicts.length > 0 ? scheduleConflictRejection(conflicts, target) : null;
 }

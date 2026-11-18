@@ -22,6 +22,8 @@ import {
 import { scrollToField } from "../lib/scroll-to-field";
 import type { GameFormLayoutProps } from "../model/game-form-layout";
 import { FORM_SECTION, SECTION_FIELDS, type SectionKey } from "../model/game-form-steps";
+import { laterRoundsMismatchMessage } from "../model/later-rounds-mismatch";
+import { multiRoundSummary } from "../model/multi-round-summary";
 import { stepOfField } from "../model/step-of-field";
 import { visibilityLockReason as visibilityLockReasonOf } from "../model/visibility-lock-reason";
 import { wizardStepLabel } from "../model/wizard-step-label";
@@ -50,6 +52,7 @@ export function GameFormWizard({
   supplementRulebooks,
   reopen,
   adultOnlyEnabled = false,
+  multiRound,
 }: GameFormLayoutProps) {
   const push = useTrialPush();
   const trial = use(TrialContext);
@@ -107,10 +110,11 @@ export function GameFormWizard({
 
   const images = watch("images");
   const thumbnail = watch("thumbnailUrl");
-  const summaryLine = compact([
-    watch("rule"),
-    formatPlayRange(watch("playMinutesMin"), watch("playMinutes")),
-  ]).join(" · ");
+  const playRange = formatPlayRange(watch("playMinutesMin"), watch("playMinutes"));
+  // 새 구인의 여러 번 진행만 일정 요약이 따로 있다. 수정 화면은 multiRound가 없어 항상 null이다.
+  const roundSummary = multiRound ? multiRoundSummary(watch()) : null;
+  const summaryLine = compact([watch("rule"), playRange, roundSummary]).join(" · ");
+  const mismatchMessage = multiRound ? laterRoundsMismatchMessage(watch()) : undefined;
   const panelSteps = steps.map((config, index) => ({
     number: (trialWizard?.stepIndexes[index] ?? index) + 1,
     label: wizardStepLabel(config.sections),
@@ -163,6 +167,7 @@ export function GameFormWizard({
             modeLocked={locked}
             endDateLocked={edit?.drawn ?? false}
             sessionLocked={!!edit}
+            multiRound={edit ? undefined : multiRound}
           />
         );
     }
@@ -188,7 +193,7 @@ export function GameFormWizard({
             status={edit?.status}
             title={watch("title") || (edit ? "제목 미입력" : "새 구인")}
             ruleLabel={watch("rule") || "룰북 미선택"}
-            timeLabel={formatPlayRange(watch("playMinutesMin"), watch("playMinutes")) ?? ""}
+            timeLabel={roundSummary ?? playRange ?? ""}
             capacity={Number(watch("maxPlayers")) || 0}
             isPrivate={watch("visibility") === GAME_VISIBILITY.private}
             onSelectStep={goToStep}
@@ -261,6 +266,7 @@ export function GameFormWizard({
             submitLabel={submitLabel}
             error={
               form.formState.errors.root?.message ??
+              mismatchMessage ??
               // 마감이 세션·조율 시작보다 늦은 교차 검증은 한 칸의 잘못이 아니라 제출 버튼 위에서 알린다.
               (form.formState.errors.endDate?.type === "custom"
                 ? form.formState.errors.endDate.message
