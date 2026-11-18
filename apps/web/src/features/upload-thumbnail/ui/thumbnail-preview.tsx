@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, HStack, IconButton, Text, VStack } from "@roll-and-call/ui";
-import { Move, RefreshCw, Trash2 } from "lucide-react";
+import { ImageIcon, Move, RefreshCw, Trash2 } from "lucide-react";
 
 import { formatBytes } from "../model/format-bytes";
 
@@ -31,9 +31,21 @@ export function ThumbnailPreview({
           className="aspect-video w-full rounded-500 object-cover"
         />
         <HStack align="center" gap="050">
-          <Text truncate typography="body4" foreground="muted" className="min-w-0 flex-1">
-            {picked ? `${picked.name} · ${formatBytes(picked.size)}` : "올린 이미지 · 16:9"}
-          </Text>
+          <HStack
+            align="center"
+            justify="center"
+            className="size-10 flex-none rounded-400 bg-primary-50 text-primary-600"
+          >
+            <ImageIcon size={20} aria-hidden />
+          </HStack>
+          <VStack gap="025" className="min-w-0 flex-1">
+            <Text truncate typography="subtitle2">
+              {picked ? picked.name : "올린 이미지"}
+            </Text>
+            <Text typography="body4" foreground="muted" numeric>
+              {picked ? formatBytes(picked.size) : "16:9"}
+            </Text>
+          </VStack>
           <IconButton aria-label="위치 조정" disabled={uploading} onClick={onAdjust}>
             <Move size={20} aria-hidden />
           </IconButton>
