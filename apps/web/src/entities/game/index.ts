@@ -108,3 +108,15 @@ export { recentAbsences, type Absence } from "./model/recent-absences";
 export { countRecordSessions } from "./model/count-record-sessions";
 export { AbsenceNotice } from "./ui/absence-notice";
 export { isRosterRequest } from "./model/is-roster-request";
+export { ROUND_MODE, ROUND_MODES, type RoundMode } from "./model/round-mode";
+export {
+  ROUND_SCHEDULE_KIND,
+  ROUND_SCHEDULE_KINDS,
+  type RoundScheduleKind,
+} from "./model/round-schedule-kind";
+export {
+  ROUND_REPEAT,
+  ROUND_REPEATS,
+  ROUND_REPEAT_WEEKS,
+  type RoundRepeat,
+} from "./model/round-repeat";

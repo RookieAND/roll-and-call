@@ -46,6 +46,9 @@ const CARRIED_COLUMNS = [
   "thumbnailUrl",
   "thumbnailSpoiler",
   "images",
+  "roundCount",
+  "roundScheduleKind",
+  "repeatRule",
 ] as const satisfies readonly (keyof Game)[];
 
 // 일정·참여자·디스코드 글 같은 회차별 값은 가져오지 않는다. 일정 칸은 폼 기본값(비어 있음)으로 남는다.

@@ -1,6 +1,6 @@
 import "server-only";
 import { findScheduleConflicts, type SchedulePerson } from "@roll-and-call/database/games";
-import { effectivePlayMinutes } from "@roll-and-call/database/games/model";
+import { effectivePlayMinutes, type TargetRound } from "@roll-and-call/database/games/model";
 import type { Transaction } from "@roll-and-call/database/transaction";
 
 import {
@@ -23,6 +23,7 @@ export async function checkScheduleConflicts({
   waitingUserIds = [],
   startsAt,
   playMinutes,
+  rounds,
 }: {
   transaction: Transaction;
   serverId: string;
@@ -30,21 +31,28 @@ export async function checkScheduleConflicts({
   gmId: string;
   confirmedUserIds: readonly string[];
   waitingUserIds?: readonly string[];
-  startsAt: Date;
-  playMinutes: number | null;
+  startsAt?: Date;
+  playMinutes?: number | null;
+  // 여러 회차를 한꺼번에 등록할 때 넘긴다. 주면 startsAt·playMinutes 대신 이 회차들로 비교한다.
+  rounds?: readonly TargetRound[];
 }): Promise<ScheduleConflictRejection | null> {
-  const minutes = Math.min(effectivePlayMinutes(playMinutes), ROUND_MAX_MINUTES);
   const people: SchedulePerson[] = [
     { userId: gmId, role: "gm" },
     ...confirmedUserIds.map((userId) => ({ userId, role: "confirmed" as const })),
     ...waitingUserIds.map((userId) => ({ userId, role: "waiting" as const })),
   ];
+  const minutes = Math.min(effectivePlayMinutes(playMinutes ?? null), ROUND_MAX_MINUTES);
+  const target: readonly TargetRound[] =
+    rounds ??
+    (startsAt
+      ? [{ roundNo: 1, startsAt, endsAt: new Date(startsAt.getTime() + minutes * MINUTE_MS) }]
+      : []);
   const conflicts = await findScheduleConflicts({
     transaction,
     serverId,
     gameId,
     people,
-    target: [{ roundNo: 1, startsAt, endsAt: new Date(startsAt.getTime() + minutes * MINUTE_MS) }],
+    target,
   });
   return conflicts.length > 0 ? scheduleConflictRejection(conflicts) : null;
 }

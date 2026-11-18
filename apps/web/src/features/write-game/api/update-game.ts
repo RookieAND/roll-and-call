@@ -11,7 +11,7 @@ import { createNotifications } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { syncGameSupplementRequests } from "@roll-and-call/database/rulebooks";
 import { withTransaction } from "@roll-and-call/database/transaction";
-import { isNull } from "es-toolkit";
+import { isNull, omit } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
@@ -146,7 +146,8 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       transaction,
       ...owner,
       columns: {
-        ...columns,
+        // 회차 구성은 수정 폼이 바꾸지 않는다.
+        ...omit(columns, ["roundCount", "roundScheduleKind", "repeatRule"]),
         // 표기를 꺼 둔 서버에서는 선택이 보이지 않으므로 올릴 때 정한 값을 그대로 둔다.
         adultOnly: server.adultOnlyEnabled ? columns.adultOnly : game.adultOnly,
         requireRulebookCert: columns.requireRulebookCert && !!set && !set.free,

@@ -1,12 +1,36 @@
-import { normalizeApplicationQuestion } from "@roll-and-call/database/games/model";
+import { normalizeApplicationQuestion, repeatRuleOf } from "@roll-and-call/database/games/model";
 
-import { DEFAULT_WINDOW, RECRUIT_METHOD, SCHEDULE_MODE } from "@/entities/game";
+import {
+  DEFAULT_WINDOW,
+  RECRUIT_METHOD,
+  ROUND_MODE,
+  ROUND_REPEAT,
+  ROUND_REPEAT_WEEKS,
+  ROUND_SCHEDULE_KIND,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 import { fromKstDateTimeInput } from "@/shared/lib";
 
 import type { GameFormValues } from "./game-form";
+import { multiRoundSpans } from "./multi-round-spans";
 
 export function toGameColumns(values: GameFormValues) {
   const isFixed = values.scheduleMode === SCHEDULE_MODE.fixed;
+  const isMulti = values.roundMode === ROUND_MODE.multi;
+  const scheduleKind = isMulti
+    ? (values.roundScheduleKind ?? ROUND_SCHEDULE_KIND.designated)
+    : ROUND_SCHEDULE_KIND.designated;
+  const repeat = values.roundRepeat;
+  const intervalWeeks =
+    repeat && repeat !== ROUND_REPEAT.custom ? ROUND_REPEAT_WEEKS[repeat] : null;
+  const firstSpan = multiRoundSpans({
+    confirmedAt: values.confirmedAt,
+    firstRoundEndAt: values.firstRoundEndAt,
+  })[0];
+  const repeatRule =
+    isMulti && scheduleKind === ROUND_SCHEDULE_KIND.designated && intervalWeeks && firstSpan
+      ? repeatRuleOf({ first: firstSpan, intervalWeeks })
+      : null;
 
   return {
     title: values.title,
@@ -37,6 +61,9 @@ export function toGameColumns(values: GameFormValues) {
     minRulePlays: values.minRulePlays,
     requireRulebookCert: values.requireRulebookCert,
     scheduleMode: values.scheduleMode,
+    roundCount: isMulti ? (values.roundCount ?? 1) : 1,
+    roundScheduleKind: scheduleKind,
+    repeatRule,
     endDate: fromKstDateTimeInput(values.endDate || values.confirmedAt || ""),
     rangeStart: values.rangeStart || null,
     rangeEnd: values.rangeEnd || null,

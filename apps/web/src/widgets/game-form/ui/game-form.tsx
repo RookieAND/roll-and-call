@@ -3,6 +3,7 @@
 import {
   APPLICATION_QUESTION_DEFAULT,
   DEFAULT_PLAY_MINUTES,
+  ROUND_COUNT_MIN,
 } from "@roll-and-call/database/games/model";
 import { use } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +14,9 @@ import {
   GAME_VISIBILITY,
   PLAY_TYPE,
   RECRUIT_METHOD,
+  ROUND_MODE,
+  ROUND_REPEAT,
+  ROUND_SCHEDULE_KIND,
   SCHEDULE_MODE,
 } from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
@@ -27,6 +31,7 @@ import type { GameEditContext } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
 import type { ReopenContext } from "../model/reopen-context";
+import { roundRepeatOf } from "../model/round-repeat-of";
 import { submitErrorMessage } from "../model/submit-error-message";
 import { GameFormWizard } from "./game-form-wizard";
 
@@ -68,6 +73,8 @@ export function GameForm({
     rulebooks && initialRulebookId
       ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: initialRulebookId })
       : null;
+
+  const isMultiDefault = (defaultGame?.roundCount ?? 1) > 1;
 
   const form = useForm<GameFormValues>({
     resolver: gameFormResolver({ rulebooks, edit }),
@@ -112,6 +119,14 @@ export function GameForm({
       minRulePlays: defaultGame?.minRulePlays ?? null,
       requireRulebookCert: defaultGame?.requireRulebookCert ?? false,
       preConfirmed: [],
+      roundMode: isMultiDefault ? ROUND_MODE.multi : ROUND_MODE.once,
+      roundCount: isMultiDefault ? defaultGame?.roundCount : ROUND_COUNT_MIN,
+      roundScheduleKind: isMultiDefault
+        ? defaultGame?.roundScheduleKind
+        : ROUND_SCHEDULE_KIND.designated,
+      roundRepeat: isMultiDefault ? roundRepeatOf(defaultGame?.repeatRule) : ROUND_REPEAT.weekly,
+      firstRoundEndAt: "",
+      laterRounds: [],
     },
   });
 
