@@ -9,6 +9,8 @@ interface ThumbnailPreviewProps {
   url: string;
   picked: { name: string; size: number } | null;
   uploading: boolean;
+  // 움직이는 GIF는 자르지 않으므로 위치 조정을 막는다.
+  adjustable: boolean;
   onAdjust: () => void;
   onReplace: () => void;
   onRemove: () => void;
@@ -18,6 +20,7 @@ export function ThumbnailPreview({
   url,
   picked,
   uploading,
+  adjustable,
   onAdjust,
   onReplace,
   onRemove,
@@ -46,7 +49,7 @@ export function ThumbnailPreview({
               {picked ? formatBytes(picked.size) : "16:9"}
             </Text>
           </VStack>
-          <IconButton aria-label="위치 조정" disabled={uploading} onClick={onAdjust}>
+          <IconButton aria-label="위치 조정" disabled={uploading || !adjustable} onClick={onAdjust}>
             <Move size={20} aria-hidden />
           </IconButton>
           <IconButton aria-label="이미지 교체" disabled={uploading} onClick={onReplace}>

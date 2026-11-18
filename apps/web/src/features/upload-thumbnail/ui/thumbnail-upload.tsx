@@ -34,6 +34,8 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
   const [cropping, setCropping] = useState<string | null>(null);
   // 고른 원본의 파일 이름. 잘린 파일은 이름이 늘 같아서 따로 기억한다.
   const [pickedName, setPickedName] = useState("");
+  // 움직이는 GIF는 잘라 내면 멈추므로 자르지 않고 그대로 올린다.
+  const [animated, setAnimated] = useState(false);
 
   const openPicker = () => inputRef.current?.click();
 
@@ -44,9 +46,16 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
       setError(invalid);
       return;
     }
+    setPickedName(file.name);
+    if (file.type === "image/gif") {
+      setAnimated(true);
+      setOriginal(null);
+      void upload(file);
+      return;
+    }
+    setAnimated(false);
     const url = URL.createObjectURL(file);
     setOriginal(url);
-    setPickedName(file.name);
     setCropping(url);
   }
 
@@ -79,6 +88,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
     onChange("");
     setPicked(null);
     setOriginal(null);
+    setAnimated(false);
   }
 
   return (
@@ -92,6 +102,7 @@ export function ThumbnailUpload({ serverId, value, onChange }: ThumbnailUploadPr
           url={value}
           picked={picked}
           uploading={uploading}
+          adjustable={!animated}
           onAdjust={() => setCropping(original ?? value)}
           onReplace={openPicker}
           onRemove={remove}
