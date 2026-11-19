@@ -1,9 +1,9 @@
-import { and, eq, isNull, not, sql } from "drizzle-orm";
+import { and, eq, gt, isNull, not, or, sql } from "drizzle-orm";
 
 import { participantReviewWhere } from "#db/modules/reviews";
 import { games, participants, sessionReviews } from "#db/schema";
 
-// 후기 작성자가 지금 불참이면 보류된 후기라 세지 않는다.
+// 후기 작성자가 지금 불참이면 보류된 후기라 세지 않는다. 다회차는 회차 후기 1건을 1건으로 세고 보류하지 않는다.
 const reviewAuthorAbsent = sql<boolean>`exists (
   select 1 from ${participants}
   where ${participants.gameId} = ${sessionReviews.gameId}
@@ -22,6 +22,6 @@ export function countedReviewWhere(serverId: string) {
     participantReviewWhere,
     isNull(sessionReviews.removedAt),
     isNull(sessionReviews.hiddenAt),
-    not(reviewAuthorAbsent),
+    or(gt(games.roundCount, 1), not(reviewAuthorAbsent)),
   );
 }

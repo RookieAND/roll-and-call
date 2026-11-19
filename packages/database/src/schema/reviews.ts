@@ -60,11 +60,11 @@ export const sessionReviews = pgTable(
     discordThreadId: text("discord_thread_id"),
   },
   (table) => [
-    // 회차마다 한 사람이 후기를 하나 쓴다. 옛 (구인, 작성자) 유일 조건은 다회차 후기를 여는 C36-7에서 지운다.
+    // 회차마다 한 사람이 후기를 하나 쓴다. 다회차는 같은 구인에 회차 수만큼 쓸 수 있다.
     uniqueIndex("session_reviews_round_id_author_id_unique")
       .on(table.roundId, table.authorId)
       .where(sql`round_id is not null`),
-    uniqueIndex("session_reviews_game_id_author_id_unique").on(table.gameId, table.authorId),
+    index("session_reviews_game_id_author_id_idx").on(table.gameId, table.authorId),
     unique("session_reviews_id_server_id_unique").on(table.id, table.serverId),
     foreignKey({
       columns: [table.gameId, table.serverId],
