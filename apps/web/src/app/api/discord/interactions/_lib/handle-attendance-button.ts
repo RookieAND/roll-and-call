@@ -1,4 +1,4 @@
-import { ATTENDANCE_BUTTON_PREFIX } from "@roll-and-call/game-notices";
+import { ATTENDANCE_BUTTON_PREFIX, parseButtonTarget } from "@roll-and-call/game-notices";
 
 import { openAttendanceFromDiscord } from "@/features/confirm-attendance/server";
 
@@ -17,17 +17,18 @@ export async function handleAttendanceButton(
   if (!interaction.guild_id || !discordId) {
     return ephemeralResponse(INTERACTION_MESSAGE.serverOnly);
   }
-  const gameId = customId.slice(ATTENDANCE_BUTTON_PREFIX.length);
+  // 다회차 회차면 「구인 id.회차 번호」다. 셀렉트·완료 버튼에도 그대로 실어 보낸다.
+  const target = customId.slice(ATTENDANCE_BUTTON_PREFIX.length);
   try {
     const opened = await openAttendanceFromDiscord({
       guildId: interaction.guild_id,
       discordId,
-      gameId,
+      ...parseButtonTarget(target),
     });
     if (opened.kind === "reply") return attendanceReplyResponse({ reply: opened.reply });
     return attendanceSelectResponse({
       type: INTERACTION_RESPONSE_TYPE.message,
-      gameId,
+      gameId: target,
       options: opened.options.map((option) => ({ label: option.name, value: option.userId })),
       selectedUserIds: [],
     });

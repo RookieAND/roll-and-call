@@ -1,4 +1,4 @@
-import { REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
+import { parseButtonTarget, REVIEW_BUTTON_PREFIX } from "@roll-and-call/game-notices";
 import { after } from "next/server";
 
 import { writeReviewFromDiscord } from "@/features/write-review/server";
@@ -31,7 +31,7 @@ export function handleReviewModalSubmit(
       content = await writeReviewFromDiscord({
         guildId,
         discordId,
-        gameId: customId.slice(REVIEW_BUTTON_PREFIX.length),
+        ...parseButtonTarget(customId.slice(REVIEW_BUTTON_PREFIX.length)),
         body,
         spoiler,
         photos,

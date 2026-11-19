@@ -132,6 +132,8 @@ async function sendStartNotice({
   const roundLine = roundNo ? `${roundNo}회차가 시작되었습니다.` : "";
   const content = [roundLine, head].filter(Boolean).join("\n");
   const reviewUrl = roundNo ? `${detailUrl}/review?round=${roundNo}` : `${detailUrl}/review`;
+  // packages/game-notices/src/notify/button-target.ts와 같은 모양: 다회차는 「구인 id.회차 번호」.
+  const target = roundNo ? `${game.id}.${roundNo}` : game.id;
 
   const response = await fetch(
     `https://discord.com/api/v10/channels/${game.discord_thread_id}/messages`,
@@ -163,14 +165,14 @@ async function sendStartNotice({
                 style: 3,
                 emoji: { name: "✅" },
                 label: "출석 입력하기",
-                custom_id: `${ATTENDANCE_BUTTON_PREFIX}${game.id}`,
+                custom_id: `${ATTENDANCE_BUTTON_PREFIX}${target}`,
               },
               {
                 type: 2,
                 style: 1,
                 emoji: { name: "📝" },
                 label: "후기 작성하기",
-                custom_id: `${REVIEW_BUTTON_PREFIX}${game.id}`,
+                custom_id: `${REVIEW_BUTTON_PREFIX}${target}`,
               },
               {
                 type: 2,

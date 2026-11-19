@@ -12,6 +12,7 @@ export { recruitForumPost } from "./recruit-post/recruit-forum-post";
 export { recruitPlainText } from "./recruit-post/recruit-plain-text";
 export { APPLY_BUTTON_PREFIX } from "./recruit-post/recruit-buttons";
 export { REVIEW_BUTTON_PREFIX } from "./notify/review-button";
+export { parseButtonTarget } from "./notify/button-target";
 export {
   ATTENDANCE_BUTTON_PREFIX,
   ATTENDANCE_DONE_PREFIX,

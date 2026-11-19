@@ -1,15 +1,11 @@
 "use server";
 
-import { confirmRoundAttendance as saveRoundAttendance } from "@roll-and-call/database/games";
-import { isRoundOpen } from "@roll-and-call/database/games/model";
 import { z } from "zod";
 
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { getActingMember, notMemberError } from "@/shared/server";
 
-import { ATTENDANCE_PAST_DEADLINE_MESSAGE } from "../model/attendance-messages";
-import { AttendanceError } from "./attendance-error";
-import { guardRound } from "./guard-round";
+import { submitRoundAttendance } from "./submit-round-attendance";
 
 const ABSENT_MAX = 40;
 
@@ -27,22 +23,8 @@ export async function confirmRoundAttendance(
   if (!parsed.ok) return parsed.result;
   const member = await getActingMember();
   if (!member) return { error: await notMemberError() };
-  const { gameId, roundNo, absentUserIds } = parsed.data;
-  const serverId = member.server.id;
-  return guardRound({
-    actor: { serverId, slug: member.server.slug, gmId: member.user.id },
-    gameId,
-    roundNo,
-    work: async (transaction, _game, round) => {
-      const now = new Date();
-      if (!isRoundOpen({ round, now })) {
-        throw new AttendanceError(
-          round.startAt && round.startAt > now
-            ? "아직 시작하지 않은 회차입니다."
-            : ATTENDANCE_PAST_DEADLINE_MESSAGE,
-        );
-      }
-      await saveRoundAttendance({ transaction, serverId, gameId, roundNo, absentUserIds, at: now });
-    },
+  return submitRoundAttendance({
+    actor: { serverId: member.server.id, slug: member.server.slug, gmId: member.user.id },
+    ...parsed.data,
   });
 }

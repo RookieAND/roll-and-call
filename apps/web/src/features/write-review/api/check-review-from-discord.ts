@@ -28,10 +28,13 @@ export async function checkReviewFromDiscord({
   guildId,
   discordId,
   gameId,
+  roundNo,
 }: {
   guildId: string;
   discordId: string;
   gameId: string;
+  // 다회차 시작 안내의 버튼이 싣는 회차 번호.
+  roundNo?: number;
 }): Promise<DiscordReviewBlock | null> {
   const blocked = (
     refusal: keyof typeof DISCORD_REVIEW_REFUSAL_MESSAGE,
@@ -48,13 +51,16 @@ export async function checkReviewFromDiscord({
   const membership = await getActiveMembership({ serverId: server.id, userId });
   if (!membership) return blocked(DISCORD_REVIEW_REFUSAL.notServerMember);
 
-  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId });
+  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId, roundNo });
   const refusal = discordReviewRefusalOf(target);
+  const reviewPath = roundNo
+    ? `/games/${gameId}/review?round=${roundNo}`
+    : `/games/${gameId}/review`;
   if (!refusal) return null;
   const origin = siteOrigin();
   const webUrl =
     origin && WEB_LINK_REFUSALS.includes(refusal)
-      ? `${origin}${serverPath({ slug: server.slug, path: `/games/${gameId}/review` })}`
+      ? `${origin}${serverPath({ slug: server.slug, path: reviewPath })}`
       : null;
   return blocked(refusal, webUrl);
 }
