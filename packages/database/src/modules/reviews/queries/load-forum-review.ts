@@ -5,6 +5,7 @@ import { db } from "#db/client";
 import { REVIEW_AUTHOR_ROLE } from "#db/modules/games/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import {
+  gameRounds,
   games,
   homebrewRules,
   participants,
@@ -43,7 +44,16 @@ export async function loadForumReview({
       gmDiscordId: gm.discordId,
       authorName: memberNicknameSql(serverId),
       authorDiscordId: profiles.discordId,
-      absent: participants.absent,
+      // 다회차는 빠진 사람의 후기도 보류하지 않는다.
+      absent: sql<
+        boolean | null
+      >`case when ${games.roundCount} > 1 then false else ${participants.absent} end`,
+      // 다회차 후기의 회차 번호. 포럼 글 제목 앞에 「[n회차]」를 붙인다. 단발은 null이다.
+      roundNo: sql<
+        number | null
+      >`case when ${games.roundCount} > 1 then (select r.round_no from ${gameRounds} r where r.id = ${sessionReviews.roundId}) end`.mapWith(
+        (value: unknown) => (value === null ? null : Number(value)),
+      ),
       absenceCancelledAt: participants.absenceCancelledAt,
     })
     .from(sessionReviews)
