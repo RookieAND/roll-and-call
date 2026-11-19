@@ -1,6 +1,15 @@
+import { eq } from "drizzle-orm";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
-import { gameRounds, games, participants, profiles, roundAttendances, servers } from "#db/schema";
+import {
+  gameRounds,
+  games,
+  participants,
+  profiles,
+  roundAttendances,
+  servers,
+  sessionReviews,
+} from "#db/schema";
 
 vi.mock("server-only", () => ({}));
 vi.mock("#db/client", async () => {
@@ -109,31 +118,49 @@ const forGame = <Row extends { gameId: string | null }>(rows: Row[], gameId: str
   rows.filter((row) => row.gameId === gameId);
 
 describe("다회차 뱃지 근거", () => {
-  it("끝난 캠페인은 구인 한 건으로 세고 회차별로는 참석한 회차만 센다", async () => {
+  it("끝난 캠페인도 참석한 회차마다 한 건으로 센다", async () => {
     const gameId = await seedCampaign({ finished: true, attendedByAlice: [1, 2, 3, 4] });
     const facts = await loadBadgeFacts({ serverId: SERVER_ID, userId: ALICE });
-    expect(forGame(facts.played, gameId)).toHaveLength(1);
-    expect(forGame(facts.played, gameId)[0]!.endsAt).toEqual(new Date(BASE + 5 * WEEK + 4 * HOUR));
-    expect(forGame(facts.playedRounds, gameId)).toHaveLength(4);
+    expect(forGame(facts.played, gameId)).toHaveLength(4);
     expect(forGame(facts.absences, gameId)).toHaveLength(0);
     const gm = await loadBadgeFacts({ serverId: SERVER_ID, userId: GM_ID });
-    expect(forGame(gm.hosted, gameId)).toHaveLength(1);
-    expect(forGame(gm.hostedRounds, gameId)).toHaveLength(6);
+    expect(forGame(gm.hosted, gameId)).toHaveLength(6);
   });
 
-  it("끝나지 않은 캠페인은 구인으로 세지 않고 출석을 확정하고 끝난 회차만 센다", async () => {
+  it("끝나지 않은 캠페인도 출석을 확정하고 끝난 회차만 센다", async () => {
     const gameId = await seedCampaign({ finished: false, confirmedRounds: 3 });
     const facts = await loadBadgeFacts({ serverId: SERVER_ID, userId: ALICE });
-    expect(forGame(facts.played, gameId)).toHaveLength(0);
-    expect(forGame(facts.playedRounds, gameId)).toHaveLength(3);
+    expect(forGame(facts.played, gameId)).toHaveLength(3);
   });
 
-  it("중도 합류자와 합의 하차자는 완주로 세지 않는다", async () => {
+  it("중도 합류자와 합의 하차자도 참석한 회차는 센다", async () => {
     const gameId = await seedCampaign({ finished: true });
     for (const userId of [CAROL, DAVE]) {
       const facts = await loadBadgeFacts({ serverId: SERVER_ID, userId });
-      expect(forGame(facts.played, gameId)).toHaveLength(0);
+      expect(forGame(facts.played, gameId)).toHaveLength(6);
     }
+  });
+
+  it("회차 참석자 전원이 그 회차 후기를 쓴 회차마다 풀 캐스트가 한 건씩 생긴다", async () => {
+    const gameId = await seedCampaign({ finished: true });
+    const rounds = await db.select().from(gameRounds).where(eq(gameRounds.gameId, gameId));
+    const roundOf = (no: number) => rounds.find((round) => round.roundNo === no)!;
+    const review = (roundNo: number, authorId: string, minutes: number) => ({
+      serverId: SERVER_ID,
+      gameId,
+      roundId: roundOf(roundNo).id,
+      authorId,
+      body: "후기 본문은 스무 자를 넘겨야 해서 길게 적었습니다.",
+      createdAt: new Date(BASE + roundNo * WEEK + 6 * HOUR + minutes * 60_000),
+    });
+    await db
+      .insert(sessionReviews)
+      .values([
+        ...[ALICE, BOB, CAROL, DAVE].map((userId, index) => review(1, userId, index)),
+        ...[ALICE, BOB, CAROL].map((userId, index) => review(2, userId, index)),
+      ]);
+    const gm = await loadBadgeFacts({ serverId: SERVER_ID, userId: GM_ID });
+    expect(forGame(gm.fullCasts, gameId)).toEqual([{ at: review(1, DAVE, 3).createdAt, gameId }]);
   });
 
   it("GM이 불참으로 내보낸 사람만 불참 기록이 되고 시각은 absence_at이다", async () => {
@@ -184,7 +211,6 @@ describe("다회차 뱃지 근거", () => {
     ]);
     const alice = await loadBadgeFacts({ serverId: SERVER_ID, userId: ALICE });
     expect(forGame(alice.played, gameId)).toHaveLength(1);
-    expect(forGame(alice.playedRounds, gameId)).toHaveLength(1);
     const bob = await loadBadgeFacts({ serverId: SERVER_ID, userId: BOB });
     expect(forGame(bob.played, gameId)).toHaveLength(0);
     expect(forGame(bob.absences, gameId)).toEqual([{ at: new Date(BASE), gameId }]);

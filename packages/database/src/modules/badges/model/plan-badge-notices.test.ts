@@ -22,7 +22,7 @@ describe("planBadgeNotices", () => {
       notifications: [
         {
           kind: "badge_earned",
-          params: { emoji: "🎒", name: "떠돌이", criterion: "완주한 세션 10개" },
+          params: { emoji: "🎒", name: "떠돌이", criterion: "세션 10회 참석" },
         },
       ],
       sheet: false,
@@ -92,7 +92,7 @@ describe("planBadgeNotices", () => {
     });
     expect(plan.sheet).toBe(true);
     expect(plan.notifications.map((notification) => notification.params)).toEqual([
-      { emoji: "🎲", name: "첫 주사위", criterion: "완주한 세션 1개" },
+      { emoji: "🎲", name: "첫 주사위", criterion: "세션 1회 참석" },
       { emoji: "🌱", name: "피아스코 입문자", criterion: "피아스코 세션 1회 참석" },
     ]);
   });

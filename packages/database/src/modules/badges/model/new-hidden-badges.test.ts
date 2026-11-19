@@ -11,6 +11,7 @@ function session(overrides: Partial<BadgeSession> & { day?: number } = {}): Badg
   const startsAt = new Date(Date.UTC(2026, 2, day, 5));
   return {
     gameId: `g${day}`,
+    roundId: null,
     title: "",
     startsAt,
     endsAt: new Date(startsAt.getTime() + 3 * HOUR),
@@ -25,8 +26,6 @@ function session(overrides: Partial<BadgeSession> & { day?: number } = {}): Badg
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
-  playedRounds: overrides.played ?? [],
-  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],

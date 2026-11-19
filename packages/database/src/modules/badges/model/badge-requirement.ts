@@ -16,7 +16,7 @@ export function badgeRequirement({
   const count = step.threshold;
   switch (ladder) {
     case BADGE_LADDER.playerTotal:
-      return `완주한 세션 ${count}개`;
+      return `세션 ${count}회 참석`;
     case BADGE_LADDER.gmTotal:
       return `세션 ${count}회 진행`;
     case BADGE_LADDER.playerRule:

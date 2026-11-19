@@ -153,8 +153,8 @@ export interface Session {
   timeFixed?: boolean;
   memberIds: string[];
   roundCount?: number;
+  confirmedRounds?: { endsAt: Date | null; attendeeIds: string[] }[];
   finishedAt?: Date | null;
-  finisherIds?: string[];
   capacity: number;
   closed: boolean;
   recruitStatus?: PostStatus;
@@ -268,8 +268,7 @@ export interface CountingSession {
   cancelled?: boolean;
   hidden?: unknown;
   roundCount?: number;
-  finishedAt?: Date | null;
-  finisherIds?: string[];
+  confirmedRounds?: { endsAt: Date | null; attendeeIds: string[] }[];
 }
 
 // 일시가 있는 다회차 구인의 회차. endsAt은 마친 시각(없으면 예정 종료)이다.

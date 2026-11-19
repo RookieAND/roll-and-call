@@ -2,6 +2,8 @@ import type { BadgeEvent } from "./reached-tier";
 
 export type BadgeSession = {
   gameId: string;
+  // 다회차는 회차마다 한 건이라 회차 id가 있다. 단발은 null.
+  roundId: string | null;
   title: string;
   startsAt: Date;
   endsAt: Date;
@@ -13,7 +15,7 @@ export type BadgeSession = {
   registeredAt: Date;
 };
 
-export type BadgeReview = { gameId: string; createdAt: Date };
+export type BadgeReview = { gameId: string; roundId: string | null; createdAt: Date };
 
 // 적용한 추첨에서 내가 굴린 1d100. nearMiss는 대기 1번(정원 + 1위), picked는 추첨 순간 확정이다.
 export type BadgeDraw = {
@@ -39,11 +41,9 @@ export type BadgeHostedDraw = {
 };
 
 export type BadgeFacts = {
+  // 단발은 한 건, 다회차는 출석을 확정한 회차마다 한 건이다.
   played: BadgeSession[];
   hosted: BadgeSession[];
-  // 시간·연속 칭호용 세션. 단발은 played·hosted와 같고, 다회차는 구인 하나가 아니라 출석을 확정한 회차마다 한 건이다.
-  playedRounds: BadgeSession[];
-  hostedRounds: BadgeSession[];
   // 내가 GM인 구인에 달린 후기와 내가 쓴 후기. 공개 상태인 것만 담는다.
   reviews: BadgeReview[];
   written: BadgeReview[];

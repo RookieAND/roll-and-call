@@ -59,12 +59,20 @@ export async function loadBadgeFacts({
         ),
       ),
     db
-      .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
+      .select({
+        gameId: sessionReviews.gameId,
+        roundId: sessionReviews.roundId,
+        createdAt: sessionReviews.createdAt,
+      })
       .from(sessionReviews)
       .innerJoin(games, eq(games.id, sessionReviews.gameId))
       .where(and(eq(games.gmId, userId), countedReview)),
     db
-      .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
+      .select({
+        gameId: sessionReviews.gameId,
+        roundId: sessionReviews.roundId,
+        createdAt: sessionReviews.createdAt,
+      })
       .from(sessionReviews)
       .innerJoin(games, eq(games.id, sessionReviews.gameId))
       .where(and(eq(sessionReviews.authorId, userId), countedReview)),
@@ -82,13 +90,9 @@ export async function loadBadgeFacts({
     loadHiddenBadgeFacts({ serverId, userId }),
     loadMultiRoundSessions({ serverId, userId }),
   ]);
-  const singlePlayed = toBadgeSessions(played, now);
-  const singleHosted = toBadgeSessions(hosted, now);
   return {
-    played: [...singlePlayed, ...multi.played],
-    hosted: [...singleHosted, ...multi.hosted],
-    playedRounds: [...singlePlayed, ...multi.playedRounds],
-    hostedRounds: [...singleHosted, ...multi.hostedRounds],
+    played: [...toBadgeSessions(played, now), ...multi.played],
+    hosted: [...toBadgeSessions(hosted, now), ...multi.hosted],
     reviews,
     written,
     certified: certified.map((row) => ({ at: row.at, gameId: null })),

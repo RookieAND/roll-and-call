@@ -16,6 +16,7 @@ import {
   rulebookQuizQuestions,
   rulebookRequestGames,
   rulebookRequests,
+  roundAttendances,
   rulebooks,
   sanctions,
   serverMembers,
@@ -72,6 +73,28 @@ export const ADMIN_TABLE_LOADERS = {
           eq(gameRounds.serverId, serverId),
           gt(games.roundCount, 1),
           isNotNull(gameRounds.startAt),
+        ),
+      ),
+  // 출석을 확정한 다회차 회차에 참석한 사람. 참여 세션 수가 회차마다 센다.
+  roundAttendanceRows: (serverId: string, scope?: SQL) =>
+    db
+      .select({
+        gameId: roundAttendances.gameId,
+        roundId: roundAttendances.roundId,
+        userId: roundAttendances.userId,
+        endsAt:
+          sql<Date | null>`coalesce(${gameRounds.endedAt}, ${gameRounds.plannedEndAt})`.mapWith(
+            gameRounds.startAt,
+          ),
+      })
+      .from(roundAttendances)
+      .innerJoin(gameRounds, eq(gameRounds.id, roundAttendances.roundId))
+      .where(
+        and(
+          eq(roundAttendances.serverId, serverId),
+          eq(roundAttendances.attended, true),
+          isNotNull(gameRounds.attendanceConfirmedAt),
+          scope,
         ),
       ),
   // 신청글 본문은 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.

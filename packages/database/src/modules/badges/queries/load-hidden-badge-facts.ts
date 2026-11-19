@@ -9,9 +9,11 @@ import { RECRUIT_METHOD } from "#db/modules/games/model";
 import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import {
   drawResults,
+  gameRounds,
   games,
   homebrewRuleApplications,
   participants,
+  roundAttendances,
   serverMembers,
   sessionReviews,
   userBadges,
@@ -155,10 +157,50 @@ export async function loadHiddenBadgeFacts({
       sessionReviews,
       and(eq(sessionReviews.gameId, games.id), eq(sessionReviews.authorId, participants.userId)),
     )
-    .where(and(eq(games.gmId, userId), recognizedGamesWhere, countedReviewWhere(serverId)))
+    .where(
+      and(
+        eq(games.gmId, userId),
+        eq(games.roundCount, 1),
+        recognizedGamesWhere,
+        countedReviewWhere(serverId),
+      ),
+    )
     .groupBy(games.id)
     .having(
       sql`${attendedCount} >= ${FULL_CAST_MIN_ATTENDED} and count(distinct ${participants.userId}) = ${attendedCount}`,
+    );
+  // 다회차는 회차 하나가 세션 하나다. 출석을 확정한 그 회차의 참석자 전원이 그 회차 후기를 남겼는지 본다.
+  const attendedInRound = sql<number>`(
+    select count(*)::int from ${roundAttendances} as present
+    where present.round_id = ${gameRounds.id} and present.attended = true
+  )`;
+  const roundFullCasts = await db
+    .select({ gameId: games.id, at: max(sessionReviews.createdAt) })
+    .from(gameRounds)
+    .innerJoin(games, eq(games.id, gameRounds.gameId))
+    .innerJoin(
+      roundAttendances,
+      and(eq(roundAttendances.roundId, gameRounds.id), eq(roundAttendances.attended, true)),
+    )
+    .innerJoin(
+      sessionReviews,
+      and(
+        eq(sessionReviews.roundId, gameRounds.id),
+        eq(sessionReviews.authorId, roundAttendances.userId),
+      ),
+    )
+    .where(
+      and(
+        visibleGame,
+        eq(games.gmId, userId),
+        gt(games.roundCount, 1),
+        isNotNull(gameRounds.attendanceConfirmedAt),
+        countedReviewWhere(serverId),
+      ),
+    )
+    .groupBy(gameRounds.id, games.id)
+    .having(
+      sql`${attendedInRound} >= ${FULL_CAST_MIN_ATTENDED} and count(distinct ${roundAttendances.userId}) = ${attendedInRound}`,
     );
   const absences = await db
     .select({ at: firstRoundStartSql, gameId: games.id })
@@ -210,7 +252,7 @@ export async function loadHiddenBadgeFacts({
     hostedDraws: hostedDraws.map((draw) => ({ ...draw, drawnAt: draw.drawnAt! })),
     joinedAt: member?.joinedAt ?? null,
     rush,
-    fullCasts: fullCasts
+    fullCasts: [...fullCasts, ...roundFullCasts]
       .map((cast) => ({ at: cast.at!, gameId: cast.gameId }))
       .toSorted((left, right) => left.at.getTime() - right.at.getTime()),
   };

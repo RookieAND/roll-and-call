@@ -14,7 +14,7 @@ describe("badgeCondition", () => {
   it("횟수형 뱃지는 기준만 적는다", () => {
     const step = BADGE_LADDERS[BADGE_LADDER.playerTotal].steps[0]!;
     expect(badgeCondition({ ladder: BADGE_LADDER.playerTotal, step, categoryName: null })).toBe(
-      `완주한 세션 ${step.threshold}개`,
+      `세션 ${step.threshold}회 참석`,
     );
   });
 });

@@ -7,7 +7,6 @@ import { FactRows, UserInitial } from "@/shared/ui";
 import { rejoinedNotice } from "../model/rejoined-notice";
 import { PastSanctionsLink } from "./past-sanctions-link";
 import { SanctionCallout } from "./sanction-callout";
-import { SessionCountValue } from "./session-count-value";
 import { UserStateTag } from "./user-state-tag";
 
 const NO_SHOW_WARNING_COUNT = 2;
@@ -80,16 +79,7 @@ export function UserStateCard({ user, discordBanFailed }: UserStateCardProps) {
               { label: "가입일", value: formatFullDate(user.joinedAt), nowrap: true },
               { label: "디스코드 ID", value: `@${user.discordHandle}` },
               { label: "연 세션", value: `${user.hostedCount}회`, nowrap: true },
-              {
-                label: "세션",
-                value: (
-                  <SessionCountValue
-                    attendedRoundCount={user.attendedRoundCount}
-                    playedCount={user.playedCount}
-                  />
-                ),
-                nowrap: true,
-              },
+              { label: "참여 세션", value: `${user.playedCount}회`, nowrap: true },
               {
                 label: "최근 30일 불참",
                 value: (

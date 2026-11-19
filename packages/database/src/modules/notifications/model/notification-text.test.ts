@@ -407,10 +407,10 @@ const CASES: [NotificationPayload, string, string | null][] = [
   [
     {
       kind: NOTIFICATION_KIND.badgeEarned,
-      params: { emoji: "🎒", name: "떠돌이", criterion: "완주한 세션 10개" },
+      params: { emoji: "🎒", name: "떠돌이", criterion: "세션 10회 참석" },
     },
     "새 업적 🎒 떠돌이를 받았습니다.",
-    "조건: 완주한 세션 10개",
+    "조건: 세션 10회 참석",
   ],
   [
     {

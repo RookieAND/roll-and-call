@@ -7,6 +7,7 @@ import {
   games,
   participants,
   profiles,
+  roundAttendances,
   rulebookQuizQuestions,
   rulebooks,
 } from "#db/schema";
@@ -39,6 +40,12 @@ export async function loadAdminMemberActivity({
   const participantRows = gameIds.length
     ? await ADMIN_TABLE_LOADERS.participantRows(serverId, inArray(participants.gameId, gameIds))
     : [];
+  const roundAttendanceRows = gameIds.length
+    ? await ADMIN_TABLE_LOADERS.roundAttendanceRows(
+        serverId,
+        inArray(roundAttendances.gameId, gameIds),
+      )
+    : [];
   const applicationRows = await ADMIN_TABLE_LOADERS.applicationRows(
     serverId,
     inArray(certApplications.userId, userIds),
@@ -69,5 +76,13 @@ export async function loadAdminMemberActivity({
     serverId,
     inArray(profiles.id, profileIds),
   );
-  return { gameRows, participantRows, applicationRows, quizRows, rulebookRows, profileRows };
+  return {
+    gameRows,
+    participantRows,
+    roundAttendanceRows,
+    applicationRows,
+    quizRows,
+    rulebookRows,
+    profileRows,
+  };
 }

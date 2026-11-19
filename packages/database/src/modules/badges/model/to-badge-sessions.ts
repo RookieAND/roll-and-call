@@ -30,6 +30,7 @@ export function toBadgeSessions(rows: SessionRow[], now: Date): BadgeSession[] {
     return [
       {
         gameId: row.gameId,
+        roundId: null,
         title: row.title,
         startsAt: row.confirmedAt!,
         endsAt: sessionEndAt(row)!,

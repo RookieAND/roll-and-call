@@ -27,7 +27,7 @@ function increment(counts: Map<string, number>, userId: string) {
   counts.set(userId, (counts.get(userId) ?? 0) + 1);
 }
 
-// 확정으로 참여한 인정 세션 수(다회차는 완주한 구인만). 취소되지 않은 불참(기간이 지난 것 포함)이 있는 세션은 참여로 세지 않는다.
+// 확정으로 참여한 인정 세션 수(다회차는 참석한 회차마다 하나). 취소되지 않은 불참(기간이 지난 것 포함)이 있는 단발 세션은 참여로 세지 않는다. 다회차는 내보내도 앞서 참석한 회차는 남는다.
 export function playedCountsByUser<Session extends CountSession>({
   sessions,
   noShows,
@@ -40,9 +40,10 @@ export function playedCountsByUser<Session extends CountSession>({
   );
   const counts = new Map<string, number>();
   for (const session of sessions) {
+    const isMulti = (session.roundCount ?? 1) > 1;
     for (const userId of sessionPlayerIds(session, now)) {
       if (wanted && !wanted.has(userId)) continue;
-      if (!absent.has(`${session.id}:${userId}`)) increment(counts, userId);
+      if (isMulti || !absent.has(`${session.id}:${userId}`)) increment(counts, userId);
     }
   }
   return counts;

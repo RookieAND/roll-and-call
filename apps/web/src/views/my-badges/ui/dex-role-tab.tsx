@@ -1,7 +1,7 @@
 import { BADGE_ROLE } from "@roll-and-call/database/badges/model";
 import { Text } from "@roll-and-call/ui";
 
-import { ATTENDANCE_HINT, MULTI_ROUND_HINT } from "@/entities/badge";
+import { ATTENDANCE_HINT } from "@/entities/badge";
 
 import type { DexTab } from "../model/build-dex-tab";
 import { DexGridSection } from "./dex-grid-section";
@@ -31,8 +31,6 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
           note={
             <Text typography="body4" foreground="hint">
               {ATTENDANCE_HINT}
-              <br />
-              {MULTI_ROUND_HINT}
             </Text>
           }
         />

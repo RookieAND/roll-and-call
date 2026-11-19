@@ -18,7 +18,7 @@ import { gameStatus, plainText } from "@/shared/lib";
 
 import { gameStartsAt } from "../game-starts-at";
 import type { Session } from "../types";
-import { finisherIdsOf } from "./finisher-ids-of";
+import { confirmedRoundsOf } from "./confirmed-rounds-of";
 import type { ShapeContext } from "./shape-context";
 
 export function buildSessions({
@@ -30,6 +30,7 @@ export function buildSessions({
   const gameRulebook = (game: Game) =>
     (game.rulebookId && rulebookLabelOf(game.rulebookId)) || game.rule;
   const rosterOf = groupBy(tables.participantRows, (row) => row.gameId);
+  const attendanceOf = groupBy(tables.roundAttendanceRows, (row) => row.gameId);
   return tables.gameRows.map((game) => {
     const roster = (rosterOf[game.id] ?? []).toSorted(
       (a, b) =>
@@ -50,7 +51,10 @@ export function buildSessions({
       timeFixed: !isNull(game.confirmedAt),
       memberIds: roster.filter((row) => row.status === "confirmed").map((row) => row.userId),
       finishedAt: game.finishedAt,
-      finisherIds: finisherIdsOf({ game, roster }),
+      confirmedRounds: confirmedRoundsOf({
+        roundCount: game.roundCount,
+        rows: attendanceOf[game.id] ?? [],
+      }),
       waitingIds: roster
         .filter((row) => row.status === "waiting")
         .toSorted(compareWaitlistOrder)

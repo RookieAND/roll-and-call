@@ -54,13 +54,16 @@ export const SHAPE_REGISTRY: { [Key in keyof AdminShapes]: ShapeSpec<Key> } = {
     build: buildRulebookRequests,
   },
   sessions: {
-    tables: ["profileRows", "gameRows", "participantRows", "rulebookRows"],
+    tables: ["profileRows", "gameRows", "participantRows", "roundAttendanceRows", "rulebookRows"],
     build: buildSessions,
   },
   noShows: { tables: ["profileRows", "gameRows", "participantRows"], build: buildNoShows },
   reviews: { tables: ["profileRows", "participantRows", "reviewRows"], build: buildReviews },
   rounds: { tables: ["roundRows"], build: buildRounds },
-  countingSessions: { tables: ["gameRows", "participantRows"], build: buildCountingSessions },
+  countingSessions: {
+    tables: ["gameRows", "participantRows", "roundAttendanceRows"],
+    build: buildCountingSessions,
+  },
   countingNoShows: { tables: ["gameRows", "participantRows"], build: buildCountingNoShows },
   lastActive: { tables: ["lastActiveRows"], build: buildLastActive },
   memberNicknames: { tables: ["profileRows"], build: buildMemberNicknames },

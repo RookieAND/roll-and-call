@@ -9,6 +9,7 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
   const endsAt = new Date(Date.UTC(2026, 0, 1 + index));
   return {
     gameId: `g${index}`,
+    roundId: null,
     title: "",
     startsAt: endsAt,
     endsAt,
@@ -22,8 +23,6 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
-  playedRounds: overrides.played ?? [],
-  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],
@@ -228,6 +227,7 @@ describe("작성한 후기·받은 후기", () => {
   const reviewsOf = (count: number) =>
     Array.from({ length: count }, (_, index) => ({
       gameId: `g${index}`,
+      roundId: null,
       createdAt: new Date(Date.UTC(2026, 0, 1 + index)),
     }));
 

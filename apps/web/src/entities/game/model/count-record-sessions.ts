@@ -1,5 +1,5 @@
 import { isRecordSession } from "@roll-and-call/database/badges/model";
-import { isFinisher, isSessionEnded } from "@roll-and-call/database/games/model";
+import { isSessionEnded } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
 import { countConfirmed, PARTICIPANT_STATUS } from "./participant";
@@ -38,34 +38,21 @@ export function countRecordSessions({
         statuses.includes(participant.status) &&
         !participant.absent,
     );
-  // 다회차는 구인이 끝났을 때 완주로 남은 사람만 참여로 센다. 진행 중·내보냄·하차는 세지 않는다.
-  const finishedAsFinisher = (game: SessionGame) =>
-    !isNull(game.finishedAt) &&
-    new Date(game.finishedAt) <= now &&
-    isNull(game.hiddenAt) &&
-    game.participants.some(
-      (participant) =>
-        participant.userId === userId &&
-        isFinisher({
-          game,
-          participant: {
-            ...participant,
-            lateJoined: participant.lateJoined ?? false,
-            leftReason: participant.leftReason ?? null,
-          },
-        }),
-    );
+  // 다회차는 출석을 확정하고 끝난 회차 가운데 참석한 회차마다 하나다. 구인을 끝까지 하지 않아도 센다.
+  const playedOf = (game: SessionGame) => {
+    if (game.roundCount > 1)
+      return isNull(game.cancelledAt) && isNull(game.hiddenAt) ? (game.attendedRoundCount ?? 0) : 0;
+    const counted =
+      (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
+      (upcoming(game) &&
+        seated(game, [
+          PARTICIPANT_STATUS.confirmed,
+          ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
+        ]));
+    return counted ? 1 : 0;
+  };
   return {
     hosted: hosted.filter((game) => recorded(game) || upcoming(game)).length,
-    played: joined.filter((game) =>
-      game.roundCount > 1
-        ? finishedAsFinisher(game)
-        : (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
-          (upcoming(game) &&
-            seated(game, [
-              PARTICIPANT_STATUS.confirmed,
-              ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
-            ])),
-    ).length,
+    played: joined.reduce((total, game) => total + playedOf(game), 0),
   };
 }

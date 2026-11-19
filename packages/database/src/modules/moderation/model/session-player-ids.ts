@@ -8,16 +8,16 @@ export interface PlayerCountSession {
   cancelled?: boolean;
   endsAt?: Date | null;
   roundCount?: number;
-  finishedAt?: Date | null;
-  // 다회차에서 완주한 사람. 다회차는 이 사람들만 참여 세션으로 센다.
-  finisherIds?: readonly string[];
+  // 다회차에서 출석을 확정한 회차와 그 회차에 참석한 사람. 다회차는 참석한 회차마다 참여 세션 하나다.
+  confirmedRounds?: readonly { endsAt: Date | null; attendeeIds: readonly string[] }[];
 }
 
-// 참여 세션으로 셀 사람들. 단발은 끝난 인정 세션의 확정자, 다회차는 구인이 끝났을 때의 완주자만이다.
+// 참여 세션으로 셀 사람들. 단발은 끝난 인정 세션의 확정자, 다회차는 끝난 회차의 참석자(회차마다 한 번씩 담는다)다.
 export function sessionPlayerIds(session: PlayerCountSession, now: Date): readonly string[] {
   if ((session.roundCount ?? 1) <= 1)
     return isRecognizedPost(session, now) ? session.memberIds : [];
-  const finished = !isNil(session.finishedAt) && session.finishedAt.getTime() <= now.getTime();
-  if (!finished || session.cancelled || !isNil(session.hidden)) return [];
-  return session.finisherIds ?? [];
+  if (session.cancelled || !isNil(session.hidden)) return [];
+  return (session.confirmedRounds ?? [])
+    .filter((round) => !isNil(round.endsAt) && round.endsAt.getTime() <= now.getTime())
+    .flatMap((round) => round.attendeeIds);
 }
