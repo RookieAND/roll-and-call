@@ -115,9 +115,7 @@ export function RejectRequestForm({ request, viewerId, onDone }: RejectRequestFo
           disabled={!canConfirm}
           onClick={() => void confirm()}
         >
-          <RequestGroupNotice request={request} />
           {networkError ? <RotateCcw size={16} aria-hidden /> : null}
-          <RequestGroupNotice request={request} />
           {networkError ? "다시 시도" : "반려"}
         </Button>
       </ResponsiveDialog.Footer>
