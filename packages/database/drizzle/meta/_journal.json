@@ -932,6 +932,13 @@
       "when": 1799900300003,
       "tag": "0138_round_progress",
       "breakpoints": true
+    },
+    {
+      "idx": 139,
+      "version": "7",
+      "when": 1799900300004,
+      "tag": "0139_round_progress_crons",
+      "breakpoints": true
     }
   ]
 }

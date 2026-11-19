@@ -102,3 +102,7 @@ export { endRound } from "./commands/end-round";
 export { finishGameEarly } from "./commands/finish-game-early";
 export { setRoundCount } from "./commands/set-round-count";
 export { skipRound } from "./commands/skip-round";
+export {
+  finishStaleCoordinatedGames,
+  type StaleFinishedGame,
+} from "./commands/finish-stale-coordinated-games";

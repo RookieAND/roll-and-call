@@ -111,6 +111,7 @@ export function buildTrialGame({
     lastStartAt: null,
     finishedAt: null,
     incompleteAt: null,
+    incompleteReason: null,
     endDate: new Date(sessionAt.getTime() - DAY_MS),
     rangeStart: null,
     rangeEnd: null,

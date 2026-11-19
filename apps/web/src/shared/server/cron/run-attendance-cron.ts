@@ -1,12 +1,13 @@
 import "server-only";
 import { evaluateGameBadges, syncMonthlyBadges } from "@roll-and-call/database/badges";
-import { autoConfirmAttendance } from "@roll-and-call/database/games";
+import { autoConfirmAttendance, autoConfirmRoundAttendance } from "@roll-and-call/database/games";
 import { uniq } from "es-toolkit";
 
 // pg_cron이 매시 5분에 부른다(attendance-auto-confirm). 기한이 지난 출석을 확정하고 그 구인의 업적을 다시 센다.
-// 이달의 뱃지는 구인마다 맞추지 않고 서버마다 한 번만 맞춘다.
+// 이달의 뱃지는 구인마다 맞추지 않고 서버마다 한 번만 맞춘다. 다회차는 회차마다 확정하고 집계는 C36-9에서 붙인다.
 export async function runAttendanceCron() {
   const autoConfirmed = await autoConfirmAttendance();
+  const roundsConfirmed = await autoConfirmRoundAttendance();
   for (const { serverId, gameId } of autoConfirmed) {
     try {
       await evaluateGameBadges({ serverId, gameId, syncMonthly: false });
@@ -22,5 +23,5 @@ export async function runAttendanceCron() {
       console.error(error);
     }
   }
-  return { ok: true, autoConfirmed: autoConfirmed.length };
+  return { ok: true, autoConfirmed: autoConfirmed.length, roundsConfirmed: roundsConfirmed.length };
 }

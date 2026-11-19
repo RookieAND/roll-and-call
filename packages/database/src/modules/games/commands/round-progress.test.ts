@@ -183,15 +183,13 @@ describe("회차 생략", () => {
         at: new Date(BASE + WEEK + 5 * HOUR),
       }),
     );
-    await db
-      .insert(sessionReviews)
-      .values({
-        serverId: SERVER_ID,
-        gameId,
-        roundId: second!.id,
-        authorId: ALICE,
-        body: "좋았다".repeat(10),
-      });
+    await db.insert(sessionReviews).values({
+      serverId: SERVER_ID,
+      gameId,
+      roundId: second!.id,
+      authorId: ALICE,
+      body: "좋았다".repeat(10),
+    });
     const skipped = await db.transaction((transaction) =>
       skipRound({
         transaction,
@@ -316,5 +314,24 @@ describe("조기 종결과 회차 수", () => {
       ),
     ).rejects.toThrow();
     expect((await gameOf(gameId)).roundCount).toBe(3);
+  });
+});
+
+describe("조율형 30일 자동 종결", () => {
+  it("마지막 회차 종료 30일 뒤에 마치고 29일에는 기다린다", async () => {
+    const { finishStaleCoordinatedGames } = await import("./finish-stale-coordinated-games");
+    const gameId = await seedGame({ kind: "coordinated", count: 3, dated: 1 });
+    const lastEnd = BASE + 4 * HOUR;
+    const DAY = 24 * HOUR;
+    const early = await finishStaleCoordinatedGames(new Date(lastEnd + 29 * DAY));
+    expect(early.some((game) => game.gameId === gameId)).toBe(false);
+    const finished = await finishStaleCoordinatedGames(new Date(lastEnd + 30 * DAY));
+    expect(finished.some((game) => game.gameId === gameId)).toBe(true);
+    const game = await gameOf(gameId);
+    expect(game).toMatchObject({
+      incompleteReason: "stale",
+      finishedAt: new Date(lastEnd + 30 * DAY),
+    });
+    expect((await roundsOf(gameId)).map((round) => round.roundNo)).toEqual([1]);
   });
 });

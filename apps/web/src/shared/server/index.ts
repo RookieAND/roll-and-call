@@ -49,6 +49,7 @@ export { listJoinableServers } from "./membership/list-joinable-servers";
 export { notMemberError } from "./membership/not-member-error";
 export { createSupabaseAdminClient } from "./auth/create-supabase-admin-client";
 export { runAttendanceCron } from "./cron/run-attendance-cron";
+export { runRoundsCron } from "./cron/run-rounds-cron";
 export { runBadgesCron } from "./cron/run-badges-cron";
 export { runMembersCron } from "./cron/run-members-cron";
 export { runMinPlayersCron } from "./cron/run-min-players-cron";
