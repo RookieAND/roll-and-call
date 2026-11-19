@@ -106,3 +106,5 @@ export {
   finishStaleCoordinatedGames,
   type StaleFinishedGame,
 } from "./commands/finish-stale-coordinated-games";
+export { getRoundAttendance } from "./queries/get-round-attendance";
+export { findGameRound } from "./queries/find-game-round";

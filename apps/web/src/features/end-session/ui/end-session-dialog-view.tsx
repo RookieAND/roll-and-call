@@ -8,6 +8,7 @@ interface EndSessionDialogViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   plannedEndAt: Date;
+  lastRound: boolean;
   pending: boolean;
   failed: boolean;
   onConfirm: () => void;
@@ -17,6 +18,7 @@ export function EndSessionDialogView({
   open,
   onOpenChange,
   plannedEndAt,
+  lastRound,
   pending,
   failed,
   onConfirm,
@@ -34,7 +36,11 @@ export function EndSessionDialogView({
       pending={pending}
       onConfirm={onConfirm}
     >
-      <EndSessionDialogBody plannedEndAt={plannedEndAt} failed={failed && !pending} />
+      <EndSessionDialogBody
+        plannedEndAt={plannedEndAt}
+        lastRound={lastRound}
+        failed={failed && !pending}
+      />
     </ConfirmDialog>
   );
 }

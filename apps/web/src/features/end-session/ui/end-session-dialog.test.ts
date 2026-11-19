@@ -32,6 +32,7 @@ const render = ({ pending, failed }: { pending: boolean; failed: boolean }) =>
       open: true,
       onOpenChange: vi.fn(),
       plannedEndAt,
+      lastRound: false,
       pending,
       failed,
       onConfirm: vi.fn(),
