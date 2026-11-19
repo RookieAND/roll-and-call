@@ -11,7 +11,7 @@ interface MyPageReviewRowProps {
 export function MyPageReviewRow({ label, count, href }: MyPageReviewRowProps) {
   return (
     <Button
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       variant="ghost"
       colorPalette="gray"
       className="h-auto min-h-12 w-full justify-start gap-125 rounded-none px-175 py-100 text-left not-first:border-t not-first:border-gray-200"

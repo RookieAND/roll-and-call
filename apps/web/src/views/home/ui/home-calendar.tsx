@@ -50,14 +50,16 @@ export function HomeCalendar({
           {monthStart.format("YYYY년 M월")}
         </Text>
         <Button
-          render={<Link href={toServerPath("/")} scroll={false} />}
+          render={<Link prefetch={false} href={toServerPath("/")} scroll={false} />}
           variant="outline"
           size="sm"
         >
           오늘
         </Button>
         <IconButton
-          render={navigating ? undefined : <Link href={previousHref} scroll={false} />}
+          render={
+            navigating ? undefined : <Link prefetch={false} href={previousHref} scroll={false} />
+          }
           onClick={() => setLeavingMonthKey(monthKey)}
           variant="ghost"
           aria-label="이전 달"
@@ -66,7 +68,7 @@ export function HomeCalendar({
           <ChevronLeft size={20} />
         </IconButton>
         <IconButton
-          render={canGoNext ? <Link href={nextHref} scroll={false} /> : undefined}
+          render={canGoNext ? <Link prefetch={false} href={nextHref} scroll={false} /> : undefined}
           onClick={() => setLeavingMonthKey(monthKey)}
           variant="ghost"
           aria-label="다음 달"

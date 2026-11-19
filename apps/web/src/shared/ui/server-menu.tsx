@@ -71,7 +71,7 @@ export function ServerMenu({
               <>
                 <Menu.Separator className="mx-125 my-075 h-px bg-gray-200" />
                 <Menu.Item
-                  render={<Link href="/about" />}
+                  render={<Link prefetch={false} href="/about" />}
                   className="flex h-11 cursor-pointer items-center gap-125 rounded-400 px-125 text-gray-600 outline-none data-highlighted:bg-gray-50"
                 >
                   <Info size={18} aria-hidden className="flex-none" />

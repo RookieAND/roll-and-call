@@ -21,7 +21,11 @@ export function RetryBar({ rulebookId, retryHref, discardable }: RetryBarProps) 
         {discardable && (
           <DiscardApplicationButton rulebookId={rulebookId} size="lg" className="min-w-0 flex-1" />
         )}
-        <Button render={<Link href={retryHref} />} size="lg" className="min-w-0 flex-1">
+        <Button
+          render={<Link prefetch={false} href={retryHref} />}
+          size="lg"
+          className="min-w-0 flex-1"
+        >
           다시 신청
         </Button>
       </HStack>

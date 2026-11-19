@@ -10,6 +10,7 @@ import { NavIcon } from "./nav-icon";
 export function ActiveBottomNavTab({ href, label, Icon, dot, count }: BottomNavTabProps) {
   return (
     <Link
+      prefetch={false}
       href={href}
       aria-current="page"
       aria-label={label}

@@ -117,6 +117,7 @@ export async function MyRulebooksView() {
                       <Button
                         render={
                           <Link
+                            prefetch={false}
                             href={serverPath({ slug: server.slug, path: home.suggestion.href })}
                           />
                         }
@@ -144,7 +145,10 @@ export async function MyRulebooksView() {
               ) : (
                 <Button
                   render={
-                    <Link href={serverPath({ slug: server.slug, path: "/me/rulebooks/apply" })} />
+                    <Link
+                      prefetch={false}
+                      href={serverPath({ slug: server.slug, path: "/me/rulebooks/apply" })}
+                    />
                   }
                   size="lg"
                   className="w-full"

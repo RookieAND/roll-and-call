@@ -67,7 +67,7 @@ export function ClosingSection({ signedIn }: ClosingSectionProps) {
               </>
             }
             actionLabel="도움말 보기"
-            link={<Link href="/help" />}
+            link={<Link prefetch={false} href="/help" />}
           />
         </div>
       </VStack>

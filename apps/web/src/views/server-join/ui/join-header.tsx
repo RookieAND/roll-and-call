@@ -11,6 +11,7 @@ export function JoinHeader() {
       className="relative h-(--rc-size-appbar) flex-none px-200"
     >
       <Link
+        prefetch={false}
         href="/"
         className="flex h-11 items-center rounded-300 focus-visible:outline-2 focus-visible:outline-tinted-ink"
       >

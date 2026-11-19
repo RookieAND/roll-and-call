@@ -13,7 +13,7 @@ export function HelpButton() {
 
   return (
     <IconButton
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       variant="ghost"
       aria-label="도움말"
       className="h-11 w-11 text-gray-600"

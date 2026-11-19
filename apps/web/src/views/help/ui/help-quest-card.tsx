@@ -12,7 +12,7 @@ export function HelpQuestCard({ href, progress }: HelpQuestCardProps) {
     <Card.Root
       padding="sm"
       interactive
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       className="border-tinted-border bg-tinted-bg hover:bg-primary-100"
     >
       <HStack align="center" gap="150" className="px-050 py-025">

@@ -29,7 +29,7 @@ export async function GamesJoinCallout({ page, filter }: GamesJoinCalloutProps) 
       </Callout.Description>
       <Callout.Action>
         <Button
-          render={<Link href={serverJoinPath({ slug: server.slug, next })} />}
+          render={<Link prefetch={false} href={serverJoinPath({ slug: server.slug, next })} />}
           variant="ghost"
           size="sm"
         >

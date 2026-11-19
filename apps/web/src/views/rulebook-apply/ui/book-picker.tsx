@@ -145,7 +145,11 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
                   <br />
                   목록에 없으면 추가를 요청해 주세요.
                 </Text>
-                <Button render={<Link href={requestHref} />} variant="tinted" className="mt-100">
+                <Button
+                  render={<Link prefetch={false} href={requestHref} />}
+                  variant="tinted"
+                  className="mt-100"
+                >
                   추가 요청
                 </Button>
               </VStack>
@@ -184,7 +188,7 @@ export function BookPicker({ rulebooks, initialRulebookIds }: BookPickerProps) {
                     </Text>
                   )}
                   <Button
-                    render={<Link href={bulkApplyHref} onClick={persist} />}
+                    render={<Link prefetch={false} href={bulkApplyHref} onClick={persist} />}
                     size="lg"
                     className="w-full"
                   >

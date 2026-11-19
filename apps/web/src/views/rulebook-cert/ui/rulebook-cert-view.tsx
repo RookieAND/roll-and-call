@@ -99,6 +99,7 @@ export async function RulebookCertView({ rulebookId }: RulebookCertViewProps) {
                   <Button
                     render={
                       <Link
+                        prefetch={false}
                         href={serverPath({
                           slug: server.slug,
                           path: certApplyHref({ rulebookIds: [] }),

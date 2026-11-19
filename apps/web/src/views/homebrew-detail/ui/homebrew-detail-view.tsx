@@ -167,7 +167,11 @@ export async function HomebrewDetailView({ applicationId }: HomebrewDetailViewPr
               {state.action === HOMEBREW_DETAIL_ACTION.withdraw ? (
                 <WithdrawHomebrewButton applicationId={application.id} className="w-full" />
               ) : (
-                <Button render={<Link href={reapplyHref} />} size="lg" className="w-full">
+                <Button
+                  render={<Link prefetch={false} href={reapplyHref} />}
+                  size="lg"
+                  className="w-full"
+                >
                   고쳐서 다시 신청
                 </Button>
               )}

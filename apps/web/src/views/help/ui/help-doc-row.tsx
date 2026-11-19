@@ -14,7 +14,7 @@ export function HelpDocRow({ href, title, description }: HelpDocRowProps) {
     <HStack
       align="center"
       gap="150"
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       className="min-h-[52px] border-gray-200 px-175 transition-colors not-first:border-t hover:bg-gray-50"
     >
       <VStack gap="025" className="min-w-0 flex-1 py-150">

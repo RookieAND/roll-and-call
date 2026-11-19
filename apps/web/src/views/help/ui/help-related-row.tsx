@@ -9,7 +9,12 @@ interface HelpRelatedRowProps {
 
 export function HelpRelatedRow({ slug, title }: HelpRelatedRowProps) {
   return (
-    <Card.Root radius={400} padding="sm" interactive render={<Link href={`/help/${slug}`} />}>
+    <Card.Root
+      radius={400}
+      padding="sm"
+      interactive
+      render={<Link prefetch={false} href={`/help/${slug}`} />}
+    >
       <HStack align="center" gap="125">
         <Text typography="subtitle2" render={<span />} className="min-w-0 flex-1">
           {title}

@@ -19,7 +19,12 @@ export interface BottomNavTabProps {
 
 export function BottomNavTab({ href, label, Icon, dot, count }: BottomNavTabProps) {
   return (
-    <Link href={href} aria-label={label} className={cn(BOTTOM_NAV_TAB_CLASS, "text-hint")}>
+    <Link
+      prefetch={false}
+      href={href}
+      aria-label={label}
+      className={cn(BOTTOM_NAV_TAB_CLASS, "text-hint")}
+    >
       <NavIcon Icon={Icon} dot={dot} count={count} />
     </Link>
   );

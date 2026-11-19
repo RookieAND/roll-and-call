@@ -20,7 +20,12 @@ export function MissingRulebookCallout({ href }: { href: string }) {
         목록에 없는 책은 추가를 요청해 주세요.
       </Callout.Description>
       <Callout.Action>
-        <Button render={<Link href={href} />} variant="solid" colorPalette="primary" size="sm">
+        <Button
+          render={<Link prefetch={false} href={href} />}
+          variant="solid"
+          colorPalette="primary"
+          size="sm"
+        >
           <Plus size={14} strokeWidth={2.4} aria-hidden />
           추가 요청
         </Button>
@@ -82,7 +87,7 @@ export function BookPickerPanel({
             </Text>
             {books.length > 0 && (
               <Button
-                render={<Link href={applyHref} onClick={onContinue} />}
+                render={<Link prefetch={false} href={applyHref} onClick={onContinue} />}
                 size="lg"
                 className="w-full"
               >

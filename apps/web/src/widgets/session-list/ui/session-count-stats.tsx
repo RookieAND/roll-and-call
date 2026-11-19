@@ -27,7 +27,7 @@ export function SessionCountStats({ hosted, played }: SessionCountStatsProps) {
             key={stat.label}
             align="center"
             gap="050"
-            render={<Link href={stat.href} />}
+            render={<Link prefetch={false} href={stat.href} />}
             className="border-gray-200 py-175 transition-colors not-first:border-l hover:bg-gray-50"
           >
             <Text

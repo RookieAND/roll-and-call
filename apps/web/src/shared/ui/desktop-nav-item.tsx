@@ -23,6 +23,7 @@ export function DesktopNavItem({
 }: DesktopNavItemProps) {
   return (
     <Link
+      prefetch={false}
       href={href}
       aria-current={active ? "page" : undefined}
       aria-disabled={disabled || undefined}
