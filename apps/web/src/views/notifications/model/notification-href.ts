@@ -27,6 +27,9 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.absenceRestored:
     case NOTIFICATION_KIND.attendanceAutoConfirmed:
     case NOTIFICATION_KIND.sessionReminder:
+    case NOTIFICATION_KIND.roundSkipped:
+    case NOTIFICATION_KIND.roundCountChanged:
+    case NOTIFICATION_KIND.gameFinishedEarly:
       return `/games/${payload.params.gameId}`;
     case NOTIFICATION_KIND.sessionStarted:
       return payload.params.isGm

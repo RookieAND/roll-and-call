@@ -169,6 +169,33 @@ export function notificationText(payload: NotificationPayload): NotificationText
         " 불참 기록이 다시 남았습니다.",
         "운영진이 취소를 되돌렸습니다.",
       );
+    case NOTIFICATION_KIND.roundSkipped:
+      return bold(
+        payload.params.gameTitle,
+        ` ${payload.params.roundNo}회차가 생략되었습니다.`,
+        "뒤 회차 번호가 하나씩 당겨졌습니다.",
+      );
+    case NOTIFICATION_KIND.roundCountChanged: {
+      const { previousCount, nextCount } = payload.params;
+      const direction = nextCount > previousCount ? "늘었습니다" : "줄었습니다";
+      return bold(
+        payload.params.gameTitle,
+        " 예정 회차 수가 바뀌었습니다.",
+        `총 ${previousCount}회에서 ${nextCount}회로 ${direction}.`,
+      );
+    }
+    case NOTIFICATION_KIND.gameFinishedEarly: {
+      const { reason, roundNo, finisher } = payload.params;
+      const cause =
+        reason === "stale"
+          ? "다음 회차가 30일 동안 정해지지 않아 마무리되었습니다."
+          : `GM이 ${roundNo}회차에서 마쳤습니다.`;
+      return bold(
+        payload.params.gameTitle,
+        " 구인이 일찍 마무리되었습니다.",
+        finisher ? `${cause} 완주로 인정되었습니다.` : cause,
+      );
+    }
     case NOTIFICATION_KIND.attendanceAutoConfirmed:
       return bold(
         payload.params.gameTitle,

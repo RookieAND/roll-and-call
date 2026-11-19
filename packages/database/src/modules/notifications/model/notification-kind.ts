@@ -49,6 +49,9 @@ export const NOTIFICATION_KIND = {
   hiddenTitleEarned: "hidden_title_earned",
   monthlyAward: "monthly_award",
   rankLeader: "rank_leader",
+  roundSkipped: "round_skipped",
+  roundCountChanged: "round_count_changed",
+  gameFinishedEarly: "game_finished_early",
 } as const;
 
 export type NotificationKind = (typeof NOTIFICATION_KIND)[keyof typeof NOTIFICATION_KIND];
@@ -65,7 +68,7 @@ type EmptyParams = Record<string, never>;
 // 날짜는 ISO 문자열이다. 구인 제목·룰북 이름·닉네임은 만들 때 값을 넣는다.
 export type NotificationParamsMap = {
   participation_confirmed: GameParams;
-  // 팀 나누기로 연 새 구인에 GM이 참여시킨 사람만 받는다. gameId는 새 구인이다.
+  // GM이 직접 참여시킨 사람만 받는다. 팀 나누기로 연 새 구인(gameId는 새 구인)과 다회차 1회차 시작 뒤 참여자 추가다.
   new_game_joined: GameParams;
   moved_to_waitlist: WaitlistParams;
   removed_from_roster: GameParams;
@@ -126,6 +129,15 @@ export type NotificationParamsMap = {
   // 포인트제 서버에서 이 달의 기록 1위가 바뀌어 내가 1위가 되었을 때. month는 1~12다.
   // unit이 없으면 점수 기준, "count"면 참여 횟수 기준이다.
   rank_leader: { month: number; role: MonthlyAwardRole; unit?: "count" };
+  // 다회차. roundNo는 생략한 회차의 원래 번호다.
+  round_skipped: GameParams & { roundNo: number };
+  round_count_changed: GameParams & { previousCount: number; nextCount: number };
+  // manual은 GM이 roundNo회차에서 마친 것, stale은 조율형 30일 자동 종결이다. finisher는 받는 사람이 완주인지다.
+  game_finished_early: GameParams & {
+    reason: "manual" | "stale";
+    roundNo: number;
+    finisher: boolean;
+  };
 };
 
 export type NotificationPayload = {
