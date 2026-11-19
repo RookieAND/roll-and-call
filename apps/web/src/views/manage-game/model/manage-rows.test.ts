@@ -85,7 +85,7 @@ describe("manageRowGroups", () => {
     const overdue = gameWith({ endDate: at(-DAY) });
     expect(rowOf(overdue, "time")).toMatchObject({
       state: MANAGE_ROW_STATE.blocked,
-      detail: "조율 기한이 지났습니다",
+      detail: "겹치는 시간을 보고 세션 일시를 정합니다",
     });
   });
 
@@ -149,10 +149,10 @@ describe("manageRowGroups", () => {
       href: "/games/game/review",
       state: MANAGE_ROW_STATE.open,
     });
-    expect(writable?.detail).toMatch(/까지 작성할 수 있습니다$/);
+    expect(writable?.detail).toBe("진행한 세션에 대한 GM 후기를 남깁니다");
     expect(groupsOf(ended, "view").review[1]).toMatchObject({
       label: "내 마스터링 후기 보기",
-      detail: "",
+      detail: "내가 남긴 GM 후기를 봅니다",
     });
     expect(groupsOf(ended, null).review).toHaveLength(1);
   });

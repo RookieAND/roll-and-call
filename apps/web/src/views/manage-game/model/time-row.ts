@@ -2,7 +2,7 @@ import type { GameDetailData } from "@roll-and-call/database/games";
 import { awaitingResultMethod } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
-import { isDeadlinePassed, isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
+import { isDeadlinePassed, isSessionEnded, isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { CLOCK_PARTICLE_KIND, clockParticle, formatDateTime, toKst } from "@/shared/lib";
 
 import { MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
@@ -29,20 +29,28 @@ export function timeRow({ game, now }: { game: GameDetailData; now: Date }): Man
       ...base,
       state: overdue ? MANAGE_ROW_STATE.blocked : MANAGE_ROW_STATE.open,
       href: confirmPath,
-      detail: overdue ? "조율 기한이 지났습니다" : "겹치는 시간을 보고 세션 일시를 정합니다",
+      detail: "겹치는 시간을 보고 세션 일시를 정합니다",
     };
   }
 
-  const when = formatDateTime(game.confirmedAt);
   if (!isSessionStarted(game, now)) {
     return {
       ...base,
       label: "세션 시간 바꾸기",
       state: MANAGE_ROW_STATE.open,
       href: confirmPath,
-      detail: `${when} · 시작 전까지 바꿀 수 있습니다`,
+      detail: "시작 전까지 세션 시간을 바꿀 수 있습니다",
     };
   }
+  if (!isSessionEnded(game, now)) {
+    return {
+      ...base,
+      state: MANAGE_ROW_STATE.done,
+      href: null,
+      detail: "시작한 세션은 시간을 바꿀 수 없습니다",
+    };
+  }
+  const when = formatDateTime(game.confirmedAt);
   const clock = toKst(game.confirmedAt).format("HH:mm");
   const particle = clockParticle({ clock, kind: CLOCK_PARTICLE_KIND.direction });
   return {

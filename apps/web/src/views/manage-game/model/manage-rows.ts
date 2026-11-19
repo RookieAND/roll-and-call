@@ -65,9 +65,7 @@ export function manageRowGroups({
         state: MANAGE_ROW_STATE.locked,
       };
   const reviewDeadline = started ? reviewWriteDeadline(game) : null;
-  const masteringRow = reviewDeadline
-    ? gmReviewRow({ gmReview, gameId: game.id, deadline: reviewDeadline })
-    : null;
+  const masteringRow = reviewDeadline ? gmReviewRow({ gmReview, gameId: game.id }) : null;
   const review = masteringRow ? [reviewBase, masteringRow] : [reviewBase];
 
   const management: ManageRow[] = [
