@@ -1,12 +1,11 @@
 import type { GameDetailData } from "@roll-and-call/database/games";
 import { formatPlayRange } from "@roll-and-call/database/games/model";
-import { Avatar, Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Avatar, Badge, Card, HStack, Text } from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import {
   GAME_VISIBILITY,
-  multiRoundScheduleText,
-  multiRoundSubLine,
+  multiRoundDetailRows,
   roundSummaryLine,
   type RoundScheduleRound,
 } from "@/entities/game";
@@ -34,8 +33,7 @@ export function GameInfoTable({
   rounds,
 }: GameInfoTableProps) {
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
-  const multiRoundText = multiRoundScheduleText(game);
-  const multiRoundSub = multiRoundSubLine(game);
+  const detailRows = multiRoundDetailRows(game);
   const isPrivate = game.visibility === GAME_VISIBILITY.private;
   // 지정 구인은 모집 마감이 없어 이 줄을 두지 않는다.
   const deadlineRow = {
@@ -51,39 +49,30 @@ export function GameInfoTable({
       </HStack>
     ),
   };
-  const scheduleHead = (
+  const badge = sessionBadge && (
+    <Badge colorPalette="primary" className="tabular-nums">
+      {sessionBadge}
+    </Badge>
+  );
+  const firstHead = detailRows && (
     <HStack align="center" gap="100" wrap className="min-w-0">
-      <span>{multiRoundText ?? formatGameSchedule(game)}</span>
-      {sessionBadge && (
-        <Badge colorPalette="primary" className="tabular-nums">
-          {sessionBadge}
-        </Badge>
-      )}
+      <span>{detailRows.first}</span>
+      {badge}
     </HStack>
   );
-  const scheduleLine = multiRoundSub ? (
-    <VStack gap="025" align="start" className="min-w-0">
-      {scheduleHead}
-      <Text typography="body4" foreground="hint">
-        {multiRoundSub}
-      </Text>
-    </VStack>
-  ) : (
-    scheduleHead
+  const totalPlayLabel = detailRows
+    ? formatPlayRange(
+        game.playMinutesMin && game.playMinutesMin * game.roundCount,
+        game.playMinutes && game.playMinutes * game.roundCount,
+      )
+    : null;
+  const scheduleHead = (
+    <HStack align="center" gap="100" wrap className="min-w-0">
+      <span>{formatGameSchedule(game)}</span>
+      {badge}
+    </HStack>
   );
-  const scheduleValue =
-    multiRoundText && rounds ? (
-      <MultiRoundScheduleButton
-        text={multiRoundText}
-        subLine={multiRoundSub}
-        sessionBadge={sessionBadge}
-        summary={roundSummaryLine(game)}
-        rounds={rounds}
-      />
-    ) : (
-      scheduleLine
-    );
-  const rows: { label: string; value: ReactNode; sub?: string; top?: boolean }[] = [
+  const rows: { label: string; value: ReactNode; top?: boolean }[] = [
     { label: "룰", value: game.rule },
     ...(game.supplements.length > 0
       ? [
@@ -112,17 +101,19 @@ export function GameInfoTable({
     },
     ...(playRange
       ? [
-          multiRoundText
-            ? {
-                label: "플레이타임",
-                value: `회차마다 ${playRange}`,
-                sub: "회차별 시각은 일정에서 볼 수 있습니다.",
-              }
-            : { label: "플레이타임", value: playRange },
+          {
+            label: "플레이타임",
+            value: totalPlayLabel ? `${totalPlayLabel} (회차별 ${playRange})` : playRange,
+          },
         ]
       : []),
     ...(isPrivate ? [] : [deadlineRow]),
-    { label: "세션 일정", value: scheduleValue },
+    ...(detailRows
+      ? [
+          { label: "첫 회", value: firstHead },
+          { label: "진행", value: detailRows.pace },
+        ]
+      : [{ label: "세션 일정", value: scheduleHead }]),
   ];
 
   return (
@@ -149,19 +140,15 @@ export function GameInfoTable({
             render={<div />}
             className="flex min-w-0 flex-1 items-center desktop:text-body2"
           >
-            {row.sub ? (
-              <VStack gap="025" align="start" className="min-w-0">
-                {row.value}
-                <Text typography="body4" foreground="hint">
-                  {row.sub}
-                </Text>
-              </VStack>
-            ) : (
-              row.value
-            )}
+            {row.value}
           </Text>
         </HStack>
       ))}
+      {detailRows && rounds && (
+        <div className="px-175 py-100">
+          <MultiRoundScheduleButton summary={roundSummaryLine(game)} rounds={rounds} />
+        </div>
+      )}
     </Card.Root>
   );
 }
