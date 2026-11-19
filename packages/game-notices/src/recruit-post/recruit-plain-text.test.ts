@@ -67,3 +67,14 @@ it("서플리먼트는 룰 아래 들여 쓴 목록으로 적는다", () => {
     "- **룰** 크툴루의 부름 7th\n- **서플리먼트**\n  - 펄프 크툴루\n  - 직접 적은 책\n- **인원**",
   );
 });
+
+it("다회차는 일정 칸 맨 위에 회차 한 줄을 둔다", () => {
+  const multi = {
+    ...game,
+    roundCount: 6,
+    roundScheduleKind: "designated",
+    repeatRule: { weekday: 6, startTime: "12:00", endTime: "16:00", intervalWeeks: 1 },
+  } as unknown as Game;
+  const { content } = recruitPlainText({ game: multi, gmName: "새벽세시", confirmedCount: 2 });
+  expect(content).toContain("- **회차** 총 6회 · 매주 토 오후 12:00~4:00\n- **시작**");
+});
