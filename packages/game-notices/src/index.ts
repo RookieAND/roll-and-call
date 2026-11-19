@@ -2,6 +2,7 @@
 export { notifyGameCancelled } from "./notify/notify-game-cancelled";
 export { notifyGameLeft } from "./notify/notify-game-left";
 export { notifyMovedToWaitlist } from "./notify/notify-moved-to-waitlist";
+export { notifyRoundChanged } from "./notify/notify-round-changed";
 export { attachRecruitThumbnail } from "./recruit-post/attach-recruit-thumbnail";
 export { refreshRecruitPost } from "./recruit-post/refresh-recruit-post";
 export { loadRecruitTarget } from "./recruit-post/recruit-target";

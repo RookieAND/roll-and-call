@@ -12,6 +12,9 @@ export const MESSAGE_CASES = [
   { key: "remind", label: "1시간 전 알림", to: "구인 스레드" },
   { key: "start", label: "세션 시작 안내", to: "구인 스레드" },
   { key: "cancel", label: "구인 취소", to: "구인 스레드" },
+  // 다회차. 본문(회차 번호·일시·링크)은 시스템 값이라 머리 줄만 고친다.
+  { key: "round_change", label: "회차 일정 변경", to: "구인 스레드" },
+  { key: "round_availability", label: "다음 회차 가능 시간 요청", to: "구인 스레드" },
   { key: "monthly", label: "이달의 GM·PL 발표", to: "공지 채널" },
 ] as const;
 
@@ -32,6 +35,8 @@ export const DEFAULT_MESSAGE_HEADS: Partial<Record<MessageCaseKey, string>> = {
   remind: "📢 {구인 제목} 세션이 곧 시작해요!",
   start: "📢 세션이 시작되었습니다! 이제부터 후기 및 출석 처리가 가능합니다.",
   cancel: "📢 {구인 제목} 구인이 취소됐어요.",
+  round_change: "📢 {구인 제목} 회차 일정이 바뀌었어요.",
+  round_availability: "📢 {구인 제목} 다음 회차 가능 시간을 알려 주세요!",
   monthly: "📢 {달}에 활약한 분들을 소개해요!",
 };
 

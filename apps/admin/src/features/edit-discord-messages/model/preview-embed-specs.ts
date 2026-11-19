@@ -72,4 +72,17 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
     button: "🌐 웹에서 작성하기",
   },
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },
+  round_change: {
+    emoji: "🗓️",
+    color: DISCORD.recruit,
+    descriptionSuffix: "2회차가 생략되었습니다. 뒤 회차 번호가 하나씩 당겨졌습니다.",
+    fields: [],
+  },
+  round_availability: {
+    emoji: "🗓️",
+    color: DISCORD.recruit,
+    descriptionSuffix: "5회차 가능 시간을 알려 주세요.",
+    fields: [],
+    button: "🗓️ 가능 시간 입력하기",
+  },
 };

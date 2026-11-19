@@ -4,10 +4,11 @@ import { listParticipantUserIds, skipRound as removeRound } from "@roll-and-call
 import { PARTICIPANT_STATUS, roundSkipBlock } from "@roll-and-call/database/games/model";
 import { createNotifications, NOTIFICATION_KIND } from "@roll-and-call/database/notifications";
 import { isNull } from "es-toolkit";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
-import { getActingMember, notMemberError } from "@/shared/server";
+import { getActingMember, notMemberError, notifyRoundChanged } from "@/shared/server";
 
 import { AttendanceError } from "./attendance-error";
 import { guardRound } from "./guard-round";
@@ -28,7 +29,7 @@ export async function skipRound(input: z.input<typeof inputSchema>): Promise<Act
   if (!member) return { error: await notMemberError() };
   const { gameId, roundNo } = parsed.data;
   const serverId = member.server.id;
-  return guardRound({
+  const result = await guardRound({
     actor: { serverId, slug: member.server.slug, gmId: member.user.id },
     gameId,
     roundNo,
@@ -55,4 +56,14 @@ export async function skipRound(input: z.input<typeof inputSchema>): Promise<Act
       });
     },
   });
+  if (!result.error) {
+    after(() =>
+      notifyRoundChanged({
+        server: member.server,
+        gameId,
+        description: `${roundNo}회차가 생략되었습니다. 뒤 회차 번호가 하나씩 당겨졌습니다.`,
+      }),
+    );
+  }
+  return result;
 }
