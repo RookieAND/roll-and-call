@@ -9,12 +9,14 @@ export async function replaceAvailability({
   serverId,
   gameId,
   userId,
+  roundNo = 1,
   slotStarts,
 }: {
   transaction?: Transaction;
   serverId: string;
   gameId: string;
   userId: string;
+  roundNo?: number;
   slotStarts: Date[];
 }) {
   await (outer ?? db).transaction(async (transaction) => {
@@ -25,12 +27,13 @@ export async function replaceAvailability({
           eq(availabilities.serverId, serverId),
           eq(availabilities.gameId, gameId),
           eq(availabilities.userId, userId),
+          eq(availabilities.roundNo, roundNo),
         ),
       );
     if (slotStarts.length > 0) {
       await transaction
         .insert(availabilities)
-        .values(slotStarts.map((slotStart) => ({ serverId, gameId, userId, slotStart })));
+        .values(slotStarts.map((slotStart) => ({ serverId, gameId, userId, roundNo, slotStart })));
     }
   });
 }

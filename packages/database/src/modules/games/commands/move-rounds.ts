@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import type { Transaction } from "#db/modules/transaction";
 import { gameRounds } from "#db/schema";
@@ -39,7 +39,12 @@ export async function moveRounds({
   for (const move of ordered) {
     await transaction
       .update(gameRounds)
-      .set({ startAt: move.startAt, plannedEndAt: move.plannedEndAt })
+      .set({
+        startAt: move.startAt,
+        plannedEndAt: move.plannedEndAt,
+        // 다시 조율 중이던 회차는 일시를 받으면 닫힌다.
+        status: sql`case when ${gameRounds.status} = 'coordinating' then 'scheduled'::round_status else ${gameRounds.status} end`,
+      })
       .where(and(scope, eq(gameRounds.roundNo, move.roundNo)));
   }
   return moves.flatMap((move) => {

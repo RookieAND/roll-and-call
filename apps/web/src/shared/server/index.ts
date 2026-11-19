@@ -2,6 +2,7 @@ import "server-only";
 
 export { refreshRecruitPost } from "@roll-and-call/game-notices";
 export { notifyRoundChanged } from "@roll-and-call/game-notices";
+export { notifyRoundAvailability } from "@roll-and-call/game-notices";
 export { notifyGameJoined } from "./discord/notify-game-joined";
 export { notifyGameLeft, notifyMovedToWaitlist } from "@roll-and-call/game-notices";
 export { notifyGameCancelled } from "@roll-and-call/game-notices";

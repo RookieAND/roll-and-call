@@ -173,3 +173,5 @@ export { kickRoundNumber } from "./kick-round-number";
 export { clockTextLabel } from "./clock-text-label";
 export { schedulableRoundNo } from "./schedulable-round-no";
 export { roundTimeError } from "./round-time-error";
+export { roundCoordinationError, ROUND_COORDINATION_MAX_DAYS } from "./round-coordination-error";
+export { defaultCoordinationWindow } from "./default-coordination-window";

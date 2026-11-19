@@ -51,6 +51,9 @@ export const gameRounds = pgTable(
     coordinationStart: date("coordination_start"),
     coordinationEnd: date("coordination_end"),
     coordinationTimezone: text("coordination_timezone"),
+    // 조율 기간의 하루 시간대(시). 끝이 시작 이하이면 자정을 넘긴다. 다음 회차를 열 때 이 값을 기본으로 쓴다.
+    coordinationWindowStartHour: smallint("coordination_window_start_hour"),
+    coordinationWindowEndHour: smallint("coordination_window_end_hour"),
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
     // 다회차 회차의 1시간 전 알림을 보낸 시각(한 번만 보내는 표시). 단발은 games.notified_at을 쓴다.
     notifiedAt: timestamp("notified_at", { withTimezone: true }),
