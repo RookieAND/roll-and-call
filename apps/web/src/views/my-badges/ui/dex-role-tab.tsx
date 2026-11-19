@@ -53,7 +53,7 @@ export function DexRoleTab({ role, board }: DexRoleTabProps) {
       </DexSection>
 
       <div className="desktop:hidden">
-        <DexSection title={board.monthly.title}>
+        <DexSection title={board.monthly.title} hint={board.monthly.condition}>
           <DexMonthlyCard card={board.monthly} />
         </DexSection>
       </div>
