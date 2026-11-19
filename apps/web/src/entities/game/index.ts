@@ -133,7 +133,7 @@ export { repeatPhrase } from "./model/repeat-phrase";
 export { datedScheduleText } from "./model/dated-schedule-text";
 export { coordinatingScheduleText } from "./model/coordinating-schedule-text";
 export { multiRoundScheduleText } from "./model/multi-round-schedule-text";
-export { multiRoundSubLine } from "./model/multi-round-sub-line";
+export { multiRoundDetailRows } from "./model/multi-round-detail-rows";
 export { roundSummaryLine } from "./model/round-summary-line";
 export { applySummaryLines } from "./model/apply-summary-lines";
 export { roundSlotLabel } from "./model/round-slot-label";

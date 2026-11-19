@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { applySummaryLines } from "./apply-summary-lines";
-import { multiRoundSubLine } from "./multi-round-sub-line";
+import { multiRoundDetailRows } from "./multi-round-detail-rows";
 import { roundSummaryLine } from "./round-summary-line";
 
 const designated = {
@@ -21,11 +21,20 @@ const coordinating = {
 } as const;
 
 describe("다회차 상세 문구", () => {
-  it("정보 표 보조 줄", () => {
-    expect(multiRoundSubLine(designated)).toBe("첫 회 10월 24일 (토)");
-    expect(multiRoundSubLine(coordinated)).toBe("다음 회차는 한 회차씩 정합니다.");
-    expect(multiRoundSubLine(coordinating)).toBe("1회차는 10월 24일 ~ 11월 6일 중 정합니다.");
-    expect(multiRoundSubLine({ ...designated, roundCount: 1 })).toBeNull();
+  it("정보 표 첫 회·진행 줄", () => {
+    expect(multiRoundDetailRows(designated)).toEqual({
+      first: "10월 24일 (토) 오후 12:00~4:00",
+      pace: "매주 토 · 총 6회",
+    });
+    expect(multiRoundDetailRows(coordinated)).toEqual({
+      first: "10월 24일 (토) 오후 12:00부터",
+      pace: "회차마다 정하며 총 6회",
+    });
+    expect(multiRoundDetailRows(coordinating)).toEqual({
+      first: "10월 24일 ~ 11월 6일 중 조율",
+      pace: "회차마다 정하며 총 6회",
+    });
+    expect(multiRoundDetailRows({ ...designated, roundCount: 1 })).toBeNull();
   });
 
   it("요약 한 줄", () => {
