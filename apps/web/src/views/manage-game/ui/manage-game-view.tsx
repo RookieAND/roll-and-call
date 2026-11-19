@@ -1,5 +1,5 @@
 import { getResponseCounts, listGameRounds } from "@roll-and-call/database/games";
-import { getGameReviews, getReviewDraftTarget } from "@roll-and-call/database/reviews";
+import { getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { Badge, Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNil } from "es-toolkit";
 import { notFound } from "next/navigation";
@@ -50,15 +50,10 @@ const ATTENDANCE_LABEL = "출석";
 
 export async function ManageGameView({ id }: ManageGameViewProps) {
   const server = await getCurrentServer();
-  const [game, user, responseCounts, reviews] = await Promise.all([
+  const [game, user, responseCounts] = await Promise.all([
     getGameById(server.id, id),
     getCurrentSessionUser(),
     getResponseCounts({ serverId: server.id, gameIds: [id] }),
-    getCurrentSessionUser().then((viewer) =>
-      getGameReviews({ serverId: server.id, gameId: id, viewerId: viewer?.id ?? null }).then(
-        ({ participantReviews }) => participantReviews,
-      ),
-    ),
   ]);
   if (!game) notFound();
   if (user?.id !== game.gmId) {
@@ -101,7 +96,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   const stageTone = roundStage?.tone ?? MANAGE_STAGE_TONE[stage];
   const groups = manageRowGroups({
     game,
-    reviewCount: reviews.length,
     gmReview,
     roundProgress,
     now,

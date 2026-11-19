@@ -44,14 +44,9 @@ const coordinating = {
 const gameWith = (patch: Record<string, unknown>) =>
   ({ ...coordinating, ...patch }) as unknown as GameDetailData;
 
-const groupsOf = (
-  game: GameDetailData,
-  reviewCount = 0,
-  gmReview: "write" | "view" | null = null,
-) =>
+const groupsOf = (game: GameDetailData, gmReview: "write" | "view" | null = null) =>
   manageRowGroups({
     game,
-    reviewCount,
     gmReview: gmReview === null ? null : MANAGE_REVIEW_BUTTON[gmReview],
     now: NOW,
   });
@@ -126,15 +121,20 @@ describe("manageRowGroups", () => {
     });
   });
 
-  it("세션 후기는 시작 뒤 열리고 개수를 보인다", () => {
+  it("세션 후기는 시작 뒤 열리고 줄 설명은 기능만 적는다", () => {
     const live = gameWith({ confirmedAt: at(-HOUR / 2), scheduleMode: SCHEDULE_MODE.fixed });
     expect(rowOf(live, "review")).toMatchObject({
       label: "세션 후기 보기",
-      detail: "아직 후기가 없습니다",
+      detail: "참여자가 남긴 후기를 모아 봅니다",
       state: MANAGE_ROW_STATE.open,
     });
-    expect(groupsOf(live, 2).review[0]?.detail).toBe("후기 2개");
     expect(rowOf(coordinating, "review").detail).toBe("세션이 시작되면 열립니다");
+  });
+
+  it("다회차 후기 줄은 회차별로 모은다고 말한다", () => {
+    const live = gameWith({ confirmedAt: at(-HOUR / 2), scheduleMode: SCHEDULE_MODE.fixed });
+    const groups = manageRowGroups({ game: live, roundProgress: [], now: NOW });
+    expect(groups.review[0]?.detail).toBe("회차별로 후기를 모아 봅니다");
   });
 
   it("마스터링 후기를 쓸 수 있으면 작성 줄을, 이미 썼으면 보기 줄을 더한다", () => {
@@ -143,18 +143,18 @@ describe("manageRowGroups", () => {
       scheduleMode: SCHEDULE_MODE.fixed,
       endDate: at(-3 * DAY),
     });
-    const writable = groupsOf(ended, 0, "write").review[1];
+    const writable = groupsOf(ended, "write").review[1];
     expect(writable).toMatchObject({
       label: "마스터링 후기 작성하기",
       href: "/games/game/review",
       state: MANAGE_ROW_STATE.open,
     });
     expect(writable?.detail).toMatch(/까지 작성할 수 있습니다$/);
-    expect(groupsOf(ended, 0, "view").review[1]).toMatchObject({
+    expect(groupsOf(ended, "view").review[1]).toMatchObject({
       label: "내 마스터링 후기 보기",
       detail: "",
     });
-    expect(groupsOf(ended, 0, null).review).toHaveLength(1);
+    expect(groupsOf(ended, null).review).toHaveLength(1);
   });
 
   it("취소한 구인은 모든 줄이 잠기고 후기는 한 줄만 남는다", () => {
@@ -163,7 +163,7 @@ describe("manageRowGroups", () => {
       cancelKind: GAME_CANCEL_KIND.gm,
       confirmedAt: at(-2 * HOUR),
     });
-    const groups = groupsOf(cancelled, 0, "write");
+    const groups = groupsOf(cancelled, "write");
     const rows = [...groups.progress, ...groups.management, ...groups.review];
     expect(rows.every((row) => row.detail === "취소한 구인입니다")).toBe(true);
     expect(rows.every((row) => row.state === MANAGE_ROW_STATE.locked)).toBe(true);

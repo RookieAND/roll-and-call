@@ -22,13 +22,11 @@ export type ManageRowGroups = {
 // 줄 순서는 고정이다. 상태에 따라 순서를 바꾸지 않고 같은 자리에서 찾게 한다.
 export function manageRowGroups({
   game,
-  reviewCount,
   gmReview = null,
   roundProgress,
   now = new Date(),
 }: {
   game: GameDetailData;
-  reviewCount: number;
   gmReview?: ManageReviewButton | null;
   // 다회차면 회차 기준 「세션 진행」 줄. 명단은 구인이 끝날 때까지 열리고, 구인 수정은 C36-5의 진행 중 수정 범위로 열린다.
   roundProgress?: ManageRow[];
@@ -54,7 +52,7 @@ export function manageRowGroups({
         key: "review",
         icon: "message",
         label: "세션 후기 보기",
-        detail: reviewCount > 0 ? `후기 ${reviewCount}개` : "아직 후기가 없습니다",
+        detail: multiRound ? "회차별로 후기를 모아 봅니다" : "참여자가 남긴 후기를 모아 봅니다",
         href: `/games/${game.id}/reviews`,
         state: MANAGE_ROW_STATE.open,
       }
