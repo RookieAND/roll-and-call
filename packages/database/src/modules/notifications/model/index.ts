@@ -24,3 +24,4 @@ export {
   SELECTION_EXPIRED_CANCEL_TEXT,
   type GameCancelKind,
 } from "./game-cancel-kind";
+export { UNDO_WINDOW_MS } from "./undo-window";

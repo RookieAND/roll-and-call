@@ -108,3 +108,6 @@ export {
 } from "./commands/finish-stale-coordinated-games";
 export { getRoundAttendance } from "./queries/get-round-attendance";
 export { findGameRound } from "./queries/find-game-round";
+export { removeLastRound } from "./commands/remove-last-round";
+export { listRosterFinishers } from "./queries/list-roster-finishers";
+export { listGameRoundsInTransaction } from "./queries/list-game-rounds-in-transaction";

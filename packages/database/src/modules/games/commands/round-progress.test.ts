@@ -335,3 +335,21 @@ describe("조율형 30일 자동 종결", () => {
     expect((await roundsOf(gameId)).map((round) => round.roundNo)).toEqual([1]);
   });
 });
+
+describe("회차 추가 되돌리기", () => {
+  it("맨 뒤에 붙인 시작 전 회차만 지우고 회차 수를 줄인다", async () => {
+    const { removeLastRound } = await import("./remove-last-round");
+    const gameId = await seedGame({ count: 3 });
+    const now = new Date(BASE - HOUR);
+    const wrong = await db.transaction((transaction) =>
+      removeLastRound({ transaction, serverId: SERVER_ID, gameId, roundNo: 2, now }),
+    );
+    expect(wrong).toBe(false);
+    const removed = await db.transaction((transaction) =>
+      removeLastRound({ transaction, serverId: SERVER_ID, gameId, roundNo: 3, now }),
+    );
+    expect(removed).toBe(true);
+    expect((await gameOf(gameId)).roundCount).toBe(2);
+    expect((await roundsOf(gameId)).map((round) => round.roundNo)).toEqual([1, 2]);
+  });
+});

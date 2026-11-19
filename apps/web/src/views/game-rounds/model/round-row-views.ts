@@ -1,0 +1,99 @@
+import type { GameRoundRow } from "@roll-and-call/database/games";
+import { roundEndAt } from "@roll-and-call/database/games/model";
+import { isNil } from "es-toolkit";
+
+import { roundRangeLabel, roundSlotLabel } from "@/entities/game";
+
+import { roundRow, type RoundRowView } from "./round-row";
+import { ROUND_ROW_KIND } from "./round-row-kind";
+
+// 회차 일정 화면의 줄. 상태는 배지가 아니라 아이콘과 문장이다. 일정 없는 회차는 가장 앞 하나만 따로 보이고 나머지는 한 줄로 묶는다.
+export function roundRowViews({
+  rounds,
+  now,
+}: {
+  rounds: readonly GameRoundRow[];
+  now: Date;
+}): RoundRowView[] {
+  const views: RoundRowView[] = [];
+  const waiting: number[] = [];
+  for (const round of rounds) {
+    const prefix = `${round.roundNo}회차 · `;
+    if (round.status === "cancelling") {
+      views.push(
+        roundRow({
+          roundNo: round.roundNo,
+          kind: ROUND_ROW_KIND.cancelling,
+          label: `${prefix}취소하는 중입니다`,
+        }),
+      );
+      continue;
+    }
+    if (isNil(round.startAt) || isNil(round.plannedEndAt)) {
+      const hasOpenSlot = views.some(
+        (view) =>
+          view.kind === ROUND_ROW_KIND.unscheduled || view.kind === ROUND_ROW_KIND.coordinating,
+      );
+      if (round.status === "coordinating" && !hasOpenSlot) {
+        views.push(
+          roundRow({
+            roundNo: round.roundNo,
+            kind: ROUND_ROW_KIND.coordinating,
+            label: `${prefix}가능 시간을 모으고 있습니다`,
+          }),
+        );
+      } else if (!hasOpenSlot) {
+        views.push(
+          roundRow({
+            roundNo: round.roundNo,
+            kind: ROUND_ROW_KIND.unscheduled,
+            label: `${prefix}아직 정하지 않았습니다`,
+          }),
+        );
+      } else {
+        waiting.push(round.roundNo);
+      }
+      continue;
+    }
+    const endAt = roundEndAt(round)!;
+    if (round.startAt > now) {
+      views.push(
+        roundRow({
+          roundNo: round.roundNo,
+          kind: ROUND_ROW_KIND.scheduled,
+          label: `${prefix}${roundSlotLabel({ startsAt: round.startAt, endsAt: round.plannedEndAt })}`,
+        }),
+      );
+    } else if (endAt > now) {
+      views.push({
+        ...roundRow({
+          roundNo: round.roundNo,
+          kind: ROUND_ROW_KIND.inProgress,
+          label: `${prefix}지금 진행 중입니다`,
+        }),
+        attendanceRoundNo: round.roundNo,
+      });
+    } else {
+      const early = !isNil(round.endedAt) && round.endedAt < round.plannedEndAt;
+      views.push({
+        ...roundRow({
+          roundNo: round.roundNo,
+          kind: ROUND_ROW_KIND.finished,
+          label: `${prefix}${roundSlotLabel({ startsAt: round.startAt, endsAt: endAt })}`,
+        }),
+        note: early ? "일찍 마침" : null,
+        attendanceRoundNo: round.roundNo,
+      });
+    }
+  }
+  if (waiting.length > 0) {
+    views.push(
+      roundRow({
+        roundNo: waiting[0]!,
+        kind: ROUND_ROW_KIND.later,
+        label: `${roundRangeLabel(waiting)} · 앞 회차를 잡은 뒤 정합니다`,
+      }),
+    );
+  }
+  return views;
+}

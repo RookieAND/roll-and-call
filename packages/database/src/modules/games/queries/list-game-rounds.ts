@@ -12,6 +12,7 @@ export async function listGameRounds({ serverId, gameId }: { serverId: string; g
       startAt: gameRounds.startAt,
       plannedEndAt: gameRounds.plannedEndAt,
       endedAt: gameRounds.endedAt,
+      attendanceConfirmedAt: gameRounds.attendanceConfirmedAt,
       coordinationStart: gameRounds.coordinationStart,
       coordinationEnd: gameRounds.coordinationEnd,
     })

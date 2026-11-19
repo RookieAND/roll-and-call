@@ -165,3 +165,4 @@ export { STALE_ROUND_DAYS } from "./stale-round-days";
 export { isStaleCoordinatedGame } from "./is-stale-coordinated-game";
 export { roundCountChange, type RoundCountChange } from "./round-count-change";
 export { roundSkipBlock, type RoundSkipBlock } from "./round-skip-block";
+export { gameFinishedEarlyNotices } from "./game-finished-early-notices";
