@@ -100,6 +100,21 @@ describe("참여 카드", () => {
     expect(card.schedule).toMatch(/까지 조율 격자에 일정을 설정해야 합니다$/);
   });
 
+  it("추첨·선발로 참여자가 정해지기 전에는 일정 조율을 할 일로 띄우지 않는다", () => {
+    const lottery = playerCard({
+      participants: [confirmedMe],
+      recruitMethod: "lottery",
+      drawnAt: null,
+    });
+    expect(lottery.todo).toBeNull();
+    const selection = playerCard({
+      participants: [confirmedMe],
+      recruitMethod: "selection",
+      selectionFinishedAt: null,
+    });
+    expect(selection.todo).toBeNull();
+  });
+
   it("가능 시간을 내면 할 일이 사라진다", () => {
     expect(playerCard({ participants: [confirmedMe] }, ["g"]).todo).toBeNull();
   });
