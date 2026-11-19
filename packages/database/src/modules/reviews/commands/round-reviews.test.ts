@@ -108,3 +108,17 @@ describe("회차 후기", () => {
     expect(target?.review?.roundId).toBe(rounds[0]!.id);
   });
 });
+
+describe("회차 후기 목록", () => {
+  it("다회차 후기 카드에 회차 번호와 회차 시작을 붙인다", async () => {
+    const { getGameReviews } = await import("../queries/get-game-reviews");
+    const { participantReviews } = await getGameReviews({
+      serverId: SERVER_ID,
+      gameId,
+      viewerId: PLAYER_ID,
+    });
+    expect(participantReviews.map((row) => row.roundNo).toSorted()).toEqual([1, 2]);
+    const second = participantReviews.find((row) => row.roundNo === 2);
+    expect(second?.roundStartAt).toEqual(new Date(BASE + WEEK));
+  });
+});

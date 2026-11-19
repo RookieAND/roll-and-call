@@ -10,8 +10,12 @@ import { getCurrentSessionUser, getGameById, getCurrentServer } from "@/shared/s
 import { EmptyState } from "@/shared/ui";
 
 import { REVIEW_PERSPECTIVE } from "../model/review-perspective";
+import { roundReviewGroups } from "../model/round-review-groups";
+import { visibleReviewGroups } from "../model/visible-review-groups";
+import { FoldedReviewGroups } from "./folded-review-groups";
 import { ReviewList } from "./review-list";
 import { ReviewsPage } from "./reviews-page";
+import { RoundReviewGroup } from "./round-review-group";
 
 const NO_PARTICIPANT_REVIEWS = "아직 달린 후기가 없습니다";
 
@@ -43,17 +47,30 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
       </ReviewsPage>
     );
   }
-  const { gmReview, participantReviews } = await getGameReviews({
+  const { gmReview, gmReviews, participantReviews } = await getGameReviews({
     serverId: server.id,
     gameId,
     viewerId,
   });
+  const allRows = [...gmReviews, ...participantReviews];
   const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
-    userIds: [...(gmReview ? [gmReview] : []), ...participantReviews].map((row) => row.authorId),
+    userIds: allRows.map((row) => row.authorId),
     now: new Date(),
   });
   const hasReviews = gmReview || participantReviews.length > 0;
+  // 다회차는 GM 후기도 회차마다 있어 참석자 후기와 같이 회차별로 묶는다.
+  const roundGroups = game.roundCount > 1 ? visibleReviewGroups(roundReviewGroups(allRows)) : null;
+  const renderGroup = (group: ReturnType<typeof roundReviewGroups>[number]) => (
+    <RoundReviewGroup
+      key={group.roundNo}
+      roundNo={group.roundNo}
+      startAt={group.startAt}
+      rows={group.rows}
+      perspective={REVIEW_PERSPECTIVE.session}
+      viewerId={viewerId}
+    />
+  );
 
   return (
     <ReviewsPage title="세션 후기" back={`/games/${gameId}`}>
@@ -64,21 +81,32 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
       />
       {hasReviews ? (
         <MemberTitleSheetsProvider sheets={titleSheets}>
-          <VStack gap="150">
-            <ReviewList
-              rows={[...(gmReview ? [gmReview] : []), ...participantReviews]}
-              perspective={REVIEW_PERSPECTIVE.session}
-              viewerId={viewerId}
-              emptyText=""
-            />
-            {participantReviews.length === 0 && (
-              <Card.Root padding="md" radius={500} background="subtle" className="text-center">
-                <Text typography="subtitle2" foreground="muted">
-                  {NO_PARTICIPANT_REVIEWS}
-                </Text>
-              </Card.Root>
-            )}
-          </VStack>
+          {roundGroups ? (
+            <VStack gap="250">
+              {roundGroups.shown.map(renderGroup)}
+              {roundGroups.folded.length > 0 && (
+                <FoldedReviewGroups count={roundGroups.folded.length}>
+                  {roundGroups.folded.map(renderGroup)}
+                </FoldedReviewGroups>
+              )}
+            </VStack>
+          ) : (
+            <VStack gap="150">
+              <ReviewList
+                rows={[...(gmReview ? [gmReview] : []), ...participantReviews]}
+                perspective={REVIEW_PERSPECTIVE.session}
+                viewerId={viewerId}
+                emptyText=""
+              />
+              {participantReviews.length === 0 && (
+                <Card.Root padding="md" radius={500} background="subtle" className="text-center">
+                  <Text typography="subtitle2" foreground="muted">
+                    {NO_PARTICIPANT_REVIEWS}
+                  </Text>
+                </Card.Root>
+              )}
+            </VStack>
+          )}
         </MemberTitleSheetsProvider>
       ) : (
         <EmptyState

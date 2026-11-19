@@ -9,6 +9,7 @@ import { formatDate } from "@/shared/lib";
 import { ServerLink } from "@/shared/ui";
 
 import { reviewCardText } from "../model/review-card-text";
+import { reviewEditPath } from "../model/review-edit-path";
 import { REVIEW_PERSPECTIVE, type ReviewPerspective } from "../model/review-perspective";
 import { ReviewMenu } from "./review-menu";
 
@@ -39,7 +40,7 @@ export function ReviewList({ rows, perspective, viewerId, emptyText }: ReviewLis
         const menu = own && (
           <ReviewMenu
             reviewId={row.id}
-            editPath={editable ? `/games/${row.gameId}/review` : null}
+            editPath={editable ? reviewEditPath(row) : null}
             deleteSubject={`${row.gameTitle} · ${formatDate(row.sessionAt ?? row.createdAt)} 세션`}
           />
         );

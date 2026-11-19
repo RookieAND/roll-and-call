@@ -23,9 +23,11 @@ export async function getGameReviews({
     .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))
     .where(and(eq(sessionReviews.gameId, gameId), publicReviewsWhere({ serverId, viewerId })))
     .orderBy(desc(sessionReviews.createdAt));
-  // GM 후기는 구인당 최대 1건이라 참석자 후기와 따로 돌려준다.
+  // GM 후기는 단발이면 구인당 1건이라 참석자 후기와 따로 돌려준다. 다회차는 회차마다 있어 gmReviews로 모두 돌려준다.
+  const gmReviews = rows.filter((row) => row.authorRole === REVIEW_AUTHOR_ROLE.gm);
   return {
-    gmReview: rows.find((row) => row.authorRole === REVIEW_AUTHOR_ROLE.gm) ?? null,
+    gmReview: gmReviews[0] ?? null,
+    gmReviews,
     participantReviews: rows.filter((row) => row.authorRole !== REVIEW_AUTHOR_ROLE.gm),
   };
 }

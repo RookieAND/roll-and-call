@@ -20,3 +20,11 @@ describe("마스터링 후기 문구", () => {
     );
   });
 });
+
+describe("다회차 후기 제목", () => {
+  it("회차 번호를 앞에 붙인다", () => {
+    expect(reviewFormTitle({ editing: false, gm: false, roundNo: 3 })).toBe("3회차 후기");
+    expect(reviewFormTitle({ editing: false, gm: true, roundNo: 3 })).toBe("3회차 마스터링 후기");
+    expect(reviewFormTitle({ editing: false, gm: false })).toBe("후기 쓰기");
+  });
+});
