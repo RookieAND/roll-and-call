@@ -89,3 +89,16 @@ export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";
 export * from "./model";
 export { releaseMemberGames, type ReleasedMemberGames } from "./commands/release-member-games";
+export { addRound } from "./commands/add-round";
+export {
+  autoConfirmRoundAttendance,
+  type AutoConfirmedRound,
+} from "./commands/auto-confirm-round-attendance";
+export {
+  confirmRoundAttendance,
+  type RoundAttendanceResult,
+} from "./commands/confirm-round-attendance";
+export { endRound } from "./commands/end-round";
+export { finishGameEarly } from "./commands/finish-game-early";
+export { setRoundCount } from "./commands/set-round-count";
+export { skipRound } from "./commands/skip-round";

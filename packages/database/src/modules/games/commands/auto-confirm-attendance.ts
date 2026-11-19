@@ -92,6 +92,8 @@ export async function autoConfirmAttendance(
         sql`${firstRoundAttendanceConfirmedAtSql} is null`,
         isNull(games.attendanceFirstConfirmedAt),
         isNull(games.cancelledAt),
+        // 다회차는 회차마다 autoConfirmRoundAttendance가 확정한다.
+        eq(games.roundCount, 1),
         lte(deadline, now),
         exists(
           db
