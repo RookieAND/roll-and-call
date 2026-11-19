@@ -47,6 +47,9 @@ export const gameVisibility = pgEnum("game_visibility", ["public", "private"]);
 export const roundScheduleKind = pgEnum("round_schedule_kind", ["designated", "coordinated"]);
 
 // 내보내거나 떠난 참여자의 사유. removed는 불참 기록을 남긴 내보내기, mutual은 합의 하차, server_left는 서버 이탈이다.
+// 조기 종결 사유. manual은 GM의 [여기서 마치기]·회차 수 줄이기, stale은 조율형 30일 자동 종결이다.
+export const gameIncompleteReason = pgEnum("game_incomplete_reason", ["manual", "stale"]);
+
 export const participantLeftReason = pgEnum("participant_left_reason", [
   "removed",
   "mutual",
@@ -140,6 +143,7 @@ export const games = pgTable(
     finishedAt: timestamp("finished_at", { withTimezone: true }),
     // 조기 종결한 시각. 값이 있으면 finishedAt도 같이 채워진다.
     incompleteAt: timestamp("incomplete_at", { withTimezone: true }),
+    incompleteReason: gameIncompleteReason("incomplete_reason"),
     endDate: timestamp("end_date", { withTimezone: true }).notNull(),
     rangeStart: date("range_start"),
     rangeEnd: date("range_end"),
@@ -248,6 +252,10 @@ export const games = pgTable(
     check(
       "games_min_players_range",
       sql`${table.minPlayers} is null or (${table.minPlayers} >= 1 and ${table.minPlayers} <= ${table.maxPlayers})`,
+    ),
+    check(
+      "games_incomplete_reason_shape",
+      sql`(${table.incompleteAt} is null) = (${table.incompleteReason} is null)`,
     ),
     check("games_round_count_range", sql`${table.roundCount} between 1 and 52`),
     check("games_play_minutes_positive", sql`${table.playMinutes} > 0`),

@@ -20,6 +20,8 @@ export const notifications = pgTable(
     params: jsonb("params").$type<Record<string, unknown>>().notNull().default({}),
     // 만든 시각
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    // 이 시각부터 목록·숫자에 보인다. 되돌리기가 있는 동작은 토스트 시간만큼 미루고, 되돌리면 행을 지운다
+    visibleAt: timestamp("visible_at", { withTimezone: true }).notNull().defaultNow(),
     // null이면 안 읽음
     readAt: timestamp("read_at", { withTimezone: true }),
   },

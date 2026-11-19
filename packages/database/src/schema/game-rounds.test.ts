@@ -145,7 +145,10 @@ describe("games 요약 칼럼 트리거", () => {
     const game = await createGame(5);
     await db.insert(gameRounds).values(round(game.id, 1, 0));
     const incompleteAt = new Date(BASE + 6 * HOUR);
-    await db.update(games).set({ incompleteAt }).where(eq(games.id, game.id));
+    await db
+      .update(games)
+      .set({ incompleteAt, incompleteReason: "manual" })
+      .where(eq(games.id, game.id));
     const [saved] = await db.select().from(games).where(eq(games.id, game.id));
     expect(saved!.finishedAt).toEqual(incompleteAt);
   });
