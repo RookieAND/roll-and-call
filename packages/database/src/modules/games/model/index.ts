@@ -167,3 +167,4 @@ export { roundCountChange, type RoundCountChange } from "./round-count-change";
 export { roundSkipBlock, type RoundSkipBlock } from "./round-skip-block";
 export { gameFinishedEarlyNotices } from "./game-finished-early-notices";
 export { multiRoundNoticeLine } from "./multi-round-notice-line";
+export { roundScheduleChangeNotices } from "./round-schedule-change-notices";

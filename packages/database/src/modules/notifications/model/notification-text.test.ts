@@ -200,6 +200,45 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "세션이 끝나고 24시간이 지났습니다.",
   ],
   [
+    { kind: NOTIFICATION_KIND.roundAvailabilityRequested, params: { ...game, roundNo: 4 } },
+    "4회차 가능 시간을 알려 주세요",
+    "검은 산의 노래",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleSet,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-10-31T03:00:00Z",
+        endsAt: "2026-10-31T07:00:00Z",
+      },
+    },
+    "4회차 일정이 정해졌습니다",
+    "10월 31일 (토) 오후 12:00~4:00",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleChanged,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-11-07T03:00:00Z",
+        endsAt: "2026-11-07T07:00:00Z",
+      },
+    },
+    "4회차 일정이 바뀌었습니다",
+    "11월 7일 (토) 오후 12:00~4:00로 옮겨졌습니다",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.laterRoundsChanged,
+      params: { ...game, fromRoundNo: 5, toRoundNo: 6, shiftMs: 7 * 86_400_000 },
+    },
+    "이후 회차 일정이 바뀌었습니다",
+    "5~6회차가 한 주씩 뒤로 옮겨졌습니다",
+  ],
+  [
     { kind: NOTIFICATION_KIND.sessionReminder, params: { ...game, roundNo: 4 } },
     "검은 산의 노래 4회차 시작 1시간 전입니다.",
     null,

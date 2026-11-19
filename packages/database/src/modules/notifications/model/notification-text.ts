@@ -19,6 +19,8 @@ import {
   NOTIFICATION_KIND,
   type NotificationPayload,
 } from "./notification-kind";
+import { roundSpanText } from "./round-span-text";
+import { shiftPhrase } from "./shift-phrase";
 
 export interface NotificationText {
   pre: string;
@@ -194,6 +196,30 @@ export function notificationText(payload: NotificationPayload): NotificationText
         payload.params.gameTitle,
         " 구인이 일찍 마무리되었습니다.",
         finisher ? `${cause} 완주로 인정되었습니다.` : cause,
+      );
+    }
+    case NOTIFICATION_KIND.roundAvailabilityRequested:
+      return plain(
+        `${payload.params.roundNo}회차 가능 시간을 알려 주세요`,
+        payload.params.gameTitle,
+      );
+    case NOTIFICATION_KIND.roundScheduleSet:
+      return plain(
+        `${payload.params.roundNo}회차 일정이 정해졌습니다`,
+        roundSpanText(payload.params),
+      );
+    case NOTIFICATION_KIND.roundScheduleChanged:
+      return plain(
+        `${payload.params.roundNo}회차 일정이 바뀌었습니다`,
+        `${roundSpanText(payload.params)}로 옮겨졌습니다`,
+      );
+    case NOTIFICATION_KIND.laterRoundsChanged: {
+      const { fromRoundNo, toRoundNo, shiftMs } = payload.params;
+      const range =
+        fromRoundNo === toRoundNo ? `${fromRoundNo}회차` : `${fromRoundNo}~${toRoundNo}회차`;
+      return plain(
+        "이후 회차 일정이 바뀌었습니다",
+        `${range}가 ${shiftPhrase(shiftMs)} 옮겨졌습니다`,
       );
     }
     case NOTIFICATION_KIND.attendanceAutoConfirmed:

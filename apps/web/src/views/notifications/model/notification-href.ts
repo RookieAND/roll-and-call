@@ -27,6 +27,9 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.absenceRestored:
     case NOTIFICATION_KIND.attendanceAutoConfirmed:
     case NOTIFICATION_KIND.sessionReminder:
+    case NOTIFICATION_KIND.roundScheduleSet:
+    case NOTIFICATION_KIND.roundScheduleChanged:
+    case NOTIFICATION_KIND.laterRoundsChanged:
     case NOTIFICATION_KIND.roundSkipped:
     case NOTIFICATION_KIND.roundCountChanged:
     case NOTIFICATION_KIND.gameFinishedEarly:
@@ -38,6 +41,8 @@ export function notificationHref(payload: NotificationPayload): string | null {
         ? `/games/${gameId}/attendance?round=${roundNo}`
         : `/games/${gameId}/attendance`;
     }
+    case NOTIFICATION_KIND.roundAvailabilityRequested:
+      return `/games/${payload.params.gameId}/schedule?round=${payload.params.roundNo}`;
     case NOTIFICATION_KIND.participantLeft:
       return `/games/${payload.params.gameId}/participants`;
     case NOTIFICATION_KIND.drawWon:

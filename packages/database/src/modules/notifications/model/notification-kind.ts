@@ -52,6 +52,10 @@ export const NOTIFICATION_KIND = {
   roundSkipped: "round_skipped",
   roundCountChanged: "round_count_changed",
   gameFinishedEarly: "game_finished_early",
+  roundAvailabilityRequested: "round_availability_requested",
+  roundScheduleSet: "round_schedule_set",
+  roundScheduleChanged: "round_schedule_changed",
+  laterRoundsChanged: "later_rounds_changed",
 } as const;
 
 export type NotificationKind = (typeof NOTIFICATION_KIND)[keyof typeof NOTIFICATION_KIND];
@@ -134,6 +138,12 @@ export type NotificationParamsMap = {
   round_skipped: GameParams & { roundNo: number };
   round_count_changed: GameParams & { previousCount: number; nextCount: number };
   // manual은 GM이 roundNo회차에서 마친 것, stale은 조율형 30일 자동 종결이다. finisher는 받는 사람이 완주인지다.
+  // 다회차 일정(C36-11에서 보낸다). 날짜는 ISO 문자열이다. 지정형의 처음 일정에는 일정 확정 알림을 보내지 않는다.
+  round_availability_requested: GameParams & { roundNo: number };
+  round_schedule_set: GameParams & { roundNo: number; startsAt: string; endsAt: string };
+  round_schedule_changed: GameParams & { roundNo: number; startsAt: string; endsAt: string };
+  // 이후 회차를 함께 옮겼을 때 한 건으로 묶는다. shiftMs는 옮긴 간격(밀리초)이다.
+  later_rounds_changed: GameParams & { fromRoundNo: number; toRoundNo: number; shiftMs: number };
   game_finished_early: GameParams & {
     reason: "manual" | "stale";
     roundNo: number;

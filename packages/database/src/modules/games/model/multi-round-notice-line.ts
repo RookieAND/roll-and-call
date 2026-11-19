@@ -1,4 +1,4 @@
-import { formatDate } from "@roll-and-call/app-kit/date";
+import { formatDateWeekday } from "@roll-and-call/app-kit/date";
 import { isNil } from "es-toolkit";
 
 import type { GameRepeatRule } from "#db/schema";
@@ -31,5 +31,5 @@ export function multiRoundNoticeLine(game: {
     return `${total} · ${repeat} ${WEEKDAY[rule.weekday]} ${range}`;
   }
   if (isNil(game.confirmedAt)) return total;
-  return `${total} · 첫 회 ${formatDate(game.confirmedAt)}`;
+  return `${total} · 첫 회 ${formatDateWeekday(game.confirmedAt)}`;
 }
