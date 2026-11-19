@@ -227,6 +227,8 @@ export interface NoShow {
   added?: { by: string; at: Date; reason: string };
   // 다회차에서 불참으로 내보낸 회차의 시작. 있으면 30일을 세션 시작 대신 이 시각부터 센다.
   absenceAt?: Date;
+  // 다회차에서 내보낸 회차 번호. 찾지 못하면 없다.
+  kickedRound?: number;
 }
 
 export interface AuditEntry {

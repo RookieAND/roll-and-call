@@ -21,6 +21,7 @@ import { conflictToastText } from "@/shared/lib";
 import { saveMessageHeadAction } from "../api/save-message-head";
 import { saveMessageTextAction } from "../api/save-message-text";
 import type { MessageRole } from "../model/message-role";
+import { PREVIEW_EMBED_EXAMPLES } from "../model/preview-embed-specs";
 import { UNKNOWN_ROLE_WARNING, unknownRoleIds } from "../model/unknown-role-ids";
 import { DiscordPreview } from "./discord-preview";
 import { MessageField } from "./message-field";
@@ -65,6 +66,8 @@ export function MessageEditor({
   );
   const labels = [...new Set(texts.map((item) => item.label))];
   const [variant, setVariant] = useState(labels[0]);
+  const examples = PREVIEW_EMBED_EXAMPLES[caseKey];
+  const [exampleIndex, setExampleIndex] = useState(0);
   const [focused, setFocused] = useState<"head" | MessageTextKey>("head");
   const inputs = useRef<Record<string, (HTMLInputElement & HTMLTextAreaElement) | null>>({});
 
@@ -168,8 +171,27 @@ export function MessageEditor({
             </HStack>
           </VStack>
         ) : null}
+        {examples ? (
+          <VStack gap="075">
+            <Text typography="body4" weight="bold" foreground="muted">
+              예시
+            </Text>
+            <HStack wrap gap="075">
+              {examples.map((example, index) => (
+                <Chip
+                  key={example.label}
+                  selected={index === exampleIndex}
+                  onClick={() => setExampleIndex(index)}
+                >
+                  {example.label}
+                </Chip>
+              ))}
+            </HStack>
+          </VStack>
+        ) : null}
         <DiscordPreview
           caseKey={caseKey}
+          embedSpec={examples?.[exampleIndex]?.spec}
           text={text}
           bodyLine={line(bodyItem)}
           description={line(embedItem)}
@@ -178,6 +200,11 @@ export function MessageEditor({
         {caseKey === "open" ? (
           <Text typography="body4" foreground="hint">
             포럼 글 맨 위에 구인글 상세 링크가 고정으로 붙습니다. 본문과 버튼은 고칠 수 없습니다.
+          </Text>
+        ) : null}
+        {caseKey === "round_change" || caseKey === "round_availability" ? (
+          <Text typography="body4" foreground="hint">
+            본문은 고칠 수 없습니다.
           </Text>
         ) : null}
         {caseKey === "monthly" ? (

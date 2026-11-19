@@ -115,3 +115,4 @@ export { addLateParticipant } from "./commands/add-late-participant";
 export { removeLateParticipant } from "./commands/remove-late-participant";
 export { listThreadsToLock } from "./queries/list-threads-to-lock";
 export { markThreadLocked } from "./commands/mark-thread-locked";
+export { getAdminGameRounds, type AdminGameRounds } from "./queries/get-admin-game-rounds";

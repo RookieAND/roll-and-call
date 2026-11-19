@@ -83,7 +83,9 @@ export function NoShowsMobileView({ rows, detail, sort, query, filtered }: NoSho
                     )
                   }
                   description={row.sessionTitle}
-                  meta={`GM ${row.gmNickname}`}
+                  meta={
+                    row.kickHint ? `GM ${row.gmNickname} · ${row.kickHint}` : `GM ${row.gmNickname}`
+                  }
                   muted={cancelled}
                 />
               );

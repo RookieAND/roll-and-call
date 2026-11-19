@@ -11,7 +11,7 @@ import Image from "next/image";
 import { DISCORD } from "@/shared/lib";
 
 import type { MessageRole } from "../model/message-role";
-import { PREVIEW_EMBED_SPECS } from "../model/preview-embed-specs";
+import { PREVIEW_EMBED_SPECS, type PreviewEmbedSpec } from "../model/preview-embed-specs";
 import { Mention } from "./discord-mention";
 import { PreviewEmbed } from "./preview-embed";
 import { PreviewMonthly } from "./preview-monthly";
@@ -91,6 +91,8 @@ interface DiscordPreviewProps {
   bodyLine?: { key: MessageTextKey; text: string };
   guildRoles?: MessageRole[];
   loading?: boolean;
+  // 고른 예시. 없으면 경우의 기본 모양을 쓴다.
+  embedSpec?: PreviewEmbedSpec;
 }
 
 // 경우마다 실제로 나가는 모양(평문 또는 임베드의 칸·푸터·버튼)으로 보여 주고 설명 문장만 바꿔 끼운다. 변수는 예시 값으로 바꾼다.
@@ -101,6 +103,7 @@ export function DiscordPreview({
   bodyLine,
   guildRoles,
   loading,
+  embedSpec: chosenSpec,
 }: DiscordPreviewProps) {
   const nodes = loading
     ? null
@@ -120,7 +123,7 @@ export function DiscordPreview({
         guildRoles,
       })
     : null;
-  const embedSpec = PREVIEW_EMBED_SPECS[caseKey];
+  const embedSpec = chosenSpec ?? PREVIEW_EMBED_SPECS[caseKey];
   return (
     <div
       className="flex gap-150 rounded-400 px-200 py-150"

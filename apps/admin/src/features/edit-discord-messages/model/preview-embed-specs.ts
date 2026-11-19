@@ -13,6 +13,8 @@ export interface PreviewEmbedSpec {
   color: string;
   // 제목이 링크가 아닌 알림(구인 취소).
   unlinked?: boolean;
+  // 설명 문장 앞에 붙는 고정 첫 줄(다회차 예시).
+  descriptionPrefix?: string;
   // 설명 문장 뒤에 항상 붙는 고정 문구.
   descriptionSuffix?: string;
   fields: PreviewField[];
@@ -27,6 +29,43 @@ const HEADCOUNT: PreviewField[] = [
 ];
 
 const SESSION_TIME: PreviewField = { name: "🕒 시간", value: "9월 27일 (일) 20:00", inline: true };
+
+const START_SPEC: PreviewEmbedSpec = {
+  emoji: "🚀",
+  color: DISCORD.recruit,
+  fields: [{ name: "📜 룰", value: "피아스코", inline: true }],
+  button: "🌐 웹에서 작성하기",
+};
+
+const ROUND_SKIP_SPEC: PreviewEmbedSpec = {
+  emoji: "🗓️",
+  color: DISCORD.recruit,
+  descriptionSuffix: "2회차가 생략되었습니다. 뒤 회차 번호가 하나씩 당겨졌습니다.",
+  fields: [],
+};
+
+// 같은 경우에 보낼 수 있는 예시가 여럿이면 미리보기 위에서 고른다. 첫 예시가 기본이다.
+export const PREVIEW_EMBED_EXAMPLES: Partial<
+  Record<MessageCaseKey, { label: string; spec: PreviewEmbedSpec }[]>
+> = {
+  start: [
+    { label: "한 번 진행", spec: START_SPEC },
+    {
+      label: "여러 번 진행",
+      spec: { ...START_SPEC, descriptionPrefix: "3회차가 시작되었습니다." },
+    },
+  ],
+  round_change: [
+    { label: "생략", spec: ROUND_SKIP_SPEC },
+    {
+      label: "옮김",
+      spec: {
+        ...ROUND_SKIP_SPEC,
+        descriptionSuffix: "4회차가 11월 7일 (토) 오후 12:00~4:00로 옮겨졌습니다.",
+      },
+    },
+  ],
+};
 
 // 코드가 실제로 보내는 임베드(제목 이모지·색·칸·버튼)와 같게 둔다. 임베드를 쓰지 않는 구인 개설(포럼 평문)과 이달의 GM·PL은 없다.
 export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpec>> = {
@@ -65,19 +104,9 @@ export const PREVIEW_EMBED_SPECS: Partial<Record<MessageCaseKey, PreviewEmbedSpe
     color: DISCORD.recruit,
     fields: [{ name: "📜 룰", value: "피아스코", inline: true }, SESSION_TIME],
   },
-  start: {
-    emoji: "🚀",
-    color: DISCORD.recruit,
-    fields: [{ name: "📜 룰", value: "피아스코", inline: true }],
-    button: "🌐 웹에서 작성하기",
-  },
+  start: START_SPEC,
   cancel: { emoji: "🚫", color: DISCORD.cancelled, unlinked: true, fields: [] },
-  round_change: {
-    emoji: "🗓️",
-    color: DISCORD.recruit,
-    descriptionSuffix: "2회차가 생략되었습니다. 뒤 회차 번호가 하나씩 당겨졌습니다.",
-    fields: [],
-  },
+  round_change: ROUND_SKIP_SPEC,
   round_availability: {
     emoji: "🗓️",
     color: DISCORD.recruit,

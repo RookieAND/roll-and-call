@@ -3,10 +3,13 @@ import { Grid, Text, VStack } from "@roll-and-call/ui";
 import type { PostDetail } from "@/entities/post/server";
 import { FactRows, Tag, ZoomablePhotos } from "@/shared/ui";
 
+import type { AdminRoundsView } from "../model/admin-rounds";
 import { ContentSection } from "./content-section";
 import { ContentText } from "./content-text";
+import { RoundsSection } from "./rounds-section";
 
 interface ContentPanelProps {
+  rounds: AdminRoundsView | null;
   post: Pick<
     PostDetail,
     | "title"
@@ -25,7 +28,7 @@ interface ContentPanelProps {
 }
 
 // 어드민에서는 스포일러를 가리지 않는다.
-export function ContentPanel({ post }: ContentPanelProps) {
+export function ContentPanel({ post, rounds }: ContentPanelProps) {
   const tagsOf = (values: string[]) =>
     values.length ? values.map((value) => <Tag key={value}>{value}</Tag>) : "없음";
   const aiImageBadge = post.aiImage ? <Tag tone="warning">사용</Tag> : <Tag>사용 안 함</Tag>;
@@ -44,6 +47,7 @@ export function ContentPanel({ post }: ContentPanelProps) {
           ]}
         />
       </ContentSection>
+      {rounds ? <RoundsSection rounds={rounds} /> : null}
       <ContentSection
         title="시놉시스"
         right={

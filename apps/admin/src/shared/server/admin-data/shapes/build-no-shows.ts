@@ -1,6 +1,6 @@
 import { ABSENCE_ADDED_TAG_LABEL } from "@roll-and-call/database/games/model";
-import { isRoundKickAbsence } from "@roll-and-call/database/games/model";
-import { isNull } from "es-toolkit";
+import { isRoundKickAbsence, kickRoundNumber } from "@roll-and-call/database/games/model";
+import { groupBy, isNull } from "es-toolkit";
 
 import { isAbsenceAddedTag } from "@/shared/lib";
 
@@ -17,11 +17,16 @@ export function buildNoShows({ tables, nicknameOf }: ShapeContext): NoShow[] {
     if (game.roundCount > 1) return isRoundKickAbsence({ ...row, absenceCancelledAt: null });
     return row.absent && Boolean(game.attendanceConfirmedAt);
   };
+  const roundsOf = groupBy(tables.roundRows, (round) => round.gameId);
   return tables.participantRows.filter(counts).map((row) => ({
     id: noShowId(row.gameId, row.userId),
     userId: row.userId,
     sessionId: row.gameId,
     absenceAt: row.absenceAt ?? undefined,
+    kickedRound: row.absenceAt
+      ? (kickRoundNumber({ absenceAt: row.absenceAt, rounds: roundsOf[row.gameId] ?? [] }) ??
+        undefined)
+      : undefined,
     cancelled: !isNull(row.absenceCancelledAt),
     cancelledBy: row.absenceCancelledBy ? nicknameOf(row.absenceCancelledBy) : undefined,
     cancelledAt: row.absenceCancelledAt ?? undefined,

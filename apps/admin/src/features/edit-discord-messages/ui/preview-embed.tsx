@@ -20,10 +20,12 @@ export function PreviewEmbed({ spec, description }: PreviewEmbedProps) {
       <span className="font-semibold" style={spec.unlinked ? undefined : { color: DISCORD.link }}>
         {spec.emoji} 달그림자 여관
       </span>
-      {description ? (
+      {description || spec.descriptionPrefix || spec.descriptionSuffix ? (
         <div className="text-body3 leading-5 whitespace-pre-line wrap-anywhere">
+          {spec.descriptionPrefix ? `${spec.descriptionPrefix}\n` : null}
           {description}
-          {spec.descriptionSuffix ? `\n${spec.descriptionSuffix}` : null}
+          {description && spec.descriptionSuffix ? "\n" : null}
+          {spec.descriptionSuffix}
         </div>
       ) : (
         <span

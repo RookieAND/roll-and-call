@@ -121,9 +121,15 @@ export function AddNoShowForm({ search, onClose, onAdded }: AddNoShowFormProps) 
                     label={`${candidate.title} · GM ${candidate.gmNickname} · ${formatFullDateTime(candidate.startsAt)}`}
                     note={candidate.autoConfirmed ? "자동 확정" : "GM 확정"}
                     selected={candidate.id === session?.id}
+                    disabled={candidate.multiRound}
                   />
                 ))}
               </OptionList>
+            ) : null}
+            {shownSessions.some((candidate) => candidate.multiRound) ? (
+              <Text typography="body4" foreground="hint">
+                여러 번 진행하는 구인은 GM이 불참으로 내보낼 때만 불참 기록이 남습니다.
+              </Text>
             ) : null}
           </VStack>
           {session ? (

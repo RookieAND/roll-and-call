@@ -77,6 +77,7 @@ export function CancelNoShowDialog({ record, summary, closeHref }: CancelNoShowD
               kind: NOTIFICATION_KIND.absenceCancelled,
               params: { gameId: record.gameId, gameTitle: record.sessionTitle },
             }}
+            note={record.multiRound ? "참여자 명단은 바뀌지 않습니다." : undefined}
             submit={(reason) => cancelNoShowRecord({ noShowId: record.id, reason })}
             onClose={close}
           />

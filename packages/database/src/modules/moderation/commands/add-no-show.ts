@@ -26,6 +26,9 @@ const REASON_MAX = 200;
 
 export const ADD_NO_SHOW_FAILURE = { notEligible: "notEligible", conflict: "conflict" } as const;
 
+export const MULTI_ROUND_NO_SHOW_ERROR =
+  "여러 번 진행하는 구인은 GM이 불참으로 내보낼 때만 불참 기록이 남습니다.";
+
 export type AddNoShowResult =
   | { ok: true }
   | { ok: false; reason: typeof ADD_NO_SHOW_FAILURE.notEligible }
@@ -66,9 +69,11 @@ export async function addNoShow({
       .select({
         confirmedAt: firstRoundStartSql,
         attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
+        roundCount: games.roundCount,
       })
       .from(games)
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+    if (game && game.roundCount > 1) throw new Error(MULTI_ROUND_NO_SHOW_ERROR);
     const [current] = await tx
       .select({ status: participants.status })
       .from(participants)
