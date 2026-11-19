@@ -26,7 +26,5 @@ export type ManageRow = {
   action?: ManageRowAction;
   // 다회차의 회차 마치기. 이 회차만 마치고, 마지막 회차면 확인 창에 한 줄을 더한다.
   round?: { roundNo: number; lastRound: boolean; plannedEndAt: Date };
-  // 줄 오른쪽의 글자 버튼. 줄 자체의 이동과 따로 간다.
-  extraAction?: { label: string; href: string };
   state: ManageRowState;
 };

@@ -2,7 +2,8 @@ import type { GameRoundRow } from "@roll-and-call/database/games";
 import { roundEndAt } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
-import { roundRangeLabel, roundSlotLabel } from "@/entities/game";
+import { roundRangeLabel, roundSlotLabel, roundTimeRange } from "@/entities/game";
+import { formatDateWeekday } from "@/shared/lib";
 
 import { roundRow, type RoundRowView } from "./round-row";
 import { ROUND_ROW_KIND } from "./round-row-kind";
@@ -34,6 +35,7 @@ export function roundRowViews({
           roundNo: round.roundNo,
           kind: ROUND_ROW_KIND.cancelling,
           label: `${prefix}취소하는 중입니다`,
+          title: "취소하는 중입니다",
         }),
       );
       continue;
@@ -49,6 +51,10 @@ export function roundRowViews({
             roundNo: round.roundNo,
             kind: ROUND_ROW_KIND.coordinating,
             label: `${prefix}가능 시간을 모으고 있습니다`,
+            title: "가능 시간을 모으고 있습니다",
+            subtitle: coordinationResponse
+              ? `응답 ${coordinationResponse.respondedCount}/${coordinationResponse.totalCount}명`
+              : null,
           }),
           note: coordinationResponse
             ? `응답 ${coordinationResponse.respondedCount}/${coordinationResponse.totalCount}명`
@@ -61,6 +67,7 @@ export function roundRowViews({
             roundNo: round.roundNo,
             kind: ROUND_ROW_KIND.unscheduled,
             label: `${prefix}아직 정하지 않았습니다`,
+            title: "아직 정하지 않았습니다",
           }),
           scheduleRoundNo: canSchedule ? round.roundNo : null,
         });
@@ -76,6 +83,8 @@ export function roundRowViews({
           roundNo: round.roundNo,
           kind: ROUND_ROW_KIND.scheduled,
           label: `${prefix}${roundSlotLabel({ startsAt: round.startAt, endsAt: round.plannedEndAt })}`,
+          title: formatDateWeekday(round.startAt),
+          subtitle: roundTimeRange({ startsAt: round.startAt, endsAt: round.plannedEndAt }),
         }),
         scheduleRoundNo: canMove ? round.roundNo : null,
       });
@@ -85,6 +94,8 @@ export function roundRowViews({
           roundNo: round.roundNo,
           kind: ROUND_ROW_KIND.inProgress,
           label: `${prefix}지금 진행 중입니다`,
+          title: formatDateWeekday(round.startAt),
+          subtitle: roundTimeRange({ startsAt: round.startAt, endsAt: round.plannedEndAt }),
         }),
         attendanceRoundNo: round.roundNo,
       });
@@ -95,6 +106,8 @@ export function roundRowViews({
           roundNo: round.roundNo,
           kind: ROUND_ROW_KIND.finished,
           label: `${prefix}${roundSlotLabel({ startsAt: round.startAt, endsAt: endAt })}`,
+          title: formatDateWeekday(round.startAt),
+          subtitle: `${roundTimeRange({ startsAt: round.startAt, endsAt: endAt })}${early ? " · 일찍 마침" : ""}`,
         }),
         note: early ? "일찍 마침" : null,
         attendanceRoundNo: round.roundNo,
@@ -102,13 +115,15 @@ export function roundRowViews({
     }
   }
   if (waiting.length > 0) {
-    views.push(
-      roundRow({
+    views.push({
+      ...roundRow({
         roundNo: waiting[0]!,
         kind: ROUND_ROW_KIND.later,
         label: `${roundRangeLabel(waiting)} · 앞 회차를 잡은 뒤 정합니다`,
+        title: `${roundRangeLabel(waiting)} · 앞 회차를 잡은 뒤 정합니다`,
       }),
-    );
+      roundNo: null,
+    });
   }
   return views;
 }

@@ -42,14 +42,8 @@ export function RoundCoordinationOpenForm({
 
   const dateError = start && end ? roundCoordinationError({ start, end, today }) : null;
   const descriptions = rescheduling
-    ? [
-        "지금 일정은 그대로 두고 가능 시간을 다시 모읍니다.",
-        "조율이 끝나기 전에는 원래 일정이 유지됩니다.",
-      ]
-    : [
-        "참여자가 가능한 시간을 칠하면 겹치는 시간을 보여 드립니다.",
-        "확정된 참여자만 칠할 수 있습니다.",
-      ];
+    ? ["조율이 끝나기 전에는 원래 일정이 유지됩니다."]
+    : ["확정된 참여자만 칠할 수 있습니다."];
 
   function changeStartHour(next: string) {
     setStartHour(next);

@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 
+import { manageRoundProgress } from "./manage-round-progress";
 import { MANAGE_ROW_STATE } from "./manage-row-state";
 import { multiRoundProgressRows } from "./multi-round-progress-rows";
 import { multiRoundStage } from "./multi-round-stage";
+import { multiRoundTimeline } from "./multi-round-timeline";
+import { nextScheduleAction } from "./next-schedule-action";
 
 const HOUR = 3_600_000;
 const WEEK = 7 * 24 * HOUR;
@@ -80,7 +83,8 @@ describe("다회차 세션 진행 줄", () => {
       rounds: [dated(1), dated(2), dated(3)],
       now: new Date(BASE + WEEK + HOUR),
     });
-    expect(schedule!.detail).toBe("3/3회");
+    expect(schedule!.label).toBe("회차 일정");
+    expect(schedule!.detail).toContain("· 3/3회");
     expect(attendance).toMatchObject({
       label: "2회차 출석 확인",
       href: "/games/g1/attendance?round=2",
@@ -89,19 +93,18 @@ describe("다회차 세션 진행 줄", () => {
     expect(end).toMatchObject({ label: "2회차 마치기", round: { roundNo: 2, lastRound: false } });
   });
 
-  it("조율형이고 다음 회차가 없으면 가장 앞 미정 회차의 일정 잡기 버튼을 둔다", () => {
+  it("조율형이고 다음 회차가 없으면 가장 앞 미정 회차의 일정 잡기 행동을 준다", () => {
     const coordinated = { ...game, roundScheduleKind: "coordinated" };
     const now = new Date(BASE + WEEK + 5 * HOUR);
     const rounds = [dated(1), dated(2), pending];
-    expect(multiRoundProgressRows({ game: coordinated, rounds, now })[0]!.extraAction).toEqual({
+    expect(nextScheduleAction({ game: coordinated, rounds, now })).toEqual({
       label: "3회차 일정 잡기",
       href: "/games/g1/rounds/3/schedule",
     });
-    expect(multiRoundProgressRows({ game, rounds, now })[0]!.extraAction).toBeUndefined();
+    expect(nextScheduleAction({ game, rounds, now })).toBeNull();
     expect(
-      multiRoundProgressRows({ game: { ...coordinated, finishedAt: now }, rounds, now })[0]!
-        .extraAction,
-    ).toBeUndefined();
+      nextScheduleAction({ game: { ...coordinated, finishedAt: now }, rounds, now }),
+    ).toBeNull();
   });
 
   it("회차 사이에는 마치기가 잠긴다", () => {
@@ -111,5 +114,36 @@ describe("다회차 세션 진행 줄", () => {
       now: new Date(BASE + 5 * HOUR),
     });
     expect(rows[2]!.state).toBe(MANAGE_ROW_STATE.locked);
+  });
+});
+
+describe("다회차 진행 표시", () => {
+  const rounds = [dated(1), dated(2), dated(3), { ...pending, roundNo: 4 }];
+
+  it("회차마다 끝남·진행 중·남음으로 나눈다", () => {
+    const steps = multiRoundTimeline({ rounds, now: new Date(BASE + WEEK + HOUR) });
+    expect(steps.map((step) => [step.name, step.state])).toEqual([
+      ["1회차", "done"],
+      ["2회차", "current"],
+      ["3회차", "todo"],
+      ["4회차", "todo"],
+    ]);
+    expect(steps[3]!.detail).toBe("일정을 아직 정하지 않았습니다");
+  });
+
+  it("마친 회차 수를 세고 조기 종결이면 마친 회차에서 멈춘다", () => {
+    const now = new Date(BASE + WEEK + 5 * HOUR);
+    const open = { roundCount: 4, finishedAt: null, incompleteAt: null };
+    expect(manageRoundProgress({ game: open, rounds, now })).toEqual({
+      done: 2,
+      total: 4,
+      early: false,
+    });
+    const early = { roundCount: 4, finishedAt: now, incompleteAt: now };
+    expect(manageRoundProgress({ game: early, rounds, now })).toEqual({
+      done: 2,
+      total: 4,
+      early: true,
+    });
   });
 });

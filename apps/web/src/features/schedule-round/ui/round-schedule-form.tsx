@@ -1,7 +1,7 @@
 "use client";
 
 import { UNDO_WINDOW_MS } from "@roll-and-call/database/notifications/model";
-import { Button, Field, Text, VStack } from "@roll-and-call/ui";
+import { Button, Field, VStack } from "@roll-and-call/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ import type { LaterRound } from "../model/later-round-preview";
 import type { RoundCandidate } from "../model/round-candidate";
 import { LaterRoundsSwitch } from "./later-rounds-switch";
 import { RoundCandidateList } from "./round-candidate-list";
-import { ScheduleConflictCallout } from "./schedule-conflict-callout";
+import { ScheduleConflictSection } from "./schedule-conflict-section";
 
 const MINUTE_MS = 60_000;
 const GM_OVERLAP_MESSAGE = "이 시간에 다른 세션이 있습니다.";
@@ -131,11 +131,6 @@ export function RoundScheduleForm({
 
   return (
     <VStack gap="200">
-      <Text typography="body3" foreground="muted">
-        {moving
-          ? "새 일시로 옮기고 참여자에게 알립니다."
-          : "날짜와 시각을 정하면 참여자에게 알립니다."}
-      </Text>
       {candidates.length > 0 && (
         <RoundCandidateList
           candidates={candidates}
@@ -164,7 +159,7 @@ export function RoundScheduleForm({
         />
       )}
       {conflict && (
-        <ScheduleConflictCallout
+        <ScheduleConflictSection
           gameId={gameId}
           conflict={conflict}
           nicknames={nicknames}

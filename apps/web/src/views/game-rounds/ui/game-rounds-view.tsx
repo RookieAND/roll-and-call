@@ -4,8 +4,8 @@ import {
   listGameRounds,
 } from "@roll-and-call/database/games";
 import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
-import { Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
-import { TriangleAlert } from "lucide-react";
+import { Callout, Card, Container, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { notFound, redirect } from "next/navigation";
 
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
@@ -14,12 +14,15 @@ import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
+import { ROUND_ROW_KIND } from "../model/round-row-kind";
 import { roundRowViews } from "../model/round-row-views";
 import { roundsSummary } from "../model/rounds-summary";
 import { staleNotice } from "../model/stale-notice";
 import { visibleRoundRows } from "../model/visible-round-rows";
 import { FoldedRoundRows } from "./folded-round-rows";
+import { NextScheduleCard } from "./next-schedule-card";
 import { RoundRow } from "./round-row";
+import { RoundsProgressCard } from "./rounds-progress-card";
 
 const MINUTE_MS = 60_000;
 
@@ -86,18 +89,54 @@ export async function GameRoundsView({ id }: GameRoundsViewProps) {
       ? (lastRound.plannedEndAt.getTime() - lastRound.startAt.getTime()) / MINUTE_MS
       : (game.playMinutes ?? DEFAULT_PLAY_MINUTES);
 
+  const nextView = [...folded, ...shown].find(
+    (view) =>
+      !isNull(view.scheduleRoundNo) &&
+      (view.kind === ROUND_ROW_KIND.unscheduled || view.kind === ROUND_ROW_KIND.coordinating),
+  );
+  const progressCard = <RoundsProgressCard {...summary} />;
+  const nextCard = nextView ? (
+    <NextScheduleCard
+      gameId={id}
+      roundNo={nextView.scheduleRoundNo!}
+      response={nextView.kind === ROUND_ROW_KIND.coordinating ? coordination : null}
+    />
+  ) : null;
+  const planActions = ended ? null : (
+    <RoundPlanActions
+      gameId={id}
+      roundCount={game.roundCount}
+      startedCount={startedCount}
+      designated={game.roundScheduleKind === "designated"}
+      canAddRound={canAddRound}
+      defaultMinutes={defaultMinutes}
+    />
+  );
+
   return (
-    <PageShell readable appBar={appBar}>
+    <PageShell
+      readable
+      appBar={appBar}
+      panel={
+        <>
+          {progressCard}
+          {nextCard}
+          {planActions}
+        </>
+      }
+    >
       <div className={DESKTOP_CARD_CLASS}>
         <Container size="sm">
           <VStack gap="200" className="py-200">
-            <VStack gap="050">
-              <Text typography="heading3" weight="extrabold" render={<h2 />}>
-                {summary.title}
-              </Text>
-              <Text typography="body3" foreground="muted">
-                {summary.sub}
-              </Text>
+            {notice && (
+              <Callout.Root colorPalette={notice.warning ? "warning" : "gray"} size="sm">
+                <Callout.Icon />
+                <Callout.Description>{notice.text}</Callout.Description>
+              </Callout.Root>
+            )}
+            <VStack gap="200" className="desktop:hidden">
+              {progressCard}
+              {nextCard}
             </VStack>
             <Card.Root
               radius={500}
@@ -109,26 +148,7 @@ export async function GameRoundsView({ id }: GameRoundsViewProps) {
                 <RoundRow key={view.key} gameId={id} view={view} />
               ))}
             </Card.Root>
-            {notice && (
-              <HStack align="center" gap="075">
-                {notice.warning && (
-                  <TriangleAlert size={16} aria-hidden className="flex-none text-warning-600" />
-                )}
-                <Text typography="body4" foreground={notice.warning ? "normal" : "hint"}>
-                  {notice.text}
-                </Text>
-              </HStack>
-            )}
-            {!ended && (
-              <RoundPlanActions
-                gameId={id}
-                roundCount={game.roundCount}
-                startedCount={startedCount}
-                designated={game.roundScheduleKind === "designated"}
-                canAddRound={canAddRound}
-                defaultMinutes={defaultMinutes}
-              />
-            )}
+            <div className="desktop:hidden">{planActions}</div>
           </VStack>
         </Container>
       </div>
