@@ -84,7 +84,7 @@ export async function MyBadgesView({ tab }: MyBadgesViewProps) {
         <div className="overflow-clip rounded-700 border border-gray-200 bg-surface">
           <DexHeader earnedCount={badgeCount.total} featured={featured} />
           {board && (
-            <DexSection title={board.monthly.title}>
+            <DexSection title={board.monthly.title} hint={board.monthly.condition}>
               <DexMonthlyCard card={board.monthly} />
             </DexSection>
           )}
