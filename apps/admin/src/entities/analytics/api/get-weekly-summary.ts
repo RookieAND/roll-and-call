@@ -4,6 +4,7 @@ import { compact, mean } from "es-toolkit";
 
 import { loadAdminData } from "@/shared/server";
 
+import { expandRoundSessions } from "../model/expand-round-sessions";
 import { weekLabel } from "../model/week-label";
 
 const WEEK = 7 * 86_400_000;
@@ -35,7 +36,7 @@ export interface WeeklySummary {
 // 이번 주는 오늘까지의 7일이다. 평균은 최근 7일을 뺀 지난 7주로 낸다.
 // 새 구인은 숨김·취소를 뺀 만든 시각(R6), 진행된 세션은 인정 세션의 시작 시각(R5)으로 센다.
 export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySummary> {
-  const db = await loadAdminData(["users", "sessions"]);
+  const db = await loadAdminData(["users", "sessions", "rounds"]);
   const end = now.getTime();
   const weekIndex = (date: Date) => {
     const weeksAgo = Math.floor((end - date.getTime()) / WEEK);
@@ -78,7 +79,7 @@ export async function getWeeklySummary(now: Date = new Date()): Promise<WeeklySu
     ),
     finishedSessions: toSeries(
       countBy(
-        db.sessions
+        expandRoundSessions(db.sessions, db.rounds)
           .filter((session) => isRecognizedPost(session, now))
           .map((session) => session.startsAt),
       ),

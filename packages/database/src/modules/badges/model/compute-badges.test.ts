@@ -22,6 +22,8 @@ function session(index: number, categoryId: string | null = "coc"): BadgeSession
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
+  playedRounds: overrides.played ?? [],
+  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],

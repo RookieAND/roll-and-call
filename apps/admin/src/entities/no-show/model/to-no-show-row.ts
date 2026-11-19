@@ -40,7 +40,11 @@ export function toNoShowRow({ db, noShow, now }: ToNoShowRowOptions): NoShowRow 
     startsAt: session.startsAt,
     gmNickname,
     handler: noShow.added ? `${noShow.added.by} · 운영진` : gmNickname,
-    status: noShowStatusOf({ cancelled: noShow.cancelled, startsAt: session.startsAt, now }),
+    status: noShowStatusOf({
+      cancelled: noShow.cancelled,
+      startsAt: noShow.absenceAt ?? session.startsAt,
+      now,
+    }),
     cancelled: noShow.cancelled,
   };
 }

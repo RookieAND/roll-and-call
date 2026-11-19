@@ -7,6 +7,9 @@ interface SessionParticipant {
   status: ParticipantStatus;
   joinedAt: Date | string;
   absent: boolean;
+  absenceAt?: Date | string | null;
+  lateJoined?: boolean;
+  leftReason?: string | null;
 }
 
 export type SessionGame = Game & {

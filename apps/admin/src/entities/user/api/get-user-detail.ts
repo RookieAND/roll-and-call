@@ -1,4 +1,5 @@
 import "server-only";
+import { loadBadgeFacts } from "@roll-and-call/database/badges";
 import { isAbsenceActive } from "@roll-and-call/database/games/model";
 import {
   isSanctioned,
@@ -6,7 +7,13 @@ import {
   recentNoShowCountsByUser,
 } from "@roll-and-call/database/moderation/model";
 
-import { loadAdminData, loadAuditEntries, type Snapshot, type Session } from "@/shared/server";
+import {
+  getCurrentServer,
+  loadAdminData,
+  loadAuditEntries,
+  type Snapshot,
+  type Session,
+} from "@/shared/server";
 
 import { previousNicknameOf } from "../model/previous-nickname-of";
 import { staffMemoRowsOf } from "../model/staff-memo-rows-of";
@@ -28,6 +35,9 @@ export async function getUserDetail(userId: string) {
   if (!user) return null;
   // 활동 기록은 이 사람이 대상인 기록만 본다.
   const auditLog = await loadAuditEntries({ targetUserId: userId });
+  const server = await getCurrentServer();
+  // 참여는 다회차를 회차마다 센 횟수, 완주는 마지막 회차까지 함께한 구인 수다.
+  const { playedRounds } = await loadBadgeFacts({ serverId: server.id, userId });
   const now = Date.now();
   const sanction = isSanctioned(user, now) ? user.sanction! : null;
   const sanctionCount = auditLog.filter(
@@ -94,6 +104,7 @@ export async function getUserDetail(userId: string) {
     leftAt: user.leftAt ?? null,
     staffRole: db.staff.find((member) => member.userId === userId)?.role ?? null,
     hostedCount: user.hostedCount,
+    attendedRoundCount: playedRounds.length,
     playedCount: playedCountsByUser(countOptions).get(userId) ?? 0,
     recentNoShowCount: recentNoShowCountsByUser(countOptions).get(userId) ?? 0,
     sanction,
@@ -130,7 +141,8 @@ export async function getUserDetail(userId: string) {
           recordedBy: noShow.added ? `${noShow.added.by} · 운영진` : nicknameOf(db, session.gmId),
           cancelled: noShow.cancelled,
           expired:
-            !noShow.cancelled && !isAbsenceActive({ sessionStartsAt: session.startsAt, now }),
+            !noShow.cancelled &&
+            !isAbsenceActive({ sessionStartsAt: noShow.absenceAt ?? session.startsAt, now }),
         };
       })
       .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime()),

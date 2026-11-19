@@ -15,6 +15,7 @@ import {
 import { attendedWhere } from "./attended-where";
 import { countedReviewWhere } from "./counted-review-where";
 import { loadHiddenBadgeFacts } from "./load-hidden-badge-facts";
+import { loadMultiRoundSessions } from "./load-multi-round-sessions";
 import { recognizedGamesWhere } from "./recognized-games-where";
 import { sessionColumns } from "./session-columns";
 
@@ -28,7 +29,7 @@ export async function loadBadgeFacts({
   now?: Date;
 }): Promise<BadgeFacts> {
   const countedReview = countedReviewWhere(serverId);
-  const [played, hosted, reviews, written, certified, hidden] = await Promise.all([
+  const [played, hosted, reviews, written, certified, hidden, multi] = await Promise.all([
     db
       .select(sessionColumns)
       .from(participants)
@@ -41,6 +42,7 @@ export async function loadBadgeFacts({
           eq(participants.userId, userId),
           attendedWhere,
           recognizedGamesWhere,
+          eq(games.roundCount, 1),
         ),
       ),
     db
@@ -48,7 +50,14 @@ export async function loadBadgeFacts({
       .from(games)
       .leftJoin(rulebooks, eq(rulebooks.id, games.rulebookId))
       .leftJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
-      .where(and(eq(games.serverId, serverId), eq(games.gmId, userId), recognizedGamesWhere)),
+      .where(
+        and(
+          eq(games.serverId, serverId),
+          eq(games.gmId, userId),
+          recognizedGamesWhere,
+          eq(games.roundCount, 1),
+        ),
+      ),
     db
       .select({ gameId: sessionReviews.gameId, createdAt: sessionReviews.createdAt })
       .from(sessionReviews)
@@ -71,10 +80,15 @@ export async function loadBadgeFacts({
       )
       .orderBy(asc(certifications.approvedAt)),
     loadHiddenBadgeFacts({ serverId, userId }),
+    loadMultiRoundSessions({ serverId, userId }),
   ]);
+  const singlePlayed = toBadgeSessions(played, now);
+  const singleHosted = toBadgeSessions(hosted, now);
   return {
-    played: toBadgeSessions(played, now),
-    hosted: toBadgeSessions(hosted, now),
+    played: [...singlePlayed, ...multi.played],
+    hosted: [...singleHosted, ...multi.hosted],
+    playedRounds: [...singlePlayed, ...multi.playedRounds],
+    hostedRounds: [...singleHosted, ...multi.hostedRounds],
     reviews,
     written,
     certified: certified.map((row) => ({ at: row.at, gameId: null })),

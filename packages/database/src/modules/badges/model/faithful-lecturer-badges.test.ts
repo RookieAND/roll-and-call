@@ -22,6 +22,8 @@ function session(day: number, gameId = `g${day}`): BadgeSession {
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
+  playedRounds: overrides.played ?? [],
+  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],

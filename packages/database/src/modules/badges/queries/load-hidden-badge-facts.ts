@@ -1,4 +1,5 @@
-import { and, asc, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
+import { and, asc, count, eq, gt, isNotNull, isNull, max, sql } from "drizzle-orm";
+import { isNil } from "es-toolkit";
 
 import { db } from "#db/client";
 import type { BadgeFacts } from "#db/modules/badges/model/badge-facts";
@@ -166,6 +167,7 @@ export async function loadHiddenBadgeFacts({
     .where(
       and(
         visibleGame,
+        eq(games.roundCount, 1),
         eq(participants.userId, userId),
         eq(participants.status, "confirmed"),
         eq(participants.absent, true),
@@ -173,12 +175,35 @@ export async function loadHiddenBadgeFacts({
         sql`${firstRoundStartSql} is not null`,
       ),
     );
+  // 다회차는 GM이 [불참으로 내보내기]로 뺀 사람만 불참이다. 회차에 빠진 것(attended = false)은 세지 않는다.
+  const kickedAbsences = await db
+    .select({
+      at: sql<Date>`coalesce(${participants.absenceAt}, ${firstRoundStartSql})`.mapWith(
+        participants.absenceAt,
+      ),
+      gameId: games.id,
+    })
+    .from(participants)
+    .innerJoin(games, eq(games.id, participants.gameId))
+    .where(
+      and(
+        visibleGame,
+        gt(games.roundCount, 1),
+        eq(participants.userId, userId),
+        eq(participants.status, "removed"),
+        eq(participants.leftReason, "removed"),
+        eq(participants.absent, true),
+        isNull(participants.absenceCancelledAt),
+      ),
+    );
   const briefings = await db
     .select({ gameId: games.id })
     .from(games)
     .where(and(visibleGame, eq(games.gmId, userId), eq(games.kind, GAME_KIND.briefing)));
   return {
-    absences: absences.map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
+    absences: [...absences, ...kickedAbsences]
+      .filter((absence) => !isNil(absence.at))
+      .map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
     briefingIds: briefings.map((briefing) => briefing.gameId),
     homebrewApprovals: homebrewApprovals.map((approval) => ({ at: approval.at!, gameId: null })),
     draws: draws.map((draw) => ({ ...draw, roll: draw.roll!, drawnAt: draw.drawnAt! })),

@@ -2,8 +2,9 @@ import { isRecognizedPost, RECRUIT_METHOD_LABEL } from "@roll-and-call/database/
 import { isNull, sumBy, uniq } from "es-toolkit";
 
 import { POST_STATUS } from "@/shared/lib";
-import type { AdminUser, NoShow, Session } from "@/shared/server";
+import type { AdminUser, NoShow, RoundSlot, Session } from "@/shared/server";
 
+import { expandRoundSessions } from "./expand-round-sessions";
 import { percent } from "./percent";
 import { toGrid } from "./to-grid";
 import { topCounts } from "./top-counts";
@@ -75,6 +76,7 @@ export interface AnalyticsData {
 
 interface BuildAnalyticsOptions {
   sessions: Session[];
+  rounds?: RoundSlot[];
   noShows: NoShow[];
   users: Pick<AdminUser, "id" | "nickname">[];
   previewEarly: boolean;
@@ -82,7 +84,12 @@ interface BuildAnalyticsOptions {
 }
 
 // 세션 추이는 지난 주차(진행 완료) + 오늘이 든 주부터의 예정 주차로 이어 붙인다. 주는 서울 기준 월요일에 시작한다.
-export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptions): AnalyticsData {
+export function buildAnalytics({
+  previewEarly,
+  now,
+  rounds = [],
+  ...db
+}: BuildAnalyticsOptions): AnalyticsData {
   const today = now.getTime();
   const seoulToday = new Date(today + SEOUL_OFFSET);
   const weekStart =
@@ -90,7 +97,9 @@ export function buildAnalytics({ previewEarly, now, ...db }: BuildAnalyticsOptio
     ((seoulToday.getUTCDay() + 6) % 7) * DAY -
     SEOUL_OFFSET;
 
-  const finished = db.sessions.filter((session) => isRecognizedPost(session, now));
+  const finished = expandRoundSessions(db.sessions, rounds).filter((session) =>
+    isRecognizedPost(session, now),
+  );
   const open = db.sessions.filter(
     (session) =>
       session.recruitStatus !== POST_STATUS.ended && !session.cancelled && !session.hidden,

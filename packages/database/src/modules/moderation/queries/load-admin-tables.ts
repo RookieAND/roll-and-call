@@ -1,4 +1,4 @@
-import { and, eq, getTableColumns, isNull, ne, sql, type SQL } from "drizzle-orm";
+import { and, eq, getTableColumns, gt, isNotNull, isNull, ne, sql, type SQL } from "drizzle-orm";
 import { omit } from "es-toolkit";
 
 import { db } from "#db/client";
@@ -7,6 +7,7 @@ import {
   certApplications,
   certifications,
   certSellers,
+  gameRounds,
   games,
   homebrewRules,
   participants,
@@ -53,6 +54,26 @@ export const ADMIN_TABLE_LOADERS = {
       .select()
       .from(games)
       .where(and(eq(games.serverId, serverId), scope)),
+  // 일시가 있는 다회차 구인의 회차만. 통계가 회차를 세션 하나로 세는 데 쓴다.
+  roundRows: (serverId: string) =>
+    db
+      .select({
+        gameId: gameRounds.gameId,
+        roundNo: gameRounds.roundNo,
+        startAt: gameRounds.startAt,
+        plannedEndAt: gameRounds.plannedEndAt,
+        endedAt: gameRounds.endedAt,
+        attendanceConfirmedAt: gameRounds.attendanceConfirmedAt,
+      })
+      .from(gameRounds)
+      .innerJoin(games, eq(games.id, gameRounds.gameId))
+      .where(
+        and(
+          eq(gameRounds.serverId, serverId),
+          gt(games.roundCount, 1),
+          isNotNull(gameRounds.startAt),
+        ),
+      ),
   // 신청글 본문은 싣지 않는다. 있는지만 알리고, 본문은 운영진이 [신청글 보기]를 누를 때 따로 읽는다.
   participantRows: (serverId: string, scope?: SQL) =>
     db

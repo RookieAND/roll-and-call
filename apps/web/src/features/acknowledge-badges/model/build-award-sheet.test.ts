@@ -29,7 +29,7 @@ describe("buildAwardSheet", () => {
     expect(sheet).toMatchObject({
       kind: "first",
       highlights: [
-        { name: "첫 주사위", line: "세션 1회 참석", source: { label: "물벼락 · 9월 19일 세션" } },
+        { name: "첫 주사위", line: "완주한 세션 1개", source: { label: "물벼락 · 9월 19일 세션" } },
       ],
       chips: [{ name: "피아스코 입문자" }],
     });

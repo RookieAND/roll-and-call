@@ -38,12 +38,14 @@ const isCrowded = ({ applicants, maxPlayers }: { applicants: number; maxPlayers:
 
 // 숨겨진 칭호는 한 단계라 첫 사건이 획득 시각·근거다(R28).
 export function hiddenEvents({
-  facts,
+  facts: gameFacts,
   ladder,
 }: {
   facts: BadgeFacts;
   ladder: HiddenLadderKey;
 }): BadgeEvent[] {
+  // 시간·연속 칭호는 다회차를 회차 단위로 센다. 후기 칭호만 구인 단위를 그대로 쓴다.
+  const facts = { ...gameFacts, played: gameFacts.playedRounds, hosted: gameFacts.hostedRounds };
   const { draws } = facts;
   switch (ladder) {
     case HIDDEN_LADDER.critical:
@@ -153,7 +155,7 @@ export function hiddenEvents({
     case HIDDEN_LADDER.lecturer:
       return lecturerEvents(facts);
     case HIDDEN_LADDER.fresh:
-      return freshReviewEvents(facts);
+      return freshReviewEvents(gameFacts);
     case HIDDEN_LADDER.weeks4:
       return weekStreakEvents({ sessions: facts.played, length: 4 });
     case HIDDEN_LADDER.weeks12:

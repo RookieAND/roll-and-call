@@ -30,6 +30,8 @@ const run = (length: number, from = 0) => Array.from({ length }, (_, index) => f
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
+  playedRounds: overrides.played ?? [],
+  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],

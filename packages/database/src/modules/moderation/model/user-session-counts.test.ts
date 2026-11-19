@@ -63,3 +63,38 @@ describe("recentNoShowCountsByUser", () => {
     expect(counts.has("b")).toBe(false);
   });
 });
+
+describe("다회차 구인", () => {
+  const multi = (overrides = {}) =>
+    session("multi", ["a", "b"], {
+      roundCount: 4,
+      finishedAt: daysAgo(1),
+      finisherIds: ["a"],
+      endsAt: daysAgo(40),
+      ...overrides,
+    });
+
+  it("회차를 놓치고 남은 사람은 불참 0건, 구인이 끝나야 참여 1건이다", () => {
+    const options = { noShows: [], userIds: ["a"] };
+    expect(recentNoShowCountsByUser({ sessions: [multi()], now, ...options }).get("a")).toBe(
+      undefined,
+    );
+    expect(playedCountsByUser({ sessions: [multi()], now, ...options }).get("a")).toBe(1);
+    const running = multi({ finishedAt: null });
+    expect(playedCountsByUser({ sessions: [running], now, ...options }).get("a")).toBe(undefined);
+  });
+
+  it("내보낸 사람·합류자는 완주자가 아니라 세지 않는다", () => {
+    const counts = playedCountsByUser({ sessions: [multi()], noShows: [], now });
+    expect(counts.get("b")).toBe(undefined);
+  });
+
+  it("내보낸 불참은 1건이고 30일은 absenceAt부터 센다", () => {
+    const sessions = [multi({ startsAt: daysAgo(60) })];
+    const kicked = (absenceAt: Date) => [{ ...noShow("multi", "k"), absenceAt }];
+    const count = (absenceAt: Date) =>
+      recentNoShowCountsByUser({ sessions, noShows: kicked(absenceAt), now }).get("k");
+    expect(count(daysAgo(29))).toBe(1);
+    expect(count(daysAgo(31))).toBe(undefined);
+  });
+});

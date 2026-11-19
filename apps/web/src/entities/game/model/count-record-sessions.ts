@@ -1,5 +1,5 @@
 import { isRecordSession } from "@roll-and-call/database/badges/model";
-import { isSessionEnded } from "@roll-and-call/database/games/model";
+import { isFinisher, isSessionEnded } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
 import { countConfirmed, PARTICIPANT_STATUS } from "./participant";
@@ -38,16 +38,34 @@ export function countRecordSessions({
         statuses.includes(participant.status) &&
         !participant.absent,
     );
+  // 다회차는 구인이 끝났을 때 완주로 남은 사람만 참여로 센다. 진행 중·내보냄·하차는 세지 않는다.
+  const finishedAsFinisher = (game: SessionGame) =>
+    !isNull(game.finishedAt) &&
+    new Date(game.finishedAt) <= now &&
+    isNull(game.hiddenAt) &&
+    game.participants.some(
+      (participant) =>
+        participant.userId === userId &&
+        isFinisher({
+          game,
+          participant: {
+            ...participant,
+            lateJoined: participant.lateJoined ?? false,
+            leftReason: participant.leftReason ?? null,
+          },
+        }),
+    );
   return {
     hosted: hosted.filter((game) => recorded(game) || upcoming(game)).length,
-    played: joined.filter(
-      (game) =>
-        (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
-        (upcoming(game) &&
-          seated(game, [
-            PARTICIPANT_STATUS.confirmed,
-            ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
-          ])),
+    played: joined.filter((game) =>
+      game.roundCount > 1
+        ? finishedAsFinisher(game)
+        : (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
+          (upcoming(game) &&
+            seated(game, [
+              PARTICIPANT_STATUS.confirmed,
+              ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
+            ])),
     ).length,
   };
 }

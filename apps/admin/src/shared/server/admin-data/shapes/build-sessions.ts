@@ -18,6 +18,7 @@ import { gameStatus, plainText } from "@/shared/lib";
 
 import { gameStartsAt } from "../game-starts-at";
 import type { Session } from "../types";
+import { finisherIdsOf } from "./finisher-ids-of";
 import type { ShapeContext } from "./shape-context";
 
 export function buildSessions({
@@ -48,11 +49,14 @@ export function buildSessions({
       startsAt: gameStartsAt(game),
       timeFixed: !isNull(game.confirmedAt),
       memberIds: roster.filter((row) => row.status === "confirmed").map((row) => row.userId),
+      finishedAt: game.finishedAt,
+      finisherIds: finisherIdsOf({ game, roster }),
       waitingIds: roster
         .filter((row) => row.status === "waiting")
         .toSorted(compareWaitlistOrder)
         .map((row) => row.userId),
       capacity: game.maxPlayers,
+      roundCount: game.roundCount,
       closed: game.endDate.getTime() <= now,
       recruitStatus: gameStatus(game, now),
       createdAt: game.createdAt,

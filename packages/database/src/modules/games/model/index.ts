@@ -168,3 +168,4 @@ export { roundSkipBlock, type RoundSkipBlock } from "./round-skip-block";
 export { gameFinishedEarlyNotices } from "./game-finished-early-notices";
 export { multiRoundNoticeLine } from "./multi-round-notice-line";
 export { roundScheduleChangeNotices } from "./round-schedule-change-notices";
+export { isRoundKickAbsence } from "./is-round-kick-absence";

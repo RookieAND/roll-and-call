@@ -15,7 +15,7 @@ interface SessionCountStatsProps {
 export function SessionCountStats({ hosted, played }: SessionCountStatsProps) {
   const stats = [
     { label: "운영한 세션", ...hosted },
-    { label: "참여한 세션", ...played },
+    { label: "완주한 세션", ...played },
   ];
 
   return (

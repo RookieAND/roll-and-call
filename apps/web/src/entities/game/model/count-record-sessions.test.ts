@@ -107,4 +107,33 @@ describe("countRecordSessions · includeUpcoming", () => {
       played: 0,
     });
   });
+
+  describe("다회차", () => {
+    const multi = (finishedAt: Date | null, participant = {}) =>
+      game({
+        roundCount: 4,
+        finishedAt,
+        participants: [{ ...seat({ userId: "me" }), ...participant }],
+      } as Partial<SessionGame>);
+
+    it("구인이 끝난 완주자만 세고 진행 중에는 세지 않는다", () => {
+      expect(playedCount([multi(at(-1))])).toBe(1);
+      expect(playedCount([multi(null)])).toBe(0);
+      expect(playedCount([multi(at(1))])).toBe(0);
+    });
+
+    it("중도 합류·내보냄·상호 하차는 세지 않는다", () => {
+      expect(playedCount([multi(at(-1), { lateJoined: true })])).toBe(0);
+      expect(playedCount([multi(at(-1), { leftReason: "mutual" })])).toBe(0);
+      expect(
+        playedCount([
+          multi(at(-1), {
+            status: PARTICIPANT_STATUS.removed,
+            absent: true,
+            leftReason: "removed",
+          }),
+        ]),
+      ).toBe(0);
+    });
+  });
 });

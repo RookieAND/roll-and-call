@@ -12,6 +12,7 @@ import { buildNicknameEdits } from "./build-nickname-edits";
 import { buildNoShows } from "./build-no-shows";
 import { buildQuizQuestions } from "./build-quiz-questions";
 import { buildReviews } from "./build-reviews";
+import { buildRounds } from "./build-rounds";
 import { buildRulebookRequests } from "./build-rulebook-requests";
 import { buildRulebooks } from "./build-rulebooks";
 import { buildSellers } from "./build-sellers";
@@ -58,6 +59,7 @@ export const SHAPE_REGISTRY: { [Key in keyof AdminShapes]: ShapeSpec<Key> } = {
   },
   noShows: { tables: ["profileRows", "gameRows", "participantRows"], build: buildNoShows },
   reviews: { tables: ["profileRows", "participantRows", "reviewRows"], build: buildReviews },
+  rounds: { tables: ["roundRows"], build: buildRounds },
   countingSessions: { tables: ["gameRows", "participantRows"], build: buildCountingSessions },
   countingNoShows: { tables: ["gameRows", "participantRows"], build: buildCountingNoShows },
   lastActive: { tables: ["lastActiveRows"], build: buildLastActive },

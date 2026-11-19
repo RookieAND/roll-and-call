@@ -41,6 +41,9 @@ export type BadgeHostedDraw = {
 export type BadgeFacts = {
   played: BadgeSession[];
   hosted: BadgeSession[];
+  // 시간·연속 칭호용 세션. 단발은 played·hosted와 같고, 다회차는 구인 하나가 아니라 출석을 확정한 회차마다 한 건이다.
+  playedRounds: BadgeSession[];
+  hostedRounds: BadgeSession[];
   // 내가 GM인 구인에 달린 후기와 내가 쓴 후기. 공개 상태인 것만 담는다.
   reviews: BadgeReview[];
   written: BadgeReview[];

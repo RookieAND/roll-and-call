@@ -5,6 +5,7 @@ import { formatFullDate, MEMBERSHIP_STATUS } from "@/shared/lib";
 import { KeyValueList } from "@/shared/ui";
 
 import { rejoinedNotice } from "../../model/rejoined-notice";
+import { SessionCountValue } from "../session-count-value";
 import { UserStateTag } from "../user-state-tag";
 
 const NO_SHOW_WARNING_COUNT = 2;
@@ -22,7 +23,15 @@ export function UserSummaryCard({ user, discordBanFailed }: UserSummaryCardProps
     { label: "가입일", value: formatFullDate(user.joinedAt) },
     { label: "디스코드 ID", value: `@${user.discordHandle}` },
     { label: "연 세션", value: `${user.hostedCount}회` },
-    { label: "참여 세션", value: `${user.playedCount}회` },
+    {
+      label: "세션",
+      value: (
+        <SessionCountValue
+          attendedRoundCount={user.attendedRoundCount}
+          playedCount={user.playedCount}
+        />
+      ),
+    },
     {
       label: "최근 30일 불참",
       value: (

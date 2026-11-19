@@ -25,6 +25,8 @@ function session(overrides: Partial<BadgeSession> & { day?: number } = {}): Badg
 const facts = (overrides: Partial<BadgeFacts>): BadgeFacts => ({
   played: [],
   hosted: [],
+  playedRounds: overrides.played ?? [],
+  hostedRounds: overrides.hosted ?? [],
   reviews: [],
   written: [],
   draws: [],

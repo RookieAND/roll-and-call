@@ -45,7 +45,7 @@ export function buildDexTab({ role, records, facts, appearances, userId, now, mo
   return {
     total: {
       title: gm ? "누적 운영" : "누적 참여",
-      hint: `${totalCount}회 ${gm ? "진행" : "참석"}`,
+      hint: gm ? `${totalCount}회 진행` : `완주한 세션 ${totalCount}개`,
       medals: ladderMedals({
         ladder: totalLadder,
         events: events(totalLadder),
