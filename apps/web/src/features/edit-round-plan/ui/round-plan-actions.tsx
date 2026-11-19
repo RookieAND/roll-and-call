@@ -44,12 +44,16 @@ export function RoundPlanActions({
             className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
           >
             <PlanRow
-              label="예정 회차 수"
-              value={`${roundCount}회`}
+              label="예정 회차 수 바꾸기"
+              description={`지금 ${roundCount}회 · ${designated ? "줄일 수 있습니다" : "줄이거나 늘릴 수 있습니다"}`}
               onClick={() => setCounting(true)}
             />
             {designated && canAddRound && (
-              <PlanRow label="회차 추가" onClick={() => setAdding(true)} />
+              <PlanRow
+                label="회차 추가"
+                description="맨 뒤에 회차를 하나 더 만듭니다"
+                onClick={() => setAdding(true)}
+              />
             )}
           </Card.Root>
         </VStack>

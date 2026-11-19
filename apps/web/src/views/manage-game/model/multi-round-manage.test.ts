@@ -131,6 +131,20 @@ describe("다회차 진행 표시", () => {
     expect(steps[3]!.detail).toBe("일정을 아직 정하지 않았습니다");
   });
 
+  it("회차가 많으면 지난 회차와 먼 회차를 한 줄로 줄인다", () => {
+    const many = Array.from({ length: 10 }, (_, index) => dated(index + 1));
+    const steps = multiRoundTimeline({ rounds: many, now: new Date(BASE + 3 * WEEK + HOUR) });
+    expect(steps.map((step) => [step.name, step.state])).toEqual([
+      ["1~3회차", "done"],
+      ["4회차", "current"],
+      ["5회차", "todo"],
+      ["6회차", "todo"],
+      ["7~10회차", "todo"],
+    ]);
+    expect(steps[0]!.detail).toBe("3회 마쳤습니다");
+    expect(steps[4]!.detail).toBe("4회 남았습니다");
+  });
+
   it("마친 회차 수를 세고 조기 종결이면 마친 회차에서 멈춘다", () => {
     const now = new Date(BASE + WEEK + 5 * HOUR);
     const open = { roundCount: 4, finishedAt: null, incompleteAt: null };

@@ -175,7 +175,6 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                   </Text>
                   <Badge colorPalette={stageTone}>{stageLabel}</Badge>
                 </HStack>
-                {roundProgressBar && <ManageRoundProgress {...roundProgressBar} />}
                 <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
                   {isNil(cancelNote) ? (
                     summaryStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
@@ -183,6 +182,7 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                     <ManageCancelNote note={cancelNote} />
                   )}
                 </HStack>
+                {roundProgressBar && <ManageRoundProgress {...roundProgressBar} />}
               </Card.Root>
             </VStack>
             <div className="order-3 flex flex-col gap-200">{groupNodes}</div>
