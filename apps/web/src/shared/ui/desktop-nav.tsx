@@ -50,6 +50,7 @@ export function DesktopNav({
         className="h-(--rc-size-appbar) flex-none border-b border-gray-200 px-200"
       >
         <Link
+          prefetch={false}
           href={serverHome}
           className="focus-visible:outline-2 focus-visible:outline-tinted-ink"
         >
@@ -80,6 +81,7 @@ export function DesktopNav({
         </ul>
         <div className="mt-auto flex flex-col gap-050 border-t border-gray-200 p-150">
           <Link
+            prefetch={false}
             href={`/help?from=${current.slug}`}
             className="flex min-h-11 items-center gap-150 rounded-400 px-150 text-gray-600 hover:brightness-[.96] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-tinted-ink"
           >

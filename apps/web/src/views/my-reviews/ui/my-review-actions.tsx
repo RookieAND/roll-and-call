@@ -28,7 +28,7 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
       >
         {editable ? (
           <Button
-            render={<Link href={toServerPath(card.editHref)} />}
+            render={<Link prefetch={false} href={toServerPath(card.editHref)} />}
             variant="outline"
             size="md"
             className="min-w-0 flex-1"
@@ -38,7 +38,7 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
         ) : (
           <>
             <Button
-              render={<Link href={toServerPath(card.gameHref)} />}
+              render={<Link prefetch={false} href={toServerPath(card.gameHref)} />}
               variant="outline"
               size="md"
               className="min-w-0 flex-1"
@@ -46,7 +46,7 @@ export function MyReviewActions({ card }: MyReviewActionsProps) {
               구인글 상세 보기
             </Button>
             <Button
-              render={<Link href={toServerPath(card.reviewsHref)} />}
+              render={<Link prefetch={false} href={toServerPath(card.reviewsHref)} />}
               variant="outline"
               size="md"
               className="min-w-0 flex-1"

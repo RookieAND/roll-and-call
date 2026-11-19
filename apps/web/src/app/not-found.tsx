@@ -24,10 +24,10 @@ export default function NotFound() {
         }
         action={
           <>
-            <Button variant="outline" render={<Link href="/" />}>
+            <Button variant="outline" render={<Link prefetch={false} href="/" />}>
               내 서버 보기
             </Button>
-            <Button render={<Link href="/help" />}>도움말</Button>
+            <Button render={<Link prefetch={false} href="/help" />}>도움말</Button>
           </>
         }
         homeLink={false}

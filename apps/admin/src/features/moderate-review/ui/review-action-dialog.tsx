@@ -85,10 +85,13 @@ export function ReviewActionDialog({
   };
 
   const removing = shownAction === REVIEW_ACTION.remove && !gone;
-  const Root = removing ? ResponsiveDialog.Root : ResponsiveDialog.Root;
   const width = gone ? GONE_WIDTH : shownAction && ACTION_COPY[shownAction].widthClassName;
   return (
-    <Root open={!isNull(action)} onOpenChange={(open) => open || (gone ? backToList() : close())}>
+    <ResponsiveDialog.Root
+      alert={removing}
+      open={!isNull(action)}
+      onOpenChange={(open) => open || (gone ? backToList() : close())}
+    >
       <ResponsiveDialog.Popup
         size="lg"
         initialFocus={removing ? cancelRef : undefined}
@@ -107,6 +110,6 @@ export function ReviewActionDialog({
           <ReviewRemoveForm review={review} cancelRef={cancelRef} onSettled={settle} />
         ) : null}
       </ResponsiveDialog.Popup>
-    </Root>
+    </ResponsiveDialog.Root>
   );
 }

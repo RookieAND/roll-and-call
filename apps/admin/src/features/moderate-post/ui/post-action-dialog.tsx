@@ -57,9 +57,12 @@ export function PostActionDialog({
     toast.warning(conflictToastText({ conflict: outcome.conflict, self, target: CONFLICT_TARGET }));
   };
   const removing = shownAction === POST_ACTION.remove;
-  const Root = removing ? ResponsiveDialog.Root : ResponsiveDialog.Root;
   return (
-    <Root open={!isNull(action)} onOpenChange={(open) => open || close()}>
+    <ResponsiveDialog.Root
+      alert={removing}
+      open={!isNull(action)}
+      onOpenChange={(open) => open || close()}
+    >
       <ResponsiveDialog.Popup
         size="lg"
         initialFocus={removing ? cancelRef : undefined}
@@ -71,6 +74,6 @@ export function PostActionDialog({
         ) : null}
         {removing ? <PostRemoveForm post={post} cancelRef={cancelRef} onSettled={settle} /> : null}
       </ResponsiveDialog.Popup>
-    </Root>
+    </ResponsiveDialog.Root>
   );
 }

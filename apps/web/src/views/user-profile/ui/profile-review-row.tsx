@@ -13,7 +13,7 @@ export function ProfileReviewRow({ label, count, href }: ProfileReviewRowProps) 
     <Button
       variant="ghost"
       colorPalette="gray"
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       className="h-auto min-h-12 w-full justify-start gap-125 rounded-none border-t border-gray-200 px-125 py-100 first:border-t-0"
     >
       <Text typography="subtitle2" className="min-w-0 flex-1 text-left">

@@ -18,7 +18,7 @@ export function NewGameButton({ sanction, children, ...buttonProps }: NewGameBut
   const [open, setOpen] = useState(false);
   if (!sanction) {
     return (
-      <Button render={<Link href={toServerPath("/games/new")} />} {...buttonProps}>
+      <Button render={<Link prefetch={false} href={toServerPath("/games/new")} />} {...buttonProps}>
         {children}
       </Button>
     );

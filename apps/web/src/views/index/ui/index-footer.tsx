@@ -20,7 +20,7 @@ export function IndexFooter() {
               typography="subtitle2"
               weight="medium"
               foreground="muted"
-              render={<Link href="/help" />}
+              render={<Link prefetch={false} href="/help" />}
             >
               도움말
             </Text>

@@ -13,7 +13,7 @@ export function CountLinkRow({ label, count, href }: CountLinkRowProps) {
     <HStack
       align="center"
       gap="125"
-      render={<Link href={href} />}
+      render={<Link prefetch={false} href={href} />}
       className="min-h-12 border-t border-gray-200 px-175 py-100 transition-colors first:border-t-0 hover:bg-gray-50"
     >
       <Text typography="body3" weight="bold" className="min-w-0 flex-1">

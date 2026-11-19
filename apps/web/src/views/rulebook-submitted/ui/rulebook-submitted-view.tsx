@@ -75,7 +75,12 @@ export async function RulebookSubmittedView({ rulebookId }: RulebookSubmittedVie
         <FloatingBar.Content>
           <Container size="sm">
             <Button
-              render={<Link href={serverPath({ slug: server.slug, path: "/me/rulebooks" })} />}
+              render={
+                <Link
+                  prefetch={false}
+                  href={serverPath({ slug: server.slug, path: "/me/rulebooks" })}
+                />
+              }
               size="lg"
               className="w-full"
             >
