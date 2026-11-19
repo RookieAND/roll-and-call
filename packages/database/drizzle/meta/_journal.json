@@ -967,6 +967,13 @@
       "when": 1799900300008,
       "tag": "0143_round_reminders",
       "breakpoints": true
+    },
+    {
+      "idx": 144,
+      "version": "7",
+      "when": 1799900300009,
+      "tag": "0144_absence_at",
+      "breakpoints": true
     }
   ]
 }

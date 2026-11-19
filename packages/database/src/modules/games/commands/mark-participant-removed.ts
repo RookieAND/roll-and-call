@@ -13,6 +13,7 @@ export async function markParticipantRemoved({
   userId,
   absenceReason,
   leftReason,
+  absenceAt = null,
 }: {
   transaction: Transaction;
   serverId: string;
@@ -20,6 +21,8 @@ export async function markParticipantRemoved({
   userId: string;
   absenceReason: string | null;
   leftReason?: "removed" | "mutual";
+  // 다회차 불참으로 내보내기: 내보낸 회차(이미 시작한 가장 뒤 회차)의 시작 시각.
+  absenceAt?: Date | null;
 }) {
   const mutual = leftReason === "mutual";
   const marked = await transaction
@@ -29,6 +32,7 @@ export async function markParticipantRemoved({
       absent: !mutual,
       absenceReason: mutual ? null : absenceReason,
       leftReason: leftReason ?? null,
+      absenceAt: mutual ? null : absenceAt,
     })
     .where(
       and(

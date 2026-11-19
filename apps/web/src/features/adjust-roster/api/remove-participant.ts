@@ -3,6 +3,7 @@
 import {
   deleteParticipant,
   findParticipantStatus,
+  listGameRoundsInTransaction,
   listSeatOpenedRecipients,
   markParticipantRemoved,
 } from "@roll-and-call/database/games";
@@ -55,6 +56,10 @@ export async function removeParticipant(input: z.input<typeof inputSchema>): Pro
       if (started && status === PARTICIPANT_STATUS.confirmed) {
         const multiRound = game.roundCount > 1;
         if (multiRound && !leftReason) throw new RosterError("내보내는 방식을 골라 주세요.");
+        const rounds = multiRound
+          ? await listGameRoundsInTransaction({ transaction, serverId, gameId })
+          : [];
+        const kickedRound = rounds.filter((round) => round.startAt && round.startAt <= now).at(-1);
         const marked = await markParticipantRemoved({
           transaction,
           serverId,
@@ -62,6 +67,7 @@ export async function removeParticipant(input: z.input<typeof inputSchema>): Pro
           userId,
           absenceReason: reason.value,
           leftReason: multiRound ? leftReason : undefined,
+          absenceAt: kickedRound?.startAt ?? null,
         });
         if (!marked) throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
         const kind =

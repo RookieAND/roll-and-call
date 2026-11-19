@@ -335,6 +335,8 @@ export const participants = pgTable(
     // 1회차가 시작된 뒤 합류한 사람. 완주로 세지 않는다.
     lateJoined: boolean("late_joined").notNull().default(false),
     leftReason: participantLeftReason("left_reason"),
+    // 불참 기록의 기준 시각(30일을 세는 시작). 다회차 [불참으로 내보내기]는 내보낸 회차의 시작 시각이고, 단발은 비워 두고 구인 시작을 쓴다.
+    absenceAt: timestamp("absence_at", { withTimezone: true }),
   },
   (table) => [
     primaryKey({ columns: [table.gameId, table.userId] }),
