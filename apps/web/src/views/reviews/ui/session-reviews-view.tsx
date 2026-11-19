@@ -61,6 +61,10 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
   const hasReviews = gmReview || participantReviews.length > 0;
   // 다회차는 GM 후기도 회차마다 있어 참석자 후기와 같이 회차별로 묶는다.
   const roundGroups = game.roundCount > 1 ? visibleReviewGroups(roundReviewGroups(allRows)) : null;
+  // 다회차는 1회차 일시 대신 총 회차 수를 적는다. 후기 개수도 GM 후기까지 센다.
+  let headingSubline = "";
+  if (game.roundCount > 1) headingSubline = `총 ${game.roundCount}회`;
+  else if (game.confirmedAt) headingSubline = formatDateTime(game.confirmedAt);
   const renderGroup = (group: ReturnType<typeof roundReviewGroups>[number]) => (
     <RoundReviewGroup
       key={group.roundNo}
@@ -76,8 +80,8 @@ export async function SessionReviewsView({ gameId }: SessionReviewsViewProps) {
     <ReviewsPage title="세션 후기" back={`/games/${gameId}`}>
       <SessionHeading
         title={game.title}
-        rule={`후기 ${participantReviews.length}개`}
-        subline={game.confirmedAt ? formatDateTime(game.confirmedAt) : ""}
+        rule={`후기 ${roundGroups ? allRows.length : participantReviews.length}개`}
+        subline={headingSubline}
       />
       {hasReviews ? (
         <MemberTitleSheetsProvider sheets={titleSheets}>
