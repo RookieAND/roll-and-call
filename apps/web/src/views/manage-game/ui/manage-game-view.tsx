@@ -28,6 +28,7 @@ import { manageSummary } from "../model/manage-summary";
 import { manageTimeline } from "../model/manage-timeline";
 import { multiRoundProgressRows } from "../model/multi-round-progress-rows";
 import { multiRoundStage } from "../model/multi-round-stage";
+import { multiRoundStats } from "../model/multi-round-stats";
 import { multiRoundTimeline } from "../model/multi-round-timeline";
 import { nextScheduleAction } from "../model/next-schedule-action";
 import { ManageCancelNote } from "./manage-cancel-note";
@@ -94,6 +95,7 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   const rounds =
     game.roundCount > 1 ? await listGameRounds({ serverId: server.id, gameId: id }) : null;
   const roundProgress = rounds ? multiRoundProgressRows({ game, rounds, now }) : undefined;
+  const shownStats = rounds ? multiRoundStats({ stats, rounds, now }) : summaryStats;
   const roundStage = rounds ? multiRoundStage({ game, rounds, now }) : null;
   const stageLabel = roundStage?.label ?? MANAGE_STAGE_LABEL[stage];
   const stageTone = roundStage?.tone ?? MANAGE_STAGE_TONE[stage];
@@ -114,7 +116,8 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
   const scheduleAction = rounds ? nextScheduleAction({ game, rounds, now }) : null;
   const isCancelled = !isNil(game.cancelledAt);
   const endAt = plannedEndAt(game);
-  const reviewFirst = isSessionEnded(game) && !isCancelled;
+  const sessionEnded = rounds ? !isNil(game.finishedAt) : isSessionEnded(game);
+  const reviewFirst = sessionEnded && !isCancelled;
 
   const progressGroup = (
     <ManageGroup key="progress" title="세션 진행">
@@ -177,7 +180,7 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                 </HStack>
                 <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
                   {isNil(cancelNote) ? (
-                    summaryStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
+                    shownStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
                   ) : (
                     <ManageCancelNote note={cancelNote} />
                   )}

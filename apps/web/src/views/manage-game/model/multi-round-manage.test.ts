@@ -4,6 +4,7 @@ import { manageRoundProgress } from "./manage-round-progress";
 import { MANAGE_ROW_STATE } from "./manage-row-state";
 import { multiRoundProgressRows } from "./multi-round-progress-rows";
 import { multiRoundStage } from "./multi-round-stage";
+import { multiRoundStats } from "./multi-round-stats";
 import { multiRoundTimeline } from "./multi-round-timeline";
 import { nextScheduleAction } from "./next-schedule-action";
 
@@ -84,7 +85,7 @@ describe("다회차 세션 진행 줄", () => {
       now: new Date(BASE + WEEK + HOUR),
     });
     expect(schedule!.label).toBe("회차 일정");
-    expect(schedule!.detail).toContain("· 3/3회");
+    expect(schedule!.detail).toBe("회차별 일정을 확인하고 바꿉니다");
     expect(attendance).toMatchObject({
       label: "2회차 출석 확인",
       href: "/games/g1/attendance?round=2",
@@ -159,5 +160,24 @@ describe("다회차 진행 표시", () => {
       total: 4,
       early: true,
     });
+  });
+});
+
+describe("다회차 요약 통계", () => {
+  it("세션 일시 대신 다음 회차 일시를 보이고 확정 인원은 남긴다", () => {
+    const stats = [
+      { label: "세션 일시", value: "12월 5일 (토) 12:00" },
+      { label: "확정 인원", value: "4 / 5명" },
+      { label: "대기", value: "1명" },
+    ];
+    const rounds = [dated(1), dated(2), dated(3)];
+    const result = multiRoundStats({ stats, rounds, now: new Date(BASE + HOUR) });
+    expect(result.map((stat) => stat.label)).toEqual(["다음 회차", "확정 인원", "대기"]);
+    expect(result[0]!.value).toContain("12월 12일");
+  });
+
+  it("남은 회차가 없으면 미정이다", () => {
+    const result = multiRoundStats({ stats: [], rounds: [dated(1)], now: new Date(BASE + WEEK) });
+    expect(result[0]!.value).toBe("미정");
   });
 });
