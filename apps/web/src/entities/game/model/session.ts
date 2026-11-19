@@ -33,6 +33,8 @@ export function deriveSessionState(
     maxPlayers,
     confirmedCount,
     scheduleMode,
+    roundCount,
+    finishedAt,
   }: {
     confirmedAt: Game["confirmedAt"];
     playMinutes: Game["playMinutes"];
@@ -41,6 +43,9 @@ export function deriveSessionState(
     maxPlayers: number;
     confirmedCount: number;
     scheduleMode: ScheduleMode;
+    // 다회차는 구인이 마쳐진 뒤에만 finished다. 회차 사이에는 confirmed(진행 중)다.
+    roundCount?: Game["roundCount"];
+    finishedAt?: Game["finishedAt"];
   },
   now: Date = new Date(),
 ): SessionState {
@@ -48,7 +53,7 @@ export function deriveSessionState(
   const deadlinePassed = new Date(endDate).getTime() < nowTime;
   if (confirmedAt) {
     // 시작이 아니라 플레이타임만큼 지나야 끝난 것이다. 진행 중인 세션은 아직 종료가 아니다.
-    if (isSessionEnded({ confirmedAt, playMinutes, endedAt }, now)) {
+    if (isSessionEnded({ confirmedAt, playMinutes, endedAt, roundCount, finishedAt }, now)) {
       return SESSION_STATE.finished;
     }
     if (scheduleMode === SCHEDULE_MODE.fixed) {

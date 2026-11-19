@@ -6,6 +6,9 @@ type TimedGame = {
   confirmedAt: Moment;
   playMinutes: number | null;
   endedAt: Moment;
+  // 다회차면 모든 회차가 끝나 구인이 마쳐진 시각(finishedAt)으로 세션 종료를 가른다. 없으면 단발로 본다.
+  roundCount?: number;
+  finishedAt?: Moment;
 };
 
 const MINUTE_MS = 60_000;
@@ -52,7 +55,11 @@ export function isSessionStarted(
 }
 
 // 세션 종료: GM 명단 수정 끝·참여자 관리 닫힘·출석 확인 열림·출석 24시간 기한.
+// 다회차는 1회차가 끝나도 구인이 끝난 것이 아니라서, 모든 회차가 끝나 구인이 마쳐진 뒤에만 종료다.
 export function isSessionEnded(game: TimedGame, now: Date = new Date()): boolean {
+  if ((game.roundCount ?? 1) > 1) {
+    return !isNil(game.finishedAt) && new Date(game.finishedAt).getTime() <= now.getTime();
+  }
   const endAt = sessionEndAt(game);
   return !isNil(endAt) && endAt.getTime() <= now.getTime();
 }
