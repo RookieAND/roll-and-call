@@ -17,6 +17,9 @@ interface PhaseGame {
   endDate: Date;
   playMinutes: number | null;
   endedAt: Date | null;
+  // 다회차는 모든 회차가 끝나 구인이 마쳐진 뒤에만 ended다.
+  roundCount?: number;
+  finishedAt?: Date | null;
 }
 
 // 구인글의 진행 단계. 인원이 아니라 일정(확정·종료)과 모집 기한만 본다(deriveGameStatus는 정원·대기까지 본다).

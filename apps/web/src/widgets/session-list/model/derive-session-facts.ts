@@ -39,6 +39,8 @@ export function deriveSessionFacts({
       maxPlayers: game.maxPlayers,
       confirmedCount,
       scheduleMode: game.scheduleMode,
+      roundCount: game.roundCount,
+      finishedAt: game.finishedAt,
     },
     now,
   );

@@ -106,4 +106,12 @@ describe("isSessionEnded·isSessionInProgress", () => {
   it("시각이 없으면 끝나지 않았다", () => {
     expect(isSessionEnded({ ...game, confirmedAt: null }, now)).toBe(false);
   });
+
+  it("다회차는 1회차가 끝나도 구인이 마쳐지기 전까지 진행 중이다", () => {
+    const multi = { ...game, roundCount: 4, finishedAt: null };
+    expect(isSessionEnded(multi, now)).toBe(false);
+    expect(isSessionInProgress(multi, now)).toBe(true);
+    expect(isSessionEnded({ ...multi, finishedAt: at(-1) }, now)).toBe(true);
+    expect(isSessionEnded({ ...multi, finishedAt: at(10) }, now)).toBe(false);
+  });
 });
