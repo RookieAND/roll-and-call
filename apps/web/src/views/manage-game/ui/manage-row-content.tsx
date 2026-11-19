@@ -1,5 +1,6 @@
 import { Text, VStack } from "@roll-and-call/ui";
 import {
+  CalendarDays,
   ChevronRight,
   ClipboardCheck,
   Clock,
@@ -20,6 +21,7 @@ const ICONS = {
   clock: Clock,
   users: Users,
   pencil: Pencil,
+  calendar: CalendarDays,
 };
 
 const ICON_TONE = {

@@ -18,11 +18,13 @@ export const MANAGE_ROW_DETAIL = {
 } as const;
 
 export type ManageRow = {
-  key: "attendance" | "end" | "review" | "reviewWrite" | "time" | "roster" | "edit";
-  icon: "clipboard" | "flag" | "message" | "clock" | "users" | "pencil";
+  key: "attendance" | "end" | "review" | "reviewWrite" | "time" | "roster" | "edit" | "rounds";
+  icon: "clipboard" | "flag" | "message" | "clock" | "users" | "pencil" | "calendar";
   label: string;
   detail: string;
   href: string | null;
   action?: ManageRowAction;
+  // 다회차의 회차 마치기. 이 회차만 마치고, 마지막 회차면 확인 창에 한 줄을 더한다.
+  round?: { roundNo: number; lastRound: boolean; plannedEndAt: Date };
   state: ManageRowState;
 };

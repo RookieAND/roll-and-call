@@ -25,9 +25,10 @@ interface ManageRowProps {
 }
 
 export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
-  if (row.action === MANAGE_ROW_ACTION.endSession && plannedEndAt) {
+  const endAt = row.round?.plannedEndAt ?? plannedEndAt;
+  if (row.action === MANAGE_ROW_ACTION.endSession && endAt) {
     return (
-      <ManageEndSessionRow gameId={gameId} plannedEndAt={plannedEndAt}>
+      <ManageEndSessionRow gameId={gameId} plannedEndAt={endAt} round={row.round}>
         <ManageRowContent row={row} chevron />
       </ManageEndSessionRow>
     );

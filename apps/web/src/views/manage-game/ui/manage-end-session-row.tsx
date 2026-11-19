@@ -8,10 +8,16 @@ import { EndSessionDialog } from "@/features/end-session";
 interface ManageEndSessionRowProps {
   gameId: string;
   plannedEndAt: Date;
+  round?: { roundNo: number; lastRound: boolean };
   children: ReactNode;
 }
 
-export function ManageEndSessionRow({ gameId, plannedEndAt, children }: ManageEndSessionRowProps) {
+export function ManageEndSessionRow({
+  gameId,
+  plannedEndAt,
+  round,
+  children,
+}: ManageEndSessionRowProps) {
   const [ending, setEnding] = useState(false);
 
   return (
@@ -28,6 +34,7 @@ export function ManageEndSessionRow({ gameId, plannedEndAt, children }: ManageEn
         onOpenChange={setEnding}
         gameId={gameId}
         plannedEndAt={plannedEndAt}
+        round={round}
       />
     </>
   );

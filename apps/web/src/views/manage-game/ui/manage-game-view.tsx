@@ -1,4 +1,4 @@
-import { getResponseCounts } from "@roll-and-call/database/games";
+import { getResponseCounts, listGameRounds } from "@roll-and-call/database/games";
 import { getGameReviews, getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
 import { isNil } from "es-toolkit";
@@ -25,6 +25,8 @@ import { manageReviewButtonOf } from "../model/manage-review-button-of";
 import { manageRowGroups } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
 import { manageTimeline } from "../model/manage-timeline";
+import { multiRoundProgressRows } from "../model/multi-round-progress-rows";
+import { multiRoundStage } from "../model/multi-round-stage";
 import { ManageCancelNote } from "./manage-cancel-note";
 import { ManageDeadlineLine } from "./manage-deadline-line";
 import { ManageGameStat } from "./manage-game-stat";
@@ -84,7 +86,20 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     userId: user.id,
   });
   const gmReview = manageReviewButtonOf(reviewStatusOf(reviewTarget));
-  const groups = manageRowGroups({ game, reviewCount: reviews.length, gmReview });
+  const now = new Date();
+  const rounds =
+    game.roundCount > 1 ? await listGameRounds({ serverId: server.id, gameId: id }) : null;
+  const roundProgress = rounds ? multiRoundProgressRows({ game, rounds, now }) : undefined;
+  const roundStage = rounds ? multiRoundStage({ game, rounds, now }) : null;
+  const stageLabel = roundStage?.label ?? MANAGE_STAGE_LABEL[stage];
+  const stageTone = roundStage?.tone ?? MANAGE_STAGE_TONE[stage];
+  const groups = manageRowGroups({
+    game,
+    reviewCount: reviews.length,
+    gmReview,
+    roundProgress,
+    now,
+  });
   const timeline = manageTimeline({
     game,
     attendance: stats.find((stat) => stat.label === ATTENDANCE_LABEL)?.value,
@@ -143,8 +158,13 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                   >
                     {game.title}
                   </Text>
-                  <Badge colorPalette={MANAGE_STAGE_TONE[stage]}>{MANAGE_STAGE_LABEL[stage]}</Badge>
+                  <Badge colorPalette={stageTone}>{stageLabel}</Badge>
                 </HStack>
+                {roundStage?.note && (
+                  <Text typography="body4" foreground="muted" className="mt-075">
+                    {roundStage.note}
+                  </Text>
+                )}
                 <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
                   {isNil(cancelNote) ? (
                     summaryStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)

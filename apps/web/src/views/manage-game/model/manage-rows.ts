@@ -24,18 +24,26 @@ export function manageRowGroups({
   game,
   reviewCount,
   gmReview = null,
+  roundProgress,
   now = new Date(),
 }: {
   game: GameDetailData;
   reviewCount: number;
   gmReview?: ManageReviewButton | null;
+  // 다회차면 회차 기준 「세션 진행」 줄. 명단은 구인이 끝날 때까지 열리고, 구인 수정은 C36-5의 진행 중 수정 범위로 열린다.
+  roundProgress?: ManageRow[];
   now?: Date;
 }): ManageRowGroups {
-  const ended = isSessionEnded(game, now);
+  const multiRound = !isNil(roundProgress);
+  const ended = multiRound ? !isNil(game.finishedAt) : isSessionEnded(game, now);
   const started = isSessionStarted(game, now);
+  const editLocked = multiRound ? ended : started;
+  const editLockedDetail = multiRound
+    ? "끝난 구인은 고칠 수 없습니다"
+    : "시작한 세션은 고칠 수 없습니다";
   const confirmedCount = countConfirmed(game.participants);
 
-  const progress = [
+  const progress = roundProgress ?? [
     timeRow({ game, now }),
     attendanceRow({ game, confirmedCount, now }),
     endSessionRow({ game, confirmedCount, now }),
@@ -82,12 +90,12 @@ export function manageRowGroups({
           href: `/games/${game.id}/participants`,
           state: MANAGE_ROW_STATE.open,
         },
-    started
+    editLocked
       ? {
           key: "edit",
           icon: "pencil",
           label: "구인 수정",
-          detail: "시작한 세션은 고칠 수 없습니다",
+          detail: editLockedDetail,
           href: null,
           state: MANAGE_ROW_STATE.locked,
         }
