@@ -31,10 +31,13 @@ export function notificationHref(payload: NotificationPayload): string | null {
     case NOTIFICATION_KIND.roundCountChanged:
     case NOTIFICATION_KIND.gameFinishedEarly:
       return `/games/${payload.params.gameId}`;
-    case NOTIFICATION_KIND.sessionStarted:
-      return payload.params.isGm
-        ? `/games/${payload.params.gameId}/attendance`
-        : `/games/${payload.params.gameId}`;
+    case NOTIFICATION_KIND.sessionStarted: {
+      const { gameId, isGm, roundNo } = payload.params;
+      if (!isGm) return `/games/${gameId}`;
+      return roundNo
+        ? `/games/${gameId}/attendance?round=${roundNo}`
+        : `/games/${gameId}/attendance`;
+    }
     case NOTIFICATION_KIND.participantLeft:
       return `/games/${payload.params.gameId}/participants`;
     case NOTIFICATION_KIND.drawWon:

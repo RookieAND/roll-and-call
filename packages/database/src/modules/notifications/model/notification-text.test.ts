@@ -200,6 +200,16 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "세션이 끝나고 24시간이 지났습니다.",
   ],
   [
+    { kind: NOTIFICATION_KIND.sessionReminder, params: { ...game, roundNo: 4 } },
+    "검은 산의 노래 4회차 시작 1시간 전입니다.",
+    null,
+  ],
+  [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: false, roundNo: 3 } },
+    "검은 산의 노래 3회차가 시작되었습니다.",
+    null,
+  ],
+  [
     { kind: NOTIFICATION_KIND.roundSkipped, params: { ...game, roundNo: 2 } },
     "검은 산의 노래 2회차가 생략되었습니다.",
     "뒤 회차 번호가 하나씩 당겨졌습니다.",

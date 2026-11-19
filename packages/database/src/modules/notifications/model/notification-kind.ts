@@ -95,8 +95,9 @@ export type NotificationParamsMap = {
   attendance_auto_confirmed: GameParams;
   review_available: GameParams;
   // 비공개 구인만 받는다. 공개 구인은 디스코드 스레드의 글로 안내한다. isGm이면 출석 확인으로, 아니면 구인 상세로 간다.
-  session_reminder: GameParams;
-  session_started: GameParams & { isGm: boolean };
+  // roundNo는 다회차 회차 알림에만 있다.
+  session_reminder: GameParams & { roundNo?: number };
+  session_started: GameParams & { isGm: boolean; roundNo?: number };
   // otherCount는 한 묶음으로 함께 처리된 나머지 룰북 수다. 없거나 0이면 한 권이다.
   cert_approved: { rulebookId: string; rulebookName: string; otherCount?: number };
   cert_rejected: {

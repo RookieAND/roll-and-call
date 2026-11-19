@@ -76,6 +76,10 @@ const CASES: [NotificationPayload, string | null][] = [
   [{ kind: NOTIFICATION_KIND.attendanceAutoConfirmed, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.roundSkipped, params: { ...game, roundNo: 2 } }, "/games/g1"],
   [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: true, roundNo: 3 } },
+    "/games/g1/attendance?round=3",
+  ],
+  [
     {
       kind: NOTIFICATION_KIND.roundCountChanged,
       params: { ...game, previousCount: 6, nextCount: 5 },

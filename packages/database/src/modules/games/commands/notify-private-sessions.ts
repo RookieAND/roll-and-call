@@ -13,6 +13,8 @@ import {
 import type { Transaction } from "#db/modules/transaction";
 import { games, participants } from "#db/schema";
 
+import { claimPrivateRounds, type DuePrivateRound } from "./claim-private-rounds";
+
 type DueGame = { id: string; serverId: string; gmId: string; title: string };
 
 // 비공개 구인은 디스코드 스레드가 없어 1시간 전과 시작 안내를 GM과 확정 참여자에게 웹 알림으로 보낸다.
@@ -33,18 +35,58 @@ export async function notifyPrivateSessions({ now = new Date() }: { now?: Date }
       window: windows.start,
       now,
     });
+    // 다회차는 회차마다 같은 알림을 회차 번호와 함께 보낸다.
+    const remindedRounds = await claimPrivateRounds({
+      transaction,
+      mark: "notifiedAt",
+      window: windows.reminder,
+      now,
+    });
+    const startedRounds = await claimPrivateRounds({
+      transaction,
+      mark: "startNotifiedAt",
+      window: windows.start,
+      now,
+    });
     const recipients = await confirmedByGame({
       transaction,
-      gameIds: [...reminded, ...started].map((game) => game.id),
+      gameIds: [
+        ...[...reminded, ...started].map((game) => game.id),
+        ...[...remindedRounds, ...startedRounds].map((round) => round.gameId),
+      ],
     });
 
     const byServer = new Map<string, NotificationInput[]>();
     const add = (serverId: string, notification: NotificationInput) =>
       byServer.set(serverId, [...(byServer.get(serverId) ?? []), notification]);
-    const usersOf = (game: DueGame) => [
+    const usersOf = (game: Pick<DueGame, "id" | "gmId">) => [
       game.gmId,
       ...(recipients.get(game.id) ?? []).filter((userId) => userId !== game.gmId),
     ];
+    const roundGame = (round: DuePrivateRound) => ({ id: round.gameId, gmId: round.gmId });
+    for (const round of remindedRounds) {
+      for (const userId of usersOf(roundGame(round))) {
+        add(round.serverId, {
+          userId,
+          kind: NOTIFICATION_KIND.sessionReminder,
+          params: { gameId: round.gameId, gameTitle: round.title, roundNo: round.roundNo },
+        });
+      }
+    }
+    for (const round of startedRounds) {
+      for (const userId of usersOf(roundGame(round))) {
+        add(round.serverId, {
+          userId,
+          kind: NOTIFICATION_KIND.sessionStarted,
+          params: {
+            gameId: round.gameId,
+            gameTitle: round.title,
+            isGm: userId === round.gmId,
+            roundNo: round.roundNo,
+          },
+        });
+      }
+    }
     for (const game of reminded) {
       for (const userId of usersOf(game)) {
         add(game.serverId, {
@@ -77,7 +119,11 @@ export async function notifyPrivateSessions({ now = new Date() }: { now?: Date }
       notified,
       reminded: reminded.length,
       started: started.length,
-      startedGameIds: started.map((game) => game.id),
+      // Canvas 시작 이벤트는 구인에 한 번이라 다회차는 1회차만 넣는다.
+      startedGameIds: [
+        ...started.map((game) => game.id),
+        ...startedRounds.filter((round) => round.roundNo === 1).map((round) => round.gameId),
+      ],
     };
   });
 }
@@ -99,6 +145,7 @@ async function claim({
     .where(
       and(
         eq(games.visibility, GAME_VISIBILITY.private),
+        eq(games.roundCount, 1),
         isNull(games[mark]),
         isNull(games.cancelledAt),
         isNull(games.hiddenAt),
