@@ -89,9 +89,13 @@ describe("요약", () => {
   };
 
   it("마친 회차까지와 진행 방식을 보인다", () => {
-    expect(roundsSummary({ game, rounds: [dated(1, 0), dated(2, 1)], now })).toEqual({
+    expect(roundsSummary({ game, rounds: [dated(1, 0), dated(2, 1)], now })).toMatchObject({
       title: "총 6회 · 1회차까지 마쳤습니다",
       sub: "조율형 · 한 회차씩 정합니다",
+      finishedCount: 1,
+      total: 6,
+      early: false,
+      badges: ["조율형", "한 회차씩 정합니다"],
     });
   });
 

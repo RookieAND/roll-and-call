@@ -1,10 +1,11 @@
 "use client";
 
-import { Button, HStack } from "@roll-and-call/ui";
+import { Button, Card, Text, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { AddRoundSheet } from "./add-round-sheet";
 import { FinishEarlyDialog } from "./finish-early-dialog";
+import { PlanRow } from "./plan-row";
 import { RoundCountSheet } from "./round-count-sheet";
 
 interface RoundPlanActionsProps {
@@ -16,7 +17,7 @@ interface RoundPlanActionsProps {
   defaultMinutes: number;
 }
 
-// 회차 일정 화면 아래 글자 버튼 셋: 예정 회차 수 바꾸기, 회차 추가(지정형), 여기서 마치기.
+// 회차 일정 화면의 「회차 계획」(예정 회차 수, 회차 추가)과 「구인 마치기」 섹션.
 export function RoundPlanActions({
   gameId,
   roundCount,
@@ -32,26 +33,44 @@ export function RoundPlanActions({
 
   return (
     <>
-      <HStack gap="050" wrap justify="center">
-        <Button variant="ghost" size="sm" onClick={() => setCounting(true)}>
-          예정 회차 수 바꾸기
-        </Button>
-        {designated && canAddRound && (
-          <Button variant="ghost" size="sm" onClick={() => setAdding(true)}>
-            회차 추가
-          </Button>
-        )}
-        {canFinish && (
-          <Button
-            variant="ghost"
-            colorPalette="danger"
-            size="sm"
-            onClick={() => setFinishing(true)}
+      <VStack gap="200">
+        <VStack gap="075">
+          <Text typography="subtitle2" render={<h3 />}>
+            회차 계획
+          </Text>
+          <Card.Root
+            radius={600}
+            padding="none"
+            className="overflow-hidden [&>*+*]:border-t [&>*+*]:border-gray-200"
           >
-            여기서 마치기
-          </Button>
+            <PlanRow
+              label="예정 회차 수"
+              value={`${roundCount}회`}
+              onClick={() => setCounting(true)}
+            />
+            {designated && canAddRound && (
+              <PlanRow label="회차 추가" onClick={() => setAdding(true)} />
+            )}
+          </Card.Root>
+        </VStack>
+        {canFinish && (
+          <VStack gap="075">
+            <Text typography="subtitle2" render={<h3 />}>
+              구인 마치기
+            </Text>
+            <Card.Root padding="md" radius={600}>
+              <VStack gap="100">
+                <Text typography="body3" foreground="muted">
+                  남은 회차를 열지 않고 구인을 마칩니다.
+                </Text>
+                <Button variant="outline" colorPalette="danger" onClick={() => setFinishing(true)}>
+                  여기서 마치기
+                </Button>
+              </VStack>
+            </Card.Root>
+          </VStack>
         )}
-      </HStack>
+      </VStack>
       <RoundCountSheet
         gameId={gameId}
         open={counting}

@@ -1,4 +1,4 @@
-import { Button, HStack, Text, VStack } from "@roll-and-call/ui";
+import { Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNull } from "es-toolkit";
 import { ChevronRight } from "lucide-react";
 
@@ -6,17 +6,22 @@ import { ServerLink } from "@/shared/ui";
 
 import type { RoundRowView } from "../model/round-row";
 import { ROUND_ROW_KIND } from "../model/round-row-kind";
-import { RoundRowIcon } from "./round-row-icon";
+import { ROUND_ROW_STATUS } from "../model/round-row-status";
+import { RoundNumberBadge } from "./round-number-badge";
 
 interface RoundRowProps {
   gameId: string;
   view: RoundRowView;
 }
 
-// 끝났거나 진행 중인 회차는 그 회차의 출석 확인으로, 일정이 정해진 회차는 일정 바꾸기로 간다.
+const DATED_KINDS: readonly string[] = [
+  ROUND_ROW_KIND.finished,
+  ROUND_ROW_KIND.inProgress,
+  ROUND_ROW_KIND.scheduled,
+];
+
+// 끝났거나 진행 중인 회차는 그 회차의 출석 확인으로, 일정이 정해졌거나 조율 중인 회차는 일정 화면으로 간다.
 export function RoundRow({ gameId, view }: RoundRowProps) {
-  const isScheduleButton =
-    view.kind === ROUND_ROW_KIND.unscheduled && !isNull(view.scheduleRoundNo);
   const scheduleHref = `/games/${gameId}/rounds/${view.scheduleRoundNo}/schedule`;
   let href: string | null = null;
   if (!isNull(view.attendanceRoundNo)) {
@@ -27,23 +32,29 @@ export function RoundRow({ gameId, view }: RoundRowProps) {
   ) {
     href = scheduleHref;
   }
+  const status = ROUND_ROW_STATUS[view.kind];
+  const dated = DATED_KINDS.includes(view.kind);
   const content = (
-    <HStack align="center" gap="125" className="min-h-14 px-150 py-125">
-      <RoundRowIcon kind={view.kind} />
-      <VStack className="min-w-0 flex-1">
-        <Text typography="body2" truncate>
-          {view.label}
+    <HStack align="center" gap="150" className="min-h-16 px-150 py-125">
+      <RoundNumberBadge kind={view.kind} roundNo={view.roundNo} />
+      <VStack gap="025" className="min-w-0 flex-1">
+        <Text
+          typography="body2"
+          weight={dated ? "bold" : "regular"}
+          foreground={dated ? "normal" : "muted"}
+        >
+          {view.title}
         </Text>
-        {view.note && (
-          <Text typography="body4" foreground="hint">
-            {view.note}
+        {view.subtitle && (
+          <Text typography="body4" foreground="muted">
+            {view.subtitle}
           </Text>
         )}
       </VStack>
-      {isScheduleButton && (
-        <Button variant="ghost" size="sm" render={<ServerLink path={scheduleHref} />}>
-          {view.scheduleRoundNo}회차 일정 잡기
-        </Button>
+      {status && (
+        <Badge colorPalette={status.palette} className="flex-none">
+          {status.label}
+        </Badge>
       )}
       {!isNull(href) && <ChevronRight size={18} aria-hidden className="flex-none text-hint" />}
     </HStack>

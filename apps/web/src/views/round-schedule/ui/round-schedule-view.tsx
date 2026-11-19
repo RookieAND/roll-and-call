@@ -207,7 +207,15 @@ export async function RoundScheduleView({ id, round }: RoundScheduleViewProps) {
             )}
             <RoundScheduleModes
               directLabel={dated ? "옮기기" : "바로 정하기"}
+              directDescription={
+                dated ? "새 일시로 옮기고 참여자에게 알립니다" : "날짜와 시각을 직접 정합니다"
+              }
               coordinateLabel={dated ? "다시 조율" : "가능 시간 모으기"}
+              coordinateDescription={
+                dated
+                  ? "지금 일정은 그대로 두고 가능 시간을 다시 모읍니다"
+                  : "참여자가 가능한 시간을 칠하면 겹치는 시간을 보여 드립니다"
+              }
               direct={form}
               coordinate={collecting}
             />

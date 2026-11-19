@@ -1,6 +1,6 @@
 import { getResponseCounts, listGameRounds } from "@roll-and-call/database/games";
 import { getGameReviews, getReviewDraftTarget } from "@roll-and-call/database/reviews";
-import { Badge, Card, Container, HStack, Text } from "@roll-and-call/ui";
+import { Badge, Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { isNil } from "es-toolkit";
 import { notFound } from "next/navigation";
 
@@ -22,16 +22,20 @@ import { reviewStatusOf } from "@/widgets/game-detail";
 import { cancelRowDetail } from "../model/cancel-row-detail";
 import { cancelRowLock } from "../model/cancel-row-lock";
 import { manageReviewButtonOf } from "../model/manage-review-button-of";
+import { manageRoundProgress } from "../model/manage-round-progress";
 import { manageRowGroups } from "../model/manage-rows";
 import { manageSummary } from "../model/manage-summary";
 import { manageTimeline } from "../model/manage-timeline";
 import { multiRoundProgressRows } from "../model/multi-round-progress-rows";
 import { multiRoundStage } from "../model/multi-round-stage";
+import { multiRoundTimeline } from "../model/multi-round-timeline";
+import { nextScheduleAction } from "../model/next-schedule-action";
 import { ManageCancelNote } from "./manage-cancel-note";
-import { ManageDeadlineLine } from "./manage-deadline-line";
+import { ManageDeadlineCallout } from "./manage-deadline-callout";
 import { ManageGameStat } from "./manage-game-stat";
 import { ManageGroup } from "./manage-group";
 import { ManageReopenSection } from "./manage-reopen-section";
+import { ManageRoundProgress } from "./manage-round-progress";
 import { ManageRow } from "./manage-row";
 import { ManageTimeline } from "./manage-timeline";
 
@@ -100,10 +104,14 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
     roundProgress,
     now,
   });
-  const timeline = manageTimeline({
-    game,
-    attendance: stats.find((stat) => stat.label === ATTENDANCE_LABEL)?.value,
-  });
+  const timeline = rounds
+    ? multiRoundTimeline({ rounds, now })
+    : manageTimeline({
+        game,
+        attendance: stats.find((stat) => stat.label === ATTENDANCE_LABEL)?.value,
+      });
+  const roundProgressBar = rounds ? manageRoundProgress({ game, rounds, now }) : null;
+  const scheduleAction = rounds ? nextScheduleAction({ game, rounds, now }) : null;
   const isCancelled = !isNil(game.cancelledAt);
   const endAt = plannedEndAt(game);
   const reviewFirst = isSessionEnded(game) && !isCancelled;
@@ -147,7 +155,14 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
           className="flex flex-col gap-200 px-200 pt-200 pb-200 desktop:grid desktop:max-w-none desktop:grid-cols-[minmax(0,1fr)_320px] desktop:items-start desktop:p-200"
         >
           <div className="contents desktop:flex desktop:min-w-0 desktop:flex-col desktop:gap-200">
-            <div className="order-1">
+            <VStack gap="150" className="order-1">
+              {deadlineNote && <ManageDeadlineCallout note={deadlineNote} />}
+              {roundStage?.note && (
+                <ManageDeadlineCallout
+                  note={{ text: roundStage.note, urgent: false }}
+                  action={scheduleAction}
+                />
+              )}
               <Card.Root padding="md" radius={600}>
                 <HStack align="start" gap="100">
                   <Text
@@ -160,11 +175,7 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                   </Text>
                   <Badge colorPalette={stageTone}>{stageLabel}</Badge>
                 </HStack>
-                {roundStage?.note && (
-                  <Text typography="body4" foreground="muted" className="mt-075">
-                    {roundStage.note}
-                  </Text>
-                )}
+                {roundProgressBar && <ManageRoundProgress {...roundProgressBar} />}
                 <HStack align="stretch" className="mt-150 border-t border-gray-200 pt-150">
                   {isNil(cancelNote) ? (
                     summaryStats.map((stat) => <ManageGameStat key={stat.label} stat={stat} />)
@@ -172,9 +183,8 @@ export async function ManageGameView({ id }: ManageGameViewProps) {
                     <ManageCancelNote note={cancelNote} />
                   )}
                 </HStack>
-                {deadlineNote && <ManageDeadlineLine note={deadlineNote} />}
               </Card.Root>
-            </div>
+            </VStack>
             <div className="order-3 flex flex-col gap-200">{groupNodes}</div>
           </div>
 

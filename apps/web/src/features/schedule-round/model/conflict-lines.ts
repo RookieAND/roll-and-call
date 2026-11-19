@@ -22,6 +22,8 @@ export function conflictLines({
       const prefix = showRoundNos ? `${entry.roundNos.join("·")}회차 · ` : "";
       return {
         text: `${prefix}${nicknames[entry.userId] ?? "참여자"}님은 이 시간에 다른 세션이 있습니다.`,
+        name: nicknames[entry.userId] ?? "참여자",
+        roundLabel: showRoundNos ? `${entry.roundNos.join("·")}회차` : null,
         waiting: entry.role === "waiting",
       };
     }),
