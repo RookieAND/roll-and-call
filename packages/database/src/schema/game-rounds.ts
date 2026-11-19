@@ -52,6 +52,8 @@ export const gameRounds = pgTable(
     coordinationEnd: date("coordination_end"),
     coordinationTimezone: text("coordination_timezone"),
     attendanceConfirmedAt: timestamp("attendance_confirmed_at", { withTimezone: true }),
+    // 다회차 회차의 세션 시작 안내를 스레드에 올린 시각(한 번만 보내는 표시). 단발은 games.start_notified_at을 쓴다.
+    startNotifiedAt: timestamp("start_notified_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
