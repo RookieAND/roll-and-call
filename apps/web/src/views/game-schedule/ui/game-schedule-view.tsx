@@ -56,7 +56,10 @@ export async function GameScheduleView({ id }: GameScheduleViewProps) {
               action={
                 <Button
                   render={
-                    <Link href={serverPath({ slug: server.slug, path: `/games/${id}/edit` })} />
+                    <Link
+                      prefetch={false}
+                      href={serverPath({ slug: server.slug, path: `/games/${id}/edit` })}
+                    />
                   }
                   className="mt-100 w-full"
                 >
