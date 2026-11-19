@@ -6,6 +6,7 @@ import { applyNoteModalResponse } from "./apply-note-modal-response";
 import { ephemeralResponse } from "./ephemeral-response";
 import { INTERACTION_MESSAGE } from "./interaction-message";
 import type { DiscordInteraction, DiscordInteractionResponse } from "./interaction-types";
+import { multiRoundApplyModalResponse } from "./multi-round-apply-modal-response";
 
 export async function handleApplyButton(
   interaction: DiscordInteraction,
@@ -24,6 +25,13 @@ export async function handleApplyButton(
       discordId,
       gameId: customId.slice(APPLY_BUTTON_PREFIX.length),
     });
+    if ("askCommitment" in result) {
+      return multiRoundApplyModalResponse({
+        customId,
+        scheduleLine: result.scheduleLine,
+        note: result.note,
+      });
+    }
     return "askNote" in result
       ? applyNoteModalResponse({ customId, question: result.question })
       : ephemeralResponse(result.message);

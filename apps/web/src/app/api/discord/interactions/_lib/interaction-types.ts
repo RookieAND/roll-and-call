@@ -35,7 +35,7 @@ export type DiscordInteraction = {
     custom_id?: string;
     values?: string[];
     options?: DiscordInteractionOption[];
-    components?: { component: DiscordModalField }[];
+    components?: { component?: DiscordModalField }[];
     resolved?: { attachments?: Record<string, DiscordAttachment> };
   };
   message?: { components?: { components?: DiscordMessageComponent[] }[] };
