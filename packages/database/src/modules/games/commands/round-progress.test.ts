@@ -353,3 +353,53 @@ describe("회차 추가 되돌리기", () => {
     expect((await roundsOf(gameId)).map((round) => round.roundNo)).toEqual([1, 2]);
   });
 });
+
+describe("다회차 참여자", () => {
+  it("중도 합류는 정원을 늘리고 되돌리면 원래대로 돌아간다", async () => {
+    const { addLateParticipant } = await import("./add-late-participant");
+    const { removeLateParticipant } = await import("./remove-late-participant");
+    const gameId = await seedGame({ count: 3 });
+    await db
+      .delete(participants)
+      .where(and(eq(participants.gameId, gameId), eq(participants.userId, BOB)));
+    await db.transaction((transaction) =>
+      addLateParticipant({ transaction, serverId: SERVER_ID, gameId, userId: BOB }),
+    );
+    const [bob] = await db
+      .select()
+      .from(participants)
+      .where(and(eq(participants.gameId, gameId), eq(participants.userId, BOB)));
+    expect(bob).toMatchObject({ status: "confirmed", lateJoined: true });
+    expect((await gameOf(gameId)).maxPlayers).toBe(5);
+    const undone = await db.transaction((transaction) =>
+      removeLateParticipant({ transaction, serverId: SERVER_ID, gameId, userId: BOB }),
+    );
+    expect(undone).toBe(true);
+    expect((await gameOf(gameId)).maxPlayers).toBe(4);
+  });
+
+  it("합의 하차는 불참 기록 없이 명단 행을 남긴다", async () => {
+    const { markParticipantRemoved } = await import("./mark-participant-removed");
+    const gameId = await seedGame({ count: 3 });
+    await db.transaction((transaction) =>
+      markParticipantRemoved({
+        transaction,
+        serverId: SERVER_ID,
+        gameId,
+        userId: ALICE,
+        absenceReason: "사유",
+        leftReason: "mutual",
+      }),
+    );
+    const [alice] = await db
+      .select()
+      .from(participants)
+      .where(and(eq(participants.gameId, gameId), eq(participants.userId, ALICE)));
+    expect(alice).toMatchObject({
+      status: "removed",
+      absent: false,
+      absenceReason: null,
+      leftReason: "mutual",
+    });
+  });
+});

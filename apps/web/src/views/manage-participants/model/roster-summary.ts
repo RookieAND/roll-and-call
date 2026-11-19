@@ -27,6 +27,7 @@ export function summarizeRoster({
   isCoordinate,
   started,
   capacityRaised,
+  multiRound = false,
   now = new Date(),
 }: {
   confirmed: ManagedMember[];
@@ -42,6 +43,8 @@ export function summarizeRoster({
   isCoordinate: boolean;
   started: boolean;
   capacityRaised: boolean;
+  // 여러 번 진행하는 구인. 1회차 시작 뒤 참여자 추가·내보내기가 다회차용으로 바뀐다.
+  multiRound?: boolean;
   now?: Date;
 }) {
   const passed = isDeadlinePassed(endDate, now);
@@ -82,6 +85,7 @@ export function summarizeRoster({
     isFull: confirmed.length >= maxPlayers,
     started,
     capacityRaised,
+    lateJoin: multiRound && started,
     // 신청자(직접 확정 포함)가 최소 인원에 못 미쳐 지금 추첨할 수 없을 때의 최소 인원. 그 밖에는 null이다.
     blockedMinPlayers:
       lotteryOpen &&

@@ -42,7 +42,8 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
       </PageShell>
     );
   }
-  if (game.cancelledAt || isSessionEnded(game)) {
+  const ended = game.roundCount > 1 ? Boolean(game.finishedAt) : isSessionEnded(game);
+  if (game.cancelledAt || ended) {
     redirect(serverPath({ slug: server.slug, path: `/games/${id}/manage` }));
   }
 
@@ -80,6 +81,7 @@ export async function ManageParticipantsView({ id }: ManageParticipantsViewProps
     isCoordinate,
     started,
     capacityRaised: !isNull(game.capacityRaisedAt),
+    multiRound: game.roundCount > 1,
   });
 
   return (

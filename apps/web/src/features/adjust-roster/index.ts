@@ -5,3 +5,5 @@ export { FinishSelectionCard } from "./ui/finish-selection-card";
 export type { MemberSummary } from "./model/member-summary";
 export { DirectConfirmButton } from "./ui/direct-confirm-button";
 export { DirectConfirmSheet } from "./ui/direct-confirm-sheet";
+export { LateJoinButton } from "./ui/late-join-button";
+export { RoundKickSheet } from "./ui/round-kick-sheet";

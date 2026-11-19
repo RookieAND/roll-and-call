@@ -111,3 +111,5 @@ export { findGameRound } from "./queries/find-game-round";
 export { removeLastRound } from "./commands/remove-last-round";
 export { listRosterFinishers } from "./queries/list-roster-finishers";
 export { listGameRoundsInTransaction } from "./queries/list-game-rounds-in-transaction";
+export { addLateParticipant } from "./commands/add-late-participant";
+export { removeLateParticipant } from "./commands/remove-late-participant";
