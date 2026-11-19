@@ -9,6 +9,7 @@ import {
   CoordinationRangeFields,
   CoordinationWindowField,
   EndDateField,
+  FirstRoundFields,
   FixedSessionField,
   MinPlayersField,
   OpenRecruitFields,
@@ -24,6 +25,7 @@ interface SplitTeamsStepTwoProps {
   selectedCount: number;
   capacityError: string | undefined;
   onCapacityChange: (capacity: number) => void;
+  multiRound: { line: string | null; designated: boolean } | null;
 }
 
 // 구인 등록의 인원·모집 유형·일정 칸을 그대로 쓴다. 선택한 참여자는 1단계에서 정했으므로 여기서 다시 보이지 않는다.
@@ -33,10 +35,17 @@ export function SplitTeamsStepTwo({
   selectedCount,
   capacityError,
   onCapacityChange,
+  multiRound,
 }: SplitTeamsStepTwoProps) {
   const scheduleMode = form.watch("scheduleMode");
   const visibility: GameVisibility = form.watch("visibility") ?? GAME_VISIBILITY.private;
   const isOpen = visibility === GAME_VISIBILITY.public;
+
+  const sessionField = multiRound ? (
+    <FirstRoundFields form={form} />
+  ) : (
+    <FixedSessionField form={form} />
+  );
 
   return (
     <VStack gap="250">
@@ -67,17 +76,24 @@ export function SplitTeamsStepTwo({
           <OpenRecruitFields form={form} />
         </>
       )}
-      <ScheduleModeField
-        value={scheduleMode}
-        onChange={(next) => form.setValue("scheduleMode", next, { shouldDirty: true })}
-      />
+      {!multiRound?.designated && (
+        <ScheduleModeField
+          value={scheduleMode}
+          onChange={(next) => form.setValue("scheduleMode", next, { shouldDirty: true })}
+        />
+      )}
       {scheduleMode === SCHEDULE_MODE.fixed ? (
-        <FixedSessionField form={form} />
+        sessionField
       ) : (
         <>
           <CoordinationRangeFields form={form} />
           <CoordinationWindowField form={form} locked={false} />
         </>
+      )}
+      {multiRound?.line && (
+        <Text typography="body4" foreground="muted" render={<p />}>
+          {multiRound.line}
+        </Text>
       )}
       {isOpen && <EndDateField form={form} />}
     </VStack>

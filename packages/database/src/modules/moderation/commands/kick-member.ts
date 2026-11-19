@@ -104,7 +104,7 @@ export async function kickMember({
       ok: true,
       discordId: user.discordId,
       cancelledGames: released.cancelledGames,
-      leftGameIds: released.leftGameIds,
+      leftGameIds: [...released.leftGameIds, ...released.removedRoundGameIds],
     };
   });
 }

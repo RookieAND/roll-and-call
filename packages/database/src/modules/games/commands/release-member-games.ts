@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, isNull, or, sql } from "drizzle-orm";
 
 import { departedGmGameAction } from "#db/modules/games/model/departed-gm-game-action";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
@@ -14,17 +14,22 @@ import { createNotifications } from "#db/modules/notifications";
 import type { GameCancelKind } from "#db/modules/notifications/model";
 import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 import type { Transaction } from "#db/modules/transaction";
-import { games, participants, staff, type Game } from "#db/schema";
+import { games, participants, servers, staff, type Game } from "#db/schema";
 
 import { autoConfirmAttendanceForGame } from "./auto-confirm-attendance";
 import { cancelGame } from "./cancel-game";
 import { setSessionEndedAt } from "./end-session";
+import { finishDepartedGmGame } from "./finish-departed-gm-game";
+import { removeDepartedRoundParticipant } from "./remove-departed-round-participant";
 
 export type ReleasedMemberGames = {
   leftGameIds: string[];
   leftConfirmedGameIds: string[];
   cancelledGames: Game[];
   autoConfirmedGameIds: string[];
+  // 시작한 다회차에서 다음 회차부터 빠진 구인. 빈자리 알림 대상은 아니다.
+  removedRoundGameIds: string[];
+  finishedEarlyGames: Game[];
 };
 
 // 서버를 떠난 사람(추방·탈퇴)의 정리. 운영진 역할을 떼고(소유자는 그대로), 시작 전 구인의 신청·대기·확정에서 빼고,
@@ -62,6 +67,32 @@ export async function releaseMemberGames({
     )
     .returning({ gameId: participants.gameId, status: participants.status });
 
+  const now = new Date();
+  // 시작했고 끝나지 않은 다회차의 확정 참여자는 이번 회차까지 남기고 명단에서 뺀다.
+  const startedMultiRound = await transaction
+    .select({ id: games.id })
+    .from(games)
+    .innerJoin(
+      participants,
+      and(
+        eq(participants.gameId, games.id),
+        eq(participants.userId, userId),
+        eq(participants.status, PARTICIPANT_STATUS.confirmed),
+      ),
+    )
+    .where(
+      and(
+        eq(games.serverId, serverId),
+        gt(games.roundCount, 1),
+        isNull(games.cancelledAt),
+        isNull(games.finishedAt),
+        sql`${firstRoundStartSql} <= ${now}`,
+      ),
+    );
+  for (const game of startedMultiRound) {
+    await removeDepartedRoundParticipant({ transaction, serverId, gameId: game.id, userId, now });
+  }
+
   // 끝나고 출석까지 확정한 세션은 읽지 않는다.
   const hosted = await transaction
     .select({
@@ -71,19 +102,27 @@ export async function releaseMemberGames({
       endedAt: firstRoundEndedAtSql,
       attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
       cancelledAt: games.cancelledAt,
+      roundCount: games.roundCount,
+      finishedAt: games.finishedAt,
     })
     .from(games)
+    // 조인이 있어야 select 목록의 회차 서브쿼리가 games.id를 표 이름까지 붙여 읽는다(단일 표 select는 "id"만 써서 fr.id로 풀린다).
+    .innerJoin(servers, eq(servers.id, games.serverId))
     .where(
       and(
         eq(games.serverId, serverId),
         eq(games.gmId, userId),
         isNull(games.cancelledAt),
-        or(sql`${firstRoundAttendanceConfirmedAtSql} is null`, sql`${firstRoundStartSql} is null`),
+        or(
+          sql`${firstRoundAttendanceConfirmedAtSql} is null`,
+          sql`${firstRoundStartSql} is null`,
+          and(gt(games.roundCount, 1), isNull(games.finishedAt)),
+        ),
       ),
     );
-  const now = new Date();
   const cancelledGames: Game[] = [];
   const autoConfirmedGameIds: string[] = [];
+  const finishedEarlyGames: Game[] = [];
   for (const game of hosted) {
     const action = departedGmGameAction({ game, now });
     if (action === "cancel") {
@@ -97,6 +136,13 @@ export async function releaseMemberGames({
         now,
       });
       if (cancelled.ok) cancelledGames.push(cancelled.game);
+    }
+    if (action === "finish_early") {
+      const finished = await finishDepartedGmGame({ transaction, serverId, gameId: game.id, now });
+      if (finished) {
+        const [row] = await transaction.select().from(games).where(eq(games.id, game.id));
+        if (row) finishedEarlyGames.push(row);
+      }
     }
     if (action === "confirm_attendance") {
       // 이미 끝난 세션은 ended_at을 그대로 둔다. 자동 확정 시각은 기한(마친 시각 + 24시간, 미래)이라
@@ -147,6 +193,8 @@ export async function releaseMemberGames({
 
   return {
     leftGameIds: left.map((row) => row.gameId),
+    removedRoundGameIds: startedMultiRound.map((game) => game.id),
+    finishedEarlyGames,
     leftConfirmedGameIds,
     cancelledGames,
     autoConfirmedGameIds,

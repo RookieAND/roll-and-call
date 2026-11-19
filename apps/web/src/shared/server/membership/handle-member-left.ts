@@ -25,12 +25,17 @@ export async function handleMemberLeft({ server, userId }: { server: Server; use
     }
   };
 
-  for (const gameId of result.leftConfirmedGameIds) {
+  for (const gameId of [...result.leftConfirmedGameIds, ...result.removedRoundGameIds]) {
     await step("나감 알림", () =>
       notifyGameLeft({ server, gameId, userId, removedByGm: false, leftServer: true }),
     );
   }
-  for (const gameId of uniq(result.leftGameIds)) {
+  const refreshGameIds = [
+    ...result.leftGameIds,
+    ...result.removedRoundGameIds,
+    ...result.finishedEarlyGames.map((game) => game.id),
+  ];
+  for (const gameId of uniq(refreshGameIds)) {
     await step("구인 글", () => refreshRecruitPost({ server, gameId }));
   }
   for (const game of result.cancelledGames) {

@@ -59,6 +59,8 @@ interface SplitTeamsFormProps {
   gameLine: string;
   candidates: SplitCandidate[];
   carriesApplicationNote: boolean;
+  // 다회차 구인이면 일정 요약 줄과 1회차 시간 입력 방식. 지정형은 모든 회차가 날짜로 정해져 일시 지정만 쓴다.
+  multiRound: { line: string | null; designated: boolean; defaultMinutes: number } | null;
 }
 
 export function SplitTeamsForm({
@@ -69,11 +71,18 @@ export function SplitTeamsForm({
   gameLine,
   candidates,
   carriesApplicationNote,
+  multiRound,
 }: SplitTeamsFormProps) {
   const router = useRouter();
   const toServerPath = useServerPath();
   const { pending, run } = useAction();
-  const form = useForm<GameFormValues>({ defaultValues: FORM_DEFAULTS });
+  const form = useForm<GameFormValues>({
+    defaultValues: {
+      ...FORM_DEFAULTS,
+      ...(multiRound && { playMinutes: multiRound.defaultMinutes }),
+      ...(multiRound?.designated && { scheduleMode: SCHEDULE_MODE.fixed }),
+    },
+  });
   const [step, setStep] = useState(0);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [capacity, setCapacity] = useState(0);
@@ -85,6 +94,7 @@ export function SplitTeamsForm({
   const rangeStart = form.watch("rangeStart") ?? "";
   const rangeEnd = form.watch("rangeEnd") ?? "";
   const startsAt = form.watch("confirmedAt") ?? "";
+  const firstRoundEndAt = form.watch("firstRoundEndAt") ?? "";
   const endDate = form.watch("endDate") ?? "";
   const isLastStep = step === SPLIT_TEAMS_STEPS.length - 1;
   const capacityMatched = isCapacityMatched({
@@ -103,6 +113,7 @@ export function SplitTeamsForm({
     rangeStart,
     rangeEnd,
     startsAt,
+    firstRoundEndAt: multiRound ? firstRoundEndAt : undefined,
     endDate,
   });
   const ready = footHint === null;
@@ -136,6 +147,9 @@ export function SplitTeamsForm({
         ? {
             scheduleMode: SCHEDULE_MODE.fixed,
             startsAt: fromKstDateTimeInput(startsAt).toISOString(),
+            firstRoundEndsAt: multiRound
+              ? fromKstDateTimeInput(firstRoundEndAt).toISOString()
+              : undefined,
           }
         : {
             scheduleMode: SCHEDULE_MODE.coordinate,
@@ -231,6 +245,7 @@ export function SplitTeamsForm({
                 selectedCount={selectedIds.length}
                 capacityError={capacityError}
                 onCapacityChange={changeCapacity}
+                multiRound={multiRound}
               />
             </div>
           </VStack>
