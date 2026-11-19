@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, Table, Text, VStack } from "@roll-and-call/ui";
+import { Button, HStack, Table, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
-import { TableColumns, TABLE_COLUMN } from "@/shared/ui";
+import { TableColumns, TABLE_COLUMN, Tag } from "@/shared/ui";
 
 import type { AdminRoundsView } from "../model/admin-rounds";
-import { roundsHint } from "../model/rounds-hint";
+import { roundsBadges } from "../model/rounds-badges";
 import { ContentSection } from "./content-section";
 import { RoundAttendeeDialog } from "./round-attendee-dialog";
 import { RoundRow } from "./round-row";
@@ -28,9 +28,11 @@ export function RoundsSection({ rounds }: { rounds: AdminRoundsView }) {
     <ContentSection
       title="회차"
       right={
-        <Text typography="body4" foreground="hint">
-          {roundsHint(rounds)}
-        </Text>
+        <HStack gap="050">
+          {roundsBadges(rounds).map((label) => (
+            <Tag key={label}>{label}</Tag>
+          ))}
+        </HStack>
       }
     >
       <Table.Root className="table-equal">
