@@ -113,3 +113,5 @@ export { listRosterFinishers } from "./queries/list-roster-finishers";
 export { listGameRoundsInTransaction } from "./queries/list-game-rounds-in-transaction";
 export { addLateParticipant } from "./commands/add-late-participant";
 export { removeLateParticipant } from "./commands/remove-late-participant";
+export { listThreadsToLock } from "./queries/list-threads-to-lock";
+export { markThreadLocked } from "./commands/mark-thread-locked";

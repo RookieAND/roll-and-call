@@ -128,6 +128,7 @@ export function buildTrialGame({
     reviewNotifiedAt: null,
     capacityRaisedAt: null,
     discordThreadId: null,
+    threadLockedAt: null,
     hiddenAt: null,
     hiddenBy: null,
     hiddenReasonCode: null,

@@ -174,6 +174,8 @@ export const games = pgTable(
     capacityRaisedAt: timestamp("capacity_raised_at", { withTimezone: true }),
     // 모집 공지 메시지에서 연 스레드라 id가 공지 메시지 id와 같다.
     discordThreadId: text("discord_thread_id"),
+    // 다회차가 끝나 구인 스레드를 잠근 시각. 회차 사이에는 열어 두고 마지막 회차가 끝나면 잠근다.
+    threadLockedAt: timestamp("thread_locked_at", { withTimezone: true }),
     // 운영진 조치. 숨긴 구인은 사용자 앱의 목록·검색에서만 빠진다.
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
     hiddenBy: uuid("hidden_by").references(() => profiles.id, {

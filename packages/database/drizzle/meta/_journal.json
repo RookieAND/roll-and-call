@@ -953,6 +953,13 @@
       "when": 1799900300006,
       "tag": "0141_round_start_notices",
       "breakpoints": true
+    },
+    {
+      "idx": 142,
+      "version": "7",
+      "when": 1799900300007,
+      "tag": "0142_thread_lock",
+      "breakpoints": true
     }
   ]
 }
