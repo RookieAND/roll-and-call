@@ -27,6 +27,13 @@ describe("canReopenGame", () => {
   it("취소된 구인도 다시 열 수 있다", () => {
     expect(can({ confirmedAt: null, cancelledAt: NOW })).toBe(true);
   });
+  it("다회차는 모든 회차가 끝나 구인이 마쳐졌을 때만 열 수 있다", () => {
+    const multi = { roundCount: 4, confirmedAt: new Date(NOW.getTime() - 40 * HOUR) };
+    expect(can({ ...multi, finishedAt: null })).toBe(false);
+    expect(can({ ...multi, finishedAt: new Date(NOW.getTime() + HOUR) })).toBe(false);
+    expect(can({ ...multi, finishedAt: new Date(NOW.getTime() - HOUR) })).toBe(true);
+    expect(can({ ...multi, finishedAt: null, cancelledAt: NOW })).toBe(true);
+  });
   it("진행 중이거나 모집 중이면 열 수 없다", () => {
     expect(can({ confirmedAt: new Date(NOW.getTime() - HOUR) })).toBe(false);
     expect(can({ confirmedAt: null })).toBe(false);

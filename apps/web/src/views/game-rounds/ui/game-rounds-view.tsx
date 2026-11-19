@@ -94,7 +94,15 @@ export async function GameRoundsView({ id }: GameRoundsViewProps) {
       !isNull(view.scheduleRoundNo) &&
       (view.kind === ROUND_ROW_KIND.unscheduled || view.kind === ROUND_ROW_KIND.coordinating),
   );
-  const progressCard = <RoundsProgressCard {...summary} />;
+  const progressCard = (
+    <RoundsProgressCard
+      title={game.title}
+      finishedCount={summary.finishedCount}
+      total={summary.total}
+      early={summary.early}
+      badges={summary.badges}
+    />
+  );
   const nextCard = nextView ? (
     <NextScheduleCard
       gameId={id}

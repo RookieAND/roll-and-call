@@ -3,7 +3,6 @@ import { isRoundOpen, roundEndAt } from "@roll-and-call/database/games/model";
 import { isNil } from "es-toolkit";
 
 import { MANAGE_ROW_ACTION, MANAGE_ROW_STATE, type ManageRow } from "./manage-row-state";
-import { nextRoundDetail } from "./next-round-detail";
 
 // 다회차 운영 관리의 「세션 진행」 줄: 회차 일정, 가장 최근 회차 출석 확인, 진행 중인 회차 마치기.
 // 운영 관리에는 회차 목록을 늘어놓지 않고 회차 일정 화면으로 보낸다.
@@ -24,7 +23,6 @@ export function multiRoundProgressRows({
 }): ManageRow[] {
   const started = rounds.filter((round) => !isNil(round.startAt) && round.startAt <= now);
   const latest = started.at(-1);
-  const next = rounds.find((round) => !isNil(round.startAt) && round.startAt > now);
   const latestEnd = latest ? roundEndAt(latest) : null;
   const inProgress =
     latest && latestEnd && latestEnd > now && isNil(latest.endedAt) ? latest : null;
@@ -33,11 +31,7 @@ export function multiRoundProgressRows({
     key: "rounds",
     icon: "calendar",
     label: "회차 일정",
-    detail: nextRoundDetail({
-      next,
-      finished: !isNil(game.finishedAt),
-      roundCount: game.roundCount,
-    }),
+    detail: "회차별 일정을 확인하고 바꿉니다",
     href: `/games/${game.id}/rounds`,
     state: MANAGE_ROW_STATE.open,
   };
