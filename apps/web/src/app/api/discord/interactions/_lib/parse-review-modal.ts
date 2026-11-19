@@ -1,8 +1,9 @@
 import type { DiscordInteraction } from "./interaction-types";
+import { modalFields } from "./modal-fields";
 import { REVIEW_FIELD_ID } from "./review-modal-response";
 
 export function parseReviewModal(interaction: DiscordInteraction) {
-  const fields = interaction.data?.components?.map(({ component }) => component) ?? [];
+  const fields = modalFields(interaction);
   const fieldOf = (customId: string) => fields.find((field) => field.custom_id === customId);
   const attachments = interaction.data?.resolved?.attachments ?? {};
   const body = fieldOf(REVIEW_FIELD_ID.body)?.value;

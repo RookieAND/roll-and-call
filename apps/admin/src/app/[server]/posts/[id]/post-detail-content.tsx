@@ -1,3 +1,4 @@
+import { getAdminGameRounds } from "@roll-and-call/database/games";
 import { notFound } from "next/navigation";
 
 import { type PostListFilter } from "@/entities/post";
@@ -26,6 +27,8 @@ export async function PostDetailContent({
     requireStaff(),
   ]);
   if (!post) notFound();
+  const roundData = await getAdminGameRounds({ serverId: server.id, gameId: id });
+  const rounds = roundData && { ...roundData, now: new Date() };
   const userAppUrl = process.env.NEXT_PUBLIC_USER_APP_URL;
   const serverAppUrl = userAppUrl && `${userAppUrl}/${server.slug}`;
   // 조치·신청글 모달은 데스크톱 화면이 띄우고, 모바일에선 같은 모달이 시트로 열린다.
@@ -38,6 +41,7 @@ export async function PostDetailContent({
           listQuery={listQuery}
           viewerId={staff.id}
           serverAppUrl={serverAppUrl}
+          rounds={rounds}
         />
       </div>
       <div data-view="mobile" className="contents lg:hidden">
@@ -46,6 +50,7 @@ export async function PostDetailContent({
           tab={tab}
           listQuery={listQuery}
           serverAppUrl={serverAppUrl}
+          rounds={rounds}
         />
       </div>
     </>

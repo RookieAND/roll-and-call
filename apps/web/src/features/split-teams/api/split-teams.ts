@@ -4,6 +4,7 @@ import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import {
   createGameWithRoster,
   deleteParticipant,
+  listGameRoundsInTransaction,
   listWaitingParticipants,
   lockGame,
 } from "@roll-and-call/database/games";
@@ -15,7 +16,8 @@ import { uniq } from "es-toolkit";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
-import { GAME_VISIBILITY, isSessionStarted } from "@/entities/game";
+import { GAME_VISIBILITY, isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
+import { checkScheduleConflicts } from "@/entities/game/server";
 import { RULE_GATE, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import {
   AppError,
@@ -33,6 +35,7 @@ import { splitTeamsColumns } from "../model/split-teams-columns";
 import { splitTeamsDeadline } from "../model/split-teams-deadline";
 import { splitTeamsInputSchema, type SplitTeamsInput } from "../model/split-teams-input";
 import { splitTeamsRecruit } from "../model/split-teams-recruit";
+import { splitTeamsRounds } from "../model/split-teams-rounds";
 import { splitTeamsSchedule } from "../model/split-teams-schedule";
 
 // 원 구인의 대기자(판정 전에는 신청자) 가운데 GM이 고른 사람으로 새 구인을 연다. 모집 유형은 GM이 고른다.
@@ -111,17 +114,39 @@ export async function splitTeams(
         throw new AppError("이 룰로는 지금 구인을 열 수 없습니다. 룰북 인증 상태를 확인해 주세요.");
       }
 
+      const planned = splitTeamsRounds({
+        game,
+        originals:
+          game.roundCount > 1
+            ? await listGameRoundsInTransaction({
+                transaction,
+                serverId: server.id,
+                gameId: game.id,
+              })
+            : [],
+        schedule: scheduled.columns,
+        firstRoundEndsAt:
+          schedule.scheduleMode === SCHEDULE_MODE.fixed && schedule.firstRoundEndsAt
+            ? new Date(schedule.firstRoundEndsAt)
+            : undefined,
+      });
+      if (planned && "error" in planned) throw new AppError(planned.error);
+
       const createdId = await createGameWithRoster({
         transaction,
         serverId: server.id,
-        columns: splitTeamsColumns({
-          game,
-          maxPlayers,
-          visibility,
-          endDate: deadline.endDate,
-          recruit: recruitColumns.columns,
-          schedule: scheduled.columns,
-        }),
+        columns: {
+          ...splitTeamsColumns({
+            game,
+            maxPlayers,
+            visibility,
+            endDate: deadline.endDate,
+            recruit: recruitColumns.columns,
+            schedule: scheduled.columns,
+          }),
+          ...(planned ? { repeatRule: planned.repeatRule } : {}),
+        },
+        rounds: planned?.rows,
         confirmedUserIds: userIds,
         applicationNotes: new Map(
           waiting.map((participant) => [participant.userId, participant.applicationNote]),
@@ -131,6 +156,18 @@ export async function splitTeams(
       // 남은 대기 순서는 waitlistedAt·drawRank를 그대로 두어 바뀌지 않는다.
       for (const userId of userIds) {
         await deleteParticipant({ transaction, serverId: server.id, gameId: game.id, userId });
+      }
+      // 옮긴 사람이 원 구인에서 빠진 뒤에 비교해야 원 구인 회차와 겹쳤다고 잘못 막지 않는다.
+      if (planned && planned.dated.length > 0) {
+        const conflict = await checkScheduleConflicts({
+          transaction,
+          serverId: server.id,
+          gameId: createdId,
+          gmId: user.id,
+          confirmedUserIds: userIds,
+          rounds: planned.dated,
+        });
+        if (conflict) throw new AppError(conflict.error);
       }
       await createNotifications({
         executor: transaction,

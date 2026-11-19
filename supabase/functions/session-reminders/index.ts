@@ -75,7 +75,8 @@ async function descriptionText(game: DueGame, gmName: string) {
   );
 }
 
-async function sendReminder(game: DueGame, gmName: string) {
+// roundNo가 있으면 다회차 회차의 알림이라 첫 줄에 「4회차 시작 1시간 전입니다.」를 둔다.
+async function sendReminder(game: DueGame, gmName: string, roundNo?: number) {
   const mentionIds = [
     game.gm?.discord_id,
     ...game.participants
@@ -88,9 +89,11 @@ async function sendReminder(game: DueGame, gmName: string) {
     descriptionText(game, gmName),
   ]);
   const roleIds = roleMentionIds(head);
+  const roundLine = roundNo ? `${roundNo}회차 시작 1시간 전입니다.` : "";
   const content =
-    [head, mentionIds.map((discordId) => `<@${discordId}>`).join(" ")].filter(Boolean).join("\n") ||
-    undefined;
+    [roundLine, head, mentionIds.map((discordId) => `<@${discordId}>`).join(" ")]
+      .filter(Boolean)
+      .join("\n") || undefined;
 
   const response = await fetch(
     `https://discord.com/api/v10/channels/${game.discord_thread_id}/messages`,
@@ -146,6 +149,7 @@ Deno.serve(async () => {
     .not("confirmed_at", "is", null)
     .not("discord_thread_id", "is", null)
     .eq("visibility", "public")
+    .eq("round_count", 1)
     .is("notified_at", null)
     .is("hidden_at", null)
     .is("cancelled_at", null)
@@ -175,5 +179,60 @@ Deno.serve(async () => {
       await supabase.from("games").update({ notified_at: null }).eq("id", game.id);
     }
   }
-  return Response.json({ claimed: data.length, failed, start });
+  const rounds = await sendRoundReminders(now);
+  return Response.json({ claimed: data.length, failed, start, rounds });
 });
+
+type DueRound = {
+  id: string;
+  round_no: number;
+  start_at: string;
+  game: Omit<DueGame, "confirmed_at">;
+};
+
+// 다회차는 회차마다 1시간 전 알림을 스레드에 올린다. 후보를 고른 뒤 회차 행의 notified_at을 하나씩 채워 가져간다.
+async function sendRoundReminders(now: Date) {
+  const { data, error } = await supabase
+    .from("game_rounds")
+    .select(
+      "id, round_no, start_at, game:games!game_rounds_game_id_games_id_fk!inner(id, title, rule, discord_thread_id, server_id, gm_id, round_count, visibility, hidden_at, cancelled_at, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(discord_id, username), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id)))",
+    )
+    .is("notified_at", null)
+    .gt("start_at", now.toISOString())
+    .lte("start_at", new Date(now.getTime() + ONE_HOUR_MS).toISOString())
+    .gt("game.round_count", 1)
+    .eq("game.visibility", "public")
+    .not("game.discord_thread_id", "is", null)
+    .is("game.hidden_at", null)
+    .is("game.cancelled_at", null)
+    .returns<DueRound[]>();
+  if (error) return { claimed: 0, failed: [] as string[], error: error.message };
+
+  let claimed = 0;
+  const failed: string[] = [];
+  for (const round of data) {
+    if (!round.game.participants.some((participant) => participant.status === "confirmed"))
+      continue;
+    const { data: claim } = await supabase
+      .from("game_rounds")
+      .update({ notified_at: now.toISOString() })
+      .eq("id", round.id)
+      .is("notified_at", null)
+      .select("id");
+    if (!claim || claim.length === 0) continue;
+    claimed += 1;
+    const game: DueGame = { ...round.game, confirmed_at: round.start_at };
+    try {
+      await sendReminder(
+        game,
+        (await gmNickname(game)) ?? game.gm?.username ?? "?",
+        round.round_no,
+      );
+    } catch (sendError) {
+      console.warn(`round reminder failed for ${round.id}:`, sendError);
+      failed.push(round.id);
+      await supabase.from("game_rounds").update({ notified_at: null }).eq("id", round.id);
+    }
+  }
+  return { claimed, failed };
+}

@@ -200,6 +200,84 @@ const CASES: [NotificationPayload, string, string | null][] = [
     "세션이 끝나고 24시간이 지났습니다.",
   ],
   [
+    { kind: NOTIFICATION_KIND.roundAvailabilityRequested, params: { ...game, roundNo: 4 } },
+    "4회차 가능 시간을 알려 주세요",
+    "검은 산의 노래",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleSet,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-10-31T03:00:00Z",
+        endsAt: "2026-10-31T07:00:00Z",
+      },
+    },
+    "4회차 일정이 정해졌습니다",
+    "10월 31일 (토) 오후 12:00~4:00",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleChanged,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-11-07T03:00:00Z",
+        endsAt: "2026-11-07T07:00:00Z",
+      },
+    },
+    "4회차 일정이 바뀌었습니다",
+    "11월 7일 (토) 오후 12:00~4:00로 옮겨졌습니다",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.laterRoundsChanged,
+      params: { ...game, fromRoundNo: 5, toRoundNo: 6, shiftMs: 7 * 86_400_000 },
+    },
+    "이후 회차 일정이 바뀌었습니다",
+    "5~6회차가 한 주씩 뒤로 옮겨졌습니다",
+  ],
+  [
+    { kind: NOTIFICATION_KIND.sessionReminder, params: { ...game, roundNo: 4 } },
+    "검은 산의 노래 4회차 시작 1시간 전입니다.",
+    null,
+  ],
+  [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: false, roundNo: 3 } },
+    "검은 산의 노래 3회차가 시작되었습니다.",
+    null,
+  ],
+  [
+    { kind: NOTIFICATION_KIND.roundSkipped, params: { ...game, roundNo: 2 } },
+    "검은 산의 노래 2회차가 생략되었습니다.",
+    "뒤 회차 번호가 하나씩 당겨졌습니다.",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundCountChanged,
+      params: { ...game, previousCount: 6, nextCount: 8 },
+    },
+    "검은 산의 노래 예정 회차 수가 바뀌었습니다.",
+    "총 6회에서 8회로 늘었습니다.",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.gameFinishedEarly,
+      params: { ...game, reason: "manual", roundNo: 3, finisher: true },
+    },
+    "검은 산의 노래 구인이 일찍 마무리되었습니다.",
+    "GM이 3회차에서 마쳤습니다. 완주로 인정되었습니다.",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.gameFinishedEarly,
+      params: { ...game, reason: "stale", roundNo: 4, finisher: false },
+    },
+    "검은 산의 노래 구인이 일찍 마무리되었습니다.",
+    "다음 회차가 30일 동안 정해지지 않아 마무리되었습니다.",
+  ],
+  [
     { kind: NOTIFICATION_KIND.reviewAvailable, params: game },
     "검은 산의 노래 후기를 남길 수 있습니다.",
     "함께한 세션의 후기를 남겨 주세요.",

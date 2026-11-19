@@ -38,6 +38,9 @@ import { WeekPager } from "./week-pager";
 interface ScheduleBodyProps {
   appBar: ReactNode;
   gameId: string;
+  // 2회차부터 회차별 가능 시간. 비우면 1회차(단발)다.
+  roundNo?: number;
+  header?: ReactNode;
   days: DayColumn[];
   timeRows: TimeRow[];
   // 서버 첫 렌더 값. 이후엔 쿼리 캐시(저장 후 invalidate, 포커스 복귀 시 refetch)가 갱신한다.
@@ -52,6 +55,8 @@ interface ScheduleBodyProps {
 export function ScheduleBody({
   appBar,
   gameId,
+  roundNo,
+  header,
   days,
   timeRows,
   initialAvailability,
@@ -62,7 +67,7 @@ export function ScheduleBody({
 }: ScheduleBodyProps) {
   const { server } = useParams<{ server: string }>();
   const { data } = useQuery({
-    ...availabilityQuery({ slug: server, gameId }),
+    ...availabilityQuery({ slug: server, gameId, roundNo }),
     initialData: initialAvailability,
   });
   const { aggregate, blocked } = data;
@@ -107,7 +112,7 @@ export function ScheduleBody({
     onPickedChange: setPicked,
   };
   const paintable = mode.kind === SCHEDULE_BODY_MODE.paint;
-  const editor = useAvailabilityEditor({ gameId, savedMine: aggregate.mine, blocked });
+  const editor = useAvailabilityEditor({ gameId, roundNo, savedMine: aggregate.mine, blocked });
   const overlap = hasResponses ? (
     <ScheduleOverlap hint="색이 진할수록 그 시간에 가능한 사람이 많습니다." {...overlapProps} />
   ) : (
@@ -148,6 +153,7 @@ export function ScheduleBody({
     <PageShell readable appBar={appBar} panel={panel}>
       <Container size="sm" className="desktop:px-0">
         <VStack className="pt-175 pb-200 desktop:pt-0">
+          {header}
           <ErrorBoundary>{renderBody()}</ErrorBoundary>
         </VStack>
       </Container>

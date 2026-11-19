@@ -8,6 +8,7 @@ export function gameFilterCount(filter: GamesFilter): number {
     (filter.days?.length ?? 0) +
     (filter.times?.length ?? 0) +
     unscheduledCount +
+    (filter.rounds ? 1 : 0) +
     (hidesPrivateGames(filter) ? 1 : 0)
   );
 }

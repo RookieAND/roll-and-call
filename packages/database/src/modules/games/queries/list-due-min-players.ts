@@ -1,8 +1,10 @@
-import { and, asc, gt, inArray, isNotNull, isNull, lte, or } from "drizzle-orm";
+import { and, asc, inArray, isNotNull, isNull, lte, or, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { RECRUIT_METHOD } from "#db/modules/games/model/recruit-method";
 import { games } from "#db/schema";
+
+import { firstRoundStartSql } from "./first-round-sql";
 
 // 마감 때 최소 인원 판정 크론이 집는 글: 마감이 지났는데 아직 판정하지 않은 선착순·선발 글(games_min_players_due_idx).
 // 시작한 세션은 취소할 수 없어 고르지 않는다. 추첨 글은 drawLottery가 판정한다.
@@ -18,7 +20,10 @@ export async function listDueMinPlayers({ now, limit = 50 }: { now: Date; limit?
         isNull(games.minPlayersJudgedAt),
         isNull(games.cancelledAt),
         lte(games.endDate, now),
-        or(isNull(games.confirmedAt), gt(games.confirmedAt, now)),
+        or(
+          sql`${firstRoundStartSql} is null`,
+          sql`${firstRoundStartSql} > ${now.toISOString()}::timestamptz`,
+        ),
       ),
     )
     .orderBy(asc(games.endDate))

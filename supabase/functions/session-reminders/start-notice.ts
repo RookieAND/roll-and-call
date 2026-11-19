@@ -107,12 +107,15 @@ async function description({
   );
 }
 
+// roundNo가 있으면 다회차 회차의 안내다. 첫 줄에 「3회차가 시작되었습니다.」를 두고 웹 후기 버튼은 그 회차로 간다.
 async function sendStartNotice({
   environment,
   game,
+  roundNo,
 }: {
   environment: Environment;
   game: StartGame;
+  roundNo?: number;
 }) {
   const { supabase, botToken, siteUrl } = environment;
   const gmName = await gmNickname({ supabase, game });
@@ -126,6 +129,11 @@ async function sendStartNotice({
     new Date(game.confirmed_at).getTime() + (game.play_minutes || DEFAULT_PLAY_MINUTES) * 60_000,
   ).toISOString();
   const userIds = [...head.matchAll(/<@!?(\d+)>/g)].flatMap((match) => match[1] ?? []);
+  const roundLine = roundNo ? `${roundNo}회차가 시작되었습니다.` : "";
+  const content = [roundLine, head].filter(Boolean).join("\n");
+  const reviewUrl = roundNo ? `${detailUrl}/review?round=${roundNo}` : `${detailUrl}/review`;
+  // packages/game-notices/src/notify/button-target.ts와 같은 모양: 다회차는 「구인 id.회차 번호」.
+  const target = roundNo ? `${game.id}.${roundNo}` : game.id;
 
   const response = await fetch(
     `https://discord.com/api/v10/channels/${game.discord_thread_id}/messages`,
@@ -133,7 +141,7 @@ async function sendStartNotice({
       method: "POST",
       headers: { authorization: `Bot ${botToken}`, "content-type": "application/json" },
       body: JSON.stringify({
-        content: head || undefined,
+        content: content || undefined,
         embeds: [
           {
             title: game.title,
@@ -157,21 +165,21 @@ async function sendStartNotice({
                 style: 3,
                 emoji: { name: "✅" },
                 label: "출석 입력하기",
-                custom_id: `${ATTENDANCE_BUTTON_PREFIX}${game.id}`,
+                custom_id: `${ATTENDANCE_BUTTON_PREFIX}${target}`,
               },
               {
                 type: 2,
                 style: 1,
                 emoji: { name: "📝" },
                 label: "후기 작성하기",
-                custom_id: `${REVIEW_BUTTON_PREFIX}${game.id}`,
+                custom_id: `${REVIEW_BUTTON_PREFIX}${target}`,
               },
               {
                 type: 2,
                 style: 5,
                 emoji: { name: "🌐" },
                 label: "웹에서 작성하기",
-                url: `${detailUrl}/review`,
+                url: reviewUrl,
               },
             ],
           },
@@ -195,6 +203,7 @@ export async function sendStartNotices(environment: Environment, now: Date) {
     .not("confirmed_at", "is", null)
     .not("discord_thread_id", "is", null)
     .eq("visibility", "public")
+    .eq("round_count", 1)
     .is("start_notified_at", null)
     .is("hidden_at", null)
     .is("cancelled_at", null)
@@ -222,5 +231,68 @@ export async function sendStartNotices(environment: Environment, now: Date) {
       await supabase.from("games").update({ start_notified_at: null }).eq("id", game.id);
     }
   }
-  return { claimed: data.length, failed, canvasFailed };
+  const rounds = await sendRoundStartNotices(environment, now);
+  return { claimed: data.length, failed, canvasFailed, rounds };
+}
+
+type DueRound = {
+  id: string;
+  round_no: number;
+  start_at: string;
+  planned_end_at: string;
+  game: Omit<StartGame, "confirmed_at" | "play_minutes"> & { round_count: number };
+};
+
+const ROUND_GAME_COLUMNS =
+  "id, title, rule, rulebook_id, discord_thread_id, server_id, gm_id, round_count, visibility, hidden_at, cancelled_at, server:servers!games_server_id_servers_id_fk(slug), gm:profiles!games_gm_id_profiles_id_fk(username, discord_id), participants!participants_game_id_games_id_fk(status, user:profiles!participants_user_id_profiles_id_fk(discord_id))";
+
+// 다회차는 회차마다 시작 안내를 올린다. 후보를 고른 뒤 회차 행의 start_notified_at을 하나씩 채워 가져가므로 겹쳐 돌아도 한 번만 보낸다.
+// Canvas 시작 이벤트는 구인에 한 번이라 1회차에만 보낸다.
+async function sendRoundStartNotices(environment: Environment, now: Date) {
+  const { supabase } = environment;
+  const { data, error } = await supabase
+    .from("game_rounds")
+    .select(
+      `id, round_no, start_at, planned_end_at, game:games!game_rounds_game_id_games_id_fk!inner(${ROUND_GAME_COLUMNS})`,
+    )
+    .is("start_notified_at", null)
+    .lte("start_at", now.toISOString())
+    .gt("start_at", new Date(now.getTime() - WINDOW_MS).toISOString())
+    .gt("game.round_count", 1)
+    .eq("game.visibility", "public")
+    .not("game.discord_thread_id", "is", null)
+    .is("game.hidden_at", null)
+    .is("game.cancelled_at", null)
+    .returns<DueRound[]>();
+  if (error) return { claimed: 0, failed: [] as string[], error: error.message };
+
+  let claimed = 0;
+  const failed: string[] = [];
+  for (const round of data) {
+    const { data: claim } = await supabase
+      .from("game_rounds")
+      .update({ start_notified_at: now.toISOString() })
+      .eq("id", round.id)
+      .is("start_notified_at", null)
+      .select("id");
+    if (!claim || claim.length === 0) continue;
+    claimed += 1;
+    const minutes = Math.round(
+      (new Date(round.planned_end_at).getTime() - new Date(round.start_at).getTime()) / 60_000,
+    );
+    const game: StartGame = { ...round.game, confirmed_at: round.start_at, play_minutes: minutes };
+    try {
+      await sendStartNotice({ environment, game, roundNo: round.round_no });
+      if (round.round_no === 1) {
+        await sendCanvasGameStarted({ supabase, game, now }).catch((canvasError) => {
+          console.warn(`canvas event failed for ${game.id}:`, canvasError);
+        });
+      }
+    } catch (sendError) {
+      console.warn(`round start notice failed for ${round.id}:`, sendError);
+      failed.push(round.id);
+      await supabase.from("game_rounds").update({ start_notified_at: null }).eq("id", round.id);
+    }
+  }
+  return { claimed, failed };
 }

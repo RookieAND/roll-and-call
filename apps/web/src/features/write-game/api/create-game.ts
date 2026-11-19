@@ -1,7 +1,9 @@
 "use server";
 
+import { isFeatureEnabled } from "@roll-and-call/app-kit/feature-flags";
 import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { createGameWithRoster } from "@roll-and-call/database/games";
+import { buildNewRounds } from "@roll-and-call/database/games/model";
 import { listSanctionedUserIds, findActiveSanction } from "@roll-and-call/database/moderation";
 import { createNotifications } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
@@ -12,7 +14,8 @@ import { uniq } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { GAME_VISIBILITY } from "@/entities/game";
+import { GAME_VISIBILITY, ROUND_MODE, ROUND_SCHEDULE_KIND, SCHEDULE_MODE } from "@/entities/game";
+import { checkScheduleConflicts } from "@/entities/game/server";
 import { RULE_GATE, isCertEnforced, ruleGate, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -24,9 +27,10 @@ import {
 } from "@/shared/server";
 
 import { checkSupplements } from "../model/check-supplements";
-import { gameFormSchema, type GameFormValues } from "../model/game-form";
+import { gameFormSchema, INVALID_INPUT_MESSAGE, type GameFormValues } from "../model/game-form";
 import { invalidInputResult } from "../model/invalid-input-result";
 import { manualSupplementNames } from "../model/manual-supplement-names";
+import { multiRoundSpans } from "../model/multi-round-spans";
 import { pastScheduleError } from "../model/past-schedule-error";
 import { toGameColumns } from "../model/to-game-columns";
 import { toPrivateColumns } from "../model/to-private-columns";
@@ -35,6 +39,15 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   const parsed = gameFormSchema.safeParse(input);
   if (!parsed.success) {
     return invalidInputResult(parsed.error.issues[0]);
+  }
+
+  const isMulti = parsed.data.roundMode === ROUND_MODE.multi;
+  const isCoordinatedKind = parsed.data.roundScheduleKind === ROUND_SCHEDULE_KIND.coordinated;
+  if (
+    (isMulti && !isFeatureEnabled("multiRound")) ||
+    (isMulti && isCoordinatedKind && !isFeatureEnabled("multiRoundCoordinated"))
+  ) {
+    return { error: INVALID_INPUT_MESSAGE };
   }
 
   const member = await getActingMember();
@@ -94,7 +107,35 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
   });
 
   const supplements = supplementCheck.supplements;
-  const gameId = await withTransaction(async (transaction) => {
+  const spans = isMulti ? multiRoundSpans(parsed.data) : [];
+  const rounds = isMulti
+    ? buildNewRounds({
+        scheduleKind: columns.roundScheduleKind,
+        roundCount: columns.roundCount,
+        dated: spans,
+        firstRoundCoordination:
+          parsed.data.scheduleMode === SCHEDULE_MODE.coordinate &&
+          columns.rangeStart &&
+          columns.rangeEnd
+            ? { start: columns.rangeStart, end: columns.rangeEnd, timezone: "Asia/Seoul" }
+            : undefined,
+      })
+    : undefined;
+  const created = await withTransaction(async (transaction) => {
+    // GM과 직접 확정한 사람의 다른 세션과 일시가 겹치면 등록하지 않는다.
+    if (columns.confirmedAt || spans.length > 0) {
+      const conflict = await checkScheduleConflicts({
+        transaction,
+        serverId: server.id,
+        gameId: null,
+        gmId: user.id,
+        confirmedUserIds: invitedIds,
+        startsAt: columns.confirmedAt,
+        playMinutes: columns.playMinutes ?? null,
+        rounds: isMulti ? spans.map((span, index) => ({ roundNo: index + 1, ...span })) : undefined,
+      });
+      if (conflict) return conflict;
+    }
     const createdId = await createGameWithRoster({
       transaction,
       serverId: server.id,
@@ -112,6 +153,7 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
         linkLabels,
       },
       confirmedUserIds: invitedIds,
+      rounds,
     });
     // 비공개 구인은 디스코드 확정 안내가 없으므로 지정한 사람에게 참여자 추가 때와 같은 받은 알림을 보낸다.
     if (isPrivate) {
@@ -137,6 +179,8 @@ export async function createGame(input: GameFormValues): Promise<ActionResult> {
     });
     return createdId;
   });
+  if (typeof created !== "string") return created;
+  const gameId = created;
 
   after(() =>
     announceGameOpened({

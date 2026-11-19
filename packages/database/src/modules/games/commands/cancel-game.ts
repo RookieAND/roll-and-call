@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { db } from "#db/client";
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import { cancelBlockReason } from "#db/modules/games/model/cancel-block-reason";
 import { gameCancelledRecipients } from "#db/modules/games/model/game-cancelled-recipients";
 import { storedCancelReason } from "#db/modules/games/model/stored-cancel-reason";
@@ -50,6 +51,7 @@ export async function cancelGame({
       })
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)))
       .returning();
+    await syncFirstRound({ transaction: tx, gameId });
     const roster = await tx
       .select({ userId: participants.userId, status: participants.status })
       .from(participants)

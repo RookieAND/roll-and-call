@@ -26,6 +26,7 @@ import { ruleSummary } from "../model/rule-summary";
 import { FilterCheckbox } from "./filter-checkbox";
 import { FilterSection } from "./filter-section";
 import { GameFilterButton } from "./game-filter-button";
+import { RoundsField } from "./rounds-field";
 import { RuleField } from "./rule-field";
 import { RulePicker } from "./rule-picker";
 
@@ -34,11 +35,12 @@ interface GameFilterSheetProps {
   // 지금 적용된 조건의 건수(상태 칩 건수). 시트를 열 때 [N건 보기]의 첫 숫자다.
   count: number;
   ruleOptions: RuleOption[];
+  showRounds: boolean;
 }
 
 // 시트 안에서 고른 것은 [N건 보기]를 눌러야 주소에 들어간다. 바깥을 누르거나 내려 닫으면 버리고, 다시 열면 적용된 조건으로 채운다.
 // 건수는 고를 때마다 서버에서 다시 세고, 요청 순서 번호로 마지막 요청의 답만 반영한다(D54).
-export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetProps) {
+export function GameFilterSheet({ filter, count, ruleOptions, showRounds }: GameFilterSheetProps) {
   const toServerPath = useServerPath();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -55,6 +57,7 @@ export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetP
         rules: filter.rules ?? [],
         days: filter.days ?? [],
         times: filter.times ?? [],
+        rounds: filter.rounds,
         includeUnscheduled: filter.includeUnscheduled !== false,
         includePrivate: filter.includePrivate !== false,
       });
@@ -144,6 +147,12 @@ export function GameFilterSheet({ filter, count, ruleOptions }: GameFilterSheetP
                     );
                   })}
                 </FilterSection>
+                {showRounds && (
+                  <RoundsField
+                    value={draft.rounds}
+                    onChange={(rounds) => update({ ...draft, rounds })}
+                  />
+                )}
                 <FilterCheckbox
                   label="일정 미정 구인도 보기"
                   hint={UNSCHEDULED_HINT}

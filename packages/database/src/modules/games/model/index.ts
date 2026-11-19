@@ -35,12 +35,14 @@ export { SCHEDULE_MODE, SCHEDULE_MODES, type ScheduleMode } from "./schedule-mod
 export { deriveGameStatus } from "./derive-game-status";
 export { GAME_STATUS, gameStatusLabel, type GameStatus } from "./game-status";
 export {
+  GAME_ROUNDS,
   GAME_RULE_OTHER,
   GAME_SORT,
   GAME_TAB,
   GAME_STATUS_FILTER,
   GAME_TIME_SLOT,
   GAME_TIME_SLOT_HOURS,
+  type GameRounds,
   type GameSort,
   type GameTab,
   type GameStatusFilter,
@@ -50,7 +52,11 @@ export {
 export { hasGameFilters } from "./has-game-filters";
 export { gameFilterCount } from "./game-filter-count";
 export { hidesPrivateGames } from "./hides-private-games";
-export { findOverlappingGame, type MySessionTiming } from "./find-overlapping-game";
+export {
+  overlappingRoundNumbers,
+  type RoundSpan,
+  type TargetRound,
+} from "./overlapping-round-numbers";
 export { APPLICATION_NOTE_MAX_LENGTH, normalizeApplicationNote } from "./application-note";
 export {
   APPLICATION_QUESTION_DEFAULT,
@@ -141,3 +147,31 @@ export {
   REMINDER_LEAD_MS,
   START_NOTICE_WINDOW_MS,
 } from "./private-notice-window";
+export { buildNewRounds, type NewRoundRow } from "./build-new-rounds";
+export { buildRepeatRounds } from "./build-repeat-rounds";
+export { repeatRuleOf } from "./repeat-rule-of";
+export { ROUND_COUNT_MAX, ROUND_COUNT_MIN, ROUND_MAX_HOURS } from "./round-limits";
+export {
+  ROUND_SCHEDULE_ERROR,
+  ROUND_SCHEDULE_ERROR_MESSAGE,
+  roundScheduleError,
+  type RoundScheduleErrorCode,
+} from "./round-schedule-error";
+export { roundEndAt } from "./round-end-at";
+export { roundAttendanceDeadline } from "./round-attendance-deadline";
+export { isRoundOpen } from "./is-round-open";
+export { isFinisher } from "./is-finisher";
+export { STALE_ROUND_DAYS } from "./stale-round-days";
+export { isStaleCoordinatedGame } from "./is-stale-coordinated-game";
+export { roundCountChange, type RoundCountChange } from "./round-count-change";
+export { roundSkipBlock, type RoundSkipBlock } from "./round-skip-block";
+export { gameFinishedEarlyNotices } from "./game-finished-early-notices";
+export { multiRoundNoticeLine } from "./multi-round-notice-line";
+export { roundScheduleChangeNotices } from "./round-schedule-change-notices";
+export { isRoundKickAbsence } from "./is-round-kick-absence";
+export { kickRoundNumber } from "./kick-round-number";
+export { clockTextLabel } from "./clock-text-label";
+export { schedulableRoundNo } from "./schedulable-round-no";
+export { roundTimeError } from "./round-time-error";
+export { roundCoordinationError, ROUND_COORDINATION_MAX_DAYS } from "./round-coordination-error";
+export { defaultCoordinationWindow } from "./default-coordination-window";

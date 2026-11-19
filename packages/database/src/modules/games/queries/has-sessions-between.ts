@@ -1,8 +1,8 @@
-import { and, gte, lt } from "drizzle-orm";
+import { and, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
-import { games } from "#db/schema";
 
+import { firstRoundStartSql } from "./first-round-sql";
 import { publicGamesWhere } from "./public-games-where";
 
 export async function hasSessionsBetween({
@@ -16,7 +16,11 @@ export async function hasSessionsBetween({
 }) {
   const row = await db.query.games.findFirst({
     columns: { id: true },
-    where: and(gte(games.confirmedAt, from), lt(games.confirmedAt, to), publicGamesWhere(serverId)),
+    where: and(
+      sql`${firstRoundStartSql} >= ${from.toISOString()}::timestamptz`,
+      sql`${firstRoundStartSql} < ${to.toISOString()}::timestamptz`,
+      publicGamesWhere(serverId),
+    ),
   });
   return row !== undefined;
 }

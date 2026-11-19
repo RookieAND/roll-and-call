@@ -5,10 +5,14 @@ import { isSessionStarted } from "@/entities/game";
 
 // 서버(updateGame)도 같은 조건으로 저장을 막는다.
 export function editLockedTitle(
-  game: Pick<Game, "cancelledAt" | "confirmedAt">,
+  game: Pick<Game, "cancelledAt" | "confirmedAt" | "roundCount" | "finishedAt">,
   now: Date = new Date(),
 ): string | null {
   if (!isNull(game.cancelledAt)) return "취소한 구인은 고칠 수 없습니다";
+  // 다회차는 진행 중에도 열고, 구인 종료 뒤에만 잠근다.
+  if (game.roundCount > 1) {
+    return isNull(game.finishedAt) ? null : "시작한 세션은 고칠 수 없습니다";
+  }
   if (isSessionStarted(game, now)) return "시작한 세션은 고칠 수 없습니다";
   return null;
 }

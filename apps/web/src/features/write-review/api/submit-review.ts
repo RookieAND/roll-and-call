@@ -34,6 +34,7 @@ export type SubmitReviewResult = ActionResult & { block?: ReviewBlock };
 // 서식 JSON이 본문보다 길어 한도를 넉넉히 둔다. 글자 수는 아래에서 서식을 뺀 본문으로 센다.
 const reviewFormSchema = z.object({
   gameId: idSchema,
+  roundNo: z.number().int().min(1).max(52).optional(),
   reviewId: idSchema.nullable(),
   body: z.string().max(REVIEW_BODY_MAX_LENGTH * 20),
   spoiler: z.boolean(),
@@ -76,6 +77,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
     serverId: server.id,
     gameId: form.gameId,
     userId: user.id,
+    roundNo: form.roundNo,
   });
   if (!target) return { error: REVIEW_BLOCK_ERROR, block: REVIEW_BLOCK.unavailable };
   if (target.review && target.review.id !== form.reviewId) {
@@ -97,6 +99,7 @@ export async function submitReview(input: ReviewFormInput): Promise<SubmitReview
         gameId: form.gameId,
         authorId: user.id,
         authorRole: target.isGm ? REVIEW_AUTHOR_ROLE.gm : REVIEW_AUTHOR_ROLE.participant,
+        roundId: target.round?.id,
         ...values,
       });
     } catch (error) {

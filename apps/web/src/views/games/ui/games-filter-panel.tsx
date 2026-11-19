@@ -23,16 +23,18 @@ import type { RuleOption } from "../model/rule-option";
 import { ruleSummary } from "../model/rule-summary";
 import { FilterCheckbox } from "./filter-checkbox";
 import { FilterSection } from "./filter-section";
+import { RoundsField } from "./rounds-field";
 import { RuleField } from "./rule-field";
 import { RulePicker } from "./rule-picker";
 
 interface GamesFilterPanelProps {
   filter: GamesFilter;
   ruleOptions: RuleOption[];
+  showRounds: boolean;
 }
 
 // 데스크톱 우측 필터. 시트와 달리 고르는 즉시 주소에 반영하고, 상태는 주소(filter)에서 읽는다.
-export function GamesFilterPanel({ filter, ruleOptions }: GamesFilterPanelProps) {
+export function GamesFilterPanel({ filter, ruleOptions, showRounds }: GamesFilterPanelProps) {
   const toServerPath = useServerPath();
   const router = useRouter();
   const [pickingRules, setPickingRules] = useState(false);
@@ -41,7 +43,11 @@ export function GamesFilterPanel({ filter, ruleOptions }: GamesFilterPanelProps)
   const times = filter.times ?? [];
   const isPast = filter.tab === GAME_TAB.past;
   const canReset =
-    rules.length > 0 || days.length > 0 || times.length > 0 || hidesPrivateGames(filter);
+    rules.length > 0 ||
+    days.length > 0 ||
+    times.length > 0 ||
+    Boolean(filter.rounds) ||
+    hidesPrivateGames(filter);
 
   function apply(next: Partial<FilterDraft>) {
     router.push(toServerPath(gamesHref(filterParams({ ...filter, ...next, page: undefined }))));
@@ -101,6 +107,9 @@ export function GamesFilterPanel({ filter, ruleOptions }: GamesFilterPanelProps)
               );
             })}
           </FilterSection>
+          {showRounds && (
+            <RoundsField value={filter.rounds} onChange={(rounds) => apply({ rounds })} />
+          )}
           <FilterCheckbox
             label="일정 미정 구인도 보기"
             hint={UNSCHEDULED_HINT}

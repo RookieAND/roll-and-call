@@ -18,12 +18,14 @@ import { AppBar, PageShell, SummaryLine } from "@/shared/ui";
 
 import { toAttendee } from "../model/to-attendee";
 import { AttendanceHeader } from "./attendance-header";
+import { RoundAttendanceView } from "./round-attendance-view";
 
 interface GameAttendanceViewProps {
   id: string;
+  round?: string;
 }
 
-export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
+export async function GameAttendanceView({ id, round }: GameAttendanceViewProps) {
   const server = await getCurrentServer();
   const [data, user] = await Promise.all([
     getGameParticipants({ serverId: server.id, gameId: id }),
@@ -57,6 +59,10 @@ export async function GameAttendanceView({ id }: GameAttendanceViewProps) {
         </Container>
       </PageShell>
     );
+  }
+
+  if (game.roundCount > 1) {
+    return <RoundAttendanceView server={server} game={game} requestedRound={round} />;
   }
 
   const { confirmed, removed } = splitRoster(game.participants);

@@ -13,10 +13,12 @@ import { useSlotPainter } from "./use-slot-painter";
 // 칠하기 상태와 저장. 격자(모바일 하단 막대 포함)와 데스크톱 요약 패널이 같은 값을 읽는다.
 export function useAvailabilityEditor({
   gameId,
+  roundNo,
   savedMine,
   blocked,
 }: {
   gameId: string;
+  roundNo?: number;
   savedMine: string[];
   blocked: string[];
 }) {
@@ -25,7 +27,7 @@ export function useAvailabilityEditor({
   const { server } = useParams<{ server: string }>();
   const { mutate, isPending: pending } = useMutation({
     mutationFn: async (keys: string[]) => {
-      const result = await saveAvailability({ gameId, slotIsos: keys });
+      const result = await saveAvailability({ gameId, slotIsos: keys, roundNo });
       if (result.error) throw new AppError(result.error, result.errorDisplay);
       return keys;
     },
@@ -35,7 +37,7 @@ export function useAvailabilityEditor({
       toast.success("가능 시간을 저장했습니다");
       // 전체 겹침·확정 후보가 같은 캐시를 읽으므로 저장 결과를 다시 받아 반영한다.
       return queryClient.invalidateQueries({
-        queryKey: availabilityQuery({ slug: server, gameId }).queryKey,
+        queryKey: availabilityQuery({ slug: server, gameId, roundNo }).queryKey,
       });
     },
   });

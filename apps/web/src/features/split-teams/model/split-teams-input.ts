@@ -19,6 +19,8 @@ const scheduleSchema = z.discriminatedUnion("scheduleMode", [
   z.object({
     scheduleMode: z.literal(SCHEDULE_MODE.fixed),
     startsAt: z.iso.datetime({ offset: true }),
+    // 다회차 구인의 1회차 종료. 단발은 받지 않는다.
+    firstRoundEndsAt: z.iso.datetime({ offset: true }).optional(),
   }),
 ]);
 

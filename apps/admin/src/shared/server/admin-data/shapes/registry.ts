@@ -12,6 +12,7 @@ import { buildNicknameEdits } from "./build-nickname-edits";
 import { buildNoShows } from "./build-no-shows";
 import { buildQuizQuestions } from "./build-quiz-questions";
 import { buildReviews } from "./build-reviews";
+import { buildRounds } from "./build-rounds";
 import { buildRulebookRequests } from "./build-rulebook-requests";
 import { buildRulebooks } from "./build-rulebooks";
 import { buildSellers } from "./build-sellers";
@@ -53,12 +54,19 @@ export const SHAPE_REGISTRY: { [Key in keyof AdminShapes]: ShapeSpec<Key> } = {
     build: buildRulebookRequests,
   },
   sessions: {
-    tables: ["profileRows", "gameRows", "participantRows", "rulebookRows"],
+    tables: ["profileRows", "gameRows", "participantRows", "roundAttendanceRows", "rulebookRows"],
     build: buildSessions,
   },
-  noShows: { tables: ["profileRows", "gameRows", "participantRows"], build: buildNoShows },
+  noShows: {
+    tables: ["profileRows", "gameRows", "participantRows", "roundRows"],
+    build: buildNoShows,
+  },
   reviews: { tables: ["profileRows", "participantRows", "reviewRows"], build: buildReviews },
-  countingSessions: { tables: ["gameRows", "participantRows"], build: buildCountingSessions },
+  rounds: { tables: ["roundRows"], build: buildRounds },
+  countingSessions: {
+    tables: ["gameRows", "participantRows", "roundAttendanceRows"],
+    build: buildCountingSessions,
+  },
   countingNoShows: { tables: ["gameRows", "participantRows"], build: buildCountingNoShows },
   lastActive: { tables: ["lastActiveRows"], build: buildLastActive },
   memberNicknames: { tables: ["profileRows"], build: buildMemberNicknames },

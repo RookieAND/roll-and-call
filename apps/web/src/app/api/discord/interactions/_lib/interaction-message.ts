@@ -7,4 +7,5 @@ export const INTERACTION_MESSAGE = {
   attendanceFailed: "출석을 처리하지 못했습니다.\n잠시 뒤에 다시 시도해 주세요.",
   applyFailed: "신청하지 못했습니다.\n잠시 뒤에 다시 시도해 주세요.",
   applyNoteLost: "신청글을 받지 못했습니다.\n버튼을 다시 눌러 신청해 주세요.",
+  commitmentRequired: "마지막 회차까지 함께해야 신청할 수 있습니다.",
 } as const;

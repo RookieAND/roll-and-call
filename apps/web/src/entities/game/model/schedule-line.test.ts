@@ -31,4 +31,13 @@ describe("scheduleLine", () => {
     );
     expect(line.confirmed).toBe(false);
   });
+
+  it("여러 번 진행이면 일정 줄에 총 횟수를 붙인다", () => {
+    const line = scheduleLine(
+      { ...base, scheduleMode: SCHEDULE_MODE.fixed, roundCount: 6, repeatRule: null },
+      NOW,
+    );
+    expect(line.text).toBe("9월 16일 (수) 오후 8:00부터 · 총 6회");
+    expect(line.confirmed).toBe(true);
+  });
 });

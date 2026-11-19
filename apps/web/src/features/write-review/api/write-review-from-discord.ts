@@ -35,6 +35,7 @@ export async function writeReviewFromDiscord({
   guildId,
   discordId,
   gameId,
+  roundNo,
   body,
   spoiler,
   photos,
@@ -42,6 +43,7 @@ export async function writeReviewFromDiscord({
   guildId: string;
   discordId: string;
   gameId: string;
+  roundNo?: number;
   body: string;
   spoiler: boolean;
   photos: { url: string; content_type?: string; size: number }[];
@@ -71,7 +73,7 @@ export async function writeReviewFromDiscord({
     return "5MB를 넘는 사진은 올릴 수 없습니다.";
   }
 
-  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId });
+  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId, roundNo });
   const refusal = discordReviewRefusalOf(target);
   if (refusal) return DISCORD_REVIEW_REFUSAL_MESSAGE[refusal];
   if (!target) return DISCORD_REVIEW_REFUSAL_MESSAGE[DISCORD_REVIEW_REFUSAL.gameNotFound];
@@ -100,6 +102,7 @@ export async function writeReviewFromDiscord({
       body: text,
       spoiler,
       photoUrls,
+      roundId: target.round?.id,
     });
   } catch (error) {
     if ((error as { code?: string }).code === UNIQUE_VIOLATION) {

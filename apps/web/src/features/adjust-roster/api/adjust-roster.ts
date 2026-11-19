@@ -48,7 +48,9 @@ export async function adjustRoster({
       if (!game) throw new RosterError(GAME_NOT_FOUND_MESSAGE, ERROR_DISPLAY.page);
       if (game.gmId !== gmId) throw new RosterError("권한이 없습니다.");
       if (game.cancelledAt) throw new RosterError(GAME_CANCELLED_MESSAGE);
-      if (isSessionEnded(game, now)) throw new RosterError(ROSTER_SESSION_ENDED_MESSAGE);
+      // 다회차는 회차 사이에도 명단을 고치므로 구인 전체가 끝났을 때 닫는다.
+      const ended = game.roundCount > 1 ? Boolean(game.finishedAt) : isSessionEnded(game, now);
+      if (ended) throw new RosterError(ROSTER_SESSION_ENDED_MESSAGE);
       draft = isSelectionDraft(game);
       await work(transaction, game, { started: isSessionStarted(game, now), now });
     });

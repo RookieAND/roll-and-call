@@ -904,6 +904,83 @@
       "when": 1799900200002,
       "tag": "0134_allow_private_coordinate",
       "breakpoints": true
+    },
+    {
+      "idx": 135,
+      "version": "7",
+      "when": 1799900300000,
+      "tag": "0135_game_rounds",
+      "breakpoints": true
+    },
+    {
+      "idx": 136,
+      "version": "7",
+      "when": 1799900300001,
+      "tag": "0136_game_round_guards",
+      "breakpoints": true
+    },
+    {
+      "idx": 137,
+      "version": "7",
+      "when": 1799900300002,
+      "tag": "0137_backfill_game_rounds",
+      "breakpoints": true
+    },
+    {
+      "idx": 138,
+      "version": "7",
+      "when": 1799900300003,
+      "tag": "0138_round_progress",
+      "breakpoints": true
+    },
+    {
+      "idx": 139,
+      "version": "7",
+      "when": 1799900300004,
+      "tag": "0139_round_progress_crons",
+      "breakpoints": true
+    },
+    {
+      "idx": 140,
+      "version": "7",
+      "when": 1799900300005,
+      "tag": "0140_round_reviews",
+      "breakpoints": true
+    },
+    {
+      "idx": 141,
+      "version": "7",
+      "when": 1799900300006,
+      "tag": "0141_round_start_notices",
+      "breakpoints": true
+    },
+    {
+      "idx": 142,
+      "version": "7",
+      "when": 1799900300007,
+      "tag": "0142_thread_lock",
+      "breakpoints": true
+    },
+    {
+      "idx": 143,
+      "version": "7",
+      "when": 1799900300008,
+      "tag": "0143_round_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 144,
+      "version": "7",
+      "when": 1799900300009,
+      "tag": "0144_absence_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 145,
+      "version": "7",
+      "when": 1799900300010,
+      "tag": "0145_round_coordination_window",
+      "breakpoints": true
     }
   ]
 }

@@ -13,6 +13,7 @@ function sessionAt(startsAtMs: number, gameId: string): BadgeSession {
   const startsAt = new Date(startsAtMs);
   return {
     gameId,
+    roundId: null,
     title: gameId,
     startsAt,
     endsAt: new Date(startsAtMs + 2 * HOUR),
@@ -131,17 +132,30 @@ describe("따끈따끈", () => {
   const played = [sessionAt(MONDAY, "g1")];
   const endsAt = played[0]!.endsAt;
   it("세션이 끝나고 1시간 안에 쓴 후기가 있으면 받는다", () => {
-    const written = [{ gameId: "g1", createdAt: new Date(endsAt.getTime() + HOUR) }];
+    const written = [{ gameId: "g1", roundId: null, createdAt: new Date(endsAt.getTime() + HOUR) }];
     expect(earned({ played, written }, "fresh")).toBe(true);
   });
 
   it("1시간이 지나서 쓰면 받지 못한다", () => {
-    const written = [{ gameId: "g1", createdAt: new Date(endsAt.getTime() + HOUR + 1) }];
+    const written = [
+      { gameId: "g1", roundId: null, createdAt: new Date(endsAt.getTime() + HOUR + 1) },
+    ];
     expect(earned({ played, written }, "fresh")).toBe(false);
   });
 
+  it("다회차 후기는 그 회차가 끝난 시각과 맞춘다", () => {
+    const round = { ...sessionAt(MONDAY, "g1"), roundId: "r2" };
+    const roundEnd = round.endsAt;
+    const written = (roundId: string, offset: number) => [
+      { gameId: "g1", roundId, createdAt: new Date(roundEnd.getTime() + offset) },
+    ];
+    expect(earned({ played: [round], written: written("r2", HOUR) }, "fresh")).toBe(true);
+    expect(earned({ played: [round], written: written("r1", HOUR) }, "fresh")).toBe(false);
+    expect(earned({ played: [round], written: written("r2", HOUR + 1) }, "fresh")).toBe(false);
+  });
+
   it("참석하지 않은 세션의 후기는 세지 않는다", () => {
-    const written = [{ gameId: "other", createdAt: endsAt }];
+    const written = [{ gameId: "other", roundId: null, createdAt: endsAt }];
     expect(earned({ played, written }, "fresh")).toBe(false);
   });
 });

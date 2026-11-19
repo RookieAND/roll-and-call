@@ -9,6 +9,7 @@ function session(day: number, gameId = `g${day}`): BadgeSession {
   const startsAt = new Date(Date.UTC(2026, 2, day, 3));
   return {
     gameId,
+    roundId: null,
     title: gameId,
     startsAt,
     endsAt: new Date(startsAt.getTime() + HOUR),

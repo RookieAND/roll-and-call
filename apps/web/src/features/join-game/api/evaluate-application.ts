@@ -3,9 +3,9 @@ import type { Game } from "@roll-and-call/database";
 import { loadParticipationStanding } from "@roll-and-call/database/badges";
 import {
   countParticipants,
-  listUserSessionTimings,
+  findScheduleConflicts,
+  listDatedRounds,
   lockGame,
-  lockUserApplications,
 } from "@roll-and-call/database/games";
 import { findActiveSanction } from "@roll-and-call/database/moderation";
 import type { Transaction } from "@roll-and-call/database/transaction";
@@ -14,11 +14,9 @@ import {
   DIE_FACES,
   GAME_VISIBILITY,
   isApplicationClosed,
-  findOverlappingGame,
   participationConditions,
   PARTICIPANT_STATUS,
   RECRUIT_METHOD,
-  SCHEDULE_MODE,
   SELECTION_APPLICANT_LIMIT,
 } from "@/entities/game";
 import {
@@ -33,7 +31,8 @@ import {
   type ActionResult,
 } from "@/shared/api";
 
-import { OVERLAP_MESSAGE, OVERLAP_REASON, type OverlapRejection } from "../model/overlap-rejection";
+import { buildOverlapRejection } from "../model/build-overlap-rejection";
+import type { OverlapRejection } from "../model/overlap-rejection";
 
 export type Rejection = (ActionResult & { error: string }) | OverlapRejection;
 
@@ -86,20 +85,23 @@ export async function evaluateApplication({
     if (unmet) return { error: unmet.unmetLine };
   }
 
-  // 일정 조율형은 신청 때 일시가 없어 겹침을 보지 않는다. 같은 사람의 신청끼리 줄을 세워 동시 신청도 막는다.
-  if (game.scheduleMode === SCHEDULE_MODE.fixed && game.confirmedAt) {
-    await lockUserApplications({ transaction, userId });
-    const [overlapping] = findOverlappingGame({
-      target: { startsAt: game.confirmedAt, playMinutes: game.playMinutes },
-      mine: await listUserSessionTimings({
-        transaction,
-        serverId,
-        userId,
-        excludeGameId: gameId,
-      }),
+  // 일시가 정해진 회차는 모두 내 다른 세션과 비교한다. 일정 조율 중인 구인은 정해진 회차가 없어 건너뛴다.
+  // 같은 사람의 신청끼리 줄을 세워 동시 신청도 막는다.
+  const target = await listDatedRounds({ transaction, gameId });
+  if (target.length > 0) {
+    const [conflict] = await findScheduleConflicts({
+      transaction,
+      serverId,
+      gameId,
+      people: [{ userId, role: "confirmed" }],
+      target,
     });
-    if (overlapping) {
-      return { error: OVERLAP_MESSAGE, reason: OVERLAP_REASON, overlapGameId: overlapping.id };
+    const [first, ...rest] = conflict?.overlaps ?? [];
+    if (first) {
+      return buildOverlapRejection({
+        targetRoundCount: game.roundCount,
+        overlaps: [first, ...rest],
+      });
     }
   }
 

@@ -3,7 +3,9 @@
 import type { Game } from "@roll-and-call/database";
 import {
   findParticipantStatus,
+  findScheduleConflicts,
   insertParticipant,
+  listDatedRounds,
   setParticipantStatus,
 } from "@roll-and-call/database/games";
 import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
@@ -62,6 +64,20 @@ export async function addParticipants(
         const status = await findParticipantStatus({ transaction, serverId, gameId, userId });
         if (status === confirmed) throw new RosterError("이미 참여 중인 사람이 있습니다.");
         statuses.set(userId, status);
+      }
+      // 대기로 이미 신청한 사람은 신청 때 검사했으므로, 새로 넣거나 내보냈다가 되돌리는 사람만 일시가 겹치는지 본다.
+      const unchecked = invitedIds.filter(
+        (userId) => statuses.get(userId) !== PARTICIPANT_STATUS.waiting,
+      );
+      const conflicts = await findScheduleConflicts({
+        transaction,
+        serverId,
+        gameId,
+        people: unchecked.map((userId) => ({ userId, role: "confirmed" as const })),
+        target: await listDatedRounds({ transaction, gameId }),
+      });
+      if (conflicts.length > 0) {
+        throw new RosterError("같은 시간에 다른 세션이 있는 사람은 추가할 수 없습니다.");
       }
       await rejectSanctioned({ transaction, serverId, userIds: invitedIds, timing });
       const seats = await secureSeats({

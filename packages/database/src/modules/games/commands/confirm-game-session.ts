@@ -1,6 +1,7 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import type { Transaction } from "#db/modules/transaction";
 import { games } from "#db/schema";
 
@@ -19,20 +20,25 @@ export async function confirmGameSession({
   gmId: string;
   confirmedAt: Date;
 }) {
-  const updated = await (transaction ?? db)
-    .update(games)
-    .set({
-      confirmedAt,
-      notifiedAt: sql`case when ${games.confirmedAt} is distinct from ${confirmedAt.toISOString()}::timestamptz then null else ${games.notifiedAt} end`,
-    })
-    .where(
-      and(
-        eq(games.serverId, serverId),
-        eq(games.id, gameId),
-        eq(games.gmId, gmId),
-        isNull(games.cancelledAt),
-      ),
-    )
-    .returning({ id: games.id });
-  return updated.length > 0;
+  const run = async (executor: Transaction) => {
+    const updated = await executor
+      .update(games)
+      .set({
+        confirmedAt,
+        notifiedAt: sql`case when ${games.confirmedAt} is distinct from ${confirmedAt.toISOString()}::timestamptz then null else ${games.notifiedAt} end`,
+      })
+      .where(
+        and(
+          eq(games.serverId, serverId),
+          eq(games.id, gameId),
+          eq(games.gmId, gmId),
+          isNull(games.cancelledAt),
+        ),
+      )
+      .returning({ id: games.id });
+    if (updated.length === 0) return false;
+    await syncFirstRound({ transaction: executor, gameId });
+    return true;
+  };
+  return transaction ? run(transaction) : db.transaction(run);
 }

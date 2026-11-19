@@ -1,5 +1,6 @@
 "use client";
 
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { Sheet, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
@@ -9,12 +10,13 @@ import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";
+import { formatRecordCount } from "./format-record-count";
 
 interface HomeRecordTieSheetProps {
   label: string;
   people: RecordPerson[];
   count: number;
-  unit: string;
+  mode: RankingMode;
   className: string;
   children: ReactNode;
 }
@@ -23,7 +25,7 @@ export function HomeRecordTieSheet({
   label,
   people,
   count,
-  unit,
+  mode,
   className,
   children,
 }: HomeRecordTieSheetProps) {
@@ -52,8 +54,7 @@ export function HomeRecordTieSheet({
                 nameAddon={<MemberTitle userId={person.id} />}
               />
               <Text typography="subtitle2" weight="extrabold" foreground="primary" numeric>
-                {count}
-                {unit}
+                {formatRecordCount(count, mode)}
               </Text>
               <ChevronRight size={16} aria-hidden className="flex-none text-hint" />
             </Sheet.Item>

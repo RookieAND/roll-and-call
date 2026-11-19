@@ -1,4 +1,4 @@
-import type { MonthSessionRow } from "@roll-and-call/database/games";
+import type { MonthRoundSessionRow } from "@roll-and-call/database/games";
 import { describe, expect, it } from "vitest";
 
 import { toCalendarSessions } from "./to-calendar-sessions";
@@ -11,7 +11,7 @@ const AFTER_END = new Date("2026-09-20T00:00:00Z");
 
 const person = (id: string) => ({ id, username: id, avatarUrl: null });
 
-const row = (overrides: Partial<MonthSessionRow> = {}) =>
+const row = (overrides: Partial<MonthRoundSessionRow> = {}) =>
   ({
     id: "game",
     title: "세션",
@@ -19,7 +19,9 @@ const row = (overrides: Partial<MonthSessionRow> = {}) =>
     gmId: "gm",
     gm: person("gm"),
     scheduleMode: "fixed",
-    confirmedAt: START,
+    roundStartAt: START,
+    roundNo: 1,
+    roundCount: 1,
     endDate: DEADLINE,
     playMinutes: 120,
     endedAt: null,
@@ -27,9 +29,9 @@ const row = (overrides: Partial<MonthSessionRow> = {}) =>
     cancelledAt: null,
     participants: [],
     ...overrides,
-  }) as MonthSessionRow;
+  }) as MonthRoundSessionRow;
 
-const confirmed = (id: string): MonthSessionRow["participants"][number] => ({
+const confirmed = (id: string): MonthRoundSessionRow["participants"][number] => ({
   userId: id,
   status: "confirmed",
   absent: false,
@@ -37,7 +39,7 @@ const confirmed = (id: string): MonthSessionRow["participants"][number] => ({
   user: person(id),
 });
 
-const ids = (rows: MonthSessionRow[], now: Date) =>
+const ids = (rows: MonthRoundSessionRow[], now: Date) =>
   toCalendarSessions({ rows, viewerId: null, now }).map((session) => session.id);
 
 describe("toCalendarSessions", () => {
@@ -58,8 +60,17 @@ describe("toCalendarSessions", () => {
     expect(ids([row({ scheduleMode: "coordinate" })], AFTER_END)).toEqual(["game"]);
   });
 
-  it("시작 시각이 없으면 뺀다", () => {
-    expect(ids([row({ confirmedAt: null })], BEFORE_DEADLINE)).toEqual([]);
+  it("다회차는 회차마다 자기 날짜로 한 항목씩 나온다", () => {
+    const next = new Date("2026-09-17T11:00:00Z");
+    const sessions = toCalendarSessions({
+      rows: [row({ roundCount: 3 }), row({ roundNo: 2, roundCount: 3, roundStartAt: next })],
+      viewerId: null,
+      now: BEFORE_DEADLINE,
+    });
+    expect(sessions.map((session) => [session.roundNo, session.startsAt])).toEqual([
+      [1, START],
+      [2, next],
+    ]);
   });
 
   it("취소된 구인은 뺀다", () => {

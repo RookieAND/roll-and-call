@@ -7,6 +7,7 @@ import { ApplicationNoteDialog } from "@/features/view-application-note";
 import { withQuery } from "@/shared/lib";
 import { AdminHeader, HiddenBanner, NextItemButton, Panel, Tag } from "@/shared/ui";
 
+import type { AdminRoundsView } from "../model/admin-rounds";
 import { POST_DETAIL_TAB, type PostDetailTab } from "../model/post-detail-tab";
 import { ContentPanel } from "./content-panel";
 import { MemberPanel } from "./member-panel";
@@ -23,6 +24,8 @@ interface PostDetailViewProps {
   // 사용자 앱에서 이 서버 화면의 주소(…/{slug}).
   serverAppUrl: string | undefined;
   viewerId: string;
+  // 회차가 여러 개인 구인만 값이 있다.
+  rounds: AdminRoundsView | null;
 }
 
 export function PostDetailView({
@@ -31,6 +34,7 @@ export function PostDetailView({
   listQuery,
   serverAppUrl,
   viewerId,
+  rounds,
 }: PostDetailViewProps) {
   const pathname = `/posts/${post.id}`;
   const cancelOpen = !post.cancelled && post.cancellable && !post.sessionStarted;
@@ -80,7 +84,7 @@ export function PostDetailView({
               tab={currentTab}
               memberCount={post.members.length}
               waitlistCount={post.waitlist.length}
-              contentPanel={<ContentPanel post={post} />}
+              contentPanel={<ContentPanel post={post} rounds={rounds} />}
               memberPanel={
                 <MemberPanel
                   members={post.members}

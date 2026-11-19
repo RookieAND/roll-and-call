@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@roll-and-call/ui";
+import { Callout, Card, VStack } from "@roll-and-call/ui";
 import { useState } from "react";
 
 import { ROSTER_GAUGE } from "../model/roster-gauge";
@@ -21,6 +21,8 @@ interface GameRosterSectionProps {
   minPlayers?: number;
   awaitingResult: boolean;
   viewerId: string | null;
+  // 다회차 구인에서 1회차가 시작된 뒤 확정 참여자에게만 보이는 안내.
+  showAbsenceNotice?: boolean;
 }
 
 export function GameRosterSection({
@@ -31,6 +33,7 @@ export function GameRosterSection({
   minPlayers,
   awaitingResult,
   viewerId,
+  showAbsenceNotice = false,
 }: GameRosterSectionProps) {
   const [openSheet, setOpenSheet] = useState<RosterSheet | null>(null);
   // 추첨·선발은 결과 전까지 대기에 순번이 없다 — 정원 밖 줄을 "신청"으로 부른다.
@@ -41,7 +44,7 @@ export function GameRosterSection({
   }
 
   return (
-    <>
+    <VStack gap="125">
       <Card.Root
         padding="md"
         radius={600}
@@ -83,6 +86,16 @@ export function GameRosterSection({
           />
         )}
       </Card.Root>
+      {showAbsenceNotice && (
+        <Callout.Root colorPalette="gray" size="sm">
+          <Callout.Icon />
+          <Callout.Description>
+            빠지는 회차가 있으면 GM에게 미리 알려 주세요.
+            <br />
+            그만두려면 GM에게 알려 주세요.
+          </Callout.Description>
+        </Callout.Root>
+      )}
 
       <LotteryRosterSheet
         open={openSheet === ROSTER_SHEET.lottery}
@@ -104,6 +117,6 @@ export function GameRosterSection({
         waiting={waiting}
         viewerId={viewerId}
       />
-    </>
+    </VStack>
   );
 }

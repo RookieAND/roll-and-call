@@ -16,6 +16,7 @@ import { richTextLength } from "@/shared/lib";
 import { TagInput } from "@/shared/ui";
 
 import { AdultOnlyField } from "./adult-only-field";
+import { InProgressLock } from "./in-progress-lock";
 import { ParticipationConditionField } from "./participation-condition-field";
 import { PlayTypeField } from "./play-type-field";
 
@@ -41,6 +42,7 @@ interface GamePreflightFieldsProps {
   rulebooks?: MyRulebooks;
   hasApplicants: boolean;
   adultOnlyEnabled: boolean;
+  inProgress?: boolean;
 }
 
 export function GamePreflightFields({
@@ -48,6 +50,7 @@ export function GamePreflightFields({
   rulebooks,
   hasApplicants,
   adultOnlyEnabled,
+  inProgress = false,
 }: GamePreflightFieldsProps) {
   const {
     setValue,
@@ -65,59 +68,63 @@ export function GamePreflightFields({
 
   return (
     <>
-      {GAME_TAG_KEYS.map((key) => {
-        const tags = watch(key);
-        return (
-          <Field.Root
-            key={key}
-            label={gameTagLabel[key]}
-            htmlFor={key}
-            counter={`${tags.length} / ${GAME_TAGS_MAX[key]}`}
-            error={errors[key]?.message}
-          >
-            <TagInput
-              id={key}
-              value={tags}
-              max={GAME_TAGS_MAX[key]}
-              maxLength={GAME_TAG_MAX_LENGTH}
-              placeholder={TAG_PLACEHOLDER[key]}
-              suggestions={TAG_SUGGESTIONS[key]}
-              tone={key === GAME_TAG.triggers ? "warning" : "primary"}
-              onChange={(next) => setValue(key, next, { shouldDirty: true })}
-            />
-          </Field.Root>
-        );
-      })}
+      <InProgressLock locked={inProgress}>
+        {GAME_TAG_KEYS.map((key) => {
+          const tags = watch(key);
+          return (
+            <Field.Root
+              key={key}
+              label={gameTagLabel[key]}
+              htmlFor={key}
+              counter={`${tags.length} / ${GAME_TAGS_MAX[key]}`}
+              error={errors[key]?.message}
+            >
+              <TagInput
+                id={key}
+                value={tags}
+                max={GAME_TAGS_MAX[key]}
+                maxLength={GAME_TAG_MAX_LENGTH}
+                placeholder={TAG_PLACEHOLDER[key]}
+                suggestions={TAG_SUGGESTIONS[key]}
+                tone={key === GAME_TAG.triggers ? "warning" : "primary"}
+                onChange={(next) => setValue(key, next, { shouldDirty: true })}
+              />
+            </Field.Root>
+          );
+        })}
 
-      {!isBriefing && (
-        <PlayTypeField
-          value={watch("playType")}
-          onChange={(next) => setValue("playType", next, { shouldDirty: true })}
-        />
-      )}
+        {!isBriefing && (
+          <PlayTypeField
+            value={watch("playType")}
+            onChange={(next) => setValue("playType", next, { shouldDirty: true })}
+          />
+        )}
 
-      <Field.Root
-        label="AI 이미지"
-        required
-        description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
-        error={errors.aiImage?.message}
-      >
-        <SegmentedControl.Root
-          value={aiImage ? AI_IMAGE.on : AI_IMAGE.off}
-          onValueChange={(next) => setValue("aiImage", next === AI_IMAGE.on, { shouldDirty: true })}
-          aria-label="AI 이미지"
+        <Field.Root
+          label="AI 이미지"
+          required
+          description="세션에서 GM과 플레이어가 AI 이미지를 쓸 수 있는지 정합니다."
+          error={errors.aiImage?.message}
         >
-          <SegmentedControl.Item value={AI_IMAGE.off}>사용 안 함</SegmentedControl.Item>
-          <SegmentedControl.Item value={AI_IMAGE.on}>사용</SegmentedControl.Item>
-        </SegmentedControl.Root>
-      </Field.Root>
+          <SegmentedControl.Root
+            value={aiImage ? AI_IMAGE.on : AI_IMAGE.off}
+            onValueChange={(next) =>
+              setValue("aiImage", next === AI_IMAGE.on, { shouldDirty: true })
+            }
+            aria-label="AI 이미지"
+          >
+            <SegmentedControl.Item value={AI_IMAGE.off}>사용 안 함</SegmentedControl.Item>
+            <SegmentedControl.Item value={AI_IMAGE.on}>사용</SegmentedControl.Item>
+          </SegmentedControl.Root>
+        </Field.Root>
 
-      {adultOnlyEnabled && (
-        <AdultOnlyField
-          value={watch("adultOnly")}
-          onChange={(next) => setValue("adultOnly", next, { shouldDirty: true })}
-        />
-      )}
+        {adultOnlyEnabled && (
+          <AdultOnlyField
+            value={watch("adultOnly")}
+            onChange={(next) => setValue("adultOnly", next, { shouldDirty: true })}
+          />
+        )}
+      </InProgressLock>
 
       <Field.Root
         label="주의 사항"
@@ -136,11 +143,13 @@ export function GamePreflightFields({
         />
       </Field.Root>
 
-      <ParticipationConditionField
-        form={form}
-        certAvailable={!!ruleSet && !ruleSet.free}
-        hasApplicants={hasApplicants}
-      />
+      <InProgressLock locked={inProgress}>
+        <ParticipationConditionField
+          form={form}
+          certAvailable={!!ruleSet && !ruleSet.free}
+          hasApplicants={hasApplicants}
+        />
+      </InProgressLock>
     </>
   );
 }

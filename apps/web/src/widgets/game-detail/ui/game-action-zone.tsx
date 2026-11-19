@@ -1,11 +1,12 @@
 import type { GameDetailData } from "@roll-and-call/database/games";
 import { applicationQuestionOf } from "@roll-and-call/database/games/model";
 
-import { RECRUIT_METHOD } from "@/entities/game";
+import { RECRUIT_METHOD, type RoundScheduleRound } from "@/entities/game";
 import { canReopenGame } from "@/features/reopen-game";
 import { formatDateClock } from "@/shared/lib";
 
 import { GAME_ACTION_VIEW, type GameActionView } from "../model/game-action-view";
+import { multiRoundApplyOf } from "../model/multi-round-apply-of";
 import { AbsentActions } from "./absent-actions";
 import { CancelledActions } from "./cancelled-actions";
 import { ClosedActions } from "./closed-actions";
@@ -26,13 +27,16 @@ import { WaitingActions } from "./waiting-actions";
 export interface GameActionZoneProps {
   game: GameDetailData;
   view: GameActionView;
+  // 여러 번 진행하는 구인의 회차. 신청 시트가 일정 요약과 회차 일정을 보인다.
+  rounds?: readonly RoundScheduleRound[] | null;
 }
 
 // 이 두 화면은 GM에게만 나오므로 GM 본인 기준으로 같은 판정을 쓴다.
 const reopenable = (game: GameDetailData) =>
   canReopenGame({ game, userId: game.gmId, serverId: game.serverId });
 
-export function GameActionZone({ game, view }: GameActionZoneProps) {
+export function GameActionZone({ game, view, rounds }: GameActionZoneProps) {
+  const multiRound = multiRoundApplyOf({ game, rounds });
   switch (view.kind) {
     case GAME_ACTION_VIEW.cancelled:
       return (
@@ -82,6 +86,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
         <JoinableActions
           gameId={game.id}
           applicationQuestion={applicationQuestionOf(game)}
+          multiRound={multiRound}
           hint={`지금 신청하면 대기 ${view.nextRank}번입니다.`}
           label="대기로 신청하기"
         />
@@ -91,6 +96,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
         <JoinableActions
           gameId={game.id}
           applicationQuestion={applicationQuestionOf(game)}
+          multiRound={multiRound}
           hint="지금 신청하면 바로 확정됩니다."
           label="신청하기"
         />
@@ -100,6 +106,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
         <JoinableActions
           gameId={game.id}
           applicationQuestion={applicationQuestionOf(game)}
+          multiRound={multiRound}
           hint={`${formatDateClock(view.endDate)} 마감 때 추첨합니다.`}
           label="신청하기"
         />
@@ -109,6 +116,7 @@ export function GameActionZone({ game, view }: GameActionZoneProps) {
         <JoinableActions
           gameId={game.id}
           applicationQuestion={applicationQuestionOf(game)}
+          multiRound={multiRound}
           hint={`${formatDateClock(view.endDate)} 모집이 끝나면 GM이 선발합니다.`}
           label="신청하기"
         />

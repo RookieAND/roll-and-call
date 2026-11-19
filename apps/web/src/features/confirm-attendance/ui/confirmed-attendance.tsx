@@ -15,6 +15,8 @@ interface ConfirmedAttendanceProps {
   canReopen: boolean;
   guide: ReactNode;
   onReopen: () => void;
+  round?: boolean;
+  footer?: ReactNode;
   children?: ReactNode;
 }
 
@@ -25,6 +27,8 @@ export function ConfirmedAttendance({
   canReopen,
   guide,
   onReopen,
+  round = false,
+  footer,
   children,
 }: ConfirmedAttendanceProps) {
   const absentCount = attendees.filter(
@@ -62,10 +66,12 @@ export function ConfirmedAttendance({
                 key={attendee.userId}
                 attendee={attendee}
                 absent={attendee.absent}
+                round={round}
                 readOnly
               />
             ))}
           </Card.Root>
+          {footer}
           {canReopen && (
             <div className="desktop:hidden">
               <ReopenAttendanceButton onReopen={onReopen} />

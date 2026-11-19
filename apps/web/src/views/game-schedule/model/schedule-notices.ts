@@ -15,4 +15,6 @@ export const SCHEDULE_NOTICE = {
     title: "모집 기한이 지났습니다",
     lines: ["GM이 세션 시간을 확정하는 중입니다.", "가능 시간은 지금도 고칠 수 있습니다."],
   },
+  roundParticipantsOnly: { lines: ["확정된 참여자만 가능 시간을 입력할 수 있습니다."] },
+  roundEnded: { lines: ["가능 시간 입력이 끝났습니다."] },
 } as const;

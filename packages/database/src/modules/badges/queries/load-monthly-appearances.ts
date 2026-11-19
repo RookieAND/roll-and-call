@@ -1,12 +1,14 @@
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { miniRuleOf } from "#db/modules/badges/model/mini-rule-of";
 import { type MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
 import { recordAppearances } from "#db/modules/badges/model/record-appearances";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { RANKING_MODE, type RankingMode } from "#db/modules/servers/model";
 import { servers } from "#db/schema";
 
+import { loadMultiRoundRecordGames } from "./load-multi-round-record-games";
 import { loadReviewAppearances } from "./load-review-appearances";
 
 // ponytail: 끝난 세션을 한 번에 읽는다. 세션이 수만 건이 되면 달 단위 집계 쿼리로 바꾼다.
@@ -33,10 +35,11 @@ export async function loadMonthlyAppearances({
       hiddenAt: true,
       cancelledAt: true,
     },
-    where: (game, { and, isNotNull, isNull }) =>
+    where: (game, { isNull }) =>
       and(
         eq(game.serverId, serverId),
-        isNotNull(game.confirmedAt),
+        eq(game.roundCount, 1),
+        sql`${firstRoundStartSql} is not null`,
         isNull(game.hiddenAt),
         isNull(game.cancelledAt),
       ),
@@ -52,7 +55,8 @@ export async function loadMonthlyAppearances({
     ...game,
     miniRule: miniRuleOf({ rulebook }),
   }));
-  const sessions = recordAppearances(games, now, { mode });
+  const multiRound = await loadMultiRoundRecordGames({ serverId });
+  const sessions = recordAppearances([...games, ...multiRound.games], now, { mode });
   if (mode !== RANKING_MODE.points) return sessions;
-  return [...sessions, ...(await loadReviewAppearances({ serverId }))];
+  return [...sessions, ...multiRound.absences, ...(await loadReviewAppearances({ serverId }))];
 }

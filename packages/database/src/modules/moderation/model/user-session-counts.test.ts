@@ -63,3 +63,60 @@ describe("recentNoShowCountsByUser", () => {
     expect(counts.has("b")).toBe(false);
   });
 });
+
+describe("다회차 구인", () => {
+  const round = (daysAgoEnd: number, attendeeIds: string[]) => ({
+    endsAt: daysAgo(daysAgoEnd),
+    attendeeIds,
+  });
+  const multi = (overrides = {}) =>
+    session("multi", ["a", "b"], {
+      roundCount: 4,
+      confirmedRounds: [
+        round(40, ["a", "b"]),
+        round(30, ["a", "b"]),
+        round(20, ["a"]),
+        round(10, ["a"]),
+      ],
+      endsAt: daysAgo(40),
+      ...overrides,
+    });
+
+  it("구인이 끝나지 않아도 끝난 회차에 참석한 만큼 센다", () => {
+    const counts = playedCountsByUser({ sessions: [multi()], noShows: [], now });
+    expect(counts.get("a")).toBe(4);
+    expect(counts.get("b")).toBe(2);
+  });
+
+  it("아직 안 끝난 회차와 취소·숨김 구인은 세지 않는다", () => {
+    const ongoing = multi({ confirmedRounds: [round(1, ["a"]), round(-3, ["a"])] });
+    expect(playedCountsByUser({ sessions: [ongoing], noShows: [], now }).get("a")).toBe(1);
+    expect(
+      playedCountsByUser({ sessions: [multi({ cancelled: true })], noShows: [], now }).size,
+    ).toBe(0);
+    expect(playedCountsByUser({ sessions: [multi({ hidden: {} })], noShows: [], now }).size).toBe(
+      0,
+    );
+  });
+
+  it("내보내거나 하차한 사람도 앞서 참석한 회차는 남는다", () => {
+    const sessions = [multi({ confirmedRounds: [round(40, ["k"]), round(30, ["k"])] })];
+    const noShows = [{ ...noShow("multi", "k"), absenceAt: daysAgo(25) }];
+    expect(playedCountsByUser({ sessions, noShows, now }).get("k")).toBe(2);
+  });
+
+  it("회차를 놓치고 남은 사람은 불참 0건이다", () => {
+    expect(
+      recentNoShowCountsByUser({ sessions: [multi()], noShows: [], now, userIds: ["a"] }).get("a"),
+    ).toBe(undefined);
+  });
+
+  it("내보낸 불참은 1건이고 30일은 absenceAt부터 센다", () => {
+    const sessions = [multi({ startsAt: daysAgo(60) })];
+    const kicked = (absenceAt: Date) => [{ ...noShow("multi", "k"), absenceAt }];
+    const count = (absenceAt: Date) =>
+      recentNoShowCountsByUser({ sessions, noShows: kicked(absenceAt), now }).get("k");
+    expect(count(daysAgo(29))).toBe(1);
+    expect(count(daysAgo(31))).toBe(undefined);
+  });
+});

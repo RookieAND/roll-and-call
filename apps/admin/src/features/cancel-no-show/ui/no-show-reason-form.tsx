@@ -1,7 +1,7 @@
 "use client";
 
 import type { NotificationPayload } from "@roll-and-call/database/notifications/model";
-import { Button, Field, Textarea, VStack, toast } from "@roll-and-call/ui";
+import { Button, Field, Text, Textarea, VStack, toast } from "@roll-and-call/ui";
 import { isUndefined } from "es-toolkit";
 import { RotateCcw } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -32,6 +32,7 @@ interface NoShowReasonFormProps {
   copy: NoShowReasonCopy;
   summary: ReactNode;
   notification: NotificationPayload;
+  note?: string;
   submit: (reason: string) => Promise<SubmitResult>;
   onClose: () => void;
 }
@@ -43,6 +44,7 @@ export function NoShowReasonForm({
   copy,
   summary,
   notification,
+  note,
   submit,
   onClose,
 }: NoShowReasonFormProps) {
@@ -90,6 +92,11 @@ export function NoShowReasonForm({
               onChange={(event) => setReason(event.target.value)}
             />
           </Field.Root>
+          {note ? (
+            <Text typography="body4" foreground="hint">
+              {note}
+            </Text>
+          ) : null}
           <NotificationPreview payload={notification} recipients="당사자와 GM에게 알립니다." />
         </VStack>
       </ResponsiveDialog.Body>

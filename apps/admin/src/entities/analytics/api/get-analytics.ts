@@ -12,6 +12,11 @@ export async function getAnalytics({
   previewEarly = false,
   now = new Date(),
 }: GetAnalyticsOptions = {}): Promise<AnalyticsData> {
-  const { sessions, noShows, users } = await loadAdminData(["sessions", "noShows", "users"]);
-  return buildAnalytics({ sessions, noShows, users, previewEarly, now });
+  const { sessions, noShows, users, rounds } = await loadAdminData([
+    "sessions",
+    "noShows",
+    "users",
+    "rounds",
+  ]);
+  return buildAnalytics({ sessions, rounds, noShows, users, previewEarly, now });
 }

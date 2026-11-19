@@ -31,6 +31,8 @@ export async function getGameParticipants({
             absenceReason: true,
             absenceCancelledAt: true,
             absenceAddedAt: true,
+            lateJoined: true,
+            leftReason: true,
           },
           where: (participant, { eq }) => eq(participant.serverId, serverId),
           with: {

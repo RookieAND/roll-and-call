@@ -5,22 +5,35 @@ import type { Transaction } from "#db/modules/transaction";
 import { participants } from "#db/schema";
 
 // 세션 시작 뒤 확정자를 불참으로 내보낸다. 행을 남겨 출석 명단과 불참 기록에 쓰고, 확정이 아니었으면 false.
+// 다회차는 빠진 까닭(leftReason)을 남긴다. 합의 하차(mutual)는 불참 기록을 남기지 않는다.
 export async function markParticipantRemoved({
   transaction,
   serverId,
   gameId,
   userId,
   absenceReason,
+  leftReason,
+  absenceAt = null,
 }: {
   transaction: Transaction;
   serverId: string;
   gameId: string;
   userId: string;
   absenceReason: string | null;
+  leftReason?: "removed" | "mutual";
+  // 다회차 불참으로 내보내기: 내보낸 회차(이미 시작한 가장 뒤 회차)의 시작 시각.
+  absenceAt?: Date | null;
 }) {
+  const mutual = leftReason === "mutual";
   const marked = await transaction
     .update(participants)
-    .set({ status: PARTICIPANT_STATUS.removed, absent: true, absenceReason })
+    .set({
+      status: PARTICIPANT_STATUS.removed,
+      absent: !mutual,
+      absenceReason: mutual ? null : absenceReason,
+      leftReason: leftReason ?? null,
+      absenceAt: mutual ? null : absenceAt,
+    })
     .where(
       and(
         eq(participants.serverId, serverId),

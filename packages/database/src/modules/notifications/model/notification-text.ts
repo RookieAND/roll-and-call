@@ -19,6 +19,8 @@ import {
   NOTIFICATION_KIND,
   type NotificationPayload,
 } from "./notification-kind";
+import { roundSpanText } from "./round-span-text";
+import { shiftPhrase } from "./shift-phrase";
 
 export interface NotificationText {
   pre: string;
@@ -169,6 +171,57 @@ export function notificationText(payload: NotificationPayload): NotificationText
         " 불참 기록이 다시 남았습니다.",
         "운영진이 취소를 되돌렸습니다.",
       );
+    case NOTIFICATION_KIND.roundSkipped:
+      return bold(
+        payload.params.gameTitle,
+        ` ${payload.params.roundNo}회차가 생략되었습니다.`,
+        "뒤 회차 번호가 하나씩 당겨졌습니다.",
+      );
+    case NOTIFICATION_KIND.roundCountChanged: {
+      const { previousCount, nextCount } = payload.params;
+      const direction = nextCount > previousCount ? "늘었습니다" : "줄었습니다";
+      return bold(
+        payload.params.gameTitle,
+        " 예정 회차 수가 바뀌었습니다.",
+        `총 ${previousCount}회에서 ${nextCount}회로 ${direction}.`,
+      );
+    }
+    case NOTIFICATION_KIND.gameFinishedEarly: {
+      const { reason, roundNo, finisher } = payload.params;
+      const cause =
+        reason === "stale"
+          ? "다음 회차가 30일 동안 정해지지 않아 마무리되었습니다."
+          : `GM이 ${roundNo}회차에서 마쳤습니다.`;
+      return bold(
+        payload.params.gameTitle,
+        " 구인이 일찍 마무리되었습니다.",
+        finisher ? `${cause} 완주로 인정되었습니다.` : cause,
+      );
+    }
+    case NOTIFICATION_KIND.roundAvailabilityRequested:
+      return plain(
+        `${payload.params.roundNo}회차 가능 시간을 알려 주세요`,
+        payload.params.gameTitle,
+      );
+    case NOTIFICATION_KIND.roundScheduleSet:
+      return plain(
+        `${payload.params.roundNo}회차 일정이 정해졌습니다`,
+        roundSpanText(payload.params),
+      );
+    case NOTIFICATION_KIND.roundScheduleChanged:
+      return plain(
+        `${payload.params.roundNo}회차 일정이 바뀌었습니다`,
+        `${roundSpanText(payload.params)}로 옮겨졌습니다`,
+      );
+    case NOTIFICATION_KIND.laterRoundsChanged: {
+      const { fromRoundNo, toRoundNo, shiftMs } = payload.params;
+      const range =
+        fromRoundNo === toRoundNo ? `${fromRoundNo}회차` : `${fromRoundNo}~${toRoundNo}회차`;
+      return plain(
+        "이후 회차 일정이 바뀌었습니다",
+        `${range}가 ${shiftPhrase(shiftMs)} 옮겨졌습니다`,
+      );
+    }
     case NOTIFICATION_KIND.attendanceAutoConfirmed:
       return bold(
         payload.params.gameTitle,
@@ -182,9 +235,13 @@ export function notificationText(payload: NotificationPayload): NotificationText
         "함께한 세션의 후기를 남겨 주세요.",
       );
     case NOTIFICATION_KIND.sessionReminder:
-      return bold(payload.params.gameTitle, " 세션이 1시간 뒤에 시작됩니다.");
+      return payload.params.roundNo
+        ? bold(payload.params.gameTitle, ` ${payload.params.roundNo}회차 시작 1시간 전입니다.`)
+        : bold(payload.params.gameTitle, " 세션이 1시간 뒤에 시작됩니다.");
     case NOTIFICATION_KIND.sessionStarted:
-      return bold(payload.params.gameTitle, " 세션이 시작되었습니다.");
+      return payload.params.roundNo
+        ? bold(payload.params.gameTitle, ` ${payload.params.roundNo}회차가 시작되었습니다.`)
+        : bold(payload.params.gameTitle, " 세션이 시작되었습니다.");
     case NOTIFICATION_KIND.certApproved:
       return bold(
         bookNames(payload.params),

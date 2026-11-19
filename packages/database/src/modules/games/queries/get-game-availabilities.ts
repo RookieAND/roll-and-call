@@ -9,9 +9,11 @@ import { availabilities, games, participants, profiles } from "#db/schema";
 export async function getGameAvailabilities({
   serverId,
   gameId,
+  roundNo = 1,
 }: {
   serverId: string;
   gameId: string;
+  roundNo?: number;
 }) {
   const rows = await db
     .select({
@@ -37,6 +39,7 @@ export async function getGameAvailabilities({
       and(
         eq(availabilities.serverId, serverId),
         eq(availabilities.gameId, gameId),
+        eq(availabilities.roundNo, roundNo),
         or(
           eq(games.gmId, availabilities.userId),
           eq(participants.status, PARTICIPANT_STATUS.confirmed),

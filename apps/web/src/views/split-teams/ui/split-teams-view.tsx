@@ -1,9 +1,19 @@
 import { getApplicationNotes, getGameParticipants } from "@roll-and-call/database/games";
-import { applicationQuestionOf } from "@roll-and-call/database/games/model";
+import {
+  applicationQuestionOf,
+  effectivePlayMinutes,
+  multiRoundNoticeLine,
+} from "@roll-and-call/database/games/model";
 import { Container } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
-import { isSessionEnded, isSessionStarted, RECRUIT_METHOD, splitRoster } from "@/entities/game";
+import {
+  isSessionEnded,
+  isSessionStarted,
+  RECRUIT_METHOD,
+  ROUND_SCHEDULE_KIND,
+  splitRoster,
+} from "@/entities/game";
 import { GmOnlyNotice } from "@/features/auth";
 import { serverPath } from "@/shared/lib";
 import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
@@ -77,6 +87,15 @@ export async function SplitTeamsView({ id }: SplitTeamsViewProps) {
       gameLine={`${game.rule} · 정원 ${game.maxPlayers}명 · 확정 ${roster.confirmed.length}명`}
       candidates={candidates}
       carriesApplicationNote={applicationQuestionOf(game) !== null}
+      multiRound={
+        game.roundCount > 1
+          ? {
+              line: multiRoundNoticeLine(game),
+              designated: game.roundScheduleKind === ROUND_SCHEDULE_KIND.designated,
+              defaultMinutes: effectivePlayMinutes(game.playMinutes ?? game.playMinutesMin),
+            }
+          : null
+      }
     />
   );
 }

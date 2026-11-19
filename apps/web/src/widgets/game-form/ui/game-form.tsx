@@ -3,17 +3,23 @@
 import {
   APPLICATION_QUESTION_DEFAULT,
   DEFAULT_PLAY_MINUTES,
+  ROUND_COUNT_MIN,
 } from "@roll-and-call/database/games/model";
-import { use } from "react";
+import { use, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
   DEFAULT_WINDOW,
   GAME_KIND,
   GAME_VISIBILITY,
+  isScheduleConflictRejection,
   PLAY_TYPE,
   RECRUIT_METHOD,
+  ROUND_MODE,
+  ROUND_REPEAT,
+  ROUND_SCHEDULE_KIND,
   SCHEDULE_MODE,
+  type ScheduleConflictRejection,
 } from "@/entities/game";
 import { ruleSetOf, type MyRulebooks } from "@/entities/rulebook";
 import type { GameFormValues } from "@/features/write-game";
@@ -23,12 +29,14 @@ import { TrialContext } from "@/shared/trial";
 import { toast, useAction } from "@/shared/ui";
 
 import type { GameDefaults } from "../model/game-defaults";
-import type { GameEditContext } from "../model/game-form-layout";
+import type { GameEditContext, MultiRoundOptions } from "../model/game-form-layout";
 import { gameFormResolver } from "../model/game-form-resolver";
 import { GAME_FORM_STEPS } from "../model/game-form-steps";
 import type { ReopenContext } from "../model/reopen-context";
+import { roundRepeatOf } from "../model/round-repeat-of";
 import { submitErrorMessage } from "../model/submit-error-message";
 import { GameFormWizard } from "./game-form-wizard";
+import { ScheduleConflictDialog } from "./schedule-conflict-dialog";
 
 interface GameFormProps {
   serverId: string;
@@ -42,6 +50,7 @@ interface GameFormProps {
   initialRulebookId?: string;
   reopen?: ReopenContext;
   adultOnlyEnabled?: boolean;
+  multiRound?: MultiRoundOptions;
 }
 
 export function GameForm({
@@ -56,8 +65,13 @@ export function GameForm({
   initialRulebookId,
   reopen,
   adultOnlyEnabled = false,
+  multiRound,
 }: GameFormProps) {
   const { pending, run } = useAction();
+  const [conflict, setConflict] = useState<{
+    rejection: ScheduleConflictRejection;
+    isMulti: boolean;
+  } | null>(null);
   // 체험에서는 일부 단계만 보인다.
   const trialStepIndexes = use(TrialContext)?.wizard?.stepIndexes;
   const steps = trialStepIndexes
@@ -68,6 +82,17 @@ export function GameForm({
     rulebooks && initialRulebookId
       ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: initialRulebookId })
       : null;
+
+  // 여러 번 진행은 등록(다시 열기 포함)에서만 열고, 열지 않은 쪽에서는 한 번으로 연다.
+  const isMultiDefault = !edit && !!multiRound && (defaultGame?.roundCount ?? 1) > 1;
+  const isCoordinatedDefault =
+    isMultiDefault &&
+    !!multiRound?.coordinated &&
+    defaultGame?.roundScheduleKind === ROUND_SCHEDULE_KIND.coordinated;
+  const defaultScheduleKind = isCoordinatedDefault
+    ? ROUND_SCHEDULE_KIND.coordinated
+    : ROUND_SCHEDULE_KIND.designated;
+  const isDesignatedMulti = isMultiDefault && !isCoordinatedDefault;
 
   const form = useForm<GameFormValues>({
     resolver: gameFormResolver({ rulebooks, edit }),
@@ -96,7 +121,9 @@ export function GameForm({
       maxPlayers: String(defaultGame?.maxPlayers ?? 4),
       minPlayers: String(defaultGame?.minPlayers ?? ""),
       recruitMethod: defaultGame?.recruitMethod ?? RECRUIT_METHOD.firstCome,
-      scheduleMode: defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate,
+      scheduleMode: isDesignatedMulti
+        ? SCHEDULE_MODE.fixed
+        : (defaultGame?.scheduleMode ?? SCHEDULE_MODE.coordinate),
       endDate: defaultGame?.endDate ? toKstDateTimeInput(defaultGame.endDate) : nextHourInput(),
       confirmedAt: defaultGame?.confirmedAt ? toKstDateTimeInput(defaultGame.confirmedAt) : "",
       rangeStart: defaultGame?.rangeStart ?? "",
@@ -112,6 +139,12 @@ export function GameForm({
       minRulePlays: defaultGame?.minRulePlays ?? null,
       requireRulebookCert: defaultGame?.requireRulebookCert ?? false,
       preConfirmed: [],
+      roundMode: isMultiDefault ? ROUND_MODE.multi : ROUND_MODE.once,
+      roundCount: isMultiDefault ? defaultGame?.roundCount : ROUND_COUNT_MIN,
+      roundScheduleKind: defaultScheduleKind,
+      roundRepeat: isMultiDefault ? roundRepeatOf(defaultGame?.repeatRule) : ROUND_REPEAT.weekly,
+      firstRoundEndAt: "",
+      laterRounds: [],
     },
   });
 
@@ -119,6 +152,10 @@ export function GameForm({
     run(async (): Promise<ActionResult> => (await onSubmit(values)) ?? {}, {
       onSuccess: () => toast.success(successMessage),
       onError: (result) => {
+        if (isScheduleConflictRejection(result) && result.gmOverlaps.length > 0) {
+          setConflict({ rejection: result, isMulti: values.roundMode === ROUND_MODE.multi });
+          return;
+        }
         const chosen = rulebooks
           ? ruleSetOf({ myRulebooks: rulebooks, rulebookId: values.rulebookId })
           : null;
@@ -132,18 +169,26 @@ export function GameForm({
   }
 
   return (
-    <GameFormWizard
-      serverId={serverId}
-      form={form}
-      pending={pending}
-      submitLabel={submitLabel}
-      onValid={onValid}
-      steps={steps}
-      edit={edit}
-      rulebooks={rulebooks}
-      supplementRulebooks={supplementRulebooks}
-      reopen={reopen}
-      adultOnlyEnabled={adultOnlyEnabled}
-    />
+    <>
+      <GameFormWizard
+        serverId={serverId}
+        form={form}
+        pending={pending}
+        submitLabel={submitLabel}
+        onValid={onValid}
+        steps={steps}
+        edit={edit}
+        rulebooks={rulebooks}
+        supplementRulebooks={supplementRulebooks}
+        reopen={reopen}
+        adultOnlyEnabled={adultOnlyEnabled}
+        multiRound={multiRound}
+      />
+      <ScheduleConflictDialog
+        rejection={conflict?.rejection ?? null}
+        isMulti={conflict?.isMulti ?? false}
+        onClose={() => setConflict(null)}
+      />
+    </>
   );
 }

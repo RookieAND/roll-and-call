@@ -8,6 +8,8 @@ export const DISCORD_ATTENDANCE_MESSAGE = {
   noAttendee: "확정된 참여자가 없는 세션입니다.",
   tooMany: "참여자가 많아 디스코드에서 고를 수 없습니다.\n웹의 운영 관리에서 입력해 주세요.",
   failed: "출석을 확정하지 못했습니다.\n잠시 뒤에 다시 시도해 주세요.",
+  roundClosed:
+    "지금은 이 회차의 출석을 입력할 수 없습니다.\n회차가 시작된 뒤 끝나고 24시간 안에만 입력할 수 있습니다.",
 } as const;
 
 export function attendanceConfirmedMessage(absentCount: number) {

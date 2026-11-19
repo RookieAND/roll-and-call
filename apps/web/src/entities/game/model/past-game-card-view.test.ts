@@ -71,4 +71,20 @@ describe("pastGameCardView", () => {
         .thumbnailUrl,
     ).toBeNull();
   });
+
+  it("여러 번 진행 구인은 한 줄에 총 횟수를 붙인다", () => {
+    expect(pastGameCardView(pastGame({ roundCount: 6 }), now).schedule).toBe(
+      "9월 12일 마감 · 총 6회",
+    );
+    expect(
+      pastGameCardView(
+        pastGame({
+          roundCount: 6,
+          scheduleMode: "fixed",
+          confirmedAt: new Date("2026-08-03T20:00:00+09:00"),
+        }),
+        now,
+      ).schedule,
+    ).toBe("8월 3일 (월) 오후 8:00부터 · 총 6회");
+  });
 });

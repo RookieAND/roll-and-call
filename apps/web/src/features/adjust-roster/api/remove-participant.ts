@@ -3,6 +3,7 @@
 import {
   deleteParticipant,
   findParticipantStatus,
+  listGameRoundsInTransaction,
   listSeatOpenedRecipients,
   markParticipantRemoved,
 } from "@roll-and-call/database/games";
@@ -27,6 +28,8 @@ const ABSENCE_REASON_INPUT_MAX = 1000;
 
 const inputSchema = rosterMemberInputSchema.extend({
   absenceReason: z.string().max(ABSENCE_REASON_INPUT_MAX).optional(),
+  // 다회차 1회차 시작 뒤 확정자를 내보낼 때만 받는다. removed는 불참 기록 1건, mutual은 기록 없음.
+  leftReason: z.enum(["removed", "mutual"]).optional(),
 });
 
 // 세션 시작 뒤 확정자는 행을 남겨 불참으로 기록한다. 그 밖(시작 전, 시작 뒤 대기자)은 행을 지운다.
@@ -34,7 +37,7 @@ const inputSchema = rosterMemberInputSchema.extend({
 export async function removeParticipant(input: z.input<typeof inputSchema>): Promise<ActionResult> {
   const parsed = parseActionInput(inputSchema, input);
   if (!parsed.ok) return parsed.result;
-  const { gameId, userId, absenceReason } = parsed.data;
+  const { gameId, userId, absenceReason, leftReason } = parsed.data;
   const reason = absenceReasonOf(absenceReason);
   if ("error" in reason) return { error: reason.error };
 
@@ -51,19 +54,27 @@ export async function removeParticipant(input: z.input<typeof inputSchema>): Pro
       }
 
       if (started && status === PARTICIPANT_STATUS.confirmed) {
+        const multiRound = game.roundCount > 1;
+        if (multiRound && !leftReason) throw new RosterError("내보내는 방식을 골라 주세요.");
+        const rounds = multiRound
+          ? await listGameRoundsInTransaction({ transaction, serverId, gameId })
+          : [];
+        const kickedRound = rounds.filter((round) => round.startAt && round.startAt <= now).at(-1);
         const marked = await markParticipantRemoved({
           transaction,
           serverId,
           gameId,
           userId,
           absenceReason: reason.value,
+          leftReason: multiRound ? leftReason : undefined,
+          absenceAt: kickedRound?.startAt ?? null,
         });
         if (!marked) throw new RosterError(PARTICIPANT_NOT_FOUND_MESSAGE);
-        await notifyRosterChange({
-          transaction,
-          game,
-          notifications: [{ userId, kind: NOTIFICATION_KIND.absenceRecorded, params }],
-        });
+        const kind =
+          leftReason === "mutual"
+            ? NOTIFICATION_KIND.removedFromRoster
+            : NOTIFICATION_KIND.absenceRecorded;
+        await notifyRosterChange({ transaction, game, notifications: [{ userId, kind, params }] });
         return;
       }
       const removed = await deleteParticipant({ transaction, serverId, gameId, userId });

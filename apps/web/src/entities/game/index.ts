@@ -32,12 +32,19 @@ export { PastGameCard } from "./ui/past-game-card";
 export { PrivateMark } from "./ui/private-mark";
 export { GameThumbnail } from "./ui/game-thumbnail";
 export { GameStatusBadge } from "./ui/game-status-badge";
+export {
+  SCHEDULE_CONFLICT_MESSAGE,
+  SCHEDULE_CONFLICT_REASON,
+  isScheduleConflictRejection,
+  scheduleConflictRejection,
+  type GmOverlap,
+  type ScheduleConflictRejection,
+} from "./model/schedule-conflict-rejection";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameScheduleRow } from "./ui/game-schedule-row";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export {
   effectivePlayMinutes,
-  findOverlappingGame,
   isApplicationClosed,
   isSessionEnded,
   isSessionInProgress,
@@ -103,3 +110,34 @@ export { recentAbsences, type Absence } from "./model/recent-absences";
 export { countRecordSessions } from "./model/count-record-sessions";
 export { AbsenceNotice } from "./ui/absence-notice";
 export { isRosterRequest } from "./model/is-roster-request";
+export { ROUND_MODE, ROUND_MODES, type RoundMode } from "./model/round-mode";
+export {
+  ROUND_SCHEDULE_KIND,
+  ROUND_SCHEDULE_KINDS,
+  type RoundScheduleKind,
+} from "./model/round-schedule-kind";
+export {
+  ROUND_REPEAT,
+  ROUND_REPEATS,
+  ROUND_REPEAT_WEEKS,
+  ROUND_REPEAT_WORD,
+  type RoundRepeat,
+  type RoundRepeatWord,
+} from "./model/round-repeat";
+export { roundClockLabel } from "./model/round-clock-label";
+export { roundTimeRange } from "./model/round-time-range";
+export { roundTotalLabel } from "./model/round-total-label";
+export { repeatScheduleText } from "./model/repeat-schedule-text";
+export { repeatWindow } from "./model/repeat-window";
+export { repeatPhrase } from "./model/repeat-phrase";
+export { datedScheduleText } from "./model/dated-schedule-text";
+export { coordinatingScheduleText } from "./model/coordinating-schedule-text";
+export { multiRoundScheduleText } from "./model/multi-round-schedule-text";
+export { multiRoundSubLine } from "./model/multi-round-sub-line";
+export { roundSummaryLine } from "./model/round-summary-line";
+export { applySummaryLines } from "./model/apply-summary-lines";
+export { roundSlotLabel } from "./model/round-slot-label";
+export { roundRangeLabel } from "./model/round-range-label";
+export { roundScheduleLines, type RoundScheduleRound } from "./model/round-schedule-lines";
+export type { MultiRoundGame } from "./model/multi-round-game";
+export { RoundScheduleSheet } from "./ui/round-schedule-sheet";

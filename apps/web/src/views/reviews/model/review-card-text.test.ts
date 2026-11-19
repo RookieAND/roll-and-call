@@ -18,6 +18,8 @@ const row = {
   authorAvatarUrl: null,
   gameTitle: "물벼락",
   sessionAt: new Date("2026-09-19T20:00:00+09:00"),
+  roundNo: null,
+  roundStartAt: null,
 } satisfies ReviewCardRow;
 
 describe("reviewCardText", () => {

@@ -25,4 +25,9 @@ describe("gameFilterCount·hasGameFilters", () => {
     expect(hasGameFilters({ tab: "past", includePrivate: false })).toBe(true);
     expect(hasGameFilters({ tab: "live", includePrivate: false })).toBe(false);
   });
+
+  it("진행 횟수를 고르면 1로 센다", () => {
+    expect(gameFilterCount({ rounds: "multi" })).toBe(1);
+    expect(hasGameFilters({ rounds: "once" })).toBe(true);
+  });
 });

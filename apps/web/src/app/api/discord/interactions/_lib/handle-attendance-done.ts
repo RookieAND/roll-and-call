@@ -1,4 +1,4 @@
-import { ATTENDANCE_DONE_PREFIX } from "@roll-and-call/game-notices";
+import { ATTENDANCE_DONE_PREFIX, parseButtonTarget } from "@roll-and-call/game-notices";
 
 import { completeAttendanceFromDiscord } from "@/features/confirm-attendance/server";
 
@@ -24,7 +24,7 @@ export async function handleAttendanceDone(
     const reply = await completeAttendanceFromDiscord({
       guildId: interaction.guild_id,
       discordId,
-      gameId: customId.slice(ATTENDANCE_DONE_PREFIX.length),
+      ...parseButtonTarget(customId.slice(ATTENDANCE_DONE_PREFIX.length)),
       absentUserIds,
     });
     return attendanceReplyResponse({ reply, type: INTERACTION_RESPONSE_TYPE.updateMessage });

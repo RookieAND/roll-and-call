@@ -1,10 +1,12 @@
 export type { ReopenContext } from "./model/reopen-context";
 export type { GameDefaults } from "./model/game-defaults";
+export type { MultiRoundOptions } from "./model/game-form-layout";
 export { CreateGameForm } from "./ui/create-game-form";
 export { EditGameForm } from "./ui/edit-game-form";
 export { GameFormSkeleton } from "./ui/game-form-skeleton";
 export { CoordinationRangeFields } from "./ui/coordination-range-fields";
 export { CoordinationWindowField } from "./ui/coordination-window-field";
+export { FirstRoundFields } from "./ui/first-round-fields";
 export { FixedSessionField } from "./ui/fixed-session-field";
 export { ScheduleModeField } from "./ui/schedule-mode-field";
 export { EndDateField } from "./ui/end-date-field";

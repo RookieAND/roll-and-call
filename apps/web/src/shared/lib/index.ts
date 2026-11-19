@@ -2,7 +2,7 @@ export { dayjs, KST } from "@roll-and-call/app-kit/date";
 export { toKst } from "@roll-and-call/app-kit/date";
 export { formatDateTime } from "@roll-and-call/app-kit/date";
 export { formatDate } from "@roll-and-call/app-kit/date";
-export { formatDateWeekday } from "./format-date-weekday";
+export { formatDateWeekday } from "@roll-and-call/app-kit/date";
 export { formatDateClock } from "@roll-and-call/app-kit/date";
 export { ddayKst } from "./dday-kst";
 export { formatDday } from "./format-dday";

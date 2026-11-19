@@ -130,7 +130,8 @@ export async function getUserDetail(userId: string) {
           recordedBy: noShow.added ? `${noShow.added.by} · 운영진` : nicknameOf(db, session.gmId),
           cancelled: noShow.cancelled,
           expired:
-            !noShow.cancelled && !isAbsenceActive({ sessionStartsAt: session.startsAt, now }),
+            !noShow.cancelled &&
+            !isAbsenceActive({ sessionStartsAt: noShow.absenceAt ?? session.startsAt, now }),
         };
       })
       .toSorted((a, b) => b.startsAt.getTime() - a.startsAt.getTime()),

@@ -9,6 +9,7 @@ export {
 } from "./servers";
 export * from "./profiles";
 export * from "./games";
+export * from "./game-rounds";
 export * from "./reviews";
 export * from "./badges";
 export * from "./relations";

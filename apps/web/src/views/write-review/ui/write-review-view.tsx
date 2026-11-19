@@ -12,9 +12,11 @@ import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
 
 interface WriteReviewViewProps {
   gameId: string;
+  // 다회차의 회차 번호(?round=n). 없으면 이미 시작한 가장 뒤 회차다.
+  roundNo?: number;
 }
 
-export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
+export async function WriteReviewView({ gameId, roundNo }: WriteReviewViewProps) {
   const user = await getCurrentSessionUser();
   if (!user) {
     return (
@@ -29,7 +31,12 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
   }
 
   const server = await getCurrentServer();
-  const target = await getReviewDraftTarget({ serverId: server.id, gameId, userId: user.id });
+  const target = await getReviewDraftTarget({
+    serverId: server.id,
+    gameId,
+    userId: user.id,
+    roundNo,
+  });
   if (!target) notFound();
   const { game, review } = target;
   const when = game.confirmedAt ? `${formatDateTime(game.confirmedAt)} · ` : "";
@@ -39,6 +46,7 @@ export async function WriteReviewView({ gameId }: WriteReviewViewProps) {
     <ReviewForm
       serverId={server.id}
       gameId={gameId}
+      roundNo={target.round?.roundNo}
       heading={{ title: game.title, rule: game.rule, subline: `${when}GM ${game.gmName}` }}
       review={
         editable && {

@@ -46,6 +46,10 @@ export { getGamesByGm } from "./queries/get-games-by-gm";
 export { getGamesCounts, type GamesCounts } from "./queries/get-games-counts";
 export { getJoinedGames } from "./queries/get-joined-games";
 export { getMonthSessions, type MonthSessionRow } from "./queries/get-month-sessions";
+export {
+  getMonthRoundSessions,
+  type MonthRoundSessionRow,
+} from "./queries/get-month-round-sessions";
 export { getRecruitingGamesPage } from "./queries/get-recruiting-games-page";
 export { getRespondedGameIds } from "./queries/get-responded-game-ids";
 export { getRespondedUserIds } from "./queries/get-responded-user-ids";
@@ -54,7 +58,15 @@ export { getResponseCounts } from "./queries/get-response-counts";
 export { getScheduleAvailabilityRows } from "./queries/get-schedule-availability-rows";
 export { getUserConfirmedSlots } from "./queries/get-user-confirmed-slots";
 export { hasAnsweredAvailability } from "./queries/has-answered-availability";
-export { listUserSessionTimings } from "./queries/list-user-session-timings";
+export {
+  findScheduleConflicts,
+  type ScheduleConflict,
+  type ScheduleOverlap,
+  type SchedulePerson,
+  type ScheduleRole,
+} from "./queries/find-schedule-conflicts";
+export { listDatedRounds } from "./queries/list-dated-rounds";
+export { listGameRounds, type GameRoundRow } from "./queries/list-game-rounds";
 export { hasSessionsBetween } from "./queries/has-sessions-between";
 export { getApplicationNote } from "./queries/get-application-note";
 export { getApplicationNotes } from "./queries/get-application-notes";
@@ -77,3 +89,37 @@ export { lockGame } from "./queries/lock-game";
 export { searchGameCandidates } from "./queries/search-game-candidates";
 export * from "./model";
 export { releaseMemberGames, type ReleasedMemberGames } from "./commands/release-member-games";
+export { addRound } from "./commands/add-round";
+export {
+  autoConfirmRoundAttendance,
+  type AutoConfirmedRound,
+} from "./commands/auto-confirm-round-attendance";
+export {
+  confirmRoundAttendance,
+  type RoundAttendanceResult,
+} from "./commands/confirm-round-attendance";
+export { endRound } from "./commands/end-round";
+export { finishGameEarly } from "./commands/finish-game-early";
+export { setRoundCount } from "./commands/set-round-count";
+export { skipRound } from "./commands/skip-round";
+export {
+  finishStaleCoordinatedGames,
+  type StaleFinishedGame,
+} from "./commands/finish-stale-coordinated-games";
+export { getRoundAttendance } from "./queries/get-round-attendance";
+export { findGameRound } from "./queries/find-game-round";
+export { removeLastRound } from "./commands/remove-last-round";
+export { listRosterFinishers } from "./queries/list-roster-finishers";
+export { listGameRoundsInTransaction } from "./queries/list-game-rounds-in-transaction";
+export { addLateParticipant } from "./commands/add-late-participant";
+export { removeLateParticipant } from "./commands/remove-late-participant";
+export { listThreadsToLock } from "./queries/list-threads-to-lock";
+export { markThreadLocked } from "./commands/mark-thread-locked";
+export { getAdminGameRounds, type AdminGameRounds } from "./queries/get-admin-game-rounds";
+export { scheduleRound } from "./commands/schedule-round";
+export { moveRounds } from "./commands/move-rounds";
+export { setRepeatRule } from "./commands/set-repeat-rule";
+export { openRoundCoordination } from "./commands/open-round-coordination";
+export { closeRoundCoordination } from "./commands/close-round-coordination";
+export { purgeRoundAvailabilities } from "./commands/purge-round-availabilities";
+export { getRoundCoordination } from "./queries/get-round-coordination";

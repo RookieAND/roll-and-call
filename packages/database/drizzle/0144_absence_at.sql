@@ -1,0 +1,1 @@
+ALTER TABLE "participants" ADD COLUMN "absence_at" timestamp with time zone;

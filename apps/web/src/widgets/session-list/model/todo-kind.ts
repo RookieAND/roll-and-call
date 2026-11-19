@@ -4,6 +4,7 @@ export const TODO_KIND = {
   confirmTime: SESSION_ACTION_KIND.confirmTime,
   confirmAttendance: SESSION_ACTION_KIND.confirmAttendance,
   fillVacancy: SESSION_ACTION_KIND.fillVacancy,
+  scheduleRound: SESSION_ACTION_KIND.scheduleRound,
   submitAvailability: SESSION_ACTION_KIND.submitAvailability,
   certRejected: "cert-rejected",
 } as const;
@@ -15,6 +16,7 @@ export const TODO_ORDER: readonly TodoKind[] = [
   TODO_KIND.confirmTime,
   TODO_KIND.confirmAttendance,
   TODO_KIND.fillVacancy,
+  TODO_KIND.scheduleRound,
   TODO_KIND.submitAvailability,
   TODO_KIND.certRejected,
 ];
@@ -24,6 +26,7 @@ export const TODO_EYEBROW = {
   [TODO_KIND.confirmTime]: "세션 일시 미정",
   [TODO_KIND.confirmAttendance]: "출석 확인",
   [TODO_KIND.fillVacancy]: "빈자리 생김",
+  [TODO_KIND.scheduleRound]: "회차 일정 미정",
   [TODO_KIND.submitAvailability]: "가능 시간 미제출",
   [TODO_KIND.certRejected]: "인증 반려",
 } as const;

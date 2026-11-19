@@ -5,8 +5,10 @@ import { useState } from "react";
 
 import {
   DirectConfirmButton,
+  LateJoinButton,
   MarkAbsentDialog,
   MemberSheet,
+  RoundKickSheet,
   type MemberSummary,
 } from "@/features/adjust-roster";
 import { toKst } from "@/shared/lib";
@@ -72,14 +74,18 @@ export function RosterQueues({
         count={confirmedCount}
         tag={summary.hasDrawResult && <DrawResultLink gameId={gameId} />}
         trailing={
-          <DirectConfirmButton
-            gameId={gameId}
-            confirmedCount={confirmedCount}
-            maxPlayers={maxPlayers}
-            started={started}
-            capacityRaised={capacityRaised}
-            disabled={addDisabled}
-          />
+          summary.lateJoin ? (
+            <LateJoinButton gameId={gameId} />
+          ) : (
+            <DirectConfirmButton
+              gameId={gameId}
+              confirmedCount={confirmedCount}
+              maxPlayers={maxPlayers}
+              started={started}
+              capacityRaised={capacityRaised}
+              disabled={addDisabled}
+            />
+          )
         }
         footnote={
           <>
@@ -171,11 +177,19 @@ export function RosterQueues({
         onMarkAbsent={setAbsentMember}
         onClose={() => setMenuMember(null)}
       />
-      <MarkAbsentDialog
-        gameId={gameId}
-        member={absentMember}
-        onClose={() => setAbsentMember(null)}
-      />
+      {summary.lateJoin ? (
+        <RoundKickSheet
+          gameId={gameId}
+          member={absentMember}
+          onClose={() => setAbsentMember(null)}
+        />
+      ) : (
+        <MarkAbsentDialog
+          gameId={gameId}
+          member={absentMember}
+          onClose={() => setAbsentMember(null)}
+        />
+      )}
     </VStack>
   );
 }

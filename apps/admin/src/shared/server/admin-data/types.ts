@@ -152,6 +152,9 @@ export interface Session {
   // false면 아직 세션 일시가 없어 startsAt이 조율 범위의 끝이나 모집 마감일이다.
   timeFixed?: boolean;
   memberIds: string[];
+  roundCount?: number;
+  confirmedRounds?: { endsAt: Date | null; attendeeIds: string[] }[];
+  finishedAt?: Date | null;
   capacity: number;
   closed: boolean;
   recruitStatus?: PostStatus;
@@ -222,6 +225,10 @@ export interface NoShow {
   gmReason?: string;
   // 운영진이 추가한 기록. 사유는 태그 이름이고 기타면 입력한 글자다.
   added?: { by: string; at: Date; reason: string };
+  // 다회차에서 불참으로 내보낸 회차의 시작. 있으면 30일을 세션 시작 대신 이 시각부터 센다.
+  absenceAt?: Date;
+  // 다회차에서 내보낸 회차 번호. 찾지 못하면 없다.
+  kickedRound?: number;
 }
 
 export interface AuditEntry {
@@ -262,12 +269,23 @@ export interface CountingSession {
   endsAt?: Date | null;
   cancelled?: boolean;
   hidden?: unknown;
+  roundCount?: number;
+  confirmedRounds?: { endsAt: Date | null; attendeeIds: string[] }[];
+}
+
+// 일시가 있는 다회차 구인의 회차. endsAt은 마친 시각(없으면 예정 종료)이다.
+export interface RoundSlot {
+  gameId: string;
+  startsAt: Date;
+  endsAt: Date | null;
+  attendanceConfirmedAt?: Date;
 }
 
 export interface CountingNoShow {
   userId: string;
   sessionId: string;
   cancelled: boolean;
+  absenceAt?: Date;
 }
 
 export interface MemberNickname {
@@ -301,6 +319,7 @@ export interface AdminShapes {
   reviews: Review[];
   staffMemos: StaffMemo[];
   countingSessions: CountingSession[];
+  rounds: RoundSlot[];
   countingNoShows: CountingNoShow[];
   nicknameEdits: NicknameEdit[];
   memberNicknames: MemberNickname[];

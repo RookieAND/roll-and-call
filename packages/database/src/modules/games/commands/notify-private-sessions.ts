@@ -1,9 +1,10 @@
-import { and, eq, gt, inArray, isNull, lte } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { GAME_VISIBILITY } from "#db/modules/games/model/game-visibility";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import { privateNoticeWindows } from "#db/modules/games/model/private-notice-window";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { createNotifications } from "#db/modules/notifications";
 import {
   NOTIFICATION_KIND,
@@ -11,6 +12,8 @@ import {
 } from "#db/modules/notifications/model/notification-kind";
 import type { Transaction } from "#db/modules/transaction";
 import { games, participants } from "#db/schema";
+
+import { claimPrivateRounds, type DuePrivateRound } from "./claim-private-rounds";
 
 type DueGame = { id: string; serverId: string; gmId: string; title: string };
 
@@ -32,18 +35,58 @@ export async function notifyPrivateSessions({ now = new Date() }: { now?: Date }
       window: windows.start,
       now,
     });
+    // 다회차는 회차마다 같은 알림을 회차 번호와 함께 보낸다.
+    const remindedRounds = await claimPrivateRounds({
+      transaction,
+      mark: "notifiedAt",
+      window: windows.reminder,
+      now,
+    });
+    const startedRounds = await claimPrivateRounds({
+      transaction,
+      mark: "startNotifiedAt",
+      window: windows.start,
+      now,
+    });
     const recipients = await confirmedByGame({
       transaction,
-      gameIds: [...reminded, ...started].map((game) => game.id),
+      gameIds: [
+        ...[...reminded, ...started].map((game) => game.id),
+        ...[...remindedRounds, ...startedRounds].map((round) => round.gameId),
+      ],
     });
 
     const byServer = new Map<string, NotificationInput[]>();
     const add = (serverId: string, notification: NotificationInput) =>
       byServer.set(serverId, [...(byServer.get(serverId) ?? []), notification]);
-    const usersOf = (game: DueGame) => [
+    const usersOf = (game: Pick<DueGame, "id" | "gmId">) => [
       game.gmId,
       ...(recipients.get(game.id) ?? []).filter((userId) => userId !== game.gmId),
     ];
+    const roundGame = (round: DuePrivateRound) => ({ id: round.gameId, gmId: round.gmId });
+    for (const round of remindedRounds) {
+      for (const userId of usersOf(roundGame(round))) {
+        add(round.serverId, {
+          userId,
+          kind: NOTIFICATION_KIND.sessionReminder,
+          params: { gameId: round.gameId, gameTitle: round.title, roundNo: round.roundNo },
+        });
+      }
+    }
+    for (const round of startedRounds) {
+      for (const userId of usersOf(roundGame(round))) {
+        add(round.serverId, {
+          userId,
+          kind: NOTIFICATION_KIND.sessionStarted,
+          params: {
+            gameId: round.gameId,
+            gameTitle: round.title,
+            isGm: userId === round.gmId,
+            roundNo: round.roundNo,
+          },
+        });
+      }
+    }
     for (const game of reminded) {
       for (const userId of usersOf(game)) {
         add(game.serverId, {
@@ -76,7 +119,11 @@ export async function notifyPrivateSessions({ now = new Date() }: { now?: Date }
       notified,
       reminded: reminded.length,
       started: started.length,
-      startedGameIds: started.map((game) => game.id),
+      // Canvas 시작 이벤트는 구인에 한 번이라 다회차는 1회차만 넣는다.
+      startedGameIds: [
+        ...started.map((game) => game.id),
+        ...startedRounds.filter((round) => round.roundNo === 1).map((round) => round.gameId),
+      ],
     };
   });
 }
@@ -98,11 +145,12 @@ async function claim({
     .where(
       and(
         eq(games.visibility, GAME_VISIBILITY.private),
+        eq(games.roundCount, 1),
         isNull(games[mark]),
         isNull(games.cancelledAt),
         isNull(games.hiddenAt),
-        gt(games.confirmedAt, window.from),
-        lte(games.confirmedAt, window.to),
+        sql`${firstRoundStartSql} > ${window.from.toISOString()}::timestamptz`,
+        sql`${firstRoundStartSql} <= ${window.to.toISOString()}::timestamptz`,
       ),
     )
     .returning({ id: games.id, serverId: games.serverId, gmId: games.gmId, title: games.title });

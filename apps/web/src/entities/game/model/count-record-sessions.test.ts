@@ -107,4 +107,48 @@ describe("countRecordSessions · includeUpcoming", () => {
       played: 0,
     });
   });
+
+  describe("다회차", () => {
+    const multi = (attendedRoundCount: number, partial = {}) =>
+      game({
+        roundCount: 4,
+        attendedRoundCount,
+        finishedAt: null,
+        participants: [seat({ userId: "me" })],
+        ...partial,
+      } as Partial<SessionGame>);
+
+    it("구인이 끝나지 않아도 참석한 회차마다 하나로 센다", () => {
+      expect(playedCount([multi(4)])).toBe(4);
+      expect(playedCount([multi(0)])).toBe(0);
+    });
+
+    it("2회차 참석 뒤 내보내거나 상호 하차해도 참석한 2회차는 남는다", () => {
+      expect(
+        playedCount([
+          multi(2, {
+            participants: [
+              {
+                ...seat({ userId: "me" }),
+                status: PARTICIPANT_STATUS.removed,
+                absent: true,
+                leftReason: "removed",
+              },
+            ],
+          }),
+        ]),
+      ).toBe(2);
+      expect(
+        playedCount([
+          multi(2, { participants: [{ ...seat({ userId: "me" }), leftReason: "mutual" }] }),
+        ]),
+      ).toBe(2);
+    });
+
+    it("취소·숨김 구인은 세지 않고 여러 구인은 합친다", () => {
+      expect(playedCount([multi(3, { cancelledAt: at(-1) })])).toBe(0);
+      expect(playedCount([multi(3, { hiddenAt: at(-1) })])).toBe(0);
+      expect(playedCount([multi(3), multi(1)])).toBe(4);
+    });
+  });
 });

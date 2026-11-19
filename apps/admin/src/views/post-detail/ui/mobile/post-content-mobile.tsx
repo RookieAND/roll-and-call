@@ -3,12 +3,16 @@ import { Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import type { PostDetail } from "@/entities/post/server";
 import { KeyValueList, MobileSection, Tag, ZoomablePhotos } from "@/shared/ui";
 
+import type { AdminRoundsView } from "../../model/admin-rounds";
+import { RoundsSection } from "../rounds-section";
+
 interface PostContentMobileProps {
   post: PostDetail;
+  rounds: AdminRoundsView | null;
 }
 
 // 본문과 이미지는 신청자가 보는 화면과 같은 순서다. 어드민에서는 스포일러를 가리지 않는다.
-export function PostContentMobile({ post }: PostContentMobileProps) {
+export function PostContentMobile({ post, rounds }: PostContentMobileProps) {
   const tagsOf = (values: string[]) =>
     values.length ? (
       <HStack gap="050" wrap render={<span />}>
@@ -40,6 +44,7 @@ export function PostContentMobile({ post }: PostContentMobileProps) {
           ]}
         />
       </MobileSection>
+      {rounds ? <RoundsSection rounds={rounds} /> : null}
       <MobileSection title="시놉시스">
         <Text
           typography="body3"

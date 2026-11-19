@@ -1,3 +1,4 @@
+import { isAwaitingResult } from "@roll-and-call/database/games/model";
 import { isNull } from "es-toolkit";
 
 import { RECRUIT_METHOD, splitRoster, type SessionGame } from "@/entities/game";
@@ -91,8 +92,12 @@ export function toJoinedSessionCard({
     };
   }
 
+  // 추첨·선발 결과로 참여자가 정해지기 전에는 가능 시간을 받지 않으므로 조율 할 일을 띄우지 않는다.
   const needsResponse =
-    !context.readOnly && !context.respondedGameIds.has(game.id) && !line.deadlinePassed;
+    !context.readOnly &&
+    !context.respondedGameIds.has(game.id) &&
+    !line.deadlinePassed &&
+    !isAwaitingResult(game);
   const cancelled = !isNull(game.cancelledAt);
   const submit = {
     kind: SESSION_ACTION_KIND.submitAvailability,

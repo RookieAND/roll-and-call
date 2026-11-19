@@ -1,4 +1,5 @@
 import { loadParticipationStanding } from "@roll-and-call/database/badges";
+import { listGameRounds } from "@roll-and-call/database/games";
 import { findActiveSanction } from "@roll-and-call/database/moderation";
 import { getReviewDraftTarget } from "@roll-and-call/database/reviews";
 import { notFound } from "next/navigation";
@@ -52,7 +53,7 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
   const needsReview = viewerId && takesPartInGame && isSessionStarted(game, now);
   // 참여 조건은 신청을 고민하는 사람(참여 기록 없는 로그인 사용자)에게만 내 현황과 견준다.
   const needsStanding = needsSanction && (game.minRulePlays !== null || game.requireRulebookCert);
-  const [sanction, standing, reviewTarget, titleSheets] = await Promise.all([
+  const [sanction, standing, reviewTarget, titleSheets, rounds] = await Promise.all([
     needsSanction ? findActiveSanction({ serverId: server.id, userId: viewerId, now }) : null,
     needsStanding
       ? loadParticipationStanding({
@@ -70,6 +71,8 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
       userIds: [game.gmId, ...game.participants.map((row) => row.userId)],
       now,
     }),
+    // 회차가 하나뿐인 구인은 games 행이 곧 회차라 따로 읽지 않는다.
+    game.roundCount > 1 ? listGameRounds({ serverId: server.id, gameId: id }) : null,
   ]);
   const review = needsReview ? reviewStatusOf(reviewTarget, now) : REVIEW_STATUS.unavailable;
 
@@ -83,6 +86,7 @@ export async function GameDetailView({ id }: GameDetailViewProps) {
         review={review}
         now={now}
         adultOnlyEnabled={server.adultOnlyEnabled}
+        rounds={rounds}
       />
       <QueryNoticeToast messages={NOTICE_MESSAGES} />
     </MemberTitleSheetsProvider>

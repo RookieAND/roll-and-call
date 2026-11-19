@@ -14,6 +14,7 @@ import {
   StatusBadges,
 } from "@/shared/ui";
 
+import type { AdminRoundsView } from "../model/admin-rounds";
 import { POST_DETAIL_TAB } from "../model/post-detail-tab";
 import { summaryRows } from "../model/summary-rows";
 import { GmValue } from "./gm-value";
@@ -25,6 +26,7 @@ interface PostDetailMobileViewProps {
   tab: string | undefined;
   listQuery: Record<string, string | undefined>;
   serverAppUrl: string | undefined;
+  rounds: AdminRoundsView | null;
 }
 
 // 조치 시트(?action=)와 신청글 시트(?note=)는 데스크톱 화면이 띄우는 ResponsiveDialog를 같이 쓴다.
@@ -33,6 +35,7 @@ export function PostDetailMobileView({
   tab,
   listQuery,
   serverAppUrl,
+  rounds,
 }: PostDetailMobileViewProps) {
   const pathname = `/posts/${post.id}`;
   const currentTab =
@@ -149,7 +152,7 @@ export function PostDetailMobileView({
         memberCount={post.members.length}
         waitlistCount={post.waitlist.length}
       >
-        <PostTabBody post={post} tab={currentTab} noteHref={noteHref} />
+        <PostTabBody post={post} tab={currentTab} noteHref={noteHref} rounds={rounds} />
       </PostMobileTabs>
       <MobileDetailBar primary={primary} more={{ title: post.title, items: moreItems }} />
     </>

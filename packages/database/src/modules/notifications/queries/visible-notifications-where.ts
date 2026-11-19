@@ -1,4 +1,4 @@
-import { and, eq, gt, inArray } from "drizzle-orm";
+import { and, eq, gt, inArray, lte } from "drizzle-orm";
 
 import { NOTIFICATION_KINDS } from "#db/modules/notifications/model/is-notification-kind";
 import { NOTIFICATION_RETENTION_DAYS } from "#db/modules/notifications/model/notification-retention";
@@ -7,6 +7,7 @@ import { notifications } from "#db/schema";
 const DAY_MS = 86_400_000;
 
 // 목록·안 읽은 수·모두 읽음이 같은 조건을 써야 [알림 N]과 목록의 안 읽음 줄 수가 맞는다.
+// 되돌리기를 기다리는 알림(visible_at이 아직 오지 않음)은 세지 않는다.
 export function visibleNotificationsWhere({
   serverId,
   userId,
@@ -21,5 +22,6 @@ export function visibleNotificationsWhere({
     eq(notifications.userId, userId),
     gt(notifications.createdAt, new Date(now.getTime() - NOTIFICATION_RETENTION_DAYS * DAY_MS)),
     inArray(notifications.kind, [...NOTIFICATION_KINDS]),
+    lte(notifications.visibleAt, now),
   );
 }

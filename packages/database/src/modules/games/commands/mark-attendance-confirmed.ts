@@ -1,5 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import type { Transaction } from "#db/modules/transaction";
 import { games } from "#db/schema";
 
@@ -22,4 +23,5 @@ export async function markAttendanceConfirmed({
       attendanceFirstConfirmedAt: sql`coalesce(${games.attendanceFirstConfirmedAt}, ${at.toISOString()}::timestamptz)`,
     })
     .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+  await syncFirstRound({ transaction, gameId });
 }

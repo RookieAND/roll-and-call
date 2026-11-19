@@ -31,6 +31,7 @@ import { ReviewSpoilerField } from "./review-spoiler-field";
 interface ReviewFormProps {
   serverId: string;
   gameId: string;
+  roundNo?: number;
   heading: { title: string; rule: string; subline: string };
   review: {
     id: string;
@@ -49,6 +50,7 @@ interface ReviewFormProps {
 export function ReviewForm({
   serverId,
   gameId,
+  roundNo,
   heading,
   review,
   editUntil,
@@ -73,7 +75,7 @@ export function ReviewForm({
   const [editorKey, setEditorKey] = useState(0);
   const photos = useReviewPhotos({ serverId, initialUrls: initialPhotoUrls });
   const draft = useReviewDraft({
-    gameId,
+    gameId: roundNo ? `${gameId}-round-${roundNo}` : gameId,
     enabled: !editing && !trial,
     onRestore: (saved) => {
       setBody(saved.body);
@@ -123,6 +125,7 @@ export function ReviewForm({
       () =>
         submitAction({
           gameId,
+          roundNo,
           reviewId: review?.id ?? null,
           body,
           spoiler,
@@ -156,7 +159,11 @@ export function ReviewForm({
     <PageShell
       readable
       appBar={
-        <AppBar title={reviewFormTitle({ editing, gm })} backIcon="close" onBack={requestLeave} />
+        <AppBar
+          title={reviewFormTitle({ editing, gm, roundNo })}
+          backIcon="close"
+          onBack={requestLeave}
+        />
       }
     >
       <div className={DESKTOP_CARD_CLASS}>

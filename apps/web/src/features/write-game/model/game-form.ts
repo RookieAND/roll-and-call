@@ -14,6 +14,9 @@ import {
   PLAY_TYPE,
   PLAY_TYPES,
   RECRUIT_METHODS,
+  ROUND_MODES,
+  ROUND_REPEATS,
+  ROUND_SCHEDULE_KINDS,
   SCHEDULE_MODE,
   SCHEDULE_MODES,
 } from "@/entities/game";
@@ -22,6 +25,7 @@ import { isGameImageUrl, richTextLength } from "@/shared/lib";
 import { isWindowHour } from "./is-window-hour";
 import { minPlayersRangeError } from "./min-players-range-error";
 import { monthDayLabel } from "./month-day-label";
+import { multiRoundIssues } from "./multi-round-issues";
 import { playTimeError } from "./play-time-error";
 
 // 시작일 포함 일수다. 시작일과 종료일이 같은 하루짜리도 받는다.
@@ -108,6 +112,16 @@ export const gameFormSchema = z
     // 비공개 구인은 모집 마감을 받지 않는다. 공개일 때 비어 있는지는 superRefine에서 본다.
     endDate: z.string(),
     confirmedAt: z.string().optional(),
+    // 비우면 단발이다. 여러 번 진행은 roundMode가 multi일 때만 아래 값을 본다.
+    roundMode: z.enum(ROUND_MODES).optional(),
+    roundCount: z.number().int().optional(),
+    roundScheduleKind: z.enum(ROUND_SCHEDULE_KINDS).optional(),
+    roundRepeat: z.enum(ROUND_REPEATS).optional(),
+    firstRoundEndAt: z.string().optional(),
+    // 지정형의 2회차부터. edited는 「직접 바꾼 일정」 표시에만 쓴다.
+    laterRounds: z
+      .array(z.object({ startAt: z.string(), endAt: z.string(), edited: z.boolean() }))
+      .optional(),
     rangeStart: z.string().optional(),
     rangeEnd: z.string().optional(),
     // 조율 시간대(KST 시, "0"~"23"). 끝이 시작 이하면 자정을 넘긴다. 일시 지정형은 쓰지 않는다.
@@ -178,6 +192,9 @@ export const gameFormSchema = z
       values.visibility === GAME_VISIBILITY.private ? null : minPlayersRangeError(values);
     if (minPlayersError) {
       context.addIssue({ code: "custom", message: minPlayersError, path: ["minPlayers"] });
+    }
+    for (const issue of multiRoundIssues(values)) {
+      context.addIssue({ code: "custom", ...issue });
     }
     if (values.scheduleMode === SCHEDULE_MODE.fixed && !values.confirmedAt) {
       context.addIssue({

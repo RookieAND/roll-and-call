@@ -51,7 +51,8 @@ export const interactionSchema: z.ZodType<DiscordInteraction> = z.looseObject({
           }),
         )
         .optional(),
-      components: z.array(z.looseObject({ component: modalFieldSchema })).optional(),
+      // 모달 제출의 Label은 component를 담고, 안내 글(Text Display)은 component가 없다.
+      components: z.array(z.looseObject({ component: modalFieldSchema.optional() })).optional(),
       resolved: z
         .looseObject({ attachments: z.record(z.string(), attachmentSchema).optional() })
         .optional(),

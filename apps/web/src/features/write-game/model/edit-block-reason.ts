@@ -4,17 +4,38 @@ import { isNil } from "es-toolkit";
 import { isSessionStarted, SCHEDULE_MODE } from "@/entities/game";
 import { GAME_CANCELLED_MESSAGE } from "@/shared/api";
 
+import { inProgressLockedChange } from "./in-progress-locked-change";
 import { isMinPlayersRaise } from "./is-min-players-raise";
 import { MIN_PLAYERS_RAISE_MESSAGE } from "./min-players-raise-message";
 import { pastScheduleError } from "./past-schedule-error";
+import { scheduleChanged } from "./schedule-changed";
 import type { toGameColumns } from "./to-game-columns";
 
 export const EDIT_FORBIDDEN_MESSAGE = "수정 권한이 없습니다.";
+export const IN_PROGRESS_EDIT_MESSAGE =
+  "진행 중인 구인은 주의 사항, 시놉시스, 이미지만 고칠 수 있습니다.";
 
 type EditBlock = { error: string; field?: string };
 
-type LockedGame = Pick<
+export type LockedGame = Pick<
   Game,
+  | "title"
+  | "playType"
+  | "playMinutesMin"
+  | "playMinutes"
+  | "genres"
+  | "triggers"
+  | "platforms"
+  | "aiImage"
+  | "adultOnly"
+  | "maxPlayers"
+  | "waitlistEnabled"
+  | "minRulePlays"
+  | "requireRulebookCert"
+  | "roundCount"
+  | "finishedAt"
+  | "rangeStart"
+  | "rangeEnd"
   | "gmId"
   | "kind"
   | "cancelledAt"
@@ -49,7 +70,17 @@ export function editBlockReason(
 ): EditBlock | null {
   if (!game || game.gmId !== userId) return { error: EDIT_FORBIDDEN_MESSAGE };
   if (!isNil(game.cancelledAt)) return { error: GAME_CANCELLED_MESSAGE };
-  if (isSessionStarted(game, now)) return { error: "시작한 세션은 고칠 수 없습니다." };
+  const isMulti = game.roundCount > 1;
+  if (isMulti ? !isNil(game.finishedAt) : isSessionStarted(game, now)) {
+    return { error: "시작한 세션은 고칠 수 없습니다." };
+  }
+  // 다회차는 수정이 회차를 맞추지 않아 1회차 일정은 언제든 바꿀 수 없고, 시작한 뒤에는 세 칸만 고친다.
+  if (isMulti) {
+    if (scheduleChanged(game, columns)) return { error: IN_PROGRESS_EDIT_MESSAGE };
+    if (isSessionStarted(game, now)) {
+      return inProgressLockedChange(game, columns) ? { error: IN_PROGRESS_EDIT_MESSAGE } : null;
+    }
+  }
 
   if (columns.maxPlayers < confirmedCount) {
     return {

@@ -28,6 +28,23 @@ const game: LockedGame = {
   drawnAt: null,
   endDate,
   minPlayers: null,
+  title: "마지막 열차",
+  playType: PLAY_TYPE.voice,
+  playMinutesMin: 180,
+  playMinutes: 180,
+  genres: [],
+  triggers: [],
+  platforms: [],
+  aiImage: false,
+  adultOnly: false,
+  maxPlayers: 4,
+  waitlistEnabled: true,
+  minRulePlays: null,
+  requireRulebookCert: false,
+  roundCount: 1,
+  finishedAt: null,
+  rangeStart: null,
+  rangeEnd: null,
 };
 
 const form: GameFormValues = {
@@ -223,5 +240,74 @@ describe("editBlockReason", () => {
         values: { endDate: "2026-09-09T20:00", confirmedAt: "2026-09-10T18:00" },
       }),
     ).toEqual({ error: "세션 일시는 지금 이후로 정해야 합니다.", field: "confirmedAt" });
+  });
+
+  describe("다회차", () => {
+    const multi = { roundCount: 3 };
+    const started = new Date(session.getTime() + 60_000);
+    const ownerError = "진행 중인 구인은 주의 사항, 시놉시스, 이미지만 고칠 수 있습니다.";
+
+    it("1회차가 시작한 뒤에도 주의 사항·시놉시스·이미지는 고칠 수 있다", () => {
+      const values = { notice: "새 주의", synopsis: "새 줄거리", images: ["a.png"] };
+      expect(reason({ overrides: multi, values, at: started })).toBeNull();
+    });
+
+    it("시작한 뒤에는 나머지 칸을 바꿀 수 없다", () => {
+      const changes: Partial<GameFormValues>[] = [
+        { title: "다른 제목" },
+        { maxPlayers: "5" },
+        { minPlayers: "2" },
+        { recruitMethod: RECRUIT_METHOD.selection },
+        { applicationNoteEnabled: true },
+        { playMinutesMin: 120 },
+        { aiImage: true },
+        { genres: ["호러"] },
+        { endDate: "2026-09-12T20:00" },
+      ];
+      for (const values of changes) {
+        expect(reason({ overrides: multi, values, at: started })?.error).toBe(ownerError);
+      }
+    });
+
+    it("구인이 끝난 다회차는 잠근다", () => {
+      expect(reason({ overrides: { ...multi, finishedAt: now } })?.error).toBe(
+        "시작한 세션은 고칠 수 없습니다.",
+      );
+    });
+
+    it("시작 전에는 일정만 바꿀 수 없고 다른 칸은 지금처럼 고친다", () => {
+      expect(reason({ overrides: multi, values: { title: "다른 제목" } })).toBeNull();
+      expect(reason({ overrides: multi, values: { confirmedAt: "2026-09-12T20:00" } })?.error).toBe(
+        ownerError,
+      );
+      expect(
+        reason({ overrides: multi, values: { scheduleMode: SCHEDULE_MODE.coordinate } })?.error,
+      ).toBe(ownerError);
+    });
+
+    it("조율형은 기간·시간대 변경을 막는다", () => {
+      const coordinate = {
+        ...multi,
+        scheduleMode: SCHEDULE_MODE.coordinate,
+        confirmedAt: null,
+        rangeStart: "2026-09-20",
+        rangeEnd: "2026-09-25",
+      };
+      const same = {
+        scheduleMode: SCHEDULE_MODE.coordinate,
+        rangeStart: "2026-09-20",
+        rangeEnd: "2026-09-25",
+        windowStartHour: "12",
+        windowEndHour: "0",
+        confirmedAt: "",
+      };
+      expect(reason({ overrides: coordinate, values: same })).toBeNull();
+      expect(
+        reason({ overrides: coordinate, values: { ...same, rangeEnd: "2026-09-26" } })?.error,
+      ).toBe(ownerError);
+      expect(
+        reason({ overrides: coordinate, values: { ...same, windowStartHour: "10" } })?.error,
+      ).toBe(ownerError);
+    });
   });
 });

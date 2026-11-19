@@ -47,7 +47,11 @@ export function HomeDaySessions({ date, sessions, stacked }: HomeDaySessionsProp
           />
         )}
         {sessions.map((session) => (
-          <ServerLink key={session.id} path={`/games/${session.id}`} className="block">
+          <ServerLink
+            key={`${session.id}-${session.roundNo}`}
+            path={`/games/${session.id}`}
+            className="block"
+          >
             <HomeSessionCard session={session} stacked={stacked} />
           </ServerLink>
         ))}

@@ -6,6 +6,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { GAME_VISIBILITY, type GameVisibility } from "@/entities/game";
 import { GAME_MAX_PLAYERS, type GameFormValues } from "@/features/write-game";
 
+import { InProgressLock } from "./in-progress-lock";
 import { MinPlayersField } from "./min-players-field";
 import { OpenRecruitFields } from "./open-recruit-fields";
 import { PreConfirmedField } from "./pre-confirmed-field";
@@ -20,6 +21,7 @@ interface GameRecruitFieldsProps {
   preConfirmable?: boolean;
   // 수정에서는 공개 범위를 바꾸지 않고, 바꿀 수 없는 이유만 보인다. 새 구인은 null이다.
   visibilityEdit?: { reason: string | null };
+  inProgress?: boolean;
 }
 
 export function GameRecruitFields({
@@ -30,6 +32,7 @@ export function GameRecruitFields({
   locked = false,
   preConfirmable = false,
   visibilityEdit,
+  inProgress = false,
 }: GameRecruitFieldsProps) {
   const {
     setValue,
@@ -59,38 +62,46 @@ export function GameRecruitFields({
         lockedReason={visibilityEdit?.reason}
       />
 
-      <VStack gap="100">
-        <Field.Root
-          label="최대 참여 인원"
-          htmlFor="maxPlayers"
-          required
-          error={errors.maxPlayers?.message}
-        >
-          <Stepper
-            id="maxPlayers"
-            value={maxPlayers}
-            min={playersFloor}
-            max={GAME_MAX_PLAYERS}
-            invalid={!!errors.maxPlayers}
-            onChange={(count) =>
-              setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
-            }
-          />
-        </Field.Root>
-        {confirmedCount > 1 && (
-          <Callout.Root colorPalette="warning" size="sm">
-            <Callout.Icon />
-            <Callout.Description>
-              {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
-              <br />
-              줄이려면 참여자 관리에서 확정 참여자를 「대기로 이동」해야 합니다.
-            </Callout.Description>
-          </Callout.Root>
-        )}
-      </VStack>
+      <InProgressLock locked={inProgress} note>
+        <VStack gap="100">
+          <Field.Root
+            label="최대 참여 인원"
+            htmlFor="maxPlayers"
+            required
+            error={errors.maxPlayers?.message}
+          >
+            <Stepper
+              id="maxPlayers"
+              value={maxPlayers}
+              min={playersFloor}
+              max={GAME_MAX_PLAYERS}
+              invalid={!!errors.maxPlayers}
+              onChange={(count) =>
+                setValue("maxPlayers", String(count), { shouldDirty: true, shouldValidate: true })
+              }
+            />
+          </Field.Root>
+          {confirmedCount > 1 && (
+            <Callout.Root colorPalette="warning" size="sm">
+              <Callout.Icon />
+              <Callout.Description>
+                {`확정 참여자가 ${confirmedCount}명이라 정원을 ${confirmedCount}명보다 줄일 수 없습니다.`}
+                <br />
+                줄이려면 참여자 관리에서 확정 참여자를 「대기로 이동」해야 합니다.
+              </Callout.Description>
+            </Callout.Root>
+          )}
+        </VStack>
+      </InProgressLock>
 
       {!isPrivate && (
-        <MinPlayersField form={form} locked={minPlayersLocked} savedMinPlayers={savedMinPlayers} />
+        <InProgressLock locked={inProgress} note>
+          <MinPlayersField
+            form={form}
+            locked={minPlayersLocked}
+            savedMinPlayers={savedMinPlayers}
+          />
+        </InProgressLock>
       )}
 
       {preConfirmable && (
@@ -115,7 +126,7 @@ export function GameRecruitFields({
         />
       )}
 
-      {!isPrivate && <OpenRecruitFields form={form} locked={locked} />}
+      {!isPrivate && <OpenRecruitFields form={form} locked={locked} inProgress={inProgress} />}
     </>
   );
 }

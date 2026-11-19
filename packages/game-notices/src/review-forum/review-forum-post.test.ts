@@ -32,6 +32,7 @@ const review = {
   authorName: "게굴",
   authorDiscordId: "123",
   absent: false,
+  roundNo: null,
   absenceCancelledAt: null,
 } satisfies ForumReview;
 
@@ -184,5 +185,18 @@ describe("reviewForumPost 서버 양식", () => {
     expect(post.content.endsWith("후기: ||재미있었어요. 반전이 좋았습니다 | | 정말로||")).toBe(
       true,
     );
+  });
+});
+
+describe("reviewForumPost 다회차", () => {
+  it("회차 후기는 제목 앞에 회차 번호를 붙인다", () => {
+    const template = { title: "{후기 종류} {구인 제목}", body: "{후기 본문}" };
+    const post = reviewForumPost({
+      review: { ...review, roundNo: 3 },
+      tagIds: tags,
+      reviewsUrl: undefined,
+      template,
+    });
+    expect(post.name).toBe("[3회차] PL 후기 붉은 여관의 밤");
   });
 });

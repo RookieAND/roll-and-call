@@ -11,6 +11,8 @@ interface AttendanceRowProps {
   attendee: Attendee;
   absent: boolean;
   readOnly?: boolean;
+  // 다회차 회차의 출석. 빠진 사람 표기가 다르고 불참 사유 줄이 없다.
+  round?: boolean;
   onChange?: (absent: boolean) => void;
 }
 
@@ -18,11 +20,12 @@ export function AttendanceRow({
   attendee,
   absent,
   readOnly = false,
+  round = false,
   onChange,
 }: AttendanceRowProps) {
   const choice = absent ? ATTENDANCE_CHOICE.absent : ATTENDANCE_CHOICE.present;
   const editable = !readOnly && !attendee.staffAdded;
-  const line = attendanceRowLine({ attendee, absent, editable });
+  const line = attendanceRowLine({ attendee, absent, editable, round });
 
   return (
     <VStack>
@@ -67,7 +70,7 @@ export function AttendanceRow({
           ))}
         </SegmentedControl.Root>
       </HStack>
-      {editable && <AttendanceRowNote attendee={attendee} absent={absent} />}
+      {editable && !round && <AttendanceRowNote attendee={attendee} absent={absent} />}
     </VStack>
   );
 }

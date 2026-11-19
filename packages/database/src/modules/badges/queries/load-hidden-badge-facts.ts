@@ -1,15 +1,19 @@
-import { and, asc, count, eq, isNotNull, isNull, max, sql } from "drizzle-orm";
+import { and, asc, count, eq, gt, isNotNull, isNull, max, sql } from "drizzle-orm";
+import { isNil } from "es-toolkit";
 
 import { db } from "#db/client";
 import type { BadgeFacts } from "#db/modules/badges/model/badge-facts";
 import { HIDDEN_LADDER } from "#db/modules/badges/model/badge-ladder";
 import { GAME_KIND } from "#db/modules/games/model";
 import { RECRUIT_METHOD } from "#db/modules/games/model";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import {
   drawResults,
+  gameRounds,
   games,
   homebrewRuleApplications,
   participants,
+  roundAttendances,
   serverMembers,
   sessionReviews,
   userBadges,
@@ -153,23 +157,85 @@ export async function loadHiddenBadgeFacts({
       sessionReviews,
       and(eq(sessionReviews.gameId, games.id), eq(sessionReviews.authorId, participants.userId)),
     )
-    .where(and(eq(games.gmId, userId), recognizedGamesWhere, countedReviewWhere(serverId)))
+    .where(
+      and(
+        eq(games.gmId, userId),
+        eq(games.roundCount, 1),
+        recognizedGamesWhere,
+        countedReviewWhere(serverId),
+      ),
+    )
     .groupBy(games.id)
     .having(
       sql`${attendedCount} >= ${FULL_CAST_MIN_ATTENDED} and count(distinct ${participants.userId}) = ${attendedCount}`,
     );
+  // 다회차는 회차 하나가 세션 하나다. 출석을 확정한 그 회차의 참석자 전원이 그 회차 후기를 남겼는지 본다.
+  const attendedInRound = sql<number>`(
+    select count(*)::int from ${roundAttendances} as present
+    where present.round_id = ${gameRounds.id} and present.attended = true
+  )`;
+  const roundFullCasts = await db
+    .select({ gameId: games.id, at: max(sessionReviews.createdAt) })
+    .from(gameRounds)
+    .innerJoin(games, eq(games.id, gameRounds.gameId))
+    .innerJoin(
+      roundAttendances,
+      and(eq(roundAttendances.roundId, gameRounds.id), eq(roundAttendances.attended, true)),
+    )
+    .innerJoin(
+      sessionReviews,
+      and(
+        eq(sessionReviews.roundId, gameRounds.id),
+        eq(sessionReviews.authorId, roundAttendances.userId),
+      ),
+    )
+    .where(
+      and(
+        visibleGame,
+        eq(games.gmId, userId),
+        gt(games.roundCount, 1),
+        isNotNull(gameRounds.attendanceConfirmedAt),
+        countedReviewWhere(serverId),
+      ),
+    )
+    .groupBy(gameRounds.id, games.id)
+    .having(
+      sql`${attendedInRound} >= ${FULL_CAST_MIN_ATTENDED} and count(distinct ${roundAttendances.userId}) = ${attendedInRound}`,
+    );
   const absences = await db
-    .select({ at: games.confirmedAt, gameId: games.id })
+    .select({ at: firstRoundStartSql, gameId: games.id })
     .from(participants)
     .innerJoin(games, eq(games.id, participants.gameId))
     .where(
       and(
         visibleGame,
+        eq(games.roundCount, 1),
         eq(participants.userId, userId),
         eq(participants.status, "confirmed"),
         eq(participants.absent, true),
         isNull(participants.absenceCancelledAt),
-        isNotNull(games.confirmedAt),
+        sql`${firstRoundStartSql} is not null`,
+      ),
+    );
+  // 다회차는 GM이 [불참으로 내보내기]로 뺀 사람만 불참이다. 회차에 빠진 것(attended = false)은 세지 않는다.
+  const kickedAbsences = await db
+    .select({
+      at: sql<Date>`coalesce(${participants.absenceAt}, ${firstRoundStartSql})`.mapWith(
+        participants.absenceAt,
+      ),
+      gameId: games.id,
+    })
+    .from(participants)
+    .innerJoin(games, eq(games.id, participants.gameId))
+    .where(
+      and(
+        visibleGame,
+        gt(games.roundCount, 1),
+        eq(participants.userId, userId),
+        eq(participants.status, "removed"),
+        eq(participants.leftReason, "removed"),
+        eq(participants.absent, true),
+        isNull(participants.absenceCancelledAt),
       ),
     );
   const briefings = await db
@@ -177,14 +243,16 @@ export async function loadHiddenBadgeFacts({
     .from(games)
     .where(and(visibleGame, eq(games.gmId, userId), eq(games.kind, GAME_KIND.briefing)));
   return {
-    absences: absences.map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
+    absences: [...absences, ...kickedAbsences]
+      .filter((absence) => !isNil(absence.at))
+      .map((absence) => ({ at: absence.at!, gameId: absence.gameId })),
     briefingIds: briefings.map((briefing) => briefing.gameId),
     homebrewApprovals: homebrewApprovals.map((approval) => ({ at: approval.at!, gameId: null })),
     draws: draws.map((draw) => ({ ...draw, roll: draw.roll!, drawnAt: draw.drawnAt! })),
     hostedDraws: hostedDraws.map((draw) => ({ ...draw, drawnAt: draw.drawnAt! })),
     joinedAt: member?.joinedAt ?? null,
     rush,
-    fullCasts: fullCasts
+    fullCasts: [...fullCasts, ...roundFullCasts]
       .map((cast) => ({ at: cast.at!, gameId: cast.gameId }))
       .toSorted((left, right) => left.at.getTime() - right.at.getTime()),
   };

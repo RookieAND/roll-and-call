@@ -1,4 +1,4 @@
-import { and, eq, exists, isNotNull, isNull, lte, sql } from "drizzle-orm";
+import { and, eq, exists, isNull, lte, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import {
@@ -8,6 +8,10 @@ import {
 import { autoConfirmNotices } from "#db/modules/games/model/auto-confirm-notices";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import { shouldAutoConfirmAttendance } from "#db/modules/games/model/should-auto-confirm-attendance";
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { listParticipantUserIds } from "#db/modules/games/queries/list-participant-user-ids";
 import { sessionEndAtSql } from "#db/modules/games/queries/session-end-at-sql";
 import { createNotifications } from "#db/modules/notifications";
@@ -84,10 +88,12 @@ export async function autoConfirmAttendance(
     .from(games)
     .where(
       and(
-        isNotNull(games.confirmedAt),
-        isNull(games.attendanceConfirmedAt),
+        sql`${firstRoundStartSql} is not null`,
+        sql`${firstRoundAttendanceConfirmedAtSql} is null`,
         isNull(games.attendanceFirstConfirmedAt),
         isNull(games.cancelledAt),
+        // 다회차는 회차마다 autoConfirmRoundAttendance가 확정한다.
+        eq(games.roundCount, 1),
         lte(deadline, now),
         exists(
           db

@@ -1,6 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 
 import { db } from "#db/client";
+import { syncFirstRound } from "#db/modules/games/commands/sync-first-round";
 import type { Transaction } from "#db/modules/transaction";
 import { games, type NewGame } from "#db/schema";
 
@@ -18,17 +19,22 @@ export async function updateOwnedGame({
   gmId: string;
   columns: Partial<Omit<NewGame, "id" | "serverId" | "gmId">>;
 }) {
-  const updated = await (transaction ?? db)
-    .update(games)
-    .set(columns)
-    .where(
-      and(
-        eq(games.serverId, serverId),
-        eq(games.id, gameId),
-        eq(games.gmId, gmId),
-        isNull(games.cancelledAt),
-      ),
-    )
-    .returning({ id: games.id });
-  return updated.length > 0;
+  const run = async (executor: Transaction) => {
+    const updated = await executor
+      .update(games)
+      .set(columns)
+      .where(
+        and(
+          eq(games.serverId, serverId),
+          eq(games.id, gameId),
+          eq(games.gmId, gmId),
+          isNull(games.cancelledAt),
+        ),
+      )
+      .returning({ id: games.id });
+    if (updated.length === 0) return false;
+    await syncFirstRound({ transaction: executor, gameId });
+    return true;
+  };
+  return transaction ? run(transaction) : db.transaction(run);
 }

@@ -15,6 +15,7 @@ export function splitTeamsFootHint({
   rangeStart,
   rangeEnd,
   startsAt,
+  firstRoundEndAt,
   endDate,
 }: {
   step: number;
@@ -25,6 +26,8 @@ export function splitTeamsFootHint({
   rangeStart: string;
   rangeEnd: string;
   startsAt: string;
+  // 다회차 구인에서만 넘긴다. 빈 문자열이면 1회차 종료를 아직 고르지 않은 것이다.
+  firstRoundEndAt?: string;
   endDate: string;
 }): string | null {
   if (step === 0) {
@@ -32,7 +35,7 @@ export function splitTeamsFootHint({
   }
   if (!capacityMatched) return "정원과 선택한 참여자 수를 맞추면 구인을 열 수 있습니다.";
   if (scheduleMode === SCHEDULE_MODE.fixed) {
-    if (!startsAt) return "세션 일시를 고르면 구인을 열 수 있습니다.";
+    if (!startsAt || firstRoundEndAt === "") return "세션 일시를 고르면 구인을 열 수 있습니다.";
   } else if (!rangeStart || !rangeEnd) {
     return "조율 기간과 시간대를 고르면 구인을 열 수 있습니다.";
   }

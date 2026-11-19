@@ -9,6 +9,7 @@ export function revalidateGamePaths({ slug, gameId }: { slug: string; gameId: st
   revalidatePath(`${gamePath}/attendance`);
   revalidatePath(`${gamePath}/participants`);
   revalidatePath(`${gamePath}/manage`);
+  revalidatePath(`${gamePath}/rounds`);
   revalidatePath(gamePath);
   revalidatePath(serverPath({ slug, path: "/me" }));
   revalidatePath(serverPath({ slug, path: "/me/sessions" }));

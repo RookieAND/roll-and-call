@@ -1,3 +1,4 @@
+import { isFeatureEnabled } from "@roll-and-call/app-kit/feature-flags";
 import { getRulebookRecords } from "@roll-and-call/database/certifications";
 import { findActiveSanction } from "@roll-and-call/database/moderation";
 import { Container } from "@roll-and-call/ui";
@@ -44,6 +45,10 @@ export async function CreateGameView({ rulebookId, fromGameId }: CreateGameViewP
   const reopened = fromGameId
     ? await loadReopen({ serverId: server.id, userId: user.id, gameId: fromGameId, rulebooks })
     : null;
+  // 꺼져 있으면 일정 단계는 지금과 똑같다. 조율형은 따로 꺼 둘 수 있다.
+  const multiRound = isFeatureEnabled("multiRound")
+    ? { coordinated: isFeatureEnabled("multiRoundCoordinated") }
+    : undefined;
   return (
     <CreateGameForm
       serverId={server.id}
@@ -52,6 +57,7 @@ export async function CreateGameView({ rulebookId, fromGameId }: CreateGameViewP
       defaultGame={reopened?.defaults}
       reopen={reopened?.reopen}
       adultOnlyEnabled={server.adultOnlyEnabled}
+      multiRound={multiRound}
     />
   );
 }

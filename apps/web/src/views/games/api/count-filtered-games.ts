@@ -1,5 +1,6 @@
 "use server";
 
+import { isFeatureEnabled } from "@roll-and-call/app-kit/feature-flags";
 import { getGamesCounts } from "@roll-and-call/database/games";
 import { isString } from "es-toolkit";
 import { z } from "zod";
@@ -20,6 +21,7 @@ type FilterParamKey =
   | "rule"
   | "day"
   | "time"
+  | "rounds"
   | "unscheduled"
   | "designated";
 
@@ -44,6 +46,7 @@ export async function countFilteredGames({
       rule: text(filter.rule),
       day: text(filter.day),
       time: text(filter.time),
+      rounds: isFeatureEnabled("multiRound") ? text(filter.rounds) : undefined,
       unscheduled: text(filter.unscheduled),
       designated: text(filter.designated),
     }),

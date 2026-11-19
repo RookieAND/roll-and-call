@@ -2,7 +2,7 @@ import { uniq } from "es-toolkit";
 
 import { isUuid } from "@/shared/lib";
 
-import { GAME_RULE_OTHER, GAME_TIME_SLOTS, type GameTimeSlot } from "./game-sort";
+import { GAME_ROUNDS, GAME_RULE_OTHER, GAME_TIME_SLOTS, type GameTimeSlot } from "./game-sort";
 
 const TIME_SLOT_ORDER: readonly GameTimeSlot[] = GAME_TIME_SLOTS.map((slot) => slot.key);
 
@@ -11,12 +11,14 @@ export function parseGameFilters({
   rule,
   day,
   time,
+  rounds,
   unscheduled,
   designated,
 }: {
   rule?: string;
   day?: string;
   time?: string;
+  rounds?: string;
   unscheduled?: string;
   designated?: string;
 }) {
@@ -36,6 +38,7 @@ export function parseGameFilters({
     rules,
     days,
     times,
+    rounds: Object.values(GAME_ROUNDS).find((value) => value === rounds),
     includeUnscheduled: unscheduled !== "0",
     includePrivate: designated !== "0",
   };

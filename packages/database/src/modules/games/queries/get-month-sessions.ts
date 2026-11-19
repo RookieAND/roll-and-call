@@ -1,29 +1,25 @@
-import { asc } from "drizzle-orm";
+import { asc, sql, type SQL } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { memberNicknameSql } from "#db/modules/profiles";
-import { games } from "#db/schema";
 
+import { firstRoundStartSql } from "./first-round-sql";
 import { publicGamesWhere } from "./public-games-where";
 
-// 취소된 구인은 홈 날짜 목록의 흐린 카드로만 쓰므로 함께 읽는다. 건수·순위에서는 호출한 쪽이 뺀다.
-export async function getMonthSessions({
+export function findMonthGames({
   serverId,
-  from,
-  to,
+  where,
+  orderBy,
+  includeCancelled,
 }: {
   serverId: string;
-  from: Date;
-  to: Date;
+  where?: SQL;
+  orderBy?: SQL;
+  includeCancelled: boolean;
 }) {
   return db.query.games.findMany({
-    where: (game, { and, gte, lt }) =>
-      and(
-        gte(game.confirmedAt, from),
-        lt(game.confirmedAt, to),
-        publicGamesWhere(serverId, { includeCancelled: true }),
-      ),
-    orderBy: asc(games.confirmedAt),
+    where: (_game, { and }) => and(where, publicGamesWhere(serverId, { includeCancelled })),
+    orderBy,
     with: {
       rulebook: { columns: {}, with: { category: { columns: { miniRule: true } } } },
       gm: {
@@ -41,6 +37,24 @@ export async function getMonthSessions({
         },
       },
     },
+  });
+}
+
+// 취소된 구인은 홈 날짜 목록의 흐린 카드로만 쓰므로 함께 읽는다. 건수·순위에서는 호출한 쪽이 뺀다.
+export async function getMonthSessions({
+  serverId,
+  from,
+  to,
+}: {
+  serverId: string;
+  from: Date;
+  to: Date;
+}) {
+  return findMonthGames({
+    serverId,
+    where: sql`${firstRoundStartSql} >= ${from.toISOString()}::timestamptz and ${firstRoundStartSql} < ${to.toISOString()}::timestamptz`,
+    orderBy: asc(firstRoundStartSql),
+    includeCancelled: true,
   });
 }
 

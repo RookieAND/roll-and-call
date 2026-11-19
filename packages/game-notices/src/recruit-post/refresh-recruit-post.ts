@@ -55,7 +55,9 @@ export async function refreshRecruitPost({
     });
   };
 
-  const closed = confirmedCount >= game.maxPlayers;
+  // 다회차는 구인이 끝나면(finished_at) 정원과 상관없이 마감 태그를 단다.
+  const finished = game.roundCount > 1 && Boolean(game.finishedAt);
+  const closed = finished || confirmedCount >= game.maxPlayers;
   await Promise.all([
     updateMessage(),
     target &&

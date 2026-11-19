@@ -11,6 +11,8 @@ export interface NoShowSessionCandidate {
   gmNickname: string;
   startsAt: Date;
   autoConfirmed: boolean;
+  // 여러 번 진행하는 구인은 GM이 내보낼 때만 불참이 남아 고를 수 없다.
+  multiRound: boolean;
   // 확정 참여자와 불참으로 내보낸 사람. 이미 불참이거나 내보낸 사람은 고를 수 없다.
   participants: { userId: string; nickname: string; absent: boolean }[];
 }
@@ -48,6 +50,7 @@ export async function searchNoShowSessions(query: string | undefined) {
         gmNickname: nicknameOf(session.gmId),
         startsAt: session.startsAt,
         autoConfirmed: Boolean(session.attendanceAutoConfirmed),
+        multiRound: (session.roundCount ?? 1) > 1,
         participants: [...session.memberIds, ...removedIds].map((userId) => ({
           userId,
           nickname: nicknameOf(userId),

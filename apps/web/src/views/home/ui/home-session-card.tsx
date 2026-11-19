@@ -14,12 +14,13 @@ interface HomeSessionCardProps {
 export function HomeSessionCard({ session, stacked = false }: HomeSessionCardProps) {
   const time = toKst(session.startsAt).format("HH:mm");
   const seatLabel = `참여 인원 ${session.players.length}/${session.maxPlayers}`;
+  const roundLabel = session.roundCount > 1 && (
+    <Text typography="body4" foreground="hint" className="flex-none">
+      {session.roundNo}회차
+    </Text>
+  );
   const seats = stacked ? (
-    <Badge
-      colorPalette="gray"
-      aria-label={seatLabel}
-      className="flex-none gap-050"
-    >
+    <Badge colorPalette="gray" aria-label={seatLabel} className="flex-none gap-050">
       <User size={12} aria-hidden />
       {session.players.length}/{session.maxPlayers}
     </Badge>
@@ -55,6 +56,7 @@ export function HomeSessionCard({ session, stacked = false }: HomeSessionCardPro
             </Text>
             <HStack align="center" gap="075" wrap>
               <Badge colorPalette="gray">{session.rule}</Badge>
+              {roundLabel}
               {session.mine && <Badge colorPalette="primary">내가 참여</Badge>}
             </HStack>
             <HStack align="center" gap="100">
@@ -74,6 +76,7 @@ export function HomeSessionCard({ session, stacked = false }: HomeSessionCardPro
             </HStack>
             <HStack align="center" gap="100">
               <Badge colorPalette="gray">{session.rule}</Badge>
+              {roundLabel}
               <Text typography="body4" foreground="muted" truncate className="min-w-0 flex-1">
                 GM {session.gm.username}
               </Text>

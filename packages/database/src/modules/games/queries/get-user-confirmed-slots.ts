@@ -1,8 +1,9 @@
-import { and, eq, isNotNull, ne, or } from "drizzle-orm";
+import { and, eq, ne, or, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model/participant-status";
 import { plannedEndAt } from "#db/modules/games/model/session-timing";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { games, participants } from "#db/schema";
 
 const SLOT_MS = 30 * 60 * 1000;
@@ -18,7 +19,7 @@ export async function getUserConfirmedSlots({
   excludeGameId: string;
 }): Promise<string[]> {
   const rows = await db
-    .selectDistinct({ confirmedAt: games.confirmedAt, playMinutes: games.playMinutes })
+    .selectDistinct({ confirmedAt: firstRoundStartSql, playMinutes: games.playMinutes })
     .from(games)
     .leftJoin(
       participants,
@@ -32,7 +33,7 @@ export async function getUserConfirmedSlots({
     .where(
       and(
         eq(games.serverId, serverId),
-        isNotNull(games.confirmedAt),
+        sql`${firstRoundStartSql} is not null`,
         ne(games.id, excludeGameId),
         or(eq(games.gmId, userId), eq(participants.userId, userId)),
       ),

@@ -1,3 +1,4 @@
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
 
@@ -5,6 +6,7 @@ import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson } from "../model/rank-people";
+import { HomeRecordCount } from "./home-record-count";
 import { HomeRecordTieSheet } from "./home-record-tie-sheet";
 import { leaderName } from "./leader-name";
 
@@ -17,11 +19,11 @@ interface HomeRecordLeaderProps {
   label: string;
   people: [RecordPerson, ...RecordPerson[]];
   count: number;
-  unit: string;
+  mode: RankingMode;
 }
 
 // 공동 1위는 갈 곳이 하나가 아니라 카드가 동점자 시트를 연다.
-export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeaderProps) {
+export function HomeRecordLeader({ label, people, count, mode }: HomeRecordLeaderProps) {
   const [first] = people;
   const name = leaderName(people);
 
@@ -59,12 +61,12 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
         </HStack>
       </div>
       <HStack align="baseline" gap="025" className="flex-none text-tinted-ink">
-        <Text typography="heading1" numeric foreground="inherit" className="tracking-[-0.03em]">
-          {count}
-        </Text>
-        <Text weight="bold" typography="body4" foreground="inherit">
-          {unit}
-        </Text>
+        <HomeRecordCount
+          count={count}
+          mode={mode}
+          typography="heading1"
+          numberClassName="tracking-[-0.03em]"
+        />
       </HStack>
     </>
   );
@@ -75,7 +77,7 @@ export function HomeRecordLeader({ label, people, count, unit }: HomeRecordLeade
         label={label}
         people={people}
         count={count}
-        unit={unit}
+        mode={mode}
         className={cn(
           CARD,
           "w-full text-left hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none",

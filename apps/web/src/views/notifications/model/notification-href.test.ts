@@ -74,6 +74,60 @@ const CASES: [NotificationPayload, string | null][] = [
   [{ kind: NOTIFICATION_KIND.absenceCancelled, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.absenceRestored, params: game }, "/games/g1"],
   [{ kind: NOTIFICATION_KIND.attendanceAutoConfirmed, params: game }, "/games/g1"],
+  [{ kind: NOTIFICATION_KIND.roundSkipped, params: { ...game, roundNo: 2 } }, "/games/g1"],
+  [
+    { kind: NOTIFICATION_KIND.roundAvailabilityRequested, params: { ...game, roundNo: 4 } },
+    "/games/g1/schedule?round=4",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleSet,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-10-31T03:00:00Z",
+        endsAt: "2026-10-31T07:00:00Z",
+      },
+    },
+    "/games/g1",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundScheduleChanged,
+      params: {
+        ...game,
+        roundNo: 4,
+        startsAt: "2026-11-07T03:00:00Z",
+        endsAt: "2026-11-07T07:00:00Z",
+      },
+    },
+    "/games/g1",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.laterRoundsChanged,
+      params: { ...game, fromRoundNo: 5, toRoundNo: 6, shiftMs: 604800000 },
+    },
+    "/games/g1",
+  ],
+  [
+    { kind: NOTIFICATION_KIND.sessionStarted, params: { ...game, isGm: true, roundNo: 3 } },
+    "/games/g1/attendance?round=3",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.roundCountChanged,
+      params: { ...game, previousCount: 6, nextCount: 5 },
+    },
+    "/games/g1",
+  ],
+  [
+    {
+      kind: NOTIFICATION_KIND.gameFinishedEarly,
+      params: { ...game, reason: "manual", roundNo: 3, finisher: true },
+    },
+    "/games/g1",
+  ],
   [{ kind: NOTIFICATION_KIND.reviewAvailable, params: game }, "/games/g1/review"],
   [{ kind: NOTIFICATION_KIND.sessionReminder, params: game }, "/games/g1"],
   [

@@ -1,10 +1,11 @@
-import { type GameTimeSlot } from "./game-sort";
+import { type GameRounds, type GameTimeSlot } from "./game-sort";
 
 // 필터 시트에서 고르는 중인 값. [N건 보기]를 눌러야 주소에 들어간다.
 export interface FilterDraft {
   rules: string[];
   days: number[];
   times: GameTimeSlot[];
+  rounds: GameRounds | undefined;
   includeUnscheduled: boolean;
   includePrivate: boolean;
 }
@@ -13,6 +14,7 @@ export const EMPTY_FILTER_DRAFT: FilterDraft = {
   rules: [],
   days: [],
   times: [],
+  rounds: undefined,
   includeUnscheduled: true,
   includePrivate: true,
 };

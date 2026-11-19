@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./date": "./src/date/index.ts",
+    "./feature-flags": "./src/feature-flags/index.ts",
     "./lib": "./src/lib/index.ts",
     "./line-breaks": "./src/ui/line-breaks.tsx",
     "./navigation": "./src/navigation/index.ts",

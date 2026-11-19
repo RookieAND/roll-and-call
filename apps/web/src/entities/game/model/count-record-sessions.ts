@@ -38,16 +38,21 @@ export function countRecordSessions({
         statuses.includes(participant.status) &&
         !participant.absent,
     );
+  // 다회차는 출석을 확정하고 끝난 회차 가운데 참석한 회차마다 하나다. 구인을 끝까지 하지 않아도 센다.
+  const playedOf = (game: SessionGame) => {
+    if (game.roundCount > 1)
+      return isNull(game.cancelledAt) && isNull(game.hiddenAt) ? (game.attendedRoundCount ?? 0) : 0;
+    const counted =
+      (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
+      (upcoming(game) &&
+        seated(game, [
+          PARTICIPANT_STATUS.confirmed,
+          ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
+        ]));
+    return counted ? 1 : 0;
+  };
   return {
     hosted: hosted.filter((game) => recorded(game) || upcoming(game)).length,
-    played: joined.filter(
-      (game) =>
-        (recorded(game) && seated(game, [PARTICIPANT_STATUS.confirmed])) ||
-        (upcoming(game) &&
-          seated(game, [
-            PARTICIPANT_STATUS.confirmed,
-            ...(includeWaiting ? [PARTICIPANT_STATUS.waiting] : []),
-          ])),
-    ).length,
+    played: joined.reduce((total, game) => total + playedOf(game), 0),
   };
 }

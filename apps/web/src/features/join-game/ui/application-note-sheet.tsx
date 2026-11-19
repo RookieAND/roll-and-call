@@ -2,23 +2,28 @@
 
 import { APPLICATION_NOTE_MAX_LENGTH } from "@roll-and-call/database/games/model";
 import { Button, Callout, Field, HStack, Sheet, Text, Textarea } from "@roll-and-call/ui";
-import { useState } from "react";
+import { isNull } from "es-toolkit";
+import { useState, type ReactNode } from "react";
 
 import { GmQuestion } from "./gm-question";
 
 interface ApplicationNoteSheetProps {
   open: boolean;
-  question: string;
+  // 신청글을 받지 않는 구인이면 null이다. 입력 칸 없이 요약과 버튼만 보인다.
+  question: string | null;
+  // 다회차 구인의 일정 요약 카드. 있으면 제목이 「신청하기」가 된다.
+  summary?: ReactNode;
   onOpenChange: (open: boolean) => void;
   submitLabel: string;
   pending: boolean;
   failed: boolean;
-  onSubmit: (note: string) => void;
+  onSubmit: (note?: string) => void;
 }
 
 export function ApplicationNoteSheet({
   open,
   question,
+  summary,
   onOpenChange,
   submitLabel,
   pending,
@@ -26,7 +31,10 @@ export function ApplicationNoteSheet({
   onSubmit,
 }: ApplicationNoteSheetProps) {
   const [note, setNote] = useState("");
-  const canSubmit = note.trim().length > 0;
+  const hasNote = !isNull(question);
+  const canSubmit = !hasNote || note.trim().length > 0;
+  const submittedNote = hasNote ? note : undefined;
+  const title = summary ? "신청하기" : "신청글 쓰기";
 
   function changeOpen(next: boolean) {
     if (!next) setNote("");
@@ -37,26 +45,29 @@ export function ApplicationNoteSheet({
     <Sheet.Root open={open} onOpenChange={changeOpen}>
       <Sheet.Popup className="gap-150">
         <Sheet.Handle />
-        <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>
-          신청글 쓰기
-        </Sheet.Title>
-        <GmQuestion question={question} />
-        <Field.Root
-          htmlFor="applicationNote"
-          counter={`${note.length} / ${APPLICATION_NOTE_MAX_LENGTH}`}
-        >
-          <Textarea
-            id="applicationNote"
-            aria-label="신청글"
-            autoComplete="off"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            placeholder="질문에 대한 답을 적어 주세요."
-            maxLength={APPLICATION_NOTE_MAX_LENGTH}
-            rows={5}
-            disabled={pending}
-          />
-        </Field.Root>
+        <Sheet.Title render={<Text typography="heading2" render={<h2 />} />}>{title}</Sheet.Title>
+        {summary}
+        {hasNote && (
+          <>
+            <GmQuestion question={question} />
+            <Field.Root
+              htmlFor="applicationNote"
+              counter={`${note.length} / ${APPLICATION_NOTE_MAX_LENGTH}`}
+            >
+              <Textarea
+                id="applicationNote"
+                aria-label="신청글"
+                autoComplete="off"
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+                placeholder="질문에 대한 답을 적어 주세요."
+                maxLength={APPLICATION_NOTE_MAX_LENGTH}
+                rows={5}
+                disabled={pending}
+              />
+            </Field.Root>
+          </>
+        )}
         {failed && (
           <Callout.Root colorPalette="danger" size="sm">
             <Callout.Icon />
@@ -72,7 +83,7 @@ export function ApplicationNoteSheet({
                 size="sm"
                 className="min-h-[44px]"
                 disabled={pending || !canSubmit}
-                onClick={() => onSubmit(note)}
+                onClick={() => onSubmit(submittedNote)}
               >
                 다시 시도
               </Button>
@@ -95,7 +106,7 @@ export function ApplicationNoteSheet({
             className="flex-1"
             disabled={!canSubmit}
             loading={pending}
-            onClick={() => onSubmit(note)}
+            onClick={() => onSubmit(submittedNote)}
           >
             {submitLabel}
           </Button>

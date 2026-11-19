@@ -1,8 +1,9 @@
-import { and, eq, gte, isNotNull, lt, not, sql } from "drizzle-orm";
+import { and, eq, not, sql } from "drizzle-orm";
 
 import { db } from "#db/client";
 import type { MonthlyAppearance } from "#db/modules/badges/model/monthly-winners";
 import { reviewAppearances } from "#db/modules/badges/model/record-appearances";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { games, participants, sessionReviews } from "#db/schema";
 
 import { countedReviewWhere } from "./counted-review-where";
@@ -30,7 +31,7 @@ export async function loadReviewAppearances({
     .select({
       authorId: sessionReviews.authorId,
       gmId: games.gmId,
-      startsAt: games.confirmedAt,
+      startsAt: firstRoundStartSql,
     })
     .from(sessionReviews)
     .innerJoin(games, eq(games.id, sessionReviews.gameId))
@@ -39,9 +40,9 @@ export async function loadReviewAppearances({
         countedReviewWhere(serverId),
         // 타이만(1:1) 세션의 후기는 점수에 넣지 않는다.
         not(isTieGame),
-        isNotNull(games.confirmedAt),
-        from ? gte(games.confirmedAt, from) : undefined,
-        to ? lt(games.confirmedAt, to) : undefined,
+        sql`${firstRoundStartSql} is not null`,
+        from ? sql`${firstRoundStartSql} >= ${from.toISOString()}::timestamptz` : undefined,
+        to ? sql`${firstRoundStartSql} < ${to.toISOString()}::timestamptz` : undefined,
       ),
     );
   return reviewAppearances(rows.map((row) => ({ ...row, startsAt: row.startsAt! })));

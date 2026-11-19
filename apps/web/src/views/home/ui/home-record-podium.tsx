@@ -6,9 +6,9 @@ import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import type { RecordPerson, RecordRanking } from "../model/rank-people";
+import { HomeRecordCount } from "./home-record-count";
 import { HomeRecordPodiumStep } from "./home-record-podium-step";
 import { HomeRecordTieSheet } from "./home-record-tie-sheet";
-import { recordUnit } from "./home-record-unit";
 import { leaderName } from "./leader-name";
 import { PodiumRankMark } from "./podium-rank-mark";
 
@@ -24,7 +24,6 @@ interface HomeRecordPodiumProps {
 }
 
 export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPodiumProps) {
-  const unit = recordUnit(mode);
   const [first] = leaders;
   const [second, third] = ranking.runnersUp;
 
@@ -55,12 +54,12 @@ export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPo
       </Text>
       {leaders.length === 1 && <MemberTitle userId={first.id} size="md" />}
       <span className="flex items-baseline gap-025 text-rank-gold">
-        <Text typography="heading1" weight="extrabold" numeric foreground="inherit">
-          {ranking.leaderCount}
-        </Text>
-        <Text typography="body4" weight="bold" foreground="inherit">
-          {unit}
-        </Text>
+        <HomeRecordCount
+          count={ranking.leaderCount}
+          mode={mode}
+          typography="heading1"
+          weight="extrabold"
+        />
       </span>
     </>
   );
@@ -85,7 +84,7 @@ export function HomeRecordPodium({ label, ranking, leaders, mode }: HomeRecordPo
             label={label}
             people={leaders}
             count={ranking.leaderCount}
-            unit={unit}
+            mode={mode}
             className={cn(
               BODY,
               "w-full focus-visible:ring-2 focus-visible:ring-focus focus-visible:outline-none",

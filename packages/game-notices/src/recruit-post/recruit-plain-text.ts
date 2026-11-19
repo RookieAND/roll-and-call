@@ -5,6 +5,7 @@ import {
   formatPlayRange,
   PLAY_TYPE_LABEL,
   RECRUIT_METHOD_LABEL,
+  multiRoundNoticeLine,
 } from "@roll-and-call/database/games/model";
 import { richTextToMarkdown } from "@roll-and-call/tiptap/markdown";
 
@@ -42,6 +43,8 @@ export function recruitPlainText({
     body ? `${heading}\n${body}` : undefined;
   const item = (label: string, value: string) => `- **${label}** ${value}`;
   const playRange = formatPlayRange(game.playMinutesMin, game.playMinutes);
+  // 다회차는 일정 칸 맨 위에 「총 6회 · 매주 토 오후 12:00~4:00」 한 줄을 둔다. 회차 목록은 넣지 않는다.
+  const roundLine = multiRoundNoticeLine(game);
   const tagItem = (label: string, values: string[]) =>
     values.length > 0 ? item(label, inlineCodeTags(values)) : undefined;
   // 트리거는 보고 싶지 않은 사람이 있으니 스포일러로 가린다. 코드 안의 ||는 문법이 아니라 가림막이 깨지지 않는다.
@@ -69,6 +72,7 @@ export function recruitPlainText({
     section(
       "### 🗓️ 일정",
       list([
+        roundLine ? item("회차", roundLine) : undefined,
         item("시작", formatGameSchedule(game)),
         playRange ? item("플레이 시간", playRange) : undefined,
         item("모집 마감", formatDateTime(game.endDate)),

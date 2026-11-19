@@ -5,6 +5,7 @@ import { createGame } from "@/features/write-game";
 import { TRIAL_HANDLER, useTrialHandler } from "@/shared/trial";
 
 import type { GameDefaults } from "../model/game-defaults";
+import type { MultiRoundOptions } from "../model/game-form-layout";
 import type { ReopenContext } from "../model/reopen-context";
 import { GameForm } from "./game-form";
 
@@ -15,6 +16,7 @@ interface CreateGameFormProps {
   defaultGame?: GameDefaults;
   reopen?: ReopenContext;
   adultOnlyEnabled?: boolean;
+  multiRound?: MultiRoundOptions;
 }
 
 export function CreateGameForm({
@@ -24,6 +26,7 @@ export function CreateGameForm({
   defaultGame,
   reopen,
   adultOnlyEnabled = false,
+  multiRound,
 }: CreateGameFormProps) {
   const create = useTrialHandler(TRIAL_HANDLER.createGame, createGame);
   return (
@@ -35,6 +38,7 @@ export function CreateGameForm({
       initialRulebookId={initialRulebookId}
       reopen={reopen}
       adultOnlyEnabled={adultOnlyEnabled}
+      multiRound={multiRound}
       submitLabel="구인 등록"
       successMessage="구인이 등록되었습니다"
     />

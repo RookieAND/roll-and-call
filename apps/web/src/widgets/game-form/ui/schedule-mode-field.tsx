@@ -28,6 +28,7 @@ interface ScheduleModeFieldProps {
   locked?: boolean;
   // 팀 나누기 시트는 방식 설명 상자를 두지 않는다.
   showHint?: boolean;
+  label?: string;
 }
 
 export function ScheduleModeField({
@@ -35,17 +36,18 @@ export function ScheduleModeField({
   onChange,
   locked = false,
   showHint = true,
+  label = "일정 방식",
 }: ScheduleModeFieldProps) {
   return (
     <VStack gap="100">
-      <Field.Root label="일정 방식">
+      <Field.Root label={label}>
         <RadioGroup
           value={value}
           onValueChange={(next) => {
             if (isScheduleMode(next)) onChange(next);
           }}
           disabled={locked}
-          aria-label="일정 방식"
+          aria-label={label}
           className="grid grid-cols-2 gap-100"
         >
           {OPTIONS.map((option) => (

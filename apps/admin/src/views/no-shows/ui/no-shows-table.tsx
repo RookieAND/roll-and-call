@@ -82,6 +82,11 @@ export function NoShowsTable({ rows, sort, empty, selectedId, hrefOf }: NoShowsT
               <Text typography="body3" truncate title={row.sessionTitle}>
                 {row.sessionTitle}
               </Text>
+              {row.kickHint ? (
+                <Text typography="body4" foreground="hint">
+                  {row.kickHint}
+                </Text>
+              ) : null}
             </Table.Cell>
             <Table.Cell>
               <Text typography="body3" foreground="muted" title={row.rulebook}>

@@ -2,7 +2,7 @@ import { sessionEndAt } from "@roll-and-call/database/games/model";
 import { describe, expect, it } from "vitest";
 
 import { POST_STATUS } from "@/shared/lib";
-import type { NoShow, Session } from "@/shared/server";
+import type { NoShow, RoundSlot, Session } from "@/shared/server";
 
 import { buildAnalytics } from "./build-analytics";
 
@@ -39,11 +39,25 @@ function noShow(sessionId: string, userId: string, cancelled = false): NoShow {
   return { id: `${sessionId}:${userId}`, sessionId, userId, cancelled };
 }
 
-function build(sessions: Session[], noShows: NoShow[] = []) {
-  return buildAnalytics({ sessions, noShows, users: [], previewEarly: false, now });
+function build(sessions: Session[], noShows: NoShow[] = [], rounds: RoundSlot[] = []) {
+  return buildAnalytics({ sessions, noShows, rounds, users: [], previewEarly: false, now });
 }
 
 describe("buildAnalytics", () => {
+  it("다회차 구인은 구인이 아니라 끝난 회차마다 세션 하나로 세고 각자의 시작 시각에 놓는다", () => {
+    const multi = session({ startsAt: ago(10), roundCount: 3 });
+    const round = (daysAgo: number, endedHoursAfter: number): RoundSlot => ({
+      gameId: multi.id,
+      startsAt: ago(daysAgo),
+      endsAt: new Date(ago(daysAgo).getTime() + endedHoursAfter * HOUR),
+    });
+    const rounds = [round(10, 3), round(3, 3), round(-4, 3)];
+    const single = session({ startsAt: ago(2) });
+    const result = build([multi, single], [], rounds);
+    expect(result.summary.finishedSessions.value).toBe(3);
+    expect(result.trend.reduce((sum, week) => sum + week.finished, 0)).toBe(3);
+  });
+
   it("확정자 0명·숨김·취소 구인은 진행된 세션에서 빠지고, 진행 시간이 비면 시작 3시간 뒤부터 센다", () => {
     const sessions = [
       session({ startsAt: ago(3) }),

@@ -1,6 +1,7 @@
 import { findUserNickname } from "@/shared/lib";
 import type { Snapshot, NoShow } from "@/shared/server";
 
+import { noShowKickHint } from "./no-show-kick-hint";
 import type { NoShowStatus } from "./no-show-status";
 import { noShowStatusOf } from "./no-show-status-of";
 
@@ -17,6 +18,9 @@ export interface NoShowRow {
   handler: string;
   status: NoShowStatus;
   cancelled: boolean;
+  multiRound: boolean;
+  // 다회차에서 내보낸 회차를 알면 「3회차에 내보냄」.
+  kickHint: string | null;
 }
 
 interface ToNoShowRowOptions {
@@ -40,7 +44,13 @@ export function toNoShowRow({ db, noShow, now }: ToNoShowRowOptions): NoShowRow 
     startsAt: session.startsAt,
     gmNickname,
     handler: noShow.added ? `${noShow.added.by} · 운영진` : gmNickname,
-    status: noShowStatusOf({ cancelled: noShow.cancelled, startsAt: session.startsAt, now }),
+    status: noShowStatusOf({
+      cancelled: noShow.cancelled,
+      startsAt: noShow.absenceAt ?? session.startsAt,
+      now,
+    }),
     cancelled: noShow.cancelled,
+    multiRound: (session.roundCount ?? 1) > 1,
+    kickHint: (session.roundCount ?? 1) > 1 ? noShowKickHint(noShow.kickedRound ?? null) : null,
   };
 }

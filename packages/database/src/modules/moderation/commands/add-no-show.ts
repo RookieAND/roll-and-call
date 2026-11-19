@@ -11,6 +11,10 @@ import {
 } from "#db/modules/games/model";
 import { isAbsenceActive } from "#db/modules/games/model";
 import { PARTICIPANT_STATUS } from "#db/modules/games/model";
+import {
+  firstRoundAttendanceConfirmedAtSql,
+  firstRoundStartSql,
+} from "#db/modules/games/queries/first-round-sql";
 import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games, participants, profiles } from "#db/schema";
@@ -21,6 +25,9 @@ import { NO_SHOW_NOTIFIED, notifyNoShowParties } from "./notify-no-show-parties"
 const REASON_MAX = 200;
 
 export const ADD_NO_SHOW_FAILURE = { notEligible: "notEligible", conflict: "conflict" } as const;
+
+export const MULTI_ROUND_NO_SHOW_ERROR =
+  "여러 번 진행하는 구인은 GM이 불참으로 내보낼 때만 불참 기록이 남습니다.";
 
 export type AddNoShowResult =
   | { ok: true }
@@ -60,11 +67,13 @@ export async function addNoShow({
   return db.transaction(async (tx) => {
     const [game] = await tx
       .select({
-        confirmedAt: games.confirmedAt,
-        attendanceConfirmedAt: games.attendanceConfirmedAt,
+        confirmedAt: firstRoundStartSql,
+        attendanceConfirmedAt: firstRoundAttendanceConfirmedAtSql,
+        roundCount: games.roundCount,
       })
       .from(games)
       .where(and(eq(games.serverId, serverId), eq(games.id, gameId)));
+    if (game && game.roundCount > 1) throw new Error(MULTI_ROUND_NO_SHOW_ERROR);
     const [current] = await tx
       .select({ status: participants.status })
       .from(participants)

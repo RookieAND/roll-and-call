@@ -2,6 +2,8 @@
 export { notifyGameCancelled } from "./notify/notify-game-cancelled";
 export { notifyGameLeft } from "./notify/notify-game-left";
 export { notifyMovedToWaitlist } from "./notify/notify-moved-to-waitlist";
+export { notifyRoundChanged } from "./notify/notify-round-changed";
+export { notifyRoundAvailability } from "./notify/notify-round-availability";
 export { attachRecruitThumbnail } from "./recruit-post/attach-recruit-thumbnail";
 export { refreshRecruitPost } from "./recruit-post/refresh-recruit-post";
 export { loadRecruitTarget } from "./recruit-post/recruit-target";
@@ -12,6 +14,7 @@ export { recruitForumPost } from "./recruit-post/recruit-forum-post";
 export { recruitPlainText } from "./recruit-post/recruit-plain-text";
 export { APPLY_BUTTON_PREFIX } from "./recruit-post/recruit-buttons";
 export { REVIEW_BUTTON_PREFIX } from "./notify/review-button";
+export { parseButtonTarget } from "./notify/button-target";
 export {
   ATTENDANCE_BUTTON_PREFIX,
   ATTENDANCE_DONE_PREFIX,

@@ -18,13 +18,19 @@ import { AppBar, EmptyState, PageShell } from "@/shared/ui";
 
 import { getScheduleAvailability } from "../api/load-availability";
 import { scheduleBodyModeOf } from "../model/schedule-body-mode-of";
+import { RoundGameSchedule } from "./round-game-schedule";
 import { ScheduleBody } from "./schedule-body";
 
 interface GameScheduleViewProps {
   id: string;
+  // ?round=n. 2 이상이면 그 회차의 가능 시간, 아니면 1회차(단발)다.
+  round?: string;
 }
 
-export async function GameScheduleView({ id }: GameScheduleViewProps) {
+export async function GameScheduleView({ id, round }: GameScheduleViewProps) {
+  const roundNo = Number(round);
+  if (Number.isInteger(roundNo) && roundNo >= 2)
+    return <RoundGameSchedule id={id} roundNo={roundNo} />;
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([getGameById(server.id, id), getCurrentSessionUser()]);
   if (!game) notFound();

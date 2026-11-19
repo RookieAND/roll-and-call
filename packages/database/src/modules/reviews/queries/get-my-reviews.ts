@@ -1,6 +1,7 @@
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "#db/client";
+import { firstRoundStartSql } from "#db/modules/games/queries/first-round-sql";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games, profiles, sessionReviews } from "#db/schema";
 
@@ -29,7 +30,7 @@ export async function getMyReviews({ serverId, authorId }: { serverId: string; a
       authorAvatarUrl: profiles.avatarUrl,
       gameTitle: games.title,
       gameRule: games.rule,
-      sessionAt: games.confirmedAt,
+      sessionAt: firstRoundStartSql,
     })
     .from(sessionReviews)
     .innerJoin(games, and(eq(games.serverId, serverId), eq(games.id, sessionReviews.gameId)))

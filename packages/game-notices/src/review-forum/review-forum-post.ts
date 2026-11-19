@@ -43,6 +43,7 @@ function fitText({ text, spoiler, max }: { text: string; spoiler: boolean; max: 
 
 // 포럼의 다른 후기처럼 본문은 평문, 사진은 첨부로 올린다. 제목과 본문 모양은 서버가 정한 양식(template)을 따른다.
 // 포럼 규칙: 스포일러면 스포 태그는 반드시 붙인다. 제목의 [스포있음]은 기본 양식의 {스포 표시}가 채운다.
+// 다회차 후기는 회차마다 글이 따로 서고 제목 앞에 「[n회차]」가 붙는다.
 export function reviewForumPost({
   review,
   tagIds,
@@ -76,7 +77,7 @@ export function reviewForumPost({
   const render = (part: "title" | "body") =>
     renderReviewTemplate({ template: template[part], values, reviewBody: body }) ||
     renderReviewTemplate({ template: DEFAULT_REVIEW_TEMPLATE[part], values, reviewBody: body });
-  const name = render("title");
+  const name = review.roundNo ? `[${review.roundNo}회차] ${render("title")}` : render("title");
   const contentMax = textChannel
     ? CONTENT_MAX_LENGTH - name.length - TEXT_CHANNEL_TITLE_EXTRA
     : CONTENT_MAX_LENGTH;

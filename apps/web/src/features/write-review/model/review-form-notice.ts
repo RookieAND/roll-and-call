@@ -32,7 +32,17 @@ export function reviewFormNotice({
   };
 }
 
-export function reviewFormTitle({ editing, gm }: { editing: boolean; gm: boolean }): string {
+// 다회차는 「3회차 후기」「3회차 마스터링 후기」다.
+export function reviewFormTitle({
+  editing,
+  gm,
+  roundNo,
+}: {
+  editing: boolean;
+  gm: boolean;
+  roundNo?: number;
+}): string {
   const noun = gm ? "마스터링 후기" : "후기";
+  if (roundNo) return `${roundNo}회차 ${noun}${editing ? " 고치기" : ""}`;
   return `${noun} ${editing ? "고치기" : "쓰기"}`;
 }

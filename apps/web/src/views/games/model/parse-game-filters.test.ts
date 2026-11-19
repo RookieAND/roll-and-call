@@ -16,6 +16,13 @@ describe("parseGameFilters", () => {
     });
   });
 
+  it("진행 횟수는 once·multi만 받는다", () => {
+    expect(parseGameFilters({ rounds: "multi" }).rounds).toBe("multi");
+    expect(parseGameFilters({ rounds: "once" }).rounds).toBe("once");
+    expect(parseGameFilters({ rounds: "all" }).rounds).toBeUndefined();
+    expect(parseGameFilters({}).rounds).toBeUndefined();
+  });
+
   it("모르는 값·중복을 버리고 정렬한다", () => {
     expect(
       parseGameFilters({
