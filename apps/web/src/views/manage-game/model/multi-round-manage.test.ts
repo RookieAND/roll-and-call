@@ -19,6 +19,8 @@ function dated(roundNo: number) {
     attendanceConfirmedAt: null,
     coordinationStart: null,
     coordinationEnd: null,
+    coordinationWindowStartHour: null,
+    coordinationWindowEndHour: null,
   };
 }
 

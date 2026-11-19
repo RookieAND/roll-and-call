@@ -15,7 +15,9 @@ import { setRoundSchedule } from "../api/set-round-schedule";
 import { undoRoundMove } from "../api/undo-round-move";
 import { hasGmOverlap } from "../model/conflict-lines";
 import type { LaterRound } from "../model/later-round-preview";
+import type { RoundCandidate } from "../model/round-candidate";
 import { LaterRoundsSwitch } from "./later-rounds-switch";
+import { RoundCandidateList } from "./round-candidate-list";
 import { ScheduleConflictCallout } from "./schedule-conflict-callout";
 
 const MINUTE_MS = 60_000;
@@ -31,6 +33,7 @@ interface RoundScheduleFormProps {
   defaultMinutes: number;
   designated: boolean;
   laterRounds: readonly LaterRound[];
+  candidates: readonly RoundCandidate[];
   nicknames: Record<string, string>;
 }
 
@@ -44,6 +47,7 @@ export function RoundScheduleForm({
   defaultMinutes,
   designated,
   laterRounds,
+  candidates,
   nicknames,
 }: RoundScheduleFormProps) {
   const router = useRouter();
@@ -75,6 +79,12 @@ export function RoundScheduleForm({
       const end = new Date(fromKstDateTimeInput(value).getTime() + defaultMinutes * MINUTE_MS);
       setEndsAt(toKstDateTimeInput(end));
     }
+  }
+
+  function pickCandidate(candidate: RoundCandidate) {
+    setStartsAt(candidate.startsAt);
+    setEndsAt(candidate.endsAt);
+    clearFeedback();
   }
 
   function changeEnd(value: string) {
@@ -126,6 +136,14 @@ export function RoundScheduleForm({
           ? "새 일시로 옮기고 참여자에게 알립니다."
           : "날짜와 시각을 정하면 참여자에게 알립니다."}
       </Text>
+      {candidates.length > 0 && (
+        <RoundCandidateList
+          candidates={candidates}
+          startsAt={startsAt}
+          endsAt={endsAt}
+          onPick={pickCandidate}
+        />
+      )}
       <Field.Root label="시작" htmlFor="roundStart" required>
         <DateTimePicker id="roundStart" value={startsAt} onChange={changeStart} />
       </Field.Root>

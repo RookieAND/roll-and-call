@@ -1,4 +1,8 @@
-import { getGameWithRoster, listGameRounds } from "@roll-and-call/database/games";
+import {
+  getGameWithRoster,
+  getRoundCoordination,
+  listGameRounds,
+} from "@roll-and-call/database/games";
 import { DEFAULT_PLAY_MINUTES } from "@roll-and-call/database/games/model";
 import { Card, Container, HStack, Text, VStack } from "@roll-and-call/ui";
 import { TriangleAlert } from "lucide-react";
@@ -53,12 +57,23 @@ export async function GameRoundsView({ id }: GameRoundsViewProps) {
   const rounds = await listGameRounds({ serverId: server.id, gameId: id });
   const summary = roundsSummary({ game, rounds, now });
   const ended = Boolean(game.finishedAt || game.cancelledAt);
+  const coordinatingRound = rounds.find(
+    (round) => round.status === "coordinating" && !round.startAt,
+  );
+  const coordination = coordinatingRound
+    ? await getRoundCoordination({
+        serverId: server.id,
+        gameId: id,
+        roundNo: coordinatingRound.roundNo,
+      })
+    : null;
   const { folded, shown } = visibleRoundRows(
     roundRowViews({
       rounds,
       now,
       canSchedule: !ended && game.roundScheduleKind === "coordinated",
       canMove: !ended,
+      coordinationResponse: coordination,
     }),
   );
   const notice =

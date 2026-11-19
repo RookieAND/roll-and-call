@@ -1,18 +1,34 @@
 import {
   getGameParticipants,
   getGameWithRoster,
+  getRoundCoordination,
   listGameRounds,
 } from "@roll-and-call/database/games";
-import { DEFAULT_PLAY_MINUTES, schedulableRoundNo } from "@roll-and-call/database/games/model";
+import {
+  DEFAULT_PLAY_MINUTES,
+  defaultCoordinationWindow,
+  schedulableRoundNo,
+} from "@roll-and-call/database/games/model";
 import { Callout, Container, Text, VStack } from "@roll-and-call/ui";
 import { notFound, redirect } from "next/navigation";
 
 import { roundSlotLabel } from "@/entities/game";
 import { GmOnlyNotice, LoginRequired } from "@/features/auth";
-import { RoundScheduleForm } from "@/features/schedule-round";
-import { serverPath, toKstDateTimeInput } from "@/shared/lib";
+import {
+  COORDINATION_PHASE,
+  coordinationPhase,
+  RoundCoordinationOpenForm,
+  RoundCoordinationStatus,
+  RoundScheduleForm,
+  RoundScheduleModes,
+} from "@/features/schedule-round";
+import { addDays, serverPath, toKstDateInput, toKstDateTimeInput } from "@/shared/lib";
 import { getCurrentServer, getCurrentSessionUser } from "@/shared/server";
 import { AppBar, DESKTOP_CARD_CLASS, PageShell } from "@/shared/ui";
+
+import { loadRoundCandidates } from "../api/load-round-candidates";
+
+const DEFAULT_COORDINATION_DAYS = 6;
 
 interface RoundScheduleViewProps {
   id: string;
@@ -50,9 +66,10 @@ export async function RoundScheduleView({ id, round }: RoundScheduleViewProps) {
 
   if (game.finishedAt || game.cancelledAt) redirect(roundsPath);
   const roundNo = Number(round);
-  const [rounds, detail] = await Promise.all([
+  const [rounds, detail, coordination] = await Promise.all([
     listGameRounds({ serverId: server.id, gameId: id }),
     getGameParticipants({ serverId: server.id, gameId: id }),
+    getRoundCoordination({ serverId: server.id, gameId: id, roundNo }),
   ]);
   const target = rounds.find((candidate) => candidate.roundNo === roundNo);
   if (!target) notFound();
@@ -110,6 +127,73 @@ export async function RoundScheduleView({ id, round }: RoundScheduleViewProps) {
       : null;
   const playMinutes = game.playMinutes ?? DEFAULT_PLAY_MINUTES;
 
+  const today = toKstDateInput(now);
+  const phase = coordinationPhase({
+    status: coordination?.status ?? null,
+    end: coordination?.end ?? null,
+    today,
+  });
+  const hasCollected =
+    coordination !== null &&
+    (coordination.status === "coordinating" || coordination.availabilities.length > 0);
+  const candidates =
+    coordination && hasCollected
+      ? await loadRoundCandidates({
+          serverId: server.id,
+          gameId: id,
+          gmId: game.gmId,
+          roundNo,
+          playMinutes,
+          now,
+          availabilities: coordination.availabilities,
+          totalCount: coordination.totalCount,
+          nicknames,
+        })
+      : [];
+  const defaultWindow = defaultCoordinationWindow({ rounds: rounds, game });
+  const gridPath =
+    roundNo === 1 ? `/games/${id}/schedule` : `/games/${id}/schedule?round=${roundNo}`;
+
+  const form = (
+    <RoundScheduleForm
+      gameId={id}
+      roundNo={roundNo}
+      mode={dated ? "move" : "set"}
+      initialStartsAt={target.startAt ? toKstDateTimeInput(target.startAt) : ""}
+      initialEndsAt={target.plannedEndAt ? toKstDateTimeInput(target.plannedEndAt) : ""}
+      defaultMinutes={playMinutes}
+      designated={game.roundScheduleKind === "designated"}
+      laterRounds={laterRounds}
+      candidates={candidates}
+      nicknames={nicknames}
+    />
+  );
+  const collecting =
+    coordination && phase !== COORDINATION_PHASE.idle && coordination.end ? (
+      <RoundCoordinationStatus
+        gameId={id}
+        roundNo={roundNo}
+        phase={phase}
+        end={coordination.end}
+        today={today}
+        respondedCount={coordination.respondedCount}
+        totalCount={coordination.totalCount}
+        pendingNames={coordination.pendingNames}
+        gridPath={gridPath}
+      />
+    ) : (
+      <RoundCoordinationOpenForm
+        gameId={id}
+        roundNo={roundNo}
+        rescheduling={dated}
+        today={today}
+        defaultStart={today}
+        defaultEnd={addDays({ date: today, count: DEFAULT_COORDINATION_DAYS })}
+        defaultStartHour={defaultWindow.startHour}
+        defaultEndHour={defaultWindow.endHour}
+      />
+    );
+
   return (
     <PageShell readable appBar={appBar}>
       <div className={DESKTOP_CARD_CLASS}>
@@ -121,16 +205,11 @@ export async function RoundScheduleView({ id, round }: RoundScheduleViewProps) {
                 지금은 {currentSpan}입니다.
               </Text>
             )}
-            <RoundScheduleForm
-              gameId={id}
-              roundNo={roundNo}
-              mode={dated ? "move" : "set"}
-              initialStartsAt={target.startAt ? toKstDateTimeInput(target.startAt) : ""}
-              initialEndsAt={target.plannedEndAt ? toKstDateTimeInput(target.plannedEndAt) : ""}
-              defaultMinutes={playMinutes}
-              designated={game.roundScheduleKind === "designated"}
-              laterRounds={laterRounds}
-              nicknames={nicknames}
+            <RoundScheduleModes
+              directLabel={dated ? "옮기기" : "바로 정하기"}
+              coordinateLabel={dated ? "다시 조율" : "가능 시간 모으기"}
+              direct={form}
+              coordinate={collecting}
             />
           </VStack>
         </Container>

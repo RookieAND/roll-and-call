@@ -13,6 +13,7 @@ export function roundRowViews({
   now,
   canSchedule = false,
   canMove = false,
+  coordinationResponse = null,
 }: {
   rounds: readonly GameRoundRow[];
   now: Date;
@@ -20,6 +21,8 @@ export function roundRowViews({
   canSchedule?: boolean;
   // 시작 전 회차의 일정을 옮길 수 있다(끝나지 않음, 지정형·조율형 모두).
   canMove?: boolean;
+  // 가능 시간을 모으는 회차의 응답 수. 그 회차 줄에만 붙는다.
+  coordinationResponse?: { respondedCount: number; totalCount: number } | null;
 }): RoundRowView[] {
   const views: RoundRowView[] = [];
   const waiting: number[] = [];
@@ -41,13 +44,17 @@ export function roundRowViews({
           view.kind === ROUND_ROW_KIND.unscheduled || view.kind === ROUND_ROW_KIND.coordinating,
       );
       if (round.status === "coordinating" && !hasOpenSlot) {
-        views.push(
-          roundRow({
+        views.push({
+          ...roundRow({
             roundNo: round.roundNo,
             kind: ROUND_ROW_KIND.coordinating,
             label: `${prefix}가능 시간을 모으고 있습니다`,
           }),
-        );
+          note: coordinationResponse
+            ? `응답 ${coordinationResponse.respondedCount}/${coordinationResponse.totalCount}명`
+            : null,
+          scheduleRoundNo: canSchedule ? round.roundNo : null,
+        });
       } else if (!hasOpenSlot) {
         views.push({
           ...roundRow({

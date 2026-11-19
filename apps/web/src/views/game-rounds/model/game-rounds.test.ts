@@ -20,6 +20,8 @@ function dated(roundNo: number, weeks: number, extra: { endedAt?: Date } = {}) {
     attendanceConfirmedAt: null,
     coordinationStart: null,
     coordinationEnd: null,
+    coordinationWindowStartHour: null,
+    coordinationWindowEndHour: null,
   };
 }
 
@@ -33,6 +35,8 @@ function pending(roundNo: number) {
     attendanceConfirmedAt: null,
     coordinationStart: null,
     coordinationEnd: null,
+    coordinationWindowStartHour: null,
+    coordinationWindowEndHour: null,
   };
 }
 

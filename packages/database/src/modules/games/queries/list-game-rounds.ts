@@ -15,6 +15,8 @@ export async function listGameRounds({ serverId, gameId }: { serverId: string; g
       attendanceConfirmedAt: gameRounds.attendanceConfirmedAt,
       coordinationStart: gameRounds.coordinationStart,
       coordinationEnd: gameRounds.coordinationEnd,
+      coordinationWindowStartHour: gameRounds.coordinationWindowStartHour,
+      coordinationWindowEndHour: gameRounds.coordinationWindowEndHour,
     })
     .from(gameRounds)
     .where(and(eq(gameRounds.serverId, serverId), eq(gameRounds.gameId, gameId)))

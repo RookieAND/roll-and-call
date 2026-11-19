@@ -21,7 +21,10 @@ export function RoundRow({ gameId, view }: RoundRowProps) {
   let href: string | null = null;
   if (!isNull(view.attendanceRoundNo)) {
     href = `/games/${gameId}/attendance?round=${view.attendanceRoundNo}`;
-  } else if (view.kind === ROUND_ROW_KIND.scheduled && !isNull(view.scheduleRoundNo)) {
+  } else if (
+    (view.kind === ROUND_ROW_KIND.scheduled || view.kind === ROUND_ROW_KIND.coordinating) &&
+    !isNull(view.scheduleRoundNo)
+  ) {
     href = scheduleHref;
   }
   const content = (
