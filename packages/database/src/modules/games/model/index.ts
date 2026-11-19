@@ -171,3 +171,5 @@ export { roundScheduleChangeNotices } from "./round-schedule-change-notices";
 export { isRoundKickAbsence } from "./is-round-kick-absence";
 export { kickRoundNumber } from "./kick-round-number";
 export { clockTextLabel } from "./clock-text-label";
+export { schedulableRoundNo } from "./schedulable-round-no";
+export { roundTimeError } from "./round-time-error";

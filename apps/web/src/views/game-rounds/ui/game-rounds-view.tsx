@@ -23,7 +23,7 @@ interface GameRoundsViewProps {
   id: string;
 }
 
-// 다회차 GM의 회차 일정(시안 04-6 1). 일정 잡기·바꾸기는 C36-11에서 붙인다.
+// 다회차 GM의 회차 일정(시안 04-6 1).
 export async function GameRoundsView({ id }: GameRoundsViewProps) {
   const server = await getCurrentServer();
   const [game, user] = await Promise.all([
@@ -52,8 +52,15 @@ export async function GameRoundsView({ id }: GameRoundsViewProps) {
   const now = new Date();
   const rounds = await listGameRounds({ serverId: server.id, gameId: id });
   const summary = roundsSummary({ game, rounds, now });
-  const { folded, shown } = visibleRoundRows(roundRowViews({ rounds, now }));
   const ended = Boolean(game.finishedAt || game.cancelledAt);
+  const { folded, shown } = visibleRoundRows(
+    roundRowViews({
+      rounds,
+      now,
+      canSchedule: !ended && game.roundScheduleKind === "coordinated",
+      canMove: !ended,
+    }),
+  );
   const notice =
     !ended && game.roundScheduleKind === "coordinated" ? staleNotice({ rounds, now }) : null;
   const startedCount = rounds.filter((round) => round.startAt && round.startAt <= now).length;

@@ -62,7 +62,11 @@ describe("다회차 단계 배지", () => {
     const rounds = [dated(1), dated(2)];
     expect(multiRoundStage({ game, rounds, now: new Date(BASE - HOUR) })).toBeNull();
     expect(
-      multiRoundStage({ game: { ...game, finishedAt: new Date(BASE) }, rounds, now: new Date(BASE + HOUR) }),
+      multiRoundStage({
+        game: { ...game, finishedAt: new Date(BASE) },
+        rounds,
+        now: new Date(BASE + HOUR),
+      }),
     ).toBeNull();
   });
 });
@@ -81,6 +85,21 @@ describe("다회차 세션 진행 줄", () => {
       state: MANAGE_ROW_STATE.open,
     });
     expect(end).toMatchObject({ label: "2회차 마치기", round: { roundNo: 2, lastRound: false } });
+  });
+
+  it("조율형이고 다음 회차가 없으면 가장 앞 미정 회차의 일정 잡기 버튼을 둔다", () => {
+    const coordinated = { ...game, roundScheduleKind: "coordinated" };
+    const now = new Date(BASE + WEEK + 5 * HOUR);
+    const rounds = [dated(1), dated(2), pending];
+    expect(multiRoundProgressRows({ game: coordinated, rounds, now })[0]!.extraAction).toEqual({
+      label: "3회차 일정 잡기",
+      href: "/games/g1/rounds/3/schedule",
+    });
+    expect(multiRoundProgressRows({ game, rounds, now })[0]!.extraAction).toBeUndefined();
+    expect(
+      multiRoundProgressRows({ game: { ...coordinated, finishedAt: now }, rounds, now })[0]!
+        .extraAction,
+    ).toBeUndefined();
   });
 
   it("회차 사이에는 마치기가 잠긴다", () => {

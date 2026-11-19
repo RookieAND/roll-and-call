@@ -11,9 +11,15 @@ import { ROUND_ROW_KIND } from "./round-row-kind";
 export function roundRowViews({
   rounds,
   now,
+  canSchedule = false,
+  canMove = false,
 }: {
   rounds: readonly GameRoundRow[];
   now: Date;
+  // 일정 없는 회차를 잡을 수 있다(조율형, 끝나지 않음).
+  canSchedule?: boolean;
+  // 시작 전 회차의 일정을 옮길 수 있다(끝나지 않음, 지정형·조율형 모두).
+  canMove?: boolean;
 }): RoundRowView[] {
   const views: RoundRowView[] = [];
   const waiting: number[] = [];
@@ -43,13 +49,14 @@ export function roundRowViews({
           }),
         );
       } else if (!hasOpenSlot) {
-        views.push(
-          roundRow({
+        views.push({
+          ...roundRow({
             roundNo: round.roundNo,
             kind: ROUND_ROW_KIND.unscheduled,
             label: `${prefix}아직 정하지 않았습니다`,
           }),
-        );
+          scheduleRoundNo: canSchedule ? round.roundNo : null,
+        });
       } else {
         waiting.push(round.roundNo);
       }
@@ -57,13 +64,14 @@ export function roundRowViews({
     }
     const endAt = roundEndAt(round)!;
     if (round.startAt > now) {
-      views.push(
-        roundRow({
+      views.push({
+        ...roundRow({
           roundNo: round.roundNo,
           kind: ROUND_ROW_KIND.scheduled,
           label: `${prefix}${roundSlotLabel({ startsAt: round.startAt, endsAt: round.plannedEndAt })}`,
         }),
-      );
+        scheduleRoundNo: canMove ? round.roundNo : null,
+      });
     } else if (endAt > now) {
       views.push({
         ...roundRow({

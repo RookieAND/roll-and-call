@@ -1,4 +1,4 @@
-import { HStack } from "@roll-and-call/ui";
+import { Button, HStack } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 import { ServerLink } from "@/shared/ui";
@@ -31,6 +31,28 @@ export function ManageRow({ row, gameId, plannedEndAt }: ManageRowProps) {
       <ManageEndSessionRow gameId={gameId} plannedEndAt={endAt} round={row.round}>
         <ManageRowContent row={row} chevron />
       </ManageEndSessionRow>
+    );
+  }
+
+  if (row.extraAction) {
+    return (
+      <HStack
+        align="center"
+        gap="150"
+        className={manageRow({ interactive: false, blocked: false })}
+      >
+        <HStack
+          align="center"
+          gap="150"
+          render={<ServerLink path={row.href ?? row.extraAction.href} />}
+          className="min-w-0 flex-1"
+        >
+          <ManageRowContent row={row} chevron={false} />
+        </HStack>
+        <Button variant="ghost" size="sm" render={<ServerLink path={row.extraAction.href} />}>
+          {row.extraAction.label}
+        </Button>
+      </HStack>
     );
   }
 

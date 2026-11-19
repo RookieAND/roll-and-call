@@ -173,6 +173,7 @@ export function GameFormWizard({
             endDateLocked={edit?.drawn ?? false}
             sessionLocked={!!edit}
             multiRoundEdit={edit?.isMultiRound ?? false}
+            gameId={edit?.gameId}
             inProgress={inProgress}
             multiRound={edit ? undefined : multiRound}
           />

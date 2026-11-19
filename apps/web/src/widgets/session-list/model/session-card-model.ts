@@ -38,6 +38,7 @@ export const SESSION_ACTION_KIND = {
   cancelWaitlist: "cancel-waitlist",
   confirmAttendance: "confirm-attendance",
   fillVacancy: "fill-vacancy",
+  scheduleRound: "schedule-round",
   writeReview: "write-review",
   viewReview: "view-review",
   viewGame: "view-game",
@@ -58,6 +59,7 @@ export type SessionTodoKind =
   | typeof SESSION_ACTION_KIND.confirmTime
   | typeof SESSION_ACTION_KIND.confirmAttendance
   | typeof SESSION_ACTION_KIND.fillVacancy
+  | typeof SESSION_ACTION_KIND.scheduleRound
   | typeof SESSION_ACTION_KIND.submitAvailability;
 
 export type SessionTodo = Omit<SessionAction, "kind"> & {

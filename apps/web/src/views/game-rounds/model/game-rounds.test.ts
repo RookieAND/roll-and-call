@@ -60,6 +60,18 @@ describe("회차 줄", () => {
   });
 });
 
+describe("일정 잡기 링크", () => {
+  it("미정 회차는 잡을 수 있을 때, 정해진 회차는 옮길 수 있을 때 회차 번호를 붙인다", () => {
+    const rounds = [dated(1, 0), dated(2, 2), pending(3)];
+    const both = roundRowViews({ rounds, now, canSchedule: true, canMove: true });
+    expect(both.map((view) => view.scheduleRoundNo)).toEqual([null, 2, 3]);
+    const designated = roundRowViews({ rounds, now, canMove: true });
+    expect(designated.map((view) => view.scheduleRoundNo)).toEqual([null, 2, null]);
+    const off = roundRowViews({ rounds, now });
+    expect(off.every((view) => view.scheduleRoundNo === null)).toBe(true);
+  });
+});
+
 describe("요약", () => {
   const game = {
     roundCount: 6,

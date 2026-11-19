@@ -10,7 +10,12 @@ export function multiRoundStage({
   rounds,
   now,
 }: {
-  game: { roundCount: number; roundScheduleKind: string; finishedAt: Date | null; cancelledAt: Date | null };
+  game: {
+    roundCount: number;
+    roundScheduleKind: string;
+    finishedAt: Date | null;
+    cancelledAt: Date | null;
+  };
   rounds: readonly GameRoundRow[];
   now: Date;
 }): MultiRoundStage | null {
@@ -22,7 +27,11 @@ export function multiRoundStage({
     return !isNil(endAt) && endAt > now;
   });
   if (current) {
-    return { label: `${current.roundNo}/${game.roundCount}회차 진행 중`, tone: "primary", note: null };
+    return {
+      label: `${current.roundNo}/${game.roundCount}회차 진행 중`,
+      tone: "primary",
+      note: null,
+    };
   }
   const nextScheduled = rounds.some((round) => !isNil(round.startAt) && round.startAt > now);
   const note =

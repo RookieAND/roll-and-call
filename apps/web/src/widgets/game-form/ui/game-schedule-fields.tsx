@@ -27,6 +27,7 @@ interface GameScheduleFieldsProps {
   sessionLocked?: boolean;
   multiRoundEdit?: boolean;
   inProgress?: boolean;
+  gameId?: string;
   // 있으면 새 구인에서 여러 번 진행 칸을 연다. 수정·팀 나누기는 넘기지 않는다.
   multiRound?: MultiRoundOptions;
 }
@@ -38,6 +39,7 @@ export function GameScheduleFields({
   sessionLocked = false,
   multiRoundEdit = false,
   inProgress = false,
+  gameId,
   multiRound,
 }: GameScheduleFieldsProps) {
   const { setValue, getValues, watch } = form;
@@ -90,6 +92,7 @@ export function GameScheduleFields({
           sessionLocked={sessionLocked}
           multiLocked={multiRoundEdit}
           inProgress={inProgress}
+          gameId={gameId}
         />
       )}
 
