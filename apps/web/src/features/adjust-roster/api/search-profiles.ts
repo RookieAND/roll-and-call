@@ -9,7 +9,7 @@ import { getActingMember } from "@/shared/server";
 
 import type { Candidate } from "../model/candidate";
 
-const MIN_QUERY_LENGTH = 2;
+const MIN_QUERY_LENGTH = 1;
 const RESULT_LIMIT = 20;
 const QUERY_MAX_LENGTH = 200;
 

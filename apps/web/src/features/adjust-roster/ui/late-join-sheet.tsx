@@ -15,7 +15,7 @@ import { searchKeyword } from "../model/search-keyword";
 import { CandidateSearchInput } from "./candidate-search-input";
 import { CandidateSearchResults } from "./candidate-search-results";
 
-const MIN_QUERY_LENGTH = 2;
+const MIN_QUERY_LENGTH = 1;
 const SEARCH_DELAY_MS = 300;
 const NOTICE_LINES = [
   "추가한 만큼 정원이 늘어납니다.",

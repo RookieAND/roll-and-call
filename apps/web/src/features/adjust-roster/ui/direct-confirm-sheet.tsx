@@ -19,7 +19,7 @@ import { SEATS_NOTICE, seatsNotice } from "./seats-notice";
 import { seatsStatus } from "./seats-status";
 import { SelectedCandidateChip } from "./selected-candidate-chip";
 
-const MIN_QUERY_LENGTH = 2;
+const MIN_QUERY_LENGTH = 1;
 const SEARCH_DELAY_MS = 300;
 
 interface DirectConfirmSheetBaseProps {

@@ -35,7 +35,7 @@ export function CandidateSearchResults({
       <Text typography="body3" foreground="hint" render={<p />} className="px-250 pt-150 pb-500">
         함께할 사람의 닉네임이나 디스코드 아이디를 적어 주세요.
         <br />
-        두 글자부터 찾기 시작합니다.
+        한 글자부터 찾기 시작합니다.
       </Text>
     );
   }
