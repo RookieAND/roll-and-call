@@ -14,7 +14,7 @@ interface UserCardProps {
   user: UsersListItem;
 }
 
-// 성향이 없으면 그 줄을 빼고 소개를 올린다. 글 영역에 최소 높이(닉네임·성향·소개 2줄)를 둬 카드 높이를 맞추고, 수치 칸은 맨 아래에 붙인다.
+// 닉네임·성향·소개 자리를 고정해 모든 카드에서 같은 위치에 두고, 수치 칸은 맨 아래에 붙인다. 성향이 없으면 점선 칩으로 비었다고 보인다.
 export function UserCard({ user }: UserCardProps) {
   return (
     <Card.Root
@@ -30,7 +30,7 @@ export function UserCard({ user }: UserCardProps) {
         <span className="relative -mt-9 flex w-fit rounded-full bg-surface p-050">
           <Avatar src={user.avatarUrl} name={user.username} size="2xl" />
         </span>
-        <VStack gap="100" className="min-h-28 min-w-0">
+        <VStack gap="100" className="min-w-0">
           <HStack align="center" gap="100" className="h-7 min-w-0">
             <Text truncate typography="heading3">
               {user.username}
@@ -40,13 +40,12 @@ export function UserCard({ user }: UserCardProps) {
           <KeywordChips
             keywords={user.keywords.slice(0, KEYWORD_LIMIT)}
             size="md"
-            hideEmpty
             className="h-7 min-w-0 overflow-hidden"
           />
           <Text
             typography="body4"
             foreground={user.bio ? "muted" : "hint"}
-            className="line-clamp-2"
+            className="line-clamp-2 h-[2lh]"
           >
             {user.bio || EMPTY_BIO}
           </Text>
