@@ -5,6 +5,7 @@ import { isNull } from "es-toolkit";
 import { countConfirmed, PARTICIPANT_STATUS } from "./participant";
 import type { SessionGame } from "./session-game";
 
+// SQL판은 packages/database의 member-session-counts-sql.ts(includeUpcoming 켠 경우). 정의를 바꾸면 함께 바꾼다.
 // 마이페이지와 프로필(W08)이 같이 쓴다. 판정은 W09의 isRecordSession 하나다. 숫자는 카드 목록과 다르다(카드는 진행 중·취소됨도 보인다).
 // joined는 getJoinedGames 행이라 운영진이 취소한 불참은 이미 absent false로 접혀 있다.
 export function countRecordSessions({

@@ -20,3 +20,5 @@ export { memberNicknameSql } from "./queries/member-nickname-sql";
 export { searchMembers } from "./queries/search-members";
 export { activeSanctionWhere } from "./queries/active-sanction-where";
 export { memberSearchWhere } from "./queries/member-search-where";
+export { countServerUsers } from "./queries/count-server-users";
+export { getServerUsersPage } from "./queries/get-server-users-page";

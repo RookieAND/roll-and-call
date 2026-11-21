@@ -17,6 +17,7 @@ export { listRankingHiddenUserIds } from "./queries/list-ranking-hidden-user-ids
 export { loadReviewAppearances } from "./queries/load-review-appearances";
 export { loadMonthlyWinners, type MonthlyWinner } from "./queries/load-monthly-winners";
 export { loadUserBadges, type BadgeRecord } from "./queries/load-user-badges";
+export { loadMembersBadges } from "./queries/load-members-badges";
 export {
   loadMemberBadgeSummaries,
   type MemberBadgeSummary,

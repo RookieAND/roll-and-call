@@ -10,7 +10,7 @@ export function homebrewUsableSql({
   userId,
 }: {
   rulebookId: AnyPgColumn;
-  userId: string | null;
+  userId: string | null | AnyPgColumn | SQL;
 }): SQL {
   return sql`not exists (select 1 from ${homebrewRules} where ${homebrewRules.rulebookId} = ${rulebookId}
     and ${homebrewRules.scope} <> 'everyone'
