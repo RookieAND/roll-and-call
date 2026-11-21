@@ -3,7 +3,8 @@ import { HStack, Text } from "@roll-and-call/ui";
 import type { Dayjs } from "dayjs";
 import { Crown, Dices } from "lucide-react";
 
-import type { MonthRecord } from "../model/build-month-record";
+import type { MonthRecord } from "@/entities/badge";
+
 import { HomeRecordEmpty } from "./home-record-empty";
 import { HomeRecordGuide } from "./home-record-guide";
 import { HomeRecordRanking } from "./home-record-ranking";

@@ -2,10 +2,10 @@ import { type RankingMode } from "@roll-and-call/database/servers/model";
 import { Avatar, Text } from "@roll-and-call/ui";
 import type { CSSProperties } from "react";
 
+import type { RecordRow } from "@/entities/badge";
 import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
-import type { RecordRow } from "../model/rank-people";
 import { HomeRecordCount } from "./home-record-count";
 import { PodiumRankMark } from "./podium-rank-mark";
 

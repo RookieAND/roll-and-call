@@ -5,11 +5,11 @@ import { Sheet, Text } from "@roll-and-call/ui";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { RecordPerson } from "@/entities/badge";
 import { ProfileRow } from "@/entities/profile";
 import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
-import type { RecordPerson } from "../model/rank-people";
 import { formatRecordCount } from "./format-record-count";
 
 interface HomeRecordTieSheetProps {

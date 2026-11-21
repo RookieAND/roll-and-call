@@ -7,9 +7,8 @@ import {
   type MonthlyAppearance,
 } from "@roll-and-call/database/badges/model";
 import type { MonthSessionRow } from "@roll-and-call/database/games";
+import { countConfirmed } from "@roll-and-call/database/games/model";
 import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
-
-import { countConfirmed } from "@/entities/game";
 
 import { rankPeople, type RecordPerson } from "./rank-people";
 
