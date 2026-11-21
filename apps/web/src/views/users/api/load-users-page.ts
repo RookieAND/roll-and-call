@@ -1,8 +1,6 @@
-import { loadMembersBadges } from "@roll-and-call/database/badges";
 import { getServerUsersPage } from "@roll-and-call/database/profiles";
-import { groupBy } from "es-toolkit";
 
-import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
+import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { getCurrentServer } from "@/shared/server";
 
 import type { UsersFilter } from "../model/users-filter";
@@ -25,20 +23,14 @@ export async function loadUsersPage({
     recruitingOnly: filter.recruiting,
     sort: filter.sort,
   });
-  const records = await loadMembersBadges({
+  const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
     userIds: rows.map((row) => row.userId),
+    now: new Date(),
   });
-  const recordsByUser = groupBy(records, (record) => record.userId);
-  const now = new Date();
   return {
     total,
-    rows: rows.map(({ featuredBadges, joinedAt: _joinedAt, ...row }) => {
-      const featured = pickFeaturedBadges({
-        featuredKeys: featuredBadges,
-        held: heldBadges(recordsByUser[row.userId] ?? [], now),
-      })[0];
-      return { ...row, title: featured ? `${featured.emoji} ${featured.name}` : null };
-    }),
+    titleSheets,
+    rows: rows.map(({ featuredBadges: _featuredBadges, joinedAt: _joinedAt, ...row }) => row),
   };
 }

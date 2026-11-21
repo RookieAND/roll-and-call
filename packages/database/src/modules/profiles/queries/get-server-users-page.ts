@@ -51,11 +51,14 @@ export async function getServerUsersPage({
 
   const recruitingCount = sql<number>`coalesce(${recruiting.count}, 0)::int`;
   const certifiedRulebookCount = sql<number>`coalesce(${certified.count}, 0)::int`;
+  const hostedCount = sql<number>`coalesce(${hosted.count}, 0)::int`;
+  const playedCount = sql<number>`(coalesce(${playedSingle.count}, 0) + coalesce(${playedMulti.count}, 0))::int`;
   const orderBy = {
     [SERVER_USER_SORT.recent]: [desc(serverMembers.joinedAt)],
     [SERVER_USER_SORT.name]: [asc(serverMembers.nickname)],
     [SERVER_USER_SORT.rulebooks]: [desc(certifiedRulebookCount)],
-    [SERVER_USER_SORT.recruiting]: [desc(recruitingCount)],
+    [SERVER_USER_SORT.played]: [desc(playedCount)],
+    [SERVER_USER_SORT.hosted]: [desc(hostedCount)],
   }[sort];
 
   const [rows, total] = await Promise.all([
@@ -66,12 +69,13 @@ export async function getServerUsersPage({
         avatarUrl: profiles.avatarUrl,
         bannerUrl: serverMembers.bannerUrl,
         bio: serverMembers.bio,
+        keywords: serverMembers.keywords,
         featuredBadges: serverMembers.featuredBadges,
         joinedAt: serverMembers.joinedAt,
         recruitingCount,
         certifiedRulebookCount,
-        hostedCount: sql<number>`coalesce(${hosted.count}, 0)::int`,
-        playedCount: sql<number>`(coalesce(${playedSingle.count}, 0) + coalesce(${playedMulti.count}, 0))::int`,
+        hostedCount,
+        playedCount,
       })
       .from(serverMembers)
       .innerJoin(profiles, eq(profiles.id, serverMembers.userId))
