@@ -4,6 +4,9 @@ import { Button, Grid, Sheet, TextInput, VStack } from "@roll-and-call/ui";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
+import { RulebookSheetGroup } from "@/widgets/game-form";
+
+import { groupRuleOptions } from "../model/group-rule-options";
 import type { RuleOption } from "../model/rule-option";
 import { SheetRadioItem } from "./sheet-radio-item";
 
@@ -17,10 +20,7 @@ interface UsersRulePickerProps {
 export function UsersRulePicker({ title, options, selected, onDone }: UsersRulePickerProps) {
   const [id, setId] = useState(selected);
   const [query, setQuery] = useState("");
-  const keyword = query.trim().toLowerCase();
-  const visible = keyword
-    ? options.filter((option) => option.label.toLowerCase().includes(keyword))
-    : options;
+  const groups = groupRuleOptions({ options, query });
 
   return (
     <>
@@ -45,14 +45,18 @@ export function UsersRulePicker({ title, options, selected, onDone }: UsersRuleP
             />
           </div>
           <div role="radiogroup" aria-label={title} className="min-h-0 flex-1 overflow-y-auto">
-            {visible.map((option) => (
-              <SheetRadioItem
-                key={option.id}
-                selected={id === option.id}
-                onSelect={() => setId(option.id)}
-              >
-                {option.label}
-              </SheetRadioItem>
+            {groups.map((group) => (
+              <RulebookSheetGroup key={group.categoryName} title={group.categoryName}>
+                {group.options.map((option) => (
+                  <SheetRadioItem
+                    key={option.id}
+                    selected={id === option.id}
+                    onSelect={() => setId(option.id)}
+                  >
+                    {option.label}
+                  </SheetRadioItem>
+                ))}
+              </RulebookSheetGroup>
             ))}
           </div>
         </VStack>

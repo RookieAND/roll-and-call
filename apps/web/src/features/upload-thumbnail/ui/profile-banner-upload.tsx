@@ -10,7 +10,7 @@ import { uploadThumbnail } from "../api/upload-thumbnail";
 import { BANNER_RATIO } from "../model/banner-crop";
 import { imageFileError } from "../model/image-file-error";
 import { uploadFailedMessage } from "../model/upload-failed-message";
-import { BANNER_ACCEPT } from "../model/upload-rules";
+import { IMAGE_ACCEPT } from "../model/upload-rules";
 import { BannerActionButton } from "./banner-action-button";
 import { BannerCropSheet } from "./banner-crop-sheet";
 
@@ -28,16 +28,23 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
   // 이번에 고른 원본. 있으면 위치 조정이 원본에서 다시 자르고, 없으면 올라가 있는 배너를 자른다.
   const [original, setOriginal] = useState<string | null>(null);
   const [cropping, setCropping] = useState<string | null>(null);
+  // 움직이는 GIF는 잘라 내면 멈추므로 썸네일처럼 자르지 않고 그대로 올린다.
+  const [animated, setAnimated] = useState(false);
 
   function pick(file: File) {
     setError(null);
-    const invalid = BANNER_ACCEPT.split(",").includes(file.type)
-      ? imageFileError(file)
-      : "JPG·PNG 이미지만 올릴 수 있습니다.";
+    const invalid = imageFileError(file);
     if (invalid) {
       setError(invalid);
       return;
     }
+    if (file.type === "image/gif") {
+      setAnimated(true);
+      setOriginal(null);
+      void upload(file);
+      return;
+    }
+    setAnimated(false);
     const url = URL.createObjectURL(file);
     setOriginal(url);
     setCropping(url);
@@ -78,7 +85,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
           <BannerActionButton
             icon={Move}
             label="위치 조정"
-            disabled={!value || uploading}
+            disabled={!value || uploading || animated}
             onClick={() => setCropping(original ?? value)}
           />
           <BannerActionButton
@@ -93,6 +100,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
             disabled={!value || uploading}
             onClick={() => {
               setOriginal(null);
+              setAnimated(false);
               onChange("");
             }}
           />
@@ -104,7 +112,7 @@ export function ProfileBannerUpload({ serverId, value, onChange }: ProfileBanner
       <input
         ref={inputRef}
         type="file"
-        accept={BANNER_ACCEPT}
+        accept={IMAGE_ACCEPT}
         className="hidden"
         onChange={(event) => {
           const file = event.target.files?.[0];

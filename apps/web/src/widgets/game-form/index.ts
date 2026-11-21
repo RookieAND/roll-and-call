@@ -13,3 +13,4 @@ export { EndDateField } from "./ui/end-date-field";
 export { VisibilityField } from "./ui/visibility-field";
 export { MinPlayersField } from "./ui/min-players-field";
 export { OpenRecruitFields } from "./ui/open-recruit-fields";
+export { RulebookSheetGroup } from "./ui/rulebook-sheet-group";

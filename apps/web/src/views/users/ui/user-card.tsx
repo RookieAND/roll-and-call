@@ -54,7 +54,7 @@ export function UserCard({ user }: UserCardProps) {
           <UserStatCell
             icon={Megaphone}
             value={user.recruitingCount}
-            label="모집 중"
+            label="모집 중인 세션"
             tinted={user.recruitingCount > 0}
           />
           <UserStatCell icon={Book} value={user.certifiedRulebookCount} label="인증 룰북" />
