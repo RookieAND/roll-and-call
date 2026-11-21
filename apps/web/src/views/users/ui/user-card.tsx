@@ -1,12 +1,13 @@
 import { Avatar, Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Book, Flag, Megaphone, Users } from "lucide-react";
 
+import { MemberTitle } from "@/features/view-badge";
 import { BannerImage, ServerLink } from "@/shared/ui";
 
 import { EMPTY_BIO } from "../model/empty-bio";
 import type { UsersListItem } from "../model/users-list-item";
+import { UserKeywords } from "./user-keywords";
 import { UserStatCell } from "./user-stat-cell";
-import { UserTitleBadge } from "./user-title-badge";
 
 interface UserCardProps {
   user: UsersListItem;
@@ -32,8 +33,9 @@ export function UserCard({ user }: UserCardProps) {
             <Text truncate typography="subtitle1">
               {user.username}
             </Text>
-            {user.title && <UserTitleBadge title={user.title} size="sm" />}
+            <MemberTitle userId={user.userId} />
           </HStack>
+          <UserKeywords keywords={user.keywords} />
           <Text
             typography="body4"
             foreground={user.bio ? "muted" : "hint"}

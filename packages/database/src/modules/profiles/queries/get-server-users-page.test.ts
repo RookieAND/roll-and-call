@@ -118,14 +118,15 @@ const upcoming = { confirmedAt: new Date(NOW + 48 * HOUR) };
 const finished = { confirmedAt: new Date(NOW - 48 * HOUR) };
 
 describe("getServerUsersPage", () => {
-  it("한 쪽은 20명이고 page 2는 처음부터 40명 분량을 준다", async () => {
+  it("한 쪽은 SERVER_USERS_PAGE_SIZE명이고 page 2는 처음부터 두 쪽 분량을 준다", async () => {
     const { addMember, page } = await setup();
-    for (let index = 0; index < 22; index += 1)
+    const memberCount = SERVER_USERS_PAGE_SIZE + 2;
+    for (let index = 0; index < memberCount; index += 1)
       await addMember(`member${String(index).padStart(2, "0")}`);
     const first = await page();
     expect(first.rows).toHaveLength(SERVER_USERS_PAGE_SIZE);
-    expect(first.total).toBe(22);
-    expect((await page({ page: 2 })).rows).toHaveLength(22);
+    expect(first.total).toBe(memberCount);
+    expect((await page({ page: 2 })).rows).toHaveLength(memberCount);
     expect((await page({ page: 0 })).rows).toHaveLength(SERVER_USERS_PAGE_SIZE);
   });
 
@@ -224,7 +225,7 @@ describe("getServerUsersPage", () => {
     expect(await names({ sort: SERVER_USER_SORT.recent })).toEqual(["b", "c", "a"]);
     expect(await names({ sort: SERVER_USER_SORT.name })).toEqual(["a", "b", "c"]);
     expect(await names({ sort: SERVER_USER_SORT.rulebooks })).toEqual(["c", "a", "b"]);
-    expect(await names({ sort: SERVER_USER_SORT.recruiting })).toEqual(["b", "a", "c"]);
+    expect(await names({ sort: SERVER_USER_SORT.hosted })).toEqual(["b", "a", "c"]);
   });
 
   it("진행 횟수: 예정과 끝난 확정 세션을 세고 취소·숨김·확정 없이 끝난 건 뺀다", async () => {
@@ -244,6 +245,7 @@ describe("getServerUsersPage", () => {
     const rows = (await page()).rows;
     expect(rows.find((row) => row.username === "gm")?.hostedCount).toBe(2);
     expect(rows.find((row) => row.username === "player")?.playedCount).toBe(2);
+    expect((await page({ sort: SERVER_USER_SORT.played })).rows[0]?.username).toBe("player");
   });
 
   it("참여 횟수: 확정만 세고 불참은 취소됐을 때만 세며 대기는 뺀다", async () => {

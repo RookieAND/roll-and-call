@@ -1,9 +1,11 @@
 import { Container, HStack, VStack } from "@roll-and-call/ui";
 
+import { MemberTitleSheetsProvider } from "@/features/view-badge";
 import { AppBar, PageShell } from "@/shared/ui";
 
 import { loadRuleOptions } from "../api/load-rule-options";
 import { loadUsersPage } from "../api/load-users-page";
+import { USERS_DESKTOP_PAGE_SIZE } from "../model/users-desktop-page-size";
 import type { UsersFilter } from "../model/users-filter";
 import { UserList } from "./user-list";
 import { UsersCountRow } from "./users-count-row";
@@ -18,7 +20,7 @@ interface UsersViewProps {
 }
 
 export async function UsersView({ filter, page }: UsersViewProps) {
-  const [{ rows, total }, ruleOptions] = await Promise.all([
+  const [{ rows, total, titleSheets }, ruleOptions] = await Promise.all([
     loadUsersPage({ filter, page }),
     loadRuleOptions(),
   ]);
@@ -31,9 +33,20 @@ export async function UsersView({ filter, page }: UsersViewProps) {
             <UsersFilterSheet filter={filter} total={total} ruleOptions={ruleOptions} />
           </HStack>
           <UsersCountRow filter={filter} total={total} />
-          {rows.length === 0 ? <UsersEmpty filter={filter} /> : <UserList users={rows} />}
-          {rows.length > 0 && rows.length < total && (
-            <UsersMoreButton filter={filter} page={page} />
+          {rows.length === 0 ? (
+            <UsersEmpty filter={filter} />
+          ) : (
+            <MemberTitleSheetsProvider sheets={titleSheets}>
+              <UserList users={rows} page={page} />
+            </MemberTitleSheetsProvider>
+          )}
+          {rows.length > 0 && (
+            <UsersMoreButton
+              filter={filter}
+              page={page}
+              mobile={rows.length < total}
+              desktop={page * USERS_DESKTOP_PAGE_SIZE < total}
+            />
           )}
         </VStack>
       </Container>
