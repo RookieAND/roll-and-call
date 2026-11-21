@@ -1,7 +1,7 @@
 import type { GamesCounts } from "@roll-and-call/database/games";
 import { HStack, Skeleton, VStack, cn } from "@roll-and-call/ui";
 
-import { FRAME_INNER_PX } from "@/shared/ui";
+import { FilterButton, FRAME_INNER_PX } from "@/shared/ui";
 
 import {
   GAME_STATUS_FILTER_DEFAULT,
@@ -11,7 +11,6 @@ import {
 } from "../model/game-sort";
 import type { RuleOption } from "../model/rule-option";
 import { statusCounts } from "../model/status-counts";
-import { GameFilterButton } from "./game-filter-button";
 import { GameFilterSheet } from "./game-filter-sheet";
 import { GameScopeTabs } from "./game-scope-tabs";
 import { GameSearchForm } from "./game-search-form";
@@ -64,7 +63,7 @@ export function GamesToolbar({
               count={chipCounts[filter.status ?? GAME_STATUS_FILTER_DEFAULT] ?? 0}
             />
           ) : (
-            <GameFilterButton count={0} className="desktop:hidden" />
+            <FilterButton count={0} className="desktop:hidden" />
           )}
         </HStack>
         <HStack align="center" gap="075">

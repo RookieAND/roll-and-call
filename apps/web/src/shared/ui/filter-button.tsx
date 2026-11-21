@@ -1,12 +1,12 @@
 import { Badge, cn, IconButton, type IconButtonProps } from "@roll-and-call/ui";
 import { ListFilter } from "lucide-react";
 
-interface GameFilterButtonProps extends Omit<IconButtonProps, "aria-label"> {
+interface FilterButtonProps extends Omit<IconButtonProps, "aria-label"> {
   count: number;
 }
 
 // 숫자는 읽기용 이름에 들어 있어 배지는 화면에만 보인다.
-export function GameFilterButton({ count, className, ...props }: GameFilterButtonProps) {
+export function FilterButton({ count, className, ...props }: FilterButtonProps) {
   const label = count > 0 ? `필터, ${count}개 적용` : "필터";
   return (
     <IconButton {...props} aria-label={label} className={cn("relative h-11 w-11", className)}>
