@@ -53,7 +53,9 @@ export async function getServerUsersPage({
   const certifiedRulebookCount = sql<number>`coalesce(${certified.count}, 0)::int`;
   const hostedCount = sql<number>`coalesce(${hosted.count}, 0)::int`;
   const playedCount = sql<number>`(coalesce(${playedSingle.count}, 0) + coalesce(${playedMulti.count}, 0))::int`;
+  // 모집 중인 구인이 없는 사람이 대부분이라 같은 수끼리는 최근 가입순으로 둔다.
   const orderBy = {
+    [SERVER_USER_SORT.recruiting]: [desc(recruitingCount), desc(serverMembers.joinedAt)],
     [SERVER_USER_SORT.recent]: [desc(serverMembers.joinedAt)],
     [SERVER_USER_SORT.name]: [asc(serverMembers.nickname)],
     [SERVER_USER_SORT.rulebooks]: [desc(certifiedRulebookCount)],
