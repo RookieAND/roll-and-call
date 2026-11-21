@@ -1,4 +1,4 @@
-import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
+import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { Text } from "@roll-and-call/ui";
 import type { ComponentProps } from "react";
 
@@ -12,7 +12,7 @@ interface HomeRecordCountProps {
   numberClassName?: string;
 }
 
-// 참여 횟수제는 작은 「참여」, 큰 숫자, 작은 「회」. 포인트제는 숫자와 「점」만 쓴다.
+// 큰 숫자 뒤에 작은 단위(횟수제 「회」, 포인트제 「점」)를 붙인다.
 export function HomeRecordCount({
   count,
   mode,
@@ -22,11 +22,6 @@ export function HomeRecordCount({
 }: HomeRecordCountProps) {
   return (
     <>
-      {mode === RANKING_MODE.count && (
-        <Text typography="body4" weight="bold" foreground="inherit">
-          참여
-        </Text>
-      )}
       <Text
         typography={typography}
         weight={weight}
