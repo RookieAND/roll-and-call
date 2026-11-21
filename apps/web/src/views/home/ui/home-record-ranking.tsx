@@ -1,6 +1,7 @@
 import type { RankingMode } from "@roll-and-call/database/servers/model";
 
-import type { RecordRanking } from "../model/rank-people";
+import type { RecordRanking } from "@/entities/badge";
+
 import { HomeRecordLeader } from "./home-record-leader";
 import { HomeRecordPodium } from "./home-record-podium";
 import { HomeRecordRow } from "./home-record-row";

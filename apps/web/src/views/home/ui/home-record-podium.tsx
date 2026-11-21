@@ -2,10 +2,10 @@ import type { RankingMode } from "@roll-and-call/database/servers/model";
 import { Avatar, AvatarGroup, cn, HStack, Text } from "@roll-and-call/ui";
 import { Crown } from "lucide-react";
 
+import type { RecordPerson, RecordRanking } from "@/entities/badge";
 import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
-import type { RecordPerson, RecordRanking } from "../model/rank-people";
 import { HomeRecordCount } from "./home-record-count";
 import { HomeRecordPodiumStep } from "./home-record-podium-step";
 import { HomeRecordTieSheet } from "./home-record-tie-sheet";

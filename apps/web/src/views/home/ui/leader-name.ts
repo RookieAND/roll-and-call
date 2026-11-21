@@ -1,4 +1,4 @@
-import type { RecordPerson } from "../model/rank-people";
+import type { RecordPerson } from "@/entities/badge";
 
 export function leaderName(people: [RecordPerson, ...RecordPerson[]]) {
   const [first, ...rest] = people;

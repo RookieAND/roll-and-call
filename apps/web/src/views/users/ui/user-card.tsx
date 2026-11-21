@@ -8,6 +8,7 @@ import { BannerImage, ServerLink } from "@/shared/ui";
 import { EMPTY_BIO } from "../model/empty-bio";
 import { KEYWORD_LIMIT } from "../model/keyword-limit";
 import type { UsersListItem } from "../model/users-list-item";
+import { UserMonthMedals } from "./user-month-medals";
 import { UserStatCell } from "./user-stat-cell";
 
 interface UserCardProps {
@@ -36,6 +37,7 @@ export function UserCard({ user }: UserCardProps) {
               {user.username}
             </Text>
             <MemberTitle userId={user.userId} size="sm" />
+            <UserMonthMedals medals={user.medals} />
           </HStack>
           <KeywordChips
             keywords={user.keywords.slice(0, KEYWORD_LIMIT)}

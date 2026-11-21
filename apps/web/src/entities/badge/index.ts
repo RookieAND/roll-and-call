@@ -27,3 +27,11 @@ export { stepLook } from "./model/step-look";
 export { TIER_NAME } from "./model/tier-name";
 export { TONE_CLASS } from "./model/tone-class";
 export { BADGE_TAB, BADGE_TABS, type BadgeTab } from "./model/badge-tab";
+export { buildMonthRecord, type MonthRecord } from "./model/build-month-record";
+export {
+  rankPeople,
+  type RecordPerson,
+  type RecordRanking,
+  type RecordRow,
+} from "./model/rank-people";
+export { monthRankMedals, type MonthRankMedal } from "./model/month-rank-medals";

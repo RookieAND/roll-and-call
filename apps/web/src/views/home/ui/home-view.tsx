@@ -1,17 +1,9 @@
-import {
-  loadMonthMultiRoundRows,
-  loadReviewAppearances,
-  listRankingHiddenUserIds,
-} from "@roll-and-call/database/badges";
-import {
-  getMonthRoundSessions,
-  getMonthSessions,
-  hasSessionsBetween,
-} from "@roll-and-call/database/games";
-import { RANKING_MODE, type RankingMode } from "@roll-and-call/database/servers/model";
+import { getMonthRoundSessions, hasSessionsBetween } from "@roll-and-call/database/games";
+import { type RankingMode } from "@roll-and-call/database/servers/model";
 import { HStack } from "@roll-and-call/ui";
 import { Suspense } from "react";
 
+import { loadMonthRecord } from "@/entities/badge/server";
 import { BadgeAwardGate } from "@/features/acknowledge-badges";
 import { LoginButton } from "@/features/auth";
 import { MemberTitleSheetsProvider } from "@/features/view-badge";
@@ -26,7 +18,6 @@ import {
   ThemeToggleButton,
 } from "@/shared/ui";
 
-import { buildMonthRecord } from "../model/build-month-record";
 import { groupSessionsByDay } from "../model/group-sessions-by-day";
 import { recordPeopleIds } from "../model/record-people-ids";
 import { resolveCalendarView } from "../model/resolve-calendar-view";
@@ -49,48 +40,29 @@ export async function HomeView({ date }: HomeViewProps) {
   const server = await getCurrentServer();
   const nextMonthStart = monthStart.add(1, "month");
   const mode = server.rankingMode as RankingMode;
-  const [user, rows, multiRoundRows, roundRows, hasNextMonthSessions, reviews, hiddenUserIds] =
-    await Promise.all([
-      getCurrentSessionUser(),
-      getMonthSessions({
-        serverId: server.id,
-        from: monthStart.toDate(),
-        to: nextMonthStart.toDate(),
-      }),
-      loadMonthMultiRoundRows({
-        serverId: server.id,
-        from: monthStart.toDate(),
-        to: nextMonthStart.toDate(),
-      }),
-      getMonthRoundSessions({
-        serverId: server.id,
-        from: monthStart.toDate(),
-        to: nextMonthStart.toDate(),
-      }),
-      hasSessionsBetween({
-        serverId: server.id,
-        from: nextMonthStart.toDate(),
-        to: nextMonthStart.add(1, "month").toDate(),
-      }),
-      mode === RANKING_MODE.points
-        ? loadReviewAppearances({
-            serverId: server.id,
-            from: monthStart.toDate(),
-            to: nextMonthStart.toDate(),
-          })
-        : [],
-      listRankingHiddenUserIds({ serverId: server.id }),
-    ]);
+  const [user, record, roundRows, hasNextMonthSessions] = await Promise.all([
+    getCurrentSessionUser(),
+    loadMonthRecord({
+      serverId: server.id,
+      rankingMode: mode,
+      from: monthStart.toDate(),
+      to: nextMonthStart.toDate(),
+      now,
+    }),
+    getMonthRoundSessions({
+      serverId: server.id,
+      from: monthStart.toDate(),
+      to: nextMonthStart.toDate(),
+    }),
+    hasSessionsBetween({
+      serverId: server.id,
+      from: nextMonthStart.toDate(),
+      to: nextMonthStart.add(1, "month").toDate(),
+    }),
+  ]);
 
   const profile = user ? await getProfile(server.id, user.id) : undefined;
   const sessions = toCalendarSessions({ rows: roundRows, viewerId: user?.id ?? null, now });
-  const record = buildMonthRecord({
-    rows: [...rows.filter((row) => row.roundCount === 1), ...multiRoundRows],
-    now,
-    mode,
-    reviews,
-    hiddenUserIds,
-  });
   const titleSheets = await loadMemberTitleSheets({
     serverId: server.id,
     userIds: recordPeopleIds(record),

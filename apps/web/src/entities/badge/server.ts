@@ -3,6 +3,8 @@ import { loadMemberBadgeSummaries } from "@roll-and-call/database/badges";
 
 import { pickRepresentativeBadge } from "./model/pick-representative-badge";
 
+export { loadMonthRecord } from "./api/load-month-record";
+
 interface LoadRepresentativeBadgesParams {
   serverId: string;
   userIds: string[];

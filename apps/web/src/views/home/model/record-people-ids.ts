@@ -1,5 +1,5 @@
-import type { MonthRecord } from "./build-month-record";
-import type { RecordRanking } from "./rank-people";
+import type { MonthRecord } from "@/entities/badge";
+import type { RecordRanking } from "@/entities/badge";
 
 function rankingIds(ranking: RecordRanking) {
   return [
