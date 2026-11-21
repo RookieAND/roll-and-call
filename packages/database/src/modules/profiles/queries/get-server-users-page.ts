@@ -62,7 +62,6 @@ export async function getServerUsersPage({
     ],
     [SERVER_USER_SORT.recent]: [desc(serverMembers.joinedAt)],
     [SERVER_USER_SORT.name]: [asc(serverMembers.nickname)],
-    [SERVER_USER_SORT.rulebooks]: [desc(certifiedRulebookCount)],
     [SERVER_USER_SORT.played]: [desc(playedCount)],
     [SERVER_USER_SORT.hosted]: [desc(hostedCount)],
   }[sort];

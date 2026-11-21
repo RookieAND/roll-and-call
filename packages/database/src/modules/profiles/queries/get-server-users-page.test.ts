@@ -207,24 +207,16 @@ describe("getServerUsersPage", () => {
     expect(await names({ recruitingOnly: true, q: "gm-b" })).toEqual([]);
   });
 
-  it("정렬: 최근 가입, 이름, 인증 룰북, 모집 중", async () => {
-    const { serverId, addMember, addRulebook, addGame, names } = await setup();
-    const first = await addRulebook("A");
-    const second = await addRulebook("B");
+  it("정렬: 최근 가입, 이름, 운영, 모집 중", async () => {
+    const { addMember, addGame, names } = await setup();
     const a = await addMember("a", { joinedAt: new Date(NOW - 3 * HOUR) });
     const b = await addMember("b", { joinedAt: new Date(NOW - 1 * HOUR) });
-    const c = await addMember("c", { joinedAt: new Date(NOW - 2 * HOUR) });
-    await db.insert(certifications).values([
-      { serverId, userId: c, rulebookId: first },
-      { serverId, userId: c, rulebookId: second },
-      { serverId, userId: a, rulebookId: first },
-    ]);
+    await addMember("c", { joinedAt: new Date(NOW - 2 * HOUR) });
     await addGame(b);
     await addGame(b);
     await addGame(a);
     expect(await names({ sort: SERVER_USER_SORT.recent })).toEqual(["b", "c", "a"]);
     expect(await names({ sort: SERVER_USER_SORT.name })).toEqual(["a", "b", "c"]);
-    expect(await names({ sort: SERVER_USER_SORT.rulebooks })).toEqual(["c", "a", "b"]);
     expect(await names({ sort: SERVER_USER_SORT.hosted })).toEqual(["b", "a", "c"]);
     expect(await names({ sort: SERVER_USER_SORT.recruiting })).toEqual(["b", "a", "c"]);
   });

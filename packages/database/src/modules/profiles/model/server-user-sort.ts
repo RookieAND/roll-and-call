@@ -2,7 +2,6 @@ export const SERVER_USER_SORT = {
   recruiting: "recruiting",
   recent: "recent",
   name: "name",
-  rulebooks: "rulebooks",
   played: "played",
   hosted: "hosted",
 } as const;
