@@ -8,5 +8,9 @@ import type { RuleOption } from "../model/rule-option";
 export async function loadRuleOptions(): Promise<RuleOption[]> {
   const server = await getCurrentServer();
   const { catalog } = await getRulebookRecords({ serverId: server.id, userId: null });
-  return catalog.map((rulebook) => ({ id: rulebook.id, label: rulebookLabel(rulebook) }));
+  return catalog.map((rulebook) => ({
+    id: rulebook.id,
+    label: rulebookLabel(rulebook),
+    categoryName: rulebook.categoryName,
+  }));
 }
