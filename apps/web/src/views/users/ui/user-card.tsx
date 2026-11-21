@@ -37,7 +37,7 @@ export function UserCard({ user }: UserCardProps) {
               {user.username}
             </Text>
             <MemberTitle userId={user.userId} size="sm" />
-            <UserMonthMedals medals={user.medals} />
+            <UserMonthMedals medals={user.medals} size="sm" />
           </HStack>
           <KeywordChips
             keywords={user.keywords.slice(0, KEYWORD_LIMIT)}

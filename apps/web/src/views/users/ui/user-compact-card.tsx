@@ -15,7 +15,7 @@ interface UserCompactCardProps {
   user: UsersListItem;
 }
 
-// 모바일 카드. 배너·아바타는 데스크톱과 같은 비율로 두고, 소개는 한 줄로 줄이고, 수치는 데스크톱과 같은 칸을 한 단계 작게 쓴다.
+// 모바일 카드. 배너·아바타는 데스크톱과 같은 비율로 두고, 소개는 두 줄까지 보이고, 수치는 데스크톱과 같은 칸을 한 단계 작게 쓴다.
 export function UserCompactCard({ user }: UserCompactCardProps) {
   const bioForeground = user.bio ? "muted" : "hint";
   return (
@@ -37,14 +37,14 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
             {user.username}
           </Text>
           <MemberTitle userId={user.userId} />
-          <UserMonthMedals medals={user.medals} />
+          <UserMonthMedals medals={user.medals} size="xs" />
         </HStack>
         <KeywordChips
           keywords={user.keywords.slice(0, KEYWORD_LIMIT)}
           size="md"
           className="h-7 min-w-0 overflow-hidden"
         />
-        <Text truncate typography="body4" foreground={bioForeground}>
+        <Text typography="body4" foreground={bioForeground} className="line-clamp-2">
           {user.bio || EMPTY_BIO}
         </Text>
         <Grid cols={2} gap="075">

@@ -61,7 +61,7 @@ export function UserStatCell({
       >
         <Icon size={scale.icon} aria-hidden />
       </span>
-      <VStack gap={scale.tight ? undefined : "025"} className="min-w-0">
+      <VStack gap={scale.tight ? "050" : "025"} className="min-w-0">
         <Text
           typography={scale.value}
           weight="bold"
