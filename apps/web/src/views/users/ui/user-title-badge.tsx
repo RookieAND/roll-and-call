@@ -1,15 +1,22 @@
-import { Badge, Text } from "@roll-and-call/ui";
+import { BadgePill } from "@/entities/badge";
+
+import type { UsersListItem } from "../model/users-list-item";
 
 interface UserTitleBadgeProps {
-  title: string;
+  title: NonNullable<UsersListItem["title"]>;
+  size: "xs" | "sm";
 }
 
-export function UserTitleBadge({ title }: UserTitleBadgeProps) {
+// 프로필의 대표 업적과 같은 등급별 알약을 쓴다.
+export function UserTitleBadge({ title, size }: UserTitleBadgeProps) {
   return (
-    <Badge colorPalette="primary" className="max-w-32 min-w-0 shrink desktop:max-w-40">
-      <Text truncate typography="body4" weight="bold" foreground="inherit" tight>
-        {title}
-      </Text>
-    </Badge>
+    <BadgePill
+      emoji={title.emoji}
+      name={title.name}
+      look={title.look}
+      tag={title.tag}
+      size={size}
+      className="max-w-36 shrink desktop:max-w-48"
+    />
   );
 }

@@ -32,7 +32,7 @@ export function UserCard({ user }: UserCardProps) {
             <Text truncate typography="subtitle1">
               {user.username}
             </Text>
-            {user.title && <UserTitleBadge title={user.title} />}
+            {user.title && <UserTitleBadge title={user.title} size="sm" />}
           </HStack>
           <Text
             typography="body4"

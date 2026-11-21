@@ -23,7 +23,7 @@ export function UserRow({ user }: UserRowProps) {
       <ProfileRow
         name={user.username}
         avatarUrl={user.avatarUrl}
-        nameAddon={user.title && <UserTitleBadge title={user.title} />}
+        nameAddon={user.title && <UserTitleBadge title={user.title} size="xs" />}
         subline={user.bio || EMPTY_BIO}
         sublineForeground={user.bio ? "muted" : "hint"}
       />

@@ -2,7 +2,7 @@ import { loadMembersBadges } from "@roll-and-call/database/badges";
 import { getServerUsersPage } from "@roll-and-call/database/profiles";
 import { groupBy } from "es-toolkit";
 
-import { heldBadges, pickFeaturedBadges } from "@/entities/badge";
+import { heldBadges, monthLabel, pickFeaturedBadges } from "@/entities/badge";
 import { getCurrentServer } from "@/shared/server";
 
 import type { UsersFilter } from "../model/users-filter";
@@ -38,7 +38,15 @@ export async function loadUsersPage({
         featuredKeys: featuredBadges,
         held: heldBadges(recordsByUser[row.userId] ?? [], now),
       })[0];
-      return { ...row, title: featured ? `${featured.emoji} ${featured.name}` : null };
+      const title = featured
+        ? {
+            emoji: featured.emoji,
+            name: featured.name,
+            look: featured.look,
+            tag: featured.monthKey ? monthLabel(featured.monthKey) : null,
+          }
+        : null;
+      return { ...row, title };
     }),
   };
 }
