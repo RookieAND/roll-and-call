@@ -18,7 +18,7 @@ import {
   type ProfileLink,
 } from "@/entities/profile";
 import { parseActionInput, type ActionResult } from "@/shared/api";
-import { isGameImageUrl, serverPath } from "@/shared/lib";
+import { isDiscordBannerUrl, isGameImageUrl, serverPath } from "@/shared/lib";
 import { getActingMember, notMemberError } from "@/shared/server";
 
 import { BIO_MAX_LENGTH, PROFILE_FIELD, USERNAME_MAX_LENGTH } from "../model/profile-form";
@@ -84,7 +84,7 @@ export async function updateProfile(input: UpdateProfileInput): Promise<ActionRe
     };
   }
   const bannerUrl = values.bannerUrl.trim();
-  if (bannerUrl && !isGameImageUrl(bannerUrl)) {
+  if (bannerUrl && !isGameImageUrl(bannerUrl) && !isDiscordBannerUrl(bannerUrl)) {
     return { error: "배너 이미지를 다시 올려 주세요." };
   }
 
