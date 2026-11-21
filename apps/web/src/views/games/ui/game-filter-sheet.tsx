@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { useServerPath } from "@/shared/lib";
-import { reportError } from "@/shared/ui";
+import { FilterButton, reportError } from "@/shared/ui";
 
 import { countFilteredGames } from "../api/count-filtered-games";
 import { CHIP_HIT_AREA } from "../lib/chip-hit-area";
@@ -25,7 +25,6 @@ import type { RuleOption } from "../model/rule-option";
 import { ruleSummary } from "../model/rule-summary";
 import { FilterCheckbox } from "./filter-checkbox";
 import { FilterSection } from "./filter-section";
-import { GameFilterButton } from "./game-filter-button";
 import { RoundsField } from "./rounds-field";
 import { RuleField } from "./rule-field";
 import { RulePicker } from "./rule-picker";
@@ -92,7 +91,7 @@ export function GameFilterSheet({ filter, count, ruleOptions, showRounds }: Game
   return (
     <Sheet.Root open={open} onOpenChange={changeOpen}>
       <Sheet.Trigger
-        render={<GameFilterButton count={gameFilterCount(filter)} className="desktop:hidden" />}
+        render={<FilterButton count={gameFilterCount(filter)} className="desktop:hidden" />}
       />
       <Sheet.Popup>
         <Sheet.Handle />

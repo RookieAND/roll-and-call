@@ -51,3 +51,4 @@ export { SheetCloseIcon } from "./sheet-close-icon";
 export { LARGE_DIALOG_TITLE_CLASS } from "./large-dialog-title-class";
 export { WizardHeader } from "./wizard-header";
 export { WizardProgressSection, type WizardPanelStep } from "./wizard-progress-section";
+export { FilterButton } from "./filter-button";
