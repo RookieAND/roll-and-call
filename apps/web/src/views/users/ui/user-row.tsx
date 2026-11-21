@@ -1,12 +1,13 @@
 import { Avatar, Badge, HStack, Text, VStack } from "@roll-and-call/ui";
 import { Megaphone } from "lucide-react";
 
+import { KeywordChips } from "@/entities/profile";
 import { MemberTitle } from "@/features/view-badge";
 import { ServerLink } from "@/shared/ui";
 
 import { EMPTY_BIO } from "../model/empty-bio";
+import { KEYWORD_LIMIT } from "../model/keyword-limit";
 import type { UsersListItem } from "../model/users-list-item";
-import { UserKeywords } from "./user-keywords";
 
 interface UserRowProps {
   user: UsersListItem;
@@ -29,7 +30,12 @@ export function UserRow({ user }: UserRowProps) {
           </Text>
           <MemberTitle userId={user.userId} />
         </HStack>
-        <UserKeywords keywords={user.keywords} />
+        <KeywordChips
+          keywords={user.keywords.slice(0, KEYWORD_LIMIT)}
+          size="sm"
+          hideEmpty
+          className="h-5.5 min-w-0 overflow-hidden"
+        />
         <Text truncate typography="body4" foreground={bioForeground}>
           {user.bio || EMPTY_BIO}
         </Text>
