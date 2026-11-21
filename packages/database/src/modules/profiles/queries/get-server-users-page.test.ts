@@ -226,6 +226,7 @@ describe("getServerUsersPage", () => {
     expect(await names({ sort: SERVER_USER_SORT.name })).toEqual(["a", "b", "c"]);
     expect(await names({ sort: SERVER_USER_SORT.rulebooks })).toEqual(["c", "a", "b"]);
     expect(await names({ sort: SERVER_USER_SORT.hosted })).toEqual(["b", "a", "c"]);
+    expect(await names({ sort: SERVER_USER_SORT.recruiting })).toEqual(["b", "a", "c"]);
   });
 
   it("진행 횟수: 예정과 끝난 확정 세션을 세고 취소·숨김·확정 없이 끝난 건 뺀다", async () => {

@@ -74,6 +74,11 @@ export function UsersFilterSheet({ filter, total, ruleOptions }: UsersFilterShee
       });
   }
 
+  function reset() {
+    setOpen(false);
+    router.push(toServerPath(usersHref({ ...filter, ...EMPTY_FILTER_DRAFT })));
+  }
+
   function apply() {
     setOpen(false);
     router.push(toServerPath(usersHref({ ...filter, ...draft })));
@@ -122,7 +127,7 @@ export function UsersFilterSheet({ filter, total, ruleOptions }: UsersFilterShee
             </Sheet.Body>
             <Sheet.Footer>
               <Grid cols={2} gap="100">
-                <Button variant="outline" size="lg" onClick={() => update(EMPTY_FILTER_DRAFT)}>
+                <Button variant="outline" size="lg" onClick={reset}>
                   초기화
                 </Button>
                 <Button size="lg" disabled={counting} onClick={apply}>

@@ -11,13 +11,18 @@ describe("parseUsersFilter", () => {
       cert: undefined,
       host: undefined,
       recruiting: false,
-      sort: "recent",
+      sort: "recruiting",
     });
   });
 
   it("공백은 없는 값, recruiting은 1만 켠다, 모르는 정렬은 기본", () => {
     const filter = parseUsersFilter({ q: "  ", cert: " abc ", recruiting: "true", sort: "x" });
-    expect(filter).toMatchObject({ q: undefined, cert: "abc", recruiting: false, sort: "recent" });
+    expect(filter).toMatchObject({
+      q: undefined,
+      cert: "abc",
+      recruiting: false,
+      sort: "recruiting",
+    });
     expect(parseUsersFilter({ recruiting: "1", sort: "name" })).toMatchObject({
       recruiting: true,
       sort: "name",
