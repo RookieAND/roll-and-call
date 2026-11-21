@@ -6,7 +6,8 @@ import { games } from "#db/schema";
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
 import { recruitingGamesWhere } from "./recruiting-games-where";
 
-export const GAMES_PAGE_SIZE = 9;
+// 데스크톱 카드 격자는 폭에 따라 2열이나 3열이라, 둘 다 줄 끝까지 차도록 6의 배수로 둔다.
+export const GAMES_PAGE_SIZE = 12;
 
 // 데스크톱은 두 탭 모두 "더 보기"로 늘려 page n이면 처음부터 n쪽 분량을 준다. 모바일 진행 중 탭은 그중 마지막 쪽만 보인다.
 // total은 목록과 같은 조건이라 지난 구인 [전체]에서는 취소된 카드까지 센다. 「더 보기」·쪽 번호에만 쓰고 화면 건수로 보이지 않는다.
