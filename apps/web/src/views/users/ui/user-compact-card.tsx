@@ -15,7 +15,7 @@ interface UserCompactCardProps {
   user: UsersListItem;
 }
 
-// 모바일 카드. 훑어보기 쉽게 배너는 얇은 띠, 소개는 한 줄로 줄이고, 수치는 데스크톱과 같은 칸을 한 단계 작게 쓴다.
+// 모바일 카드. 배너·아바타는 데스크톱과 같은 비율로 두고, 소개는 한 줄로 줄이고, 수치는 데스크톱과 같은 칸을 한 단계 작게 쓴다.
 export function UserCompactCard({ user }: UserCompactCardProps) {
   const bioForeground = user.bio ? "muted" : "hint";
   return (
@@ -25,12 +25,12 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
       render={<ServerLink path={`/users/${user.userId}`} />}
       className="block overflow-hidden"
     >
-      <div className="relative h-12 w-full overflow-hidden bg-primary-100">
+      <div className="relative aspect-[3/1] w-full overflow-hidden bg-primary-100">
         {user.bannerUrl && <BannerImage src={user.bannerUrl} />}
       </div>
       <VStack gap="100" className="px-150 pb-150">
-        <span className="relative -mt-300 flex w-fit rounded-full bg-surface p-050">
-          <Avatar src={user.avatarUrl} name={user.username} size="lg" />
+        <span className="relative -mt-9 flex w-fit rounded-full bg-surface p-050">
+          <Avatar src={user.avatarUrl} name={user.username} size="2xl" />
         </span>
         <HStack align="center" gap="075" className="min-w-0">
           <Text truncate typography="subtitle1">
@@ -42,7 +42,6 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
         <KeywordChips
           keywords={user.keywords.slice(0, KEYWORD_LIMIT)}
           size="md"
-          hideEmpty
           className="h-7 min-w-0 overflow-hidden"
         />
         <Text truncate typography="body4" foreground={bioForeground}>

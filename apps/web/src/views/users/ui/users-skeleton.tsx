@@ -13,10 +13,10 @@ export function UsersSkeleton() {
       <VStack gap="100" className="desktop:hidden">
         {range(CARD_COUNT).map((index) => (
           <Card.Root key={index} padding="none" className="overflow-hidden">
-            <Skeleton rounded="none" className="h-12 w-full" />
+            <Skeleton rounded="none" className="aspect-[3/1] w-full" />
             <VStack gap="100" className="px-150 pt-150 pb-150">
               <HStack align="center" gap="100">
-                <Skeleton width={48} height={48} rounded="full" />
+                <Skeleton width={60} height={60} rounded="full" />
                 <Skeleton width="40%" height={18} />
               </HStack>
               <Skeleton width="80%" height={14} />

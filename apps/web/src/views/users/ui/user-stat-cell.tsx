@@ -2,7 +2,15 @@ import { Card, HStack, cn, Text, VStack } from "@roll-and-call/ui";
 import type { LucideIcon } from "lucide-react";
 
 const SIZE = {
-  md: { padding: "sm", gap: "125", circle: "size-8", icon: 16, value: "subtitle1", label: "body4" },
+  md: {
+    padding: "sm",
+    gap: "125",
+    circle: "size-8",
+    icon: 16,
+    value: "subtitle1",
+    label: "body4",
+    tight: false,
+  },
   sm: {
     padding: "none",
     gap: "100",
@@ -10,6 +18,7 @@ const SIZE = {
     icon: 14,
     value: "subtitle2",
     label: "body5",
+    tight: true,
   },
 } as const;
 
@@ -52,11 +61,22 @@ export function UserStatCell({
       >
         <Icon size={scale.icon} aria-hidden />
       </span>
-      <VStack gap="025" className="min-w-0">
-        <Text typography={scale.value} weight="bold" numeric foreground={foreground}>
+      <VStack gap={scale.tight ? undefined : "025"} className="min-w-0">
+        <Text
+          typography={scale.value}
+          weight="bold"
+          numeric
+          tight={scale.tight}
+          foreground={foreground}
+        >
           {value}
         </Text>
-        <Text truncate typography={scale.label} foreground={tinted ? "primary" : "muted"}>
+        <Text
+          truncate
+          tight={scale.tight}
+          typography={scale.label}
+          foreground={tinted ? "primary" : "muted"}
+        >
           {label}
         </Text>
       </VStack>
