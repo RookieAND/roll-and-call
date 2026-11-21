@@ -3,7 +3,7 @@ import { cn } from "@roll-and-call/ui";
 import { cva } from "class-variance-authority";
 
 const pill = cva(
-  "relative inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 rounded-full border font-extrabold tracking-tight whitespace-nowrap",
+  "relative inline-flex max-w-full min-w-0 shrink-0 items-center gap-050 border font-extrabold tracking-tight whitespace-nowrap",
   {
     variants: {
       look: {
@@ -16,6 +16,8 @@ const pill = cva(
         developer: "badge-framed badge-frame-developer text-badge-developer",
         guildMaster: "badge-framed badge-frame-guild text-badge-guild",
       },
+      // 칭호는 알약, 메달처럼 짧은 표시는 모서리를 덜 둥글게 쓴다. 반짝임 층도 같은 모양을 따른다.
+      shape: { pill: "rounded-full", tag: "rounded-300" },
       size: {
         md: "h-8 pr-125 pl-100 text-body4",
         sm: "h-[26px] pr-100 pl-075 text-body4",
@@ -54,15 +56,24 @@ interface BadgePillProps {
   look: BadgeLook;
   tag?: string | null;
   size?: "md" | "sm" | "xs";
+  shape?: "pill" | "tag";
   className?: string;
 }
 
-export function BadgePill({ emoji, name, look, tag, size = "md", className }: BadgePillProps) {
+export function BadgePill({
+  emoji,
+  name,
+  look,
+  tag,
+  size = "md",
+  shape = "pill",
+  className,
+}: BadgePillProps) {
   const shines = look !== 1 && look !== 2 && look !== 3;
   const sparkColors = PILL_SPARK_COLORS[look];
   const glyph = look === "developer" || look === "guildMaster" ? "✧" : "✦";
   return (
-    <span title={name} className={cn(pill({ look, size }), className)}>
+    <span title={name} className={cn(pill({ look, size, shape }), className)}>
       <span
         aria-hidden
         className={cn(
@@ -81,7 +92,10 @@ export function BadgePill({ emoji, name, look, tag, size = "md", className }: Ba
       {shines && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-full animate-badge-shine"
+          className={cn(
+            "pointer-events-none absolute inset-0 animate-badge-shine",
+            shape === "tag" ? "rounded-300" : "rounded-full",
+          )}
         />
       )}
       {sparkColors &&

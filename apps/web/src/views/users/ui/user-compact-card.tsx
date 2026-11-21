@@ -33,11 +33,11 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
           <Avatar src={user.avatarUrl} name={user.username} size="2xl" />
         </span>
         <HStack align="center" gap="075" className="min-w-0">
-          <Text truncate typography="subtitle1">
+          <Text truncate typography="heading3">
             {user.username}
           </Text>
-          <MemberTitle userId={user.userId} />
-          <UserMonthMedals medals={user.medals} size="xs" />
+          <MemberTitle userId={user.userId} size="sm" />
+          <UserMonthMedals medals={user.medals} size="sm" />
         </HStack>
         <KeywordChips
           keywords={user.keywords.slice(0, KEYWORD_LIMIT)}

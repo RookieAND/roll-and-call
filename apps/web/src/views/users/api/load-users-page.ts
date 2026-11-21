@@ -1,7 +1,7 @@
 import { getServerUsersPage } from "@roll-and-call/database/profiles";
 import type { RankingMode } from "@roll-and-call/database/servers/model";
 
-import { monthLabel, monthRankMedals } from "@/entities/badge";
+import { monthRankMedals } from "@/entities/badge";
 import { loadMonthRecord } from "@/entities/badge/server";
 import { loadMemberTitleSheets } from "@/features/view-badge/server";
 import { toKst } from "@/shared/lib";
@@ -40,13 +40,12 @@ export async function loadUsersPage({
     }),
   ]);
   const medals = monthRankMedals(record);
-  const month = monthLabel(monthStart.format("YYYY-MM"));
   return {
     total,
     titleSheets,
     rows: rows.map(({ featuredBadges: _featuredBadges, joinedAt: _joinedAt, ...row }) => ({
       ...row,
-      medals: (medals.get(row.userId) ?? []).map((medal) => ({ ...medal, month })),
+      medals: medals.get(row.userId) ?? [],
     })),
   };
 }
