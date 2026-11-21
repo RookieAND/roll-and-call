@@ -17,6 +17,8 @@ interface RemoveMemberItemProps {
   leavesEmptySeat: boolean;
   // 세션 시작 뒤 대기자를 내보낼 때는 알림을 만들지 않는다.
   notifies: boolean;
+  // 선발을 마치기 전 명단은 초안이라 알림도 스레드 공지도 나가지 않는다.
+  selectionOpen: boolean;
   onDone: () => void;
 }
 
@@ -25,6 +27,7 @@ export function RemoveMemberItem({
   member,
   leavesEmptySeat,
   notifies,
+  selectionOpen,
   onDone,
 }: RemoveMemberItemProps) {
   const [confirming, setConfirming] = useState(false);
@@ -61,7 +64,7 @@ export function RemoveMemberItem({
         pending={pending}
         onConfirm={remove}
       >
-        {(leavesEmptySeat || notifies) && (
+        {(leavesEmptySeat || notifies || selectionOpen) && (
           <VStack gap="100">
             {leavesEmptySeat && (
               <Callout.Root colorPalette="warning" size="sm">
@@ -70,6 +73,14 @@ export function RemoveMemberItem({
                   빈자리는 저절로 차지 않습니다.
                   <br />
                   대기 명단에서 직접 확정해 주세요.
+                </Callout.Description>
+              </Callout.Root>
+            )}
+            {selectionOpen && (
+              <Callout.Root colorPalette="gray" size="sm">
+                <Callout.Icon />
+                <Callout.Description>
+                  선발을 마치기 전이라 알림과 스레드 공지는 나가지 않습니다.
                 </Callout.Description>
               </Callout.Root>
             )}

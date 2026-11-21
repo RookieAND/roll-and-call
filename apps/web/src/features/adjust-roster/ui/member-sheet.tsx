@@ -82,7 +82,8 @@ export function MemberSheet({ roster, member, onMarkAbsent, onClose }: MemberShe
                 gameId={gameId}
                 member={member}
                 leavesEmptySeat={isConfirmed && waitingCount > 0 && !beforeDraw}
-                notifies={!started}
+                notifies={!started && !selectionOpen}
+                selectionOpen={selectionOpen && !started}
                 onDone={onClose}
               />
             )}
