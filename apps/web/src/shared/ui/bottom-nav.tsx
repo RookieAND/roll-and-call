@@ -31,7 +31,7 @@ export function BottomNav({ slug, dots }: BottomNavProps) {
   return (
     <Grid
       ref={element}
-      cols={4}
+      cols={NAV_TABS.length}
       render={<nav aria-label="주요 메뉴" />}
       className="sticky bottom-0 z-(--rc-z-sticky) h-[calc(var(--rc-size-tabbar)+var(--rc-safe-bottom))] pb-(--rc-safe-bottom) border-t border-gray-200 bg-surface desktop:hidden"
     >

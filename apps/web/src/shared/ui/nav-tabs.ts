@@ -1,4 +1,4 @@
-import { Bell, CalendarDays, List, User } from "lucide-react";
+import { Bell, CalendarDays, List, User, Users } from "lucide-react";
 
 import { isInRouteGroup } from "./is-in-route-group";
 
@@ -7,6 +7,7 @@ import { isInRouteGroup } from "./is-in-route-group";
 export const NAV_TABS = [
   { path: "/", label: "홈", Icon: CalendarDays, dot: { key: "home", label: "막힌 할 일 있음" } },
   { path: "/games", label: "구인 목록", Icon: List, dot: null },
+  { path: "/users", label: "유저", Icon: Users, dot: null },
   {
     path: "/notifications",
     label: "알림",
