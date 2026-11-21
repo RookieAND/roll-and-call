@@ -18,7 +18,7 @@ const CHIP_GAP = { sm: "050", md: "075", lg: "075" } as const;
 interface KeywordChipsProps {
   keywords: readonly string[];
   size?: "sm" | "md" | "lg";
-  // 목록처럼 한 줄만 보이는 곳은 빈 상자 대신 아무것도 그리지 않는다.
+  // 비었을 때 아무것도 그리지 않는다. 작은 크기(sm·md)는 끄면 같은 높이의 점선 칩으로 비었다고 보인다.
   hideEmpty?: boolean;
   className?: string;
 }
@@ -32,6 +32,19 @@ export function KeywordChips({
 }: KeywordChipsProps) {
   if (keywords.length === 0) {
     if (hideEmpty) return null;
+    if (size !== "lg") {
+      return (
+        <HStack className={className}>
+          <Text
+            foreground="hint"
+            render={<span />}
+            className={cn(chip({ size }), "border border-dashed border-gray-300 font-medium")}
+          >
+            # 적어둔 성향이 없습니다
+          </Text>
+        </HStack>
+      );
+    }
     return (
       <Card.Root
         padding="none"

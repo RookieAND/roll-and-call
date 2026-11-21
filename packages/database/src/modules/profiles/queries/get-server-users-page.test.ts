@@ -229,6 +229,19 @@ describe("getServerUsersPage", () => {
     expect(await names({ sort: SERVER_USER_SORT.recruiting })).toEqual(["b", "a", "c"]);
   });
 
+  it("모집 중 정렬: 0건끼리는 운영한 세션 많은 순, 그다음 최근 가입순", async () => {
+    const { addMember, addGame, names } = await setup();
+    const veteran = await addMember("veteran", { joinedAt: new Date(NOW - 3 * HOUR) });
+    const player = await addMember("player", { joinedAt: new Date(NOW - 2 * HOUR) });
+    await addMember("newbie", { joinedAt: new Date(NOW - 1 * HOUR) });
+    await addGame(veteran, finished, [player]);
+    expect(await names({ sort: SERVER_USER_SORT.recruiting })).toEqual([
+      "veteran",
+      "newbie",
+      "player",
+    ]);
+  });
+
   it("진행 횟수: 예정과 끝난 확정 세션을 세고 취소·숨김·확정 없이 끝난 건 뺀다", async () => {
     const { addMember, addGame, page } = await setup();
     const gm = await addMember("gm");
