@@ -6,13 +6,13 @@ import {
   SERVER_USERS_PAGE_SIZE,
   type ServerUserSort,
 } from "#db/modules/profiles/model";
-import { certifications, profiles, rulebooks, serverMembers } from "#db/schema";
+import { profiles, serverMembers } from "#db/schema";
 
-import { certifiedRulebookWhere } from "./certified-rulebook-where";
 import { countServerUsers } from "./count-server-users";
 import { memberSessionCountsSql } from "./member-session-counts-sql";
 import { recruitingCountsByGm } from "./recruiting-counts-by-gm";
 import { serverUsersWhere } from "./server-users-where";
+import { upcomingCountsByPlayer } from "./upcoming-counts-by-player";
 
 // ponytail: 정렬을 위해 멤버 전원의 건수를 매번 센다. 수백 명까지는 충분하고, 수천 명이 되면 server_members (server_id, joined_at)와 닉네임 pg_trgm 인덱스를 검토한다.
 // 더 보기 방식이라 page n이면 처음부터 n쪽 분량을 준다.
@@ -37,20 +37,11 @@ export async function getServerUsersPage({
   const filter = { serverId, q, certifiedRulebookId, hostedRulebookId, recruitingOnly };
   const current = Math.max(1, page);
   const recruiting = recruitingCountsByGm({ serverId, now }).as("recruiting");
-  const certified = db
-    .select({
-      userId: certifications.userId,
-      count: sql<number>`count(*)::int`.as("certified_count"),
-    })
-    .from(certifications)
-    .innerJoin(rulebooks, eq(rulebooks.id, certifications.rulebookId))
-    .where(certifiedRulebookWhere(serverId))
-    .groupBy(certifications.userId)
-    .as("certified");
+  const upcoming = upcomingCountsByPlayer({ serverId, now }).as("upcoming");
   const { hosted, playedSingle, playedMulti } = memberSessionCountsSql({ serverId, now });
 
   const recruitingCount = sql<number>`coalesce(${recruiting.count}, 0)::int`;
-  const certifiedRulebookCount = sql<number>`coalesce(${certified.count}, 0)::int`;
+  const upcomingCount = sql<number>`coalesce(${upcoming.count}, 0)::int`;
   const hostedCount = sql<number>`coalesce(${hosted.count}, 0)::int`;
   const playedCount = sql<number>`(coalesce(${playedSingle.count}, 0) + coalesce(${playedMulti.count}, 0))::int`;
   // 모집 중인 구인이 없는 사람이 대부분이라 같은 수끼리는 운영한 세션 많은 순, 그다음 최근 가입순으로 둔다.
@@ -78,14 +69,14 @@ export async function getServerUsersPage({
         featuredBadges: serverMembers.featuredBadges,
         joinedAt: serverMembers.joinedAt,
         recruitingCount,
-        certifiedRulebookCount,
+        upcomingCount,
         hostedCount,
         playedCount,
       })
       .from(serverMembers)
       .innerJoin(profiles, eq(profiles.id, serverMembers.userId))
       .leftJoin(recruiting, eq(recruiting.gmId, serverMembers.userId))
-      .leftJoin(certified, eq(certified.userId, serverMembers.userId))
+      .leftJoin(upcoming, eq(upcoming.userId, serverMembers.userId))
       .leftJoin(hosted, eq(hosted.userId, serverMembers.userId))
       .leftJoin(playedSingle, eq(playedSingle.userId, serverMembers.userId))
       .leftJoin(playedMulti, eq(playedMulti.userId, serverMembers.userId))
