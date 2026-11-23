@@ -151,7 +151,7 @@ describe("getServerUsersPage", () => {
   });
 
   it("인증 필터는 반려·지운 기록을 세지 않고 룰북 ID가 잘못되면 아무도 안 맞는다", async () => {
-    const { serverId, addMember, addRulebook, names, page } = await setup();
+    const { serverId, addMember, addRulebook, names } = await setup();
     const rulebook = await addRulebook("크툴루 7판");
     const ok = await addMember("ok");
     const revoked = await addMember("revoked");
@@ -164,12 +164,22 @@ describe("getServerUsersPage", () => {
     ]);
     expect(await names({ certifiedRulebookId: rulebook })).toEqual(["ok"]);
     expect(await names({ certifiedRulebookId: "not-a-uuid" })).toEqual([]);
-    expect((await page()).rows.find((row) => row.username === "ok")?.certifiedRulebookCount).toBe(
-      1,
+  });
+
+  it("참여 예정: 끝나지 않은 공개 구인의 확정 참가만 세고 대기·취소·비공개·끝난 건 뺀다", async () => {
+    const { addMember, addGame, page } = await setup();
+    const gm = await addMember("gm");
+    const player = await addMember("player");
+    await addGame(gm, upcoming, [player]);
+    await addGame(gm, {}, [player]);
+    await addGame(gm, {}, [], [player]);
+    await addGame(gm, { ...upcoming, cancelledAt: new Date(), cancelKind: "gm" }, [player]);
+    await addGame(gm, { ...upcoming, visibility: "private" }, [player]);
+    await addGame(gm, finished, [player]);
+    const counts = Object.fromEntries(
+      (await page()).rows.map((row) => [row.username, row.upcomingCount]),
     );
-    expect(
-      (await page()).rows.find((row) => row.username === "revoked")?.certifiedRulebookCount,
-    ).toBe(0);
+    expect(counts).toEqual({ gm: 0, player: 2 });
   });
 
   it("모집 룰 필터는 3개월보다 오래됐거나 숨긴 구인을 보지 않는다", async () => {

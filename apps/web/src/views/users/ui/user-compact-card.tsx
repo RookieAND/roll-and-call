@@ -1,5 +1,5 @@
 import { Avatar, Card, Grid, HStack, Text, VStack } from "@roll-and-call/ui";
-import { Book, Flag, Megaphone, Users } from "lucide-react";
+import { CalendarClock, Flag, Megaphone, Users } from "lucide-react";
 
 import { KeywordChips } from "@/entities/profile";
 import { MemberTitle } from "@/features/view-badge";
@@ -57,9 +57,9 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
           />
           <UserStatCell
             size="sm"
-            icon={Book}
-            value={user.certifiedRulebookCount}
-            label="인증 룰북"
+            icon={CalendarClock}
+            value={user.upcomingCount}
+            label="참여 예정 세션"
           />
           <UserStatCell size="sm" icon={Flag} value={user.hostedCount} label="운영한 세션" />
           <UserStatCell size="sm" icon={Users} value={user.playedCount} label="참여한 세션" />
