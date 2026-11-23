@@ -60,6 +60,7 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
             icon={CalendarClock}
             value={user.upcomingCount}
             label="참여 예정 세션"
+            tinted={user.upcomingCount > 0}
           />
           <UserStatCell size="sm" icon={Flag} value={user.hostedCount} label="운영한 세션" />
           <UserStatCell size="sm" icon={Users} value={user.playedCount} label="참여한 세션" />

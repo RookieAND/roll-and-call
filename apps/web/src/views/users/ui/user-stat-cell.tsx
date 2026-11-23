@@ -31,7 +31,7 @@ interface UserStatCellProps {
   size?: keyof typeof SIZE;
 }
 
-// 아이콘은 원형 바탕에 넣어 두 줄 글자 옆에 붙여 둔다. 모집 중이 있으면 칸은 연한 틴트, 아이콘 원은 진한 primary로 바꿔 눈에 띄게 한다.
+// 아이콘은 원형 바탕에 넣어 두 줄 글자 옆에 붙여 둔다. 모집 중·참여 예정이 있으면 칸은 연한 틴트, 아이콘 원은 진한 primary로 바꿔 눈에 띄게 한다.
 export function UserStatCell({
   icon: Icon,
   value,
