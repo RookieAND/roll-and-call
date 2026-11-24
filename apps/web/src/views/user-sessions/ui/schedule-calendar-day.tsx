@@ -23,7 +23,7 @@ export function ScheduleCalendarDay({
   past,
   href,
 }: ScheduleCalendarDayProps) {
-  if (!cell.inMonth) return <span aria-hidden className="h-11" />;
+  if (!cell.inMonth) return <span aria-hidden className="h-13" />;
 
   const circleTone = cn(selected && "bg-primary-600", !selected && today && "bg-primary-50");
   const dayTone = calendarDayTone({ selected, today, past, weekday: cell.weekday });
@@ -34,7 +34,7 @@ export function ScheduleCalendarDay({
     mark?.past && "진행·완료 있음",
   ].filter(Boolean);
   const body = (
-    <VStack align="center" justify="center" gap="050" className="h-11">
+    <VStack align="center" justify="center" gap="075" className="h-13">
       <span className={cn("flex size-7.5 items-center justify-center rounded-full", circleTone)}>
         <Text typography="body3" weight={dayWeight} numeric className={dayTone}>
           {cell.day}
