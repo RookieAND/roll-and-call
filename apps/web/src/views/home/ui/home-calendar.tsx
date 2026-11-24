@@ -7,10 +7,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { useServerPath } from "@/shared/lib";
+import { buildMonthCells, DATE_KEY_FORMAT, useServerPath } from "@/shared/lib";
 
-import { buildMonthCells } from "../model/build-month-cells";
-import { DATE_KEY_FORMAT } from "../model/date-key-format";
 import { holidayQuery } from "../model/holiday-query";
 import type { CalendarSession } from "../model/to-calendar-sessions";
 import { WEEKDAY_TONE } from "../model/weekday-tone";

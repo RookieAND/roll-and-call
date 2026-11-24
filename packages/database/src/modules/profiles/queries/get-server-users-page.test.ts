@@ -115,6 +115,7 @@ async function setup() {
 }
 
 const upcoming = { confirmedAt: new Date(NOW + 48 * HOUR) };
+const inProgress = { confirmedAt: new Date(NOW - HOUR) };
 const finished = { confirmedAt: new Date(NOW - 48 * HOUR) };
 
 describe("getServerUsersPage", () => {
@@ -166,7 +167,7 @@ describe("getServerUsersPage", () => {
     expect(await names({ certifiedRulebookId: "not-a-uuid" })).toEqual([]);
   });
 
-  it("참여 예정: 끝나지 않은 공개 구인의 확정 참가만 세고 대기·취소·비공개·끝난 건 뺀다", async () => {
+  it("참여 예정: 시작 전 구인의 확정 참가만 세고(비공개 포함) 대기·취소·진행 중·끝난 건 뺀다", async () => {
     const { addMember, addGame, page } = await setup();
     const gm = await addMember("gm");
     const player = await addMember("player");
@@ -175,11 +176,12 @@ describe("getServerUsersPage", () => {
     await addGame(gm, {}, [], [player]);
     await addGame(gm, { ...upcoming, cancelledAt: new Date(), cancelKind: "gm" }, [player]);
     await addGame(gm, { ...upcoming, visibility: "private" }, [player]);
+    await addGame(gm, inProgress, [player]);
     await addGame(gm, finished, [player]);
     const counts = Object.fromEntries(
       (await page()).rows.map((row) => [row.username, row.upcomingCount]),
     );
-    expect(counts).toEqual({ gm: 0, player: 2 });
+    expect(counts).toEqual({ gm: 0, player: 3 });
   });
 
   it("모집 룰 필터는 3개월보다 오래됐거나 숨긴 구인을 보지 않는다", async () => {
@@ -222,6 +224,9 @@ describe("getServerUsersPage", () => {
     const a = await addMember("a", { joinedAt: new Date(NOW - 3 * HOUR) });
     const b = await addMember("b", { joinedAt: new Date(NOW - 1 * HOUR) });
     await addMember("c", { joinedAt: new Date(NOW - 2 * HOUR) });
+    await addGame(b, finished, [a]);
+    await addGame(b, inProgress, [a]);
+    await addGame(a, finished, [b]);
     await addGame(b);
     await addGame(b);
     await addGame(a);
@@ -244,11 +249,12 @@ describe("getServerUsersPage", () => {
     ]);
   });
 
-  it("진행 횟수: 예정과 끝난 확정 세션을 세고 취소·숨김·확정 없이 끝난 건 뺀다", async () => {
+  it("진행 횟수: 진행 중·끝난 확정 세션을 세고 시작 전·취소·숨김·확정 없이 끝난 건 뺀다", async () => {
     const { addMember, addGame, page } = await setup();
     const gm = await addMember("gm");
     const player = await addMember("player");
     await addGame(gm, upcoming, [player]);
+    await addGame(gm, inProgress, [player]);
     await addGame(gm, finished, [player]);
     await addGame(gm, finished, []);
     const cancelled = await addGame(gm, upcoming, [player]);

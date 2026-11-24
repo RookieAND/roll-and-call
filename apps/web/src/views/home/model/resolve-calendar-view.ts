@@ -1,6 +1,4 @@
-import { dayjs, KST, toKst } from "@/shared/lib";
-
-import { DATE_KEY_FORMAT } from "./date-key-format";
+import { DATE_KEY_FORMAT, dayjs, KST, toKst } from "@/shared/lib";
 
 export function resolveCalendarView(date: string | undefined, now: Date = new Date()) {
   const todayKey = toKst(now).format(DATE_KEY_FORMAT);

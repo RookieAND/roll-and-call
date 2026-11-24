@@ -5,8 +5,8 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 
 import { useServerPath } from "@/shared/lib";
+import type { MonthCell } from "@/shared/lib";
 
-import type { MonthCell } from "../model/build-month-cells";
 import { CALENDAR_CELL_TONE, calendarCellState } from "../model/calendar-cell-tone";
 import { MAX_CALENDAR_DOTS, MAX_CALENDAR_LINES, splitDotRows } from "../model/split-dot-rows";
 import type { CalendarSession } from "../model/to-calendar-sessions";

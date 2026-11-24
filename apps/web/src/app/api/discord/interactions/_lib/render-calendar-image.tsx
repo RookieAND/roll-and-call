@@ -1,7 +1,8 @@
 import type { Dayjs } from "dayjs";
 import { ImageResponse } from "next/og";
 
-import type { buildMonthCells, groupSessionsByDay } from "@/views/home";
+import type { buildMonthCells } from "@/shared/lib";
+import type { groupSessionsByDay } from "@/views/home";
 import { MAX_CALENDAR_LINES } from "@/views/home";
 
 import { loadPretendard } from "./load-pretendard";

@@ -25,8 +25,10 @@ export async function loadProfile({
   const now = new Date();
   return {
     profile,
+    hosted,
+    joined,
     sessions: buildProfileSessions({ hosted, joined, userId, viewerId, now }),
-    counts: countRecordSessions({ hosted, joined, userId, now, includeUpcoming: true }),
+    counts: countRecordSessions({ hosted, joined, userId, now, includeInProgress: true }),
     absences: recentAbsences({ joined, userId }),
   };
 }
