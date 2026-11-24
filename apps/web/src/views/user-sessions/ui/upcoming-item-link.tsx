@@ -15,6 +15,8 @@ export function UpcomingItemLink({ row, withThumbnail = true }: UpcomingItemLink
   const subtitle = row.roundCount > 1 ? `${row.rule} · ${row.roundCount}회차` : row.rule;
   const badgePalette = row.recruiting ? "success" : "gray";
   const badgeLabel = row.recruiting ? "모집 중" : "모집 마감";
+  // 데스크톱은 줄이 넓어 제목을 한 단계 키운다(시안 05-5).
+  const titleClass = withThumbnail ? "desktop:text-heading3" : undefined;
 
   return (
     <HStack
@@ -36,7 +38,7 @@ export function UpcomingItemLink({ row, withThumbnail = true }: UpcomingItemLink
         </div>
       )}
       <VStack gap="050" className="min-w-0 flex-1">
-        <Text typography="subtitle1" truncate>
+        <Text typography="subtitle1" truncate className={titleClass}>
           {row.title}
         </Text>
         <Text typography="body4" foreground="muted" truncate>
