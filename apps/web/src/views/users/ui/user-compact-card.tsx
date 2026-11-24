@@ -8,7 +8,7 @@ import { BannerImage, ServerLink } from "@/shared/ui";
 import { EMPTY_BIO } from "../model/empty-bio";
 import { KEYWORD_LIMIT } from "../model/keyword-limit";
 import type { UsersListItem } from "../model/users-list-item";
-import { UserMonthMedals } from "./user-month-medals";
+import { UserMonthRibbons } from "./user-month-ribbons";
 import { UserStatCell } from "./user-stat-cell";
 
 interface UserCompactCardProps {
@@ -23,11 +23,12 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
       padding="none"
       interactive
       render={<ServerLink path={`/users/${user.userId}`} />}
-      className="block overflow-hidden"
+      className="relative block overflow-hidden"
     >
       <div className="relative aspect-[3/1] w-full overflow-hidden bg-primary-100">
         {user.bannerUrl && <BannerImage src={user.bannerUrl} />}
       </div>
+      <UserMonthRibbons medals={user.medals} size="sm" />
       <VStack gap="100" className="px-150 pb-150">
         <span className="relative -mt-9 flex w-fit rounded-full bg-surface p-050">
           <Avatar src={user.avatarUrl} name={user.username} size="2xl" />
@@ -37,7 +38,6 @@ export function UserCompactCard({ user }: UserCompactCardProps) {
             {user.username}
           </Text>
           <MemberTitle userId={user.userId} size="sm" />
-          <UserMonthMedals medals={user.medals} size="sm" />
         </HStack>
         <KeywordChips
           keywords={user.keywords.slice(0, KEYWORD_LIMIT)}

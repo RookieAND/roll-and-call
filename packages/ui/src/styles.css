@@ -164,6 +164,18 @@
 
 :root {
   --rc-color-gray-000: #ffffff;
+
+  /* 이달의 순위 리본. 인라인 var()로만 쓰고 테마와 무관한 고정 색이라 다크 값을 따로 두지 않는다. */
+  --ribbon-gold-from: var(--rc-color-gold-300);
+  --ribbon-gold-to: var(--rc-color-gold-400);
+  --ribbon-gold-ink: var(--rc-color-gold-975);
+  --ribbon-silver-from: var(--rc-color-gray-100);
+  --ribbon-silver-to: var(--rc-color-gray-300);
+  --ribbon-silver-ink: var(--rc-color-gray-850);
+  --ribbon-bronze-from: var(--rc-color-amber-600);
+  --ribbon-bronze-to: var(--rc-color-amber-700);
+  --ribbon-bronze-ink: var(--rc-color-gray-000);
+  --ribbon-shadow: rgb(23 23 28 / 0.22);
   --rc-color-gray-025: #fafafc;
   --rc-color-gray-040: #f7f7fa;
   --rc-color-gray-050: #f2f2f6;
