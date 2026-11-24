@@ -82,28 +82,29 @@ describe("countRecordSessions", () => {
   });
 });
 
-describe("countRecordSessions · includeUpcoming", () => {
+describe("countRecordSessions · includeInProgress", () => {
   const count = (games: SessionGame[]) =>
     countRecordSessions({
       hosted: games,
       joined: games,
       userId: "me",
       now: NOW,
-      includeUpcoming: true,
-      includeWaiting: true,
+      includeInProgress: true,
     });
+  const running = { confirmedAt: new Date(NOW.getTime() - 60 * 60 * 1000) };
 
-  it("끝나지 않은 운영·확정·신청 세션도 세고 취소된 구인은 뺀다", () => {
+  it("시작했지만 끝나지 않은 세션은 세고 취소된 구인은 뺀다", () => {
+    expect(count([game(running)])).toEqual({ hosted: 1, played: 1 });
+    expect(count([game({ ...running, cancelledAt: at(-1) })])).toEqual({ hosted: 0, played: 0 });
+  });
+
+  it("시작 전 세션과 대기는 세지 않는다", () => {
     const waiting = game({
-      confirmedAt: at(1),
+      ...running,
       participants: [seat({ userId: "me", status: PARTICIPANT_STATUS.waiting })],
     });
-    expect(count([game({ confirmedAt: at(1) }), waiting, game({ confirmedAt: null })])).toEqual({
-      hosted: 3,
-      played: 3,
-    });
-    expect(count([game({ confirmedAt: at(1), cancelledAt: at(-1) })])).toEqual({
-      hosted: 0,
+    expect(count([game({ confirmedAt: at(1) }), game({ confirmedAt: null }), waiting])).toEqual({
+      hosted: 1,
       played: 0,
     });
   });

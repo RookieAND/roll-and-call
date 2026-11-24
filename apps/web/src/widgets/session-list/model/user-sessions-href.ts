@@ -1,6 +1,14 @@
-import { SESSION_ROLE, type SessionRole } from "@/entities/game";
+import type { SessionRole } from "@/entities/game";
 
-export function userSessionsHref({ userId, role }: { userId: string; role: SessionRole }): string {
-  const base = `/users/${userId}/sessions`;
-  return role === SESSION_ROLE.host ? `${base}?tab=${role}` : base;
+export function userSessionsHref({
+  userId,
+  role,
+  past = false,
+}: {
+  userId: string;
+  role: SessionRole;
+  past?: boolean;
+}): string {
+  const base = `/users/${userId}/sessions/${role}`;
+  return past ? `${base}?tab=past` : base;
 }

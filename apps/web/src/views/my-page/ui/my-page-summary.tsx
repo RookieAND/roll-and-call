@@ -30,8 +30,7 @@ export async function MyPageSummary() {
     joined,
     userId: user.id,
     now,
-    includeUpcoming: true,
-    includeWaiting: true,
+    includeInProgress: true,
   });
   const absences = recentAbsences({ joined, userId: user.id, now });
   const held = heldBadges(badgeRecords, now);

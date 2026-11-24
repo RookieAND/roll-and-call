@@ -87,14 +87,14 @@ export async function ProfileSummary({
             count: hosted,
             href: serverPath({
               slug: server.slug,
-              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.host }),
+              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.host, past: true }),
             }),
           }}
           played={{
             count: played,
             href: serverPath({
               slug: server.slug,
-              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.player }),
+              path: userSessionsHref({ userId: profile.id, role: SESSION_ROLE.player, past: true }),
             }),
           }}
         />

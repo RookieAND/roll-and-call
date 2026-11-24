@@ -1,21 +1,10 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { getCurrentServer, getProfile, requireMembership } from "@/shared/server";
-import { UserSessionsView } from "@/views/user-sessions";
+import { SESSION_ROLE } from "@/entities/game";
+import { serverPath } from "@/shared/lib";
+import { getCurrentServer, requireMembership } from "@/shared/server";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  await requireMembership();
-  const { id } = await params;
-  const server = await getCurrentServer();
-  const profile = await getProfile(server.id, id);
-  const name = profile?.username ?? "유저";
-  return { title: `${name}의 세션` };
-}
-
+// 옛 ?tab=host 주소가 계속 열리도록 역할 경로로 보낸다.
 export default async function Page({
   params,
   searchParams,
@@ -24,6 +13,7 @@ export default async function Page({
   searchParams: Promise<{ tab?: string }>;
 }) {
   await requireMembership();
-  const [{ id }, { tab }] = await Promise.all([params, searchParams]);
-  return <UserSessionsView id={id} tab={tab} />;
+  const [{ id }, { tab }, server] = await Promise.all([params, searchParams, getCurrentServer()]);
+  const role = tab === SESSION_ROLE.host ? SESSION_ROLE.host : SESSION_ROLE.player;
+  redirect(serverPath({ slug: server.slug, path: `/users/${id}/sessions/${role}` }));
 }
