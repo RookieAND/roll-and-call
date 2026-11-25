@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import {
+  Button,
+  Field,
+  HStack,
+  Text,
+  TextInput,
+  VStack,
+} from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import type { RulebookDetail } from "@/entities/rulebook/server";
@@ -12,6 +19,7 @@ import { CertPolicyField } from "./cert-policy-field";
 import { CoveredBooksField } from "./covered-books-field";
 import { HomebrewLockedFields } from "./homebrew-locked-fields";
 import { KindCards } from "./kind-cards";
+import { CoreModeField } from "./core-mode-field";
 import { MiniRuleField } from "./mini-rule-field";
 import { MobileFormSection } from "./mobile-form-section";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
@@ -26,7 +34,11 @@ interface MobileRulebookEditFormProps {
 }
 
 // 입력란은 한 줄에 하나씩 쌓고, 저장과 숨김은 화면 아래에 고정한다.
-export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRulebookEditFormProps) {
+export function MobileRulebookEditForm({
+  rulebook,
+  viewerId,
+  lead,
+}: MobileRulebookEditFormProps) {
   const form = useRulebookEditForm({ rulebook, viewerId });
   const { draft, pending } = form;
   const homebrew = Boolean(rulebook.homebrew);
@@ -36,7 +48,8 @@ export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRuleb
   return (
     <>
       <VStack gap="150" className="p-150 pb-200">
-        {(form.saving.networkError && !form.dialogOpen) || form.unhiding.networkError ? (
+        {(form.saving.networkError && !form.dialogOpen) ||
+        form.unhiding.networkError ? (
           <ActionNetworkError />
         ) : null}
         {lead}
@@ -57,7 +70,11 @@ export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRuleb
             disabled={pending}
             lockedFields={
               homebrew ? (
-                <HomebrewLockedFields stacked rulebook={rulebook} idPrefix={ID_PREFIX} />
+                <HomebrewLockedFields
+                  stacked
+                  rulebook={rulebook}
+                  idPrefix={ID_PREFIX}
+                />
               ) : undefined
             }
             onChange={form.change}
@@ -65,7 +82,9 @@ export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRuleb
             {homebrew ? null : (
               <Field.Root
                 label="종류"
-                description={form.certifiedCount > 0 ? form.kindDescription : undefined}
+                description={
+                  form.certifiedCount > 0 ? form.kindDescription : undefined
+                }
               >
                 <KindCards
                   kind={draft.kind}
@@ -96,6 +115,13 @@ export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRuleb
             </MobileFormSection>
           </>
         )}
+        <MobileFormSection title="기본 룰북 조건">
+          <CoreModeField
+            any={form.coreMode === "any"}
+            disabled={pending || !form.miniRuleEditable}
+            onChange={form.setCoreMode}
+          />
+        </MobileFormSection>
         <MobileFormSection title="미니룰">
           <MiniRuleField
             miniRule={form.miniRule}
@@ -154,7 +180,11 @@ export function MobileRulebookEditForm({ rulebook, viewerId, lead }: MobileRuleb
           </Button>
         </HStack>
       </MobileActionBar>
-      <RulebookEditDialogs rulebook={rulebook} viewerId={viewerId} form={form} />
+      <RulebookEditDialogs
+        rulebook={rulebook}
+        viewerId={viewerId}
+        form={form}
+      />
     </>
   );
 }

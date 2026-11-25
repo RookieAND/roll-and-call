@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Field, HStack, Text, TextInput, VStack } from "@roll-and-call/ui";
+import {
+  Button,
+  Field,
+  HStack,
+  Text,
+  TextInput,
+  VStack,
+} from "@roll-and-call/ui";
 import type { ReactNode } from "react";
 
 import type { RulebookDetail } from "@/entities/rulebook/server";
@@ -12,6 +19,7 @@ import { CertPolicyField } from "./cert-policy-field";
 import { CoveredBooksField } from "./covered-books-field";
 import { HomebrewLockedFields } from "./homebrew-locked-fields";
 import { KindCards } from "./kind-cards";
+import { CoreModeField } from "./core-mode-field";
 import { MiniRuleField } from "./mini-rule-field";
 import { RulebookEditDialogs } from "./rulebook-edit-dialogs";
 
@@ -23,7 +31,12 @@ interface RulebookEditFormProps {
   lead?: ReactNode;
 }
 
-export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEditFormProps) {
+export function RulebookEditForm({
+  rulebook,
+  viewerId,
+  aside,
+  lead,
+}: RulebookEditFormProps) {
   const form = useRulebookEditForm({ rulebook, viewerId });
   const { draft, pending } = form;
   const homebrew = Boolean(rulebook.homebrew);
@@ -41,15 +54,22 @@ export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEd
         nameError={form.nameError}
         disabled={pending}
         lockedFields={
-          homebrew ? <HomebrewLockedFields rulebook={rulebook} idPrefix="rulebook" /> : undefined
+          homebrew ? (
+            <HomebrewLockedFields rulebook={rulebook} idPrefix="rulebook" />
+          ) : undefined
         }
         onChange={form.change}
       >
         {homebrew ? null : (
-          <VStack gap="175" className="border-t border-(--rc-color-border-subtle) pt-175">
+          <VStack
+            gap="175"
+            className="border-t border-(--rc-color-border-subtle) pt-175"
+          >
             <Field.Root
               label="종류"
-              description={form.certifiedCount > 0 ? form.kindDescription : undefined}
+              description={
+                form.certifiedCount > 0 ? form.kindDescription : undefined
+              }
             >
               <KindCards
                 kind={draft.kind}
@@ -67,7 +87,8 @@ export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEd
     <VStack data-full-bleed className="min-h-0 flex-1">
       <div className="mx-auto grid w-full max-w-page flex-1 grid-cols-[minmax(0,1fr)_320px] items-start gap-200 p-200">
         <VStack gap="200" className="min-w-0">
-          {(form.saving.networkError && !form.dialogOpen) || form.unhiding.networkError ? (
+          {(form.saving.networkError && !form.dialogOpen) ||
+          form.unhiding.networkError ? (
             <ActionNetworkError />
           ) : null}
           {lead}
@@ -98,6 +119,13 @@ export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEd
               </Panel>
             </>
           )}
+          <Panel title="기본 룰북 조건" bodyClassName="p-175">
+            <CoreModeField
+              any={form.coreMode === "any"}
+              disabled={pending || !form.miniRuleEditable}
+              onChange={form.setCoreMode}
+            />
+          </Panel>
           <Panel title="미니룰" bodyClassName="p-175">
             <MiniRuleField
               miniRule={form.miniRule}
@@ -113,7 +141,12 @@ export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEd
         gap="125"
         className="sticky bottom-0 border-t border-gray-200 bg-surface px-page py-150"
       >
-        <Field.Root label="변경 사유" htmlFor="rulebook-reason" required className="flex-1">
+        <Field.Root
+          label="변경 사유"
+          htmlFor="rulebook-reason"
+          required
+          className="flex-1"
+        >
           <TextInput
             id="rulebook-reason"
             value={form.reason}
@@ -150,7 +183,11 @@ export function RulebookEditForm({ rulebook, viewerId, aside, lead }: RulebookEd
           저장
         </Button>
       </HStack>
-      <RulebookEditDialogs rulebook={rulebook} viewerId={viewerId} form={form} />
+      <RulebookEditDialogs
+        rulebook={rulebook}
+        viewerId={viewerId}
+        form={form}
+      />
     </VStack>
   );
 }

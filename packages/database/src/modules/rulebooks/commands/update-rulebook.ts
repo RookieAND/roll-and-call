@@ -44,13 +44,22 @@ export async function updateRulebook({
       .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
     if (!rulebook) throw new Error("룰북을 찾을 수 없습니다");
     const [homebrew] = await tx
-      .select({ rulebookId: homebrewRules.rulebookId, category: rulebookCategories.name })
+      .select({
+        rulebookId: homebrewRules.rulebookId,
+        category: rulebookCategories.name,
+      })
       .from(homebrewRules)
-      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebook.categoryId))
+      .innerJoin(
+        rulebookCategories,
+        eq(rulebookCategories.id, rulebook.categoryId),
+      )
       .where(eq(homebrewRules.rulebookId, id));
     if (
       homebrew &&
-      changesLockedHomebrewField({ current: { ...rulebook, category: homebrew.category }, fields })
+      changesLockedHomebrewField({
+        current: { ...rulebook, category: homebrew.category },
+        fields,
+      })
     ) {
       return { ok: false, locked: true };
     }
@@ -67,15 +76,27 @@ export async function updateRulebook({
       );
     if (duplicate) return { ok: false, duplicate: true };
     const before = await describeRulebook({ executor: tx, serverId, id });
-    const values = await toRulebookValues({ executor: tx, serverId, fields, selfId: id });
+    const values = await toRulebookValues({
+      executor: tx,
+      serverId,
+      fields,
+      selfId: id,
+    });
     await tx.update(rulebooks).set(values).where(eq(rulebooks.id, id));
-    if (!isUndefined(fields.miniRule)) {
+    const categoryPatch = {
+      ...(isUndefined(fields.miniRule) ? {} : { miniRule: fields.miniRule }),
+      ...(isUndefined(fields.coreMode) ? {} : { coreMode: fields.coreMode }),
+    };
+    if (Object.keys(categoryPatch).length > 0) {
       await tx
         .update(rulebookCategories)
-        .set({ miniRule: fields.miniRule })
+        .set(categoryPatch)
         .where(eq(rulebookCategories.id, values.categoryId));
     }
-    const pointsHere = and(eq(rulebooks.serverId, serverId), eq(rulebooks.supersedesId, id));
+    const pointsHere = and(
+      eq(rulebooks.serverId, serverId),
+      eq(rulebooks.supersedesId, id),
+    );
     await tx
       .update(rulebooks)
       .set({ supersedesId: null })
@@ -94,9 +115,17 @@ export async function updateRulebook({
     await removeEmptyCategories({ executor: tx, serverId });
     await relinkGames({ executor: tx, serverId });
     if (values.name !== rulebook.name) {
-      await renameGameSupplements({ executor: tx, serverId, rulebookId: id, name: values.name });
+      await renameGameSupplements({
+        executor: tx,
+        serverId,
+        rulebookId: id,
+        name: values.name,
+      });
     }
-    const changes = rulebookChanges(before, await describeRulebook({ executor: tx, serverId, id }));
+    const changes = rulebookChanges(
+      before,
+      await describeRulebook({ executor: tx, serverId, id }),
+    );
     const label = rulebookLabel(fields);
     await recordAudit({
       executor: tx,

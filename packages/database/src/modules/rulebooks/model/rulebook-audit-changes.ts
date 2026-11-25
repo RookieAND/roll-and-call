@@ -1,4 +1,9 @@
-import { addedChanges, compactChanges, listChange, scalarChange } from "#db/modules/audit";
+import {
+  addedChanges,
+  compactChanges,
+  listChange,
+  scalarChange,
+} from "#db/modules/audit";
 import type { RulebookDescription } from "#db/modules/rulebooks/model/rulebook-description";
 import type { AuditChange } from "#db/schema/moderation";
 
@@ -10,6 +15,8 @@ const KIND_LABEL = {
   handbook: "핸드북",
 } as const;
 
+const coreModeLabel = (coreMode: string) =>
+  coreMode === "any" ? "한 권만 인증" : "모두 인증";
 const miniRuleLabel = (miniRule: boolean) => (miniRule ? "켜짐" : "꺼짐");
 
 // 활동 기록에 남기는 칸 이름은 어드민 룰북 화면의 입력 이름과 같다.
@@ -40,11 +47,28 @@ export function rulebookChanges(
     scalarChange("판본", before.edition, after.edition),
     scalarChange("분류", before.category, after.category),
     scalarChange("분류 약어", before.categoryAlias, after.categoryAlias),
-    scalarChange("미니룰", miniRuleLabel(before.miniRule), miniRuleLabel(after.miniRule)),
+    scalarChange(
+      "미니룰",
+      miniRuleLabel(before.miniRule),
+      miniRuleLabel(after.miniRule),
+    ),
+    scalarChange(
+      "기본 룰북 조건",
+      coreModeLabel(before.coreMode),
+      coreModeLabel(after.coreMode),
+    ),
     scalarChange("종류", KIND_LABEL[before.kind], KIND_LABEL[after.kind]),
     scalarChange("포함하는 구판", before.supersedes, after.supersedes),
-    listChange("포함하는 서플리먼트", before.includedSupplements, after.includedSupplements),
+    listChange(
+      "포함하는 서플리먼트",
+      before.includedSupplements,
+      after.includedSupplements,
+    ),
     listChange("다른 이름", before.aliases, after.aliases),
-    scalarChange("인증", certPolicyLabel(before.certRequired), certPolicyLabel(after.certRequired)),
+    scalarChange(
+      "인증",
+      certPolicyLabel(before.certRequired),
+      certPolicyLabel(after.certRequired),
+    ),
   ]);
 }

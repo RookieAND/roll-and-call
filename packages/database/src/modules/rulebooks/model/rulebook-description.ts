@@ -1,5 +1,7 @@
 import type { RulebookKind } from "#db/schema";
 
+import type { CoreMode } from "./core-modes";
+
 export interface RulebookDescription {
   name: string;
   edition: string;
@@ -11,4 +13,5 @@ export interface RulebookDescription {
   aliases: string[];
   certRequired: boolean;
   miniRule: boolean;
+  coreMode: CoreMode;
 }

@@ -4,7 +4,11 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { idSchema, parseActionInput } from "@/shared/lib";
-import { getCurrentServer, requireStaff, updateRulebook } from "@/shared/server";
+import {
+  getCurrentServer,
+  requireStaff,
+  updateRulebook,
+} from "@/shared/server";
 
 import type { RulebookDraft } from "../model/rulebook-draft";
 import { rulebookDraftSchema } from "../model/rulebook-draft-schema";
@@ -15,6 +19,7 @@ const schema = z.object({
   draft: rulebookDraftSchema,
   reason: z.string().max(2000),
   miniRule: z.boolean().optional(),
+  coreMode: z.enum(["all", "any"]).optional(),
 });
 
 export async function submitRulebookSave(
@@ -22,10 +27,21 @@ export async function submitRulebookSave(
   draft: RulebookDraft,
   reason: string,
   miniRule?: boolean,
+  coreMode?: "all" | "any",
 ) {
   const staff = await requireStaff();
-  const input = parseActionInput(schema, { id, draft, reason, miniRule });
-  const fields = { ...toRulebookFields(input.draft), miniRule: input.miniRule };
+  const input = parseActionInput(schema, {
+    id,
+    draft,
+    reason,
+    miniRule,
+    coreMode,
+  });
+  const fields = {
+    ...toRulebookFields(input.draft),
+    miniRule: input.miniRule,
+    coreMode: input.coreMode,
+  };
   if (!fields.name || !input.reason.trim())
     throw new Error("룰북 이름과 변경 사유를 입력해 주세요");
   const server = await getCurrentServer();

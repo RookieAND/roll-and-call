@@ -27,21 +27,32 @@ export async function describeRulebook({
       category: rulebookCategories.name,
       categoryAlias: rulebookCategories.alias,
       miniRule: rulebookCategories.miniRule,
+      coreMode: rulebookCategories.coreMode,
     })
     .from(rulebooks)
-    .innerJoin(rulebookCategories, eq(rulebooks.categoryId, rulebookCategories.id))
+    .innerJoin(
+      rulebookCategories,
+      eq(rulebooks.categoryId, rulebookCategories.id),
+    )
     .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, id)));
   if (!row) throw new Error("룰북을 찾을 수 없습니다");
   const [superseded] = row.supersedesId
     ? await executor
         .select({ name: rulebooks.name, edition: rulebooks.edition })
         .from(rulebooks)
-        .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.id, row.supersedesId)))
+        .where(
+          and(
+            eq(rulebooks.serverId, serverId),
+            eq(rulebooks.id, row.supersedesId),
+          ),
+        )
     : [];
   const included = await executor
     .select({ name: rulebooks.name, edition: rulebooks.edition })
     .from(rulebooks)
-    .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.includedInId, id)));
+    .where(
+      and(eq(rulebooks.serverId, serverId), eq(rulebooks.includedInId, id)),
+    );
   const { supersedesId: _supersedesId, ...rest } = row;
   return {
     ...rest,

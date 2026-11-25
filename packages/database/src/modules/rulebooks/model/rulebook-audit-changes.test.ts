@@ -14,12 +14,19 @@ const base: RulebookDescription = {
   aliases: [],
   certRequired: true,
   miniRule: false,
+  coreMode: "all",
 };
 
 describe("rulebookChanges", () => {
   it("다른 이름만 바뀌면 그 칸만 남긴다", () => {
-    expect(rulebookChanges(base, { ...base, aliases: ["둘이서 수사 구판"] })).toEqual([
-      { field: "다른 이름", added: ["둘이서 수사 구판"] },
+    expect(
+      rulebookChanges(base, { ...base, aliases: ["둘이서 수사 구판"] }),
+    ).toEqual([{ field: "다른 이름", added: ["둘이서 수사 구판"] }]);
+  });
+
+  it("기본 룰북 조건이 바뀌면 한 권만 인증·모두 인증으로 남긴다", () => {
+    expect(rulebookChanges(base, { ...base, coreMode: "any" })).toEqual([
+      { field: "기본 룰북 조건", before: "모두 인증", after: "한 권만 인증" },
     ]);
   });
 
@@ -36,8 +43,16 @@ describe("rulebookChanges", () => {
       certRequired: false,
       categoryAlias: "둘수",
     });
-    expect(changes.map((change) => change.field)).toEqual(["판본", "분류 약어", "인증"]);
-    expect(changes[2]).toEqual({ field: "인증", before: "인증 필요", after: "인증 불필요" });
+    expect(changes.map((change) => change.field)).toEqual([
+      "판본",
+      "분류 약어",
+      "인증",
+    ]);
+    expect(changes[2]).toEqual({
+      field: "인증",
+      before: "인증 필요",
+      after: "인증 불필요",
+    });
   });
 
   it("바뀐 칸이 없으면 빈 목록이다", () => {

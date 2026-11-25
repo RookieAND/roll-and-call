@@ -1,5 +1,7 @@
 import type { RulebookKind } from "#db/schema";
 
+import type { CoreMode } from "./core-modes";
+
 export interface RulebookFields {
   name: string;
   edition: string;
@@ -13,4 +15,6 @@ export interface RulebookFields {
   certRequired: boolean;
   // 추가할 때는 새 카테고리를 만들 때만 쓴다. 수정할 때는 룰북의 카테고리 값을 바꾼다.
   miniRule?: boolean;
+  // 수정할 때만 쓴다. 룰북의 카테고리 값을 바꾼다.
+  coreMode?: CoreMode;
 }

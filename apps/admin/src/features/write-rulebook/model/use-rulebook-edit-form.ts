@@ -27,7 +27,10 @@ interface UseRulebookEditFormOptions {
 }
 
 // 데스크톱 폼과 모바일 폼이 같은 초안·검증·저장 흐름을 쓴다.
-export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormOptions) {
+export function useRulebookEditForm({
+  rulebook,
+  viewerId,
+}: UseRulebookEditFormOptions) {
   const router = useRouter();
   const [checking, startChecking] = useTransition();
   const saving = useActionSubmit(submitRulebookSave);
@@ -47,6 +50,7 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
   };
   const [draft, setDraft] = useState(saved);
   const [miniRule, setMiniRule] = useState(rulebook.categoryMiniRule);
+  const [coreMode, setCoreMode] = useState(rulebook.categoryCoreMode);
   const [reason, setReason] = useState("");
   const [duplicate, setDuplicate] = useState(false);
   const [impact, setImpact] = useState<RulebookImpactCase[]>([]);
@@ -63,19 +67,31 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
   };
   // 분류를 바꾼 초안이면 그 분류의 값을 따르므로 미니룰은 바꾸지 않는다.
   const miniRuleEditable = draft.category === saved.category;
-  const miniRuleDirty = miniRuleEditable && miniRule !== rulebook.categoryMiniRule;
+  const miniRuleDirty =
+    miniRuleEditable && miniRule !== rulebook.categoryMiniRule;
+  const coreModeDirty =
+    miniRuleEditable && coreMode !== rulebook.categoryCoreMode;
   const dirty =
     miniRuleDirty ||
-    (Object.keys(saved) as (keyof RulebookDraft)[]).some((key) => !isEqual(saved[key], next[key]));
+    coreModeDirty ||
+    (Object.keys(saved) as (keyof RulebookDraft)[]).some(
+      (key) => !isEqual(saved[key], next[key]),
+    );
   const categories = uniq(rulebook.allRulebooks.map((row) => row.category));
   const certifiedCount = rulebook.certifiedGms.length;
   const kindDescription = `종류를 바꾸면 인증된 GM ${certifiedCount}명의 구인 자격도 함께 바뀝니다.`;
   const hasReason = Boolean(reason.trim());
-  const canSave = dirty && hasReason && Boolean(draft.name.trim()) && !category.error && !pending;
+  const canSave =
+    dirty &&
+    hasReason &&
+    Boolean(draft.name.trim()) &&
+    !category.error &&
+    !pending;
   const nameError = duplicate ? "이미 등록된 룰북입니다" : undefined;
   const dialogOpen = impact.length > 0 || Boolean(kindImpact) || confirmingFree;
   const coreChanged = (saved.kind === "core") !== (next.kind === "core");
-  const categoryHint = draft.category === saved.category ? undefined : categoryHelp(category);
+  const categoryHint =
+    draft.category === saved.category ? undefined : categoryHelp(category);
   const change = (changes: Partial<RulebookDraft>) => {
     setDraft({ ...draft, ...changes });
     setDuplicate(false);
@@ -92,6 +108,7 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
       next,
       reason,
       miniRuleEditable ? miniRule : undefined,
+      miniRuleEditable ? coreMode : undefined,
     );
     if (isUndefined(result)) return;
     closeDialogs();
@@ -142,7 +159,11 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
     }
     const { conflict } = result;
     toast.warning(
-      conflictToastText({ conflict, self: conflict?.byId === viewerId, target: "룰북" }),
+      conflictToastText({
+        conflict,
+        self: conflict?.byId === viewerId,
+        target: "룰북",
+      }),
     );
     router.refresh();
   };
@@ -154,6 +175,8 @@ export function useRulebookEditForm({ rulebook, viewerId }: UseRulebookEditFormO
     change,
     miniRule,
     setMiniRule,
+    coreMode,
+    setCoreMode,
     miniRuleEditable,
     reason,
     setReason,
