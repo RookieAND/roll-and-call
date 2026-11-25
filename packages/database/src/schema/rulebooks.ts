@@ -12,6 +12,7 @@ import {
   type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
+import type { CoreMode } from "../modules/rulebooks/model/core-modes";
 import { RULEBOOK_KINDS } from "../modules/rulebooks/model/rulebook-kinds";
 import { profiles } from "./profiles";
 import { serverId } from "./server-id";
@@ -25,7 +26,10 @@ export const rulebookRequestOutcome = pgEnum("rulebook_request_outcome", [
 
 // user는 사용자가 직접 낸 요청, game은 구인에서 직접 입력한 서플리먼트로 자동으로 만든 요청이다.
 // 자동 요청은 요청자의 내 룰북에 보이지 않고 처리 결과 알림도 보내지 않는다.
-export const rulebookRequestSource = pgEnum("rulebook_request_source", ["user", "game"]);
+export const rulebookRequestSource = pgEnum("rulebook_request_source", [
+  "user",
+  "game",
+]);
 
 // core는 GM에 필요한 기본 룰북, supplement는 기본 룰북 위에 더하는 책, handbook은 플레이어용이라 GM 자격이 되지 않는다.
 export const rulebookKind = pgEnum("rulebook_kind", RULEBOOK_KINDS);
@@ -42,10 +46,21 @@ export const rulebookCategories = pgTable(
     alias: text("alias"),
     // 이 분류에 속한 룰북의 세션을 미니룰로 센다(이 달의 기록 점수 70점). 서버장이 어드민에서 켠다.
     miniRule: boolean("mini_rule").notNull().default(false),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    // 같은 판본의 기본 룰북을 모두 열어야 하는지(all), 한 권만 열어도 되는지(any).
+    coreMode: text("core_mode").$type<CoreMode>().notNull().default("all"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
-    uniqueIndex("rulebook_categories_server_id_name_unique").on(table.serverId, table.name),
+    uniqueIndex("rulebook_categories_server_id_name_unique").on(
+      table.serverId,
+      table.name,
+    ),
+    check(
+      "rulebook_categories_core_mode_check",
+      sql`${table.coreMode} in ('all', 'any')`,
+    ),
   ],
 ).enableRLS();
 
@@ -62,17 +77,25 @@ export const rulebooks = pgTable(
     name: text("name").notNull(),
     edition: text("edition").notNull().default(""),
     kind: rulebookKind("kind").notNull().default("core"),
-    supersedesId: uuid("supersedes_id").references((): AnyPgColumn => rulebooks.id, {
-      onDelete: "set null",
-    }),
+    supersedesId: uuid("supersedes_id").references(
+      (): AnyPgColumn => rulebooks.id,
+      {
+        onDelete: "set null",
+      },
+    ),
     // 서플리먼트가 어느 기본 룰북에 포함돼 발간됐는지. 그 기본 룰북이 열리면 이 책도 함께 열린다.
-    includedInId: uuid("included_in_id").references((): AnyPgColumn => rulebooks.id, {
-      onDelete: "set null",
-    }),
+    includedInId: uuid("included_in_id").references(
+      (): AnyPgColumn => rulebooks.id,
+      {
+        onDelete: "set null",
+      },
+    ),
     aliases: text("aliases").array().notNull().default([]),
     certRequired: boolean("cert_required").notNull().default(true),
     hidden: boolean("hidden").notNull().default(false),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
     uniqueIndex("rulebooks_server_id_name_edition_unique").on(
@@ -91,7 +114,10 @@ export const rulebookRequests = pgTable(
     serverId: serverId(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => profiles.id, { onDelete: "cascade", onUpdate: "cascade" }),
+      .references(() => profiles.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
     name: text("name").notNull(),
     edition: text("edition").notNull().default(""),
     publisher: text("publisher"),
@@ -105,7 +131,9 @@ export const rulebookRequests = pgTable(
     source: rulebookRequestSource("source").notNull().default("user"),
     // 한 번에 제출한 책을 묶는다. 심사와 결과는 각 행에서 따로 관리한다.
     groupId: uuid("group_id"),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     outcome: rulebookRequestOutcome("outcome"),
     processedBy: uuid("processed_by").references(() => profiles.id, {
       onDelete: "set null",
@@ -119,8 +147,14 @@ export const rulebookRequests = pgTable(
   },
   (table) => [
     index("rulebook_requests_user_id_idx").on(table.userId),
-    index("rulebook_requests_server_group_idx").on(table.serverId, table.groupId),
-    check("rulebook_requests_reject_reason_length", sql`char_length(${table.rejectReason}) <= 200`),
+    index("rulebook_requests_server_group_idx").on(
+      table.serverId,
+      table.groupId,
+    ),
+    check(
+      "rulebook_requests_reject_reason_length",
+      sql`char_length(${table.rejectReason}) <= 200`,
+    ),
   ],
 ).enableRLS();
 
@@ -138,9 +172,13 @@ export const rulebookQuizQuestions = pgTable(
     answers: text("answers").array().notNull().default([]),
     page: text("page").notNull().default(""),
     active: boolean("active").notNull().default(true),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
-  (table) => [index("rulebook_quiz_questions_rulebook_id_idx").on(table.rulebookId)],
+  (table) => [
+    index("rulebook_quiz_questions_rulebook_id_idx").on(table.rulebookId),
+  ],
 ).enableRLS();
 
 // 전자책 인증에서 고르는 판매처. 서버마다 따로 두고, 목록에 없으면 신청자가 적은 이름이 그대로 들어간다.
@@ -150,9 +188,16 @@ export const certSellers = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: serverId(),
     name: text("name").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
-  (table) => [uniqueIndex("cert_sellers_server_id_name_unique").on(table.serverId, table.name)],
+  (table) => [
+    uniqueIndex("cert_sellers_server_id_name_unique").on(
+      table.serverId,
+      table.name,
+    ),
+  ],
 ).enableRLS();
 
 export type Rulebook = typeof rulebooks.$inferSelect;

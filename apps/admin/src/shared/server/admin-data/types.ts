@@ -1,13 +1,31 @@
 import type { RulebookKind } from "@roll-and-call/database";
-import type { AuditAction, AuditActorKind, AuditState } from "@roll-and-call/database/audit";
+import type {
+  AuditAction,
+  AuditActorKind,
+  AuditState,
+} from "@roll-and-call/database/audit";
 import type { ReviewAuthorRole } from "@roll-and-call/database/games/model";
 import type { HomebrewRuleScope } from "@roll-and-call/database/homebrew/model";
-import type { Sanction, PhotoKey, ShotKey, StaffRole } from "@roll-and-call/database/moderation";
+import type {
+  Sanction,
+  PhotoKey,
+  ShotKey,
+  StaffRole,
+} from "@roll-and-call/database/moderation";
 
 import type { MembershipStatus, PostStatus } from "@/shared/lib";
 
-export type { Actor, AuditChange, AuditState } from "@roll-and-call/database/audit";
-export type { PhotoKey, Sanction, ShotKey, StaffRole } from "@roll-and-call/database/moderation";
+export type {
+  Actor,
+  AuditChange,
+  AuditState,
+} from "@roll-and-call/database/audit";
+export type {
+  PhotoKey,
+  Sanction,
+  ShotKey,
+  StaffRole,
+} from "@roll-and-call/database/moderation";
 
 export interface Staff {
   userId: string;
@@ -41,6 +59,7 @@ export interface Rulebook {
   category: string;
   categoryAlias: string | null;
   categoryMiniRule: boolean;
+  categoryCoreMode: "all" | "any";
   kind: RulebookKind;
   supersedesId: string | null;
   includedInId: string | null;
@@ -189,7 +208,11 @@ export interface Session {
   isPrivate?: boolean;
   cancelled?: boolean;
   // 운영진 취소를 막는 이유(cancelBlockReason). 없으면 null.
-  cancelBlock?: "already_cancelled" | "session_started" | "session_ended" | null;
+  cancelBlock?:
+    | "already_cancelled"
+    | "session_started"
+    | "session_ended"
+    | null;
   sessionStarted?: boolean;
   // 운영진이 취소하면 game_cancelled 알림을 받는 사람(gameCancelledRecipients, GM 포함).
   staffCancelRecipientIds?: string[];

@@ -23,7 +23,9 @@ describe("editionSets", () => {
     const newer = book("7", { state: CERT_STATE.certified });
     const older = book("6", { edition: "6판", unlockedBy: newer });
     const sets = editionSets([older, newer, book("p", { kind: "supplement" })]);
-    expect(sets.map((set) => [set.label, set.opened, set.unlockedBy, set.covers])).toEqual([
+    expect(
+      sets.map((set) => [set.label, set.opened, set.unlockedBy, set.covers]),
+    ).toEqual([
       ["크툴루의 부름 7판", true, null, ["6판"]],
       ["크툴루의 부름 6판", true, "7판", []],
     ]);
@@ -38,13 +40,41 @@ describe("editionSets", () => {
         edition: "3rd",
         state: CERT_STATE.certified,
       }),
-      book("2", { categoryId: "dx", categoryName: "더블크로스", edition: "3rd" }),
+      book("2", {
+        categoryId: "dx",
+        categoryName: "더블크로스",
+        edition: "3rd",
+      }),
     ]);
-    expect(set).toMatchObject({ label: "더블크로스 3rd", opened: false, earned: false });
+    expect(set).toMatchObject({
+      label: "더블크로스 3rd",
+      opened: false,
+      earned: false,
+    });
   });
 
   it("무료 배포 세트는 열려 있지만 인증해서 연 세트는 아니다", () => {
-    const [set] = editionSets([book("F", { edition: "F", certRequired: false })]);
+    const [set] = editionSets([
+      book("F", { edition: "F", certRequired: false }),
+    ]);
     expect(set).toMatchObject({ free: true, opened: true, earned: false });
+  });
+
+  it("기본 룰북 조건이 any면 한 권만 열어도 세트가 열린다", () => {
+    const base = {
+      categoryId: "in",
+      categoryName: "인세인",
+      edition: "",
+      coreMode: "any" as const,
+    };
+    const [opened, closed] = [
+      editionSets([
+        book("기본", { ...base, state: CERT_STATE.certified }),
+        book("대형판", { ...base }),
+      ])[0]!,
+      editionSets([book("기본", { ...base }), book("대형판", { ...base })])[0]!,
+    ];
+    expect(opened).toMatchObject({ opened: true, earned: true });
+    expect(closed).toMatchObject({ opened: false, earned: false });
   });
 });

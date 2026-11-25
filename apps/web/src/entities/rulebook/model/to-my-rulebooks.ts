@@ -1,5 +1,9 @@
 import type { CertApplication } from "@roll-and-call/database";
-import type { HomebrewOwnership, RulebookRecords } from "@roll-and-call/database/certifications";
+import type { CoreMode } from "@roll-and-call/database/rulebooks/model";
+import type {
+  HomebrewOwnership,
+  RulebookRecords,
+} from "@roll-and-call/database/certifications";
 
 import { CERT_STATE, type CertState } from "./cert-state";
 import { deriveCertState } from "./derive-cert-state";
@@ -19,6 +23,8 @@ export interface MyRulebook {
   kind: RulebookKind;
   categoryId: string;
   categoryName: string;
+  // 분류의 기본 룰북 조건. any면 같은 판본의 기본 룰북 한 권만 열어도 세트가 열린다.
+  coreMode: CoreMode;
   supersedesId: string | null;
   includedInId: string | null;
   // 자작 룰이면 내가 만든 룰(mine)인지 다른 사람의 룰(shared)인지. 사용 범위는 알 수 없다.
@@ -31,16 +37,27 @@ export interface MyRulebook {
   unlockedBy: MyRulebook | null;
 }
 
-function shortNameOf({ name, categoryName }: { name: string; categoryName: string }) {
-  return name.startsWith(`${categoryName} `) ? name.slice(categoryName.length + 1) : name;
+function shortNameOf({
+  name,
+  categoryName,
+}: {
+  name: string;
+  categoryName: string;
+}) {
+  return name.startsWith(`${categoryName} `)
+    ? name.slice(categoryName.length + 1)
+    : name;
 }
 
 // 신청 기록은 최신순으로 들어온다.
 export function toMyRulebooks(records: RulebookRecords) {
   const rulebooks: MyRulebook[] = records.catalog.map((rulebook) => {
-    const certification = records.certificationRows.find((row) => row.rulebookId === rulebook.id);
+    const certification = records.certificationRows.find(
+      (row) => row.rulebookId === rulebook.id,
+    );
     const latestApplication =
-      records.applicationRows.find((row) => row.rulebookId === rulebook.id) ?? null;
+      records.applicationRows.find((row) => row.rulebookId === rulebook.id) ??
+      null;
     const derived = deriveCertState({
       certification,
       latestApplication: latestApplication ?? undefined,
@@ -48,7 +65,10 @@ export function toMyRulebooks(records: RulebookRecords) {
     return {
       ...rulebook,
       label: rulebookLabel(rulebook),
-      shortName: shortNameOf({ name: rulebook.name, categoryName: rulebook.categoryName }),
+      shortName: shortNameOf({
+        name: rulebook.name,
+        categoryName: rulebook.categoryName,
+      }),
       state: derived?.state ?? null,
       stateAt: derived?.at ?? null,
       latestApplication,
@@ -66,16 +86,23 @@ export function toMyRulebooks(records: RulebookRecords) {
   for (const rulebook of rulebooks) {
     rulebook.unlockedBy =
       rulebooks.find(
-        (newer) => newer.supersedesId === rulebook.id && newer.state === CERT_STATE.certified,
+        (newer) =>
+          newer.supersedesId === rulebook.id &&
+          newer.state === CERT_STATE.certified,
       ) ?? null;
   }
   // 서플리먼트는 자기를 포함하는 기본 룰북이 열리면(인증·신판 인증) 함께 열린다.
   for (const rulebook of rulebooks) {
-    if (!rulebook.includedInId || rulebook.state === CERT_STATE.certified) continue;
-    const including = rulebooks.find((candidate) => candidate.id === rulebook.includedInId);
+    if (!rulebook.includedInId || rulebook.state === CERT_STATE.certified)
+      continue;
+    const including = rulebooks.find(
+      (candidate) => candidate.id === rulebook.includedInId,
+    );
     if (!including?.certRequired) continue;
     rulebook.unlockedBy =
-      including.state === CERT_STATE.certified ? including : including.unlockedBy;
+      including.state === CERT_STATE.certified
+        ? including
+        : including.unlockedBy;
   }
   const requests = records.requestRows.map((request) => ({
     id: request.id,

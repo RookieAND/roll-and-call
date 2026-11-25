@@ -44,13 +44,17 @@ export async function getRulebookRecords({
       includedInId: rulebooks.includedInId,
       categoryId: rulebooks.categoryId,
       categoryName: rulebookCategories.name,
+      coreMode: rulebookCategories.coreMode,
       homebrew: sql<HomebrewOwnership | null>`case
         when ${homebrewRules.rulebookId} is null then null
         when ${homebrewRules.makerId} = ${userId} then 'mine'
         else 'shared' end`,
     })
     .from(rulebooks)
-    .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+    .innerJoin(
+      rulebookCategories,
+      eq(rulebookCategories.id, rulebooks.categoryId),
+    )
     .leftJoin(homebrewRules, eq(homebrewRules.rulebookId, rulebooks.id))
     .where(
       and(
@@ -70,9 +74,17 @@ export async function getRulebookRecords({
       .from(servers)
       .where(eq(servers.id, serverId)),
     db
-      .selectDistinct({ name: rulebookRequests.name, edition: rulebookRequests.edition })
+      .selectDistinct({
+        name: rulebookRequests.name,
+        edition: rulebookRequests.edition,
+      })
       .from(rulebookRequests)
-      .where(and(eq(rulebookRequests.serverId, serverId), isNull(rulebookRequests.outcome))),
+      .where(
+        and(
+          eq(rulebookRequests.serverId, serverId),
+          isNull(rulebookRequests.outcome),
+        ),
+      ),
   ]);
   const enforcementDate = server?.certEnforcementDate ?? null;
   if (!userId) {
@@ -88,76 +100,86 @@ export async function getRulebookRecords({
     };
   }
 
-  const [certificationRows, applicationRows, requestRows, recentGames, sanction] =
-    await Promise.all([
-      db
-        .select({
-          rulebookId: certifications.rulebookId,
-          approvedAt: certifications.approvedAt,
-          revokedAt: certifications.revokedAt,
-          revokeReason: certifications.revokeReason,
-        })
-        .from(certifications)
-        .where(
-          and(
-            eq(certifications.serverId, serverId),
-            eq(certifications.userId, userId),
-            isNull(certifications.discardedAt),
-          ),
+  const [
+    certificationRows,
+    applicationRows,
+    requestRows,
+    recentGames,
+    sanction,
+  ] = await Promise.all([
+    db
+      .select({
+        rulebookId: certifications.rulebookId,
+        approvedAt: certifications.approvedAt,
+        revokedAt: certifications.revokedAt,
+        revokeReason: certifications.revokeReason,
+      })
+      .from(certifications)
+      .where(
+        and(
+          eq(certifications.serverId, serverId),
+          eq(certifications.userId, userId),
+          isNull(certifications.discardedAt),
         ),
-      db
-        .select()
-        .from(certApplications)
-        .where(
-          and(
-            eq(certApplications.serverId, serverId),
-            eq(certApplications.userId, userId),
-            ne(certApplications.status, "withdrawn"),
-            isNull(certApplications.discardedAt),
-          ),
-        )
-        .orderBy(desc(certApplications.createdAt)),
-      db
-        .select({
-          id: rulebookRequests.id,
-          name: rulebookRequests.name,
-          edition: rulebookRequests.edition,
-          kind: rulebookRequests.kind,
-          createdAt: rulebookRequests.createdAt,
-          outcome: rulebookRequests.outcome,
-          processedAt: rulebookRequests.processedAt,
-          rejectReason: rulebookRequests.rejectReason,
-        })
-        .from(rulebookRequests)
-        .where(
-          and(
-            eq(rulebookRequests.serverId, serverId),
-            eq(rulebookRequests.userId, userId),
-            eq(rulebookRequests.source, "user"),
-            or(
-              isNull(rulebookRequests.outcome),
-              gt(
-                rulebookRequests.processedAt,
-                sql`now() - make_interval(days => ${REQUEST_RESULT_DAYS})`,
-              ),
+      ),
+    db
+      .select()
+      .from(certApplications)
+      .where(
+        and(
+          eq(certApplications.serverId, serverId),
+          eq(certApplications.userId, userId),
+          ne(certApplications.status, "withdrawn"),
+          isNull(certApplications.discardedAt),
+        ),
+      )
+      .orderBy(desc(certApplications.createdAt)),
+    db
+      .select({
+        id: rulebookRequests.id,
+        name: rulebookRequests.name,
+        edition: rulebookRequests.edition,
+        kind: rulebookRequests.kind,
+        createdAt: rulebookRequests.createdAt,
+        outcome: rulebookRequests.outcome,
+        processedAt: rulebookRequests.processedAt,
+        rejectReason: rulebookRequests.rejectReason,
+      })
+      .from(rulebookRequests)
+      .where(
+        and(
+          eq(rulebookRequests.serverId, serverId),
+          eq(rulebookRequests.userId, userId),
+          eq(rulebookRequests.source, "user"),
+          or(
+            isNull(rulebookRequests.outcome),
+            gt(
+              rulebookRequests.processedAt,
+              sql`now() - make_interval(days => ${REQUEST_RESULT_DAYS})`,
             ),
           ),
-        )
-        .orderBy(desc(rulebookRequests.createdAt)),
-      db
-        .select({ rulebookId: games.rulebookId })
-        .from(games)
-        .where(
-          and(
-            eq(games.serverId, serverId),
-            eq(games.gmId, userId),
-            gt(games.createdAt, sql`now() - make_interval(days => ${RECENT_DAYS})`),
+        ),
+      )
+      .orderBy(desc(rulebookRequests.createdAt)),
+    db
+      .select({ rulebookId: games.rulebookId })
+      .from(games)
+      .where(
+        and(
+          eq(games.serverId, serverId),
+          eq(games.gmId, userId),
+          gt(
+            games.createdAt,
+            sql`now() - make_interval(days => ${RECENT_DAYS})`,
           ),
-        )
-        .orderBy(desc(games.createdAt)),
-      findActiveSanction({ serverId, userId }),
-    ]);
-  const recentRulebookIds = uniq(compact(recentGames.map((game) => game.rulebookId)));
+        ),
+      )
+      .orderBy(desc(games.createdAt)),
+    findActiveSanction({ serverId, userId }),
+  ]);
+  const recentRulebookIds = uniq(
+    compact(recentGames.map((game) => game.rulebookId)),
+  );
   return {
     catalog,
     enforcementDate,

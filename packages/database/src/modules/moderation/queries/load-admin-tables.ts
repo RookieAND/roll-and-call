@@ -1,4 +1,14 @@
-import { and, eq, getTableColumns, gt, isNotNull, isNull, ne, sql, type SQL } from "drizzle-orm";
+import {
+  and,
+  eq,
+  getTableColumns,
+  gt,
+  isNotNull,
+  isNull,
+  ne,
+  sql,
+  type SQL,
+} from "drizzle-orm";
 import { omit } from "es-toolkit";
 
 import { db } from "#db/client";
@@ -46,7 +56,10 @@ export const ADMIN_TABLE_LOADERS = {
       .from(profiles)
       .innerJoin(
         serverMembers,
-        and(eq(serverMembers.serverId, serverId), eq(serverMembers.userId, profiles.id)),
+        and(
+          eq(serverMembers.serverId, serverId),
+          eq(serverMembers.userId, profiles.id),
+        ),
       )
       .where(scope)
       .orderBy(profiles.createdAt, profiles.id),
@@ -113,27 +126,43 @@ export const ADMIN_TABLE_LOADERS = {
         category: rulebookCategories.name,
         categoryAlias: rulebookCategories.alias,
         categoryMiniRule: rulebookCategories.miniRule,
+        categoryCoreMode: rulebookCategories.coreMode,
         homebrewMakerId: homebrewRules.makerId,
         homebrewScope: homebrewRules.scope,
         homebrewApprovedAt: homebrewRules.createdAt,
       })
       .from(rulebooks)
-      .innerJoin(rulebookCategories, eq(rulebookCategories.id, rulebooks.categoryId))
+      .innerJoin(
+        rulebookCategories,
+        eq(rulebookCategories.id, rulebooks.categoryId),
+      )
       .leftJoin(homebrewRules, eq(homebrewRules.rulebookId, rulebooks.id))
       .where(and(eq(rulebooks.serverId, serverId), scope)),
   requestRows: (serverId: string) =>
-    db.select().from(rulebookRequests).where(eq(rulebookRequests.serverId, serverId)),
+    db
+      .select()
+      .from(rulebookRequests)
+      .where(eq(rulebookRequests.serverId, serverId)),
   requestGameRows: (serverId: string) =>
-    db.select().from(rulebookRequestGames).where(eq(rulebookRequestGames.serverId, serverId)),
+    db
+      .select()
+      .from(rulebookRequestGames)
+      .where(eq(rulebookRequestGames.serverId, serverId)),
   categoryRows: (serverId: string) =>
-    db.select().from(rulebookCategories).where(eq(rulebookCategories.serverId, serverId)),
+    db
+      .select()
+      .from(rulebookCategories)
+      .where(eq(rulebookCategories.serverId, serverId)),
   applicationRows: (serverId: string, scope?: SQL) =>
     db
       .select()
       .from(certApplications)
       .where(and(eq(certApplications.serverId, serverId), scope)),
   certificationRows: (serverId: string) =>
-    db.select().from(certifications).where(eq(certifications.serverId, serverId)),
+    db
+      .select()
+      .from(certifications)
+      .where(eq(certifications.serverId, serverId)),
   quizRows: (serverId: string, scope?: SQL) =>
     db
       .select()
@@ -149,10 +178,16 @@ export const ADMIN_TABLE_LOADERS = {
     db
       .select()
       .from(sanctions)
-      .where(and(eq(sanctions.serverId, serverId), isNull(sanctions.releasedAt))),
+      .where(
+        and(eq(sanctions.serverId, serverId), isNull(sanctions.releasedAt)),
+      ),
   reviewRows: (serverId: string) =>
-    db.select().from(sessionReviews).where(eq(sessionReviews.serverId, serverId)),
-  staffRows: (serverId: string) => db.select().from(staff).where(eq(staff.serverId, serverId)),
+    db
+      .select()
+      .from(sessionReviews)
+      .where(eq(sessionReviews.serverId, serverId)),
+  staffRows: (serverId: string) =>
+    db.select().from(staff).where(eq(staff.serverId, serverId)),
   memoRows: (serverId: string) =>
     db.select().from(staffMemos).where(eq(staffMemos.serverId, serverId)),
   // 닉네임 수정 기록만. 유저 목록의 이전 닉네임 검색용이라 활동 기록 전체를 읽지 않는다.
@@ -164,7 +199,12 @@ export const ADMIN_TABLE_LOADERS = {
         createdAt: auditLog.createdAt,
       })
       .from(auditLog)
-      .where(and(eq(auditLog.serverId, serverId), eq(auditLog.action, "닉네임 수정"))),
+      .where(
+        and(
+          eq(auditLog.serverId, serverId),
+          eq(auditLog.action, "닉네임 수정"),
+        ),
+      ),
   // 운영진 목록의 마지막 활동 시각. 활동 기록 전체 대신 행위자별 최근 시각만 읽는다.
   lastActiveRows: (serverId: string) =>
     db
@@ -173,7 +213,9 @@ export const ADMIN_TABLE_LOADERS = {
         lastAt: sql`max(${auditLog.createdAt})`.mapWith(auditLog.createdAt),
       })
       .from(auditLog)
-      .where(and(eq(auditLog.serverId, serverId), ne(auditLog.actorKind, "system")))
+      .where(
+        and(eq(auditLog.serverId, serverId), ne(auditLog.actorKind, "system")),
+      )
       .groupBy(auditLog.actorId),
   // 디스코드 아이디는 profiles에 없다(username은 계정 이름이고 닉네임은 server_members.nickname). 디스코드 로그인은 full_name에 아이디를 넣는다.
   handleRows: (serverId: string) =>
@@ -187,10 +229,14 @@ export const ADMIN_TABLE_LOADERS = {
 export type AdminTableKey = keyof typeof ADMIN_TABLE_LOADERS;
 
 export type AdminTables = {
-  [Key in AdminTableKey]: Awaited<ReturnType<(typeof ADMIN_TABLE_LOADERS)[Key]>>;
+  [Key in AdminTableKey]: Awaited<
+    ReturnType<(typeof ADMIN_TABLE_LOADERS)[Key]>
+  >;
 };
 
-export const ADMIN_TABLE_KEYS = Object.keys(ADMIN_TABLE_LOADERS) as AdminTableKey[];
+export const ADMIN_TABLE_KEYS = Object.keys(
+  ADMIN_TABLE_LOADERS,
+) as AdminTableKey[];
 
 export function loadAdminTable<Key extends AdminTableKey>(
   serverId: string,

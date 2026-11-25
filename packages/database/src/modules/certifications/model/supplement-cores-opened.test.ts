@@ -27,22 +27,68 @@ const supplement = books[2]!;
 
 describe("supplementCoresOpened", () => {
   it("기본 룰북은 늘 열려 있다", () => {
-    expect(supplementCoresOpened({ book: books[0]!, books, certifiedIds: new Set() })).toBe(true);
+    expect(
+      supplementCoresOpened({
+        book: books[0]!,
+        books,
+        certifiedIds: new Set(),
+      }),
+    ).toBe(true);
   });
 
   it("서플리먼트는 같은 판본 기본 룰북을 모두 열어야 한다", () => {
-    expect(supplementCoresOpened({ book: supplement, books, certifiedIds: new Set(["1권"]) })).toBe(
-      false,
-    );
     expect(
-      supplementCoresOpened({ book: supplement, books, certifiedIds: new Set(["1권", "2권"]) }),
+      supplementCoresOpened({
+        book: supplement,
+        books,
+        certifiedIds: new Set(["1권"]),
+      }),
+    ).toBe(false);
+    expect(
+      supplementCoresOpened({
+        book: supplement,
+        books,
+        certifiedIds: new Set(["1권", "2권"]),
+      }),
     ).toBe(true);
   });
 
   it("신판 인증과 인증 불필요 기본 룰북도 연 것으로 본다", () => {
     expect(
-      supplementCoresOpened({ book: supplement, books, certifiedIds: new Set(["신판1권", "2권"]) }),
+      supplementCoresOpened({
+        book: supplement,
+        books,
+        certifiedIds: new Set(["신판1권", "2권"]),
+      }),
     ).toBe(true);
-    expect(supplementCoresOpened({ book: books[5]!, books, certifiedIds: new Set() })).toBe(true);
+    expect(
+      supplementCoresOpened({
+        book: books[5]!,
+        books,
+        certifiedIds: new Set(),
+      }),
+    ).toBe(true);
+  });
+
+  it("기본 룰북 조건이 any면 한 권만 열어도 서플리먼트를 받는다", () => {
+    const anyBooks = books.map((candidate) => ({
+      ...candidate,
+      coreMode: "any",
+    }));
+    const target = anyBooks[2]!;
+    expect(
+      supplementCoresOpened({
+        book: target,
+        books: anyBooks,
+        certifiedIds: new Set(["1권"]),
+      }),
+    ).toBe(true);
+    expect(
+      supplementCoresOpened({
+        book: target,
+        books: anyBooks,
+        certifiedIds: new Set(),
+      }),
+    ).toBe(false);
   });
 });

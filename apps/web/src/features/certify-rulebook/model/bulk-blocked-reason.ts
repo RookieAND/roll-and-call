@@ -10,6 +10,7 @@ interface BulkBook {
   categoryId: string;
   certRequired: boolean;
   supersedesId: string | null;
+  coreMode?: string;
 }
 
 interface BulkBlockedReasonInput {
@@ -28,11 +29,20 @@ export function bulkBlockedReason({
   pendingIds,
 }: BulkBlockedReasonInput): string | null {
   const openedIds = new Set([...certifiedIds, ...rulebookIds]);
-  const openable = books.map((book) => ({ ...book, category: book.categoryId }));
+  const openable = books.map((book) => ({
+    ...book,
+    category: book.categoryId,
+  }));
   for (const rulebookId of rulebookIds) {
     const book = books.find((candidate) => candidate.id === rulebookId);
     if (!book) return "책을 다시 골라야 합니다.";
-    const reason = blockedReason({ book, openable, certifiedIds, pendingIds, openedIds });
+    const reason = blockedReason({
+      book,
+      openable,
+      certifiedIds,
+      pendingIds,
+      openedIds,
+    });
     if (reason) return `${rulebookLabel(book)}: ${reason}`;
   }
   return null;
@@ -57,6 +67,10 @@ function blockedReason({
   if (certifiedIds.has(book.id)) return "이미 인증된 룰북입니다.";
   if (pendingIds.has(book.id)) return "심사 중인 신청이 있습니다.";
   const target = openable.find((candidate) => candidate.id === book.id)!;
-  const cores = supplementCoresOpened({ book: target, books: openable, certifiedIds: openedIds });
+  const cores = supplementCoresOpened({
+    book: target,
+    books: openable,
+    certifiedIds: openedIds,
+  });
   return cores ? null : "같은 판본의 기본 룰북을 선택해야 합니다.";
 }

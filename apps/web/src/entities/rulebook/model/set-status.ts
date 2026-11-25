@@ -18,13 +18,20 @@ export function setStatus(set: EditionSet): {
   missing: MyRulebook[];
 } {
   const missing = set.cores.filter((core) => !isOpened(core));
-  const result = (status: SetStatus, book: MyRulebook | null = null) => ({ status, book, missing });
+  const result = (status: SetStatus, book: MyRulebook | null = null) => ({
+    status,
+    book,
+    missing,
+  });
   if (set.opened) return result(SET_STATUS.ready);
-  const withState = (state: string) => missing.find((core) => core.state === state) ?? null;
+  const withState = (state: string) =>
+    missing.find((core) => core.state === state) ?? null;
   const rejected = withState(CERT_STATE.rejected);
   if (rejected) return result(SET_STATUS.rejected, rejected);
   const pending = withState(CERT_STATE.pending);
   if (pending) return result(SET_STATUS.pending, pending);
-  if (missing.length < set.cores.length) return result(SET_STATUS.partial);
+  if (set.coreMode !== "any" && missing.length < set.cores.length) {
+    return result(SET_STATUS.partial);
+  }
   return result(SET_STATUS.none);
 }

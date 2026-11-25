@@ -7,7 +7,11 @@ import { isCertEnforced } from "./is-cert-enforced";
 import { SET_STATUS, setStatus } from "./set-status";
 import type { MyRulebooks } from "./to-my-rulebooks";
 
-export const RULE_GATE = { open: "open", notice: "notice", blocked: "blocked" } as const;
+export const RULE_GATE = {
+  open: "open",
+  notice: "notice",
+  blocked: "blocked",
+} as const;
 export type RuleGateType = (typeof RULE_GATE)[keyof typeof RULE_GATE];
 
 export interface RuleGate {
@@ -31,7 +35,10 @@ export function ruleGate({
   const { rulebooks, sets, enforcementDate } = myRulebooks;
   const { status, book, missing } = setStatus(set);
   const applicable = missing
-    .filter((core) => certOption({ rulebook: core, rulebooks }).type === CERT_OPTION.pick)
+    .filter(
+      (core) =>
+        certOption({ rulebook: core, rulebooks }).type === CERT_OPTION.pick,
+    )
     .map((core) => core.id);
   const applyAction = (label: string) => ({
     label,
@@ -40,7 +47,9 @@ export function ruleGate({
   if (set.opened) {
     return {
       type: RULE_GATE.open,
-      okText: set.unlockedBy ? `${set.unlockedBy} 인증으로 열 수 있습니다` : null,
+      okText: set.unlockedBy
+        ? `${set.unlockedBy} 인증으로 열 수 있습니다`
+        : null,
       title: null,
       lines: [],
       action: null,
@@ -51,11 +60,20 @@ export function ruleGate({
       type: RULE_GATE.notice,
       okText: null,
       title: "곧 룰북 인증이 필요합니다",
-      lines: [`${formatDate(enforcementDate!)}부터는 이 룰로 구인을 열려면 인증을 마쳐야 합니다.`],
-      action: status === SET_STATUS.pending ? null : applyAction("지금 인증 신청하기"),
+      lines: [
+        `${formatDate(enforcementDate!)}부터는 이 룰로 구인을 열려면 인증을 마쳐야 합니다.`,
+      ],
+      action:
+        status === SET_STATUS.pending
+          ? null
+          : applyAction("지금 인증 신청하기"),
     };
   }
-  const blocked = (title: string, lines: string[], action: RuleGate["action"]): RuleGate => ({
+  const blocked = (
+    title: string,
+    lines: string[],
+    action: RuleGate["action"],
+  ): RuleGate => ({
     type: RULE_GATE.blocked,
     okText: null,
     title,
@@ -84,14 +102,19 @@ export function ruleGate({
       });
     default: {
       const otherEdition = sets.some(
-        (other) => other !== set && other.categoryId === set.categoryId && other.earned,
+        (other) =>
+          other !== set && other.categoryId === set.categoryId && other.earned,
       );
       const edition = set.edition || set.categoryName;
       return blocked(
         "룰북 인증이 필요합니다",
         [
-          ...(otherEdition ? [`${edition}${topicParticle(edition)} 따로 인증이 필요합니다.`] : []),
-          "이 룰로 구인을 열려면 인증을 마쳐야 합니다.",
+          ...(otherEdition
+            ? [`${edition}${topicParticle(edition)} 따로 인증이 필요합니다.`]
+            : []),
+          set.coreMode === "any"
+            ? "기본 룰북 중 한 권만 인증하면 이 룰로 구인을 열 수 있습니다."
+            : "이 룰로 구인을 열려면 인증을 마쳐야 합니다.",
         ],
         applyAction("인증 신청하기"),
       );

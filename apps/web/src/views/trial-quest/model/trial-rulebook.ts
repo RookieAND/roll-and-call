@@ -17,6 +17,7 @@ export const TRIAL_RULEBOOK: MyRulebook = {
   kind: RULEBOOK_KIND.core,
   categoryId: "trial-category",
   categoryName: "CoC",
+  coreMode: "all",
   supersedesId: null,
   includedInId: null,
   homebrew: null,

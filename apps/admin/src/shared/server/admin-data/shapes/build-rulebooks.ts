@@ -1,7 +1,10 @@
 import type { Rulebook } from "../types";
 import type { ShapeContext } from "./shape-context";
 
-export function buildRulebooks({ tables, nicknameOf }: ShapeContext): Rulebook[] {
+export function buildRulebooks({
+  tables,
+  nicknameOf,
+}: ShapeContext): Rulebook[] {
   return tables.rulebookRows
     .toSorted((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
     .map((rulebook) => ({
@@ -11,6 +14,7 @@ export function buildRulebooks({ tables, nicknameOf }: ShapeContext): Rulebook[]
       category: rulebook.category,
       categoryAlias: rulebook.categoryAlias,
       categoryMiniRule: rulebook.categoryMiniRule,
+      categoryCoreMode: rulebook.categoryCoreMode,
       kind: rulebook.kind,
       supersedesId: rulebook.supersedesId,
       includedInId: rulebook.includedInId,
@@ -21,7 +25,9 @@ export function buildRulebooks({ tables, nicknameOf }: ShapeContext): Rulebook[]
         rulebook.homebrewScope && rulebook.homebrewApprovedAt
           ? {
               makerId: rulebook.homebrewMakerId,
-              maker: rulebook.homebrewMakerId ? nicknameOf(rulebook.homebrewMakerId) : null,
+              maker: rulebook.homebrewMakerId
+                ? nicknameOf(rulebook.homebrewMakerId)
+                : null,
               scope: rulebook.homebrewScope,
               approvedAt: rulebook.homebrewApprovedAt,
             }

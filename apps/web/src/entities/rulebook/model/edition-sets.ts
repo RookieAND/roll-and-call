@@ -1,3 +1,4 @@
+import type { CoreMode } from "@roll-and-call/database/rulebooks/model";
 import { uniq } from "es-toolkit";
 
 import { isOpened } from "./is-opened";
@@ -14,6 +15,7 @@ export interface EditionSet {
   cores: MyRulebook[];
   extras: MyRulebook[];
   free: boolean;
+  coreMode: CoreMode;
   homebrew: MyRulebook["homebrew"];
   opened: boolean;
   earned: boolean;
@@ -21,22 +23,32 @@ export interface EditionSet {
   covers: string[];
 }
 
-export function editionSetKey(rulebook: Pick<MyRulebook, "categoryId" | "edition">) {
+export function editionSetKey(
+  rulebook: Pick<MyRulebook, "categoryId" | "edition">,
+) {
   return `${rulebook.categoryId}:${rulebook.edition}`;
 }
 
 // 판본은 새것(큰 숫자)부터. 기본 룰북이 없는 판본(서플리먼트만 있는 판본)은 세트가 아니다.
 export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
   const keys = uniq(
-    rulebooks.filter((book) => book.kind === RULEBOOK_KIND.core).map(editionSetKey),
+    rulebooks
+      .filter((book) => book.kind === RULEBOOK_KIND.core)
+      .map(editionSetKey),
   );
   const sets = keys.map((key) => {
     const cores = rulebooks.filter(
       (book) => book.kind === RULEBOOK_KIND.core && editionSetKey(book) === key,
     );
     const [first] = cores as [MyRulebook];
-    const opened = cores.every(isOpened);
+    const opened =
+      first.coreMode === "any" ? cores.some(isOpened) : cores.every(isOpened);
     const unlocking = cores.find((core) => core.unlockedBy)?.unlockedBy ?? null;
+    // any 세트는 한 권이라도 인증 없이 열려 있으면 free다.
+    const free =
+      first.coreMode === "any"
+        ? cores.some((core) => !core.certRequired)
+        : cores.every((core) => !core.certRequired);
     return {
       key,
       categoryId: first.categoryId,
@@ -45,20 +57,27 @@ export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
       label: `${first.categoryName} ${first.edition}`.trim(),
       cores,
       extras: rulebooks.filter(
-        (book) => book.kind !== RULEBOOK_KIND.core && editionSetKey(book) === key,
+        (book) =>
+          book.kind !== RULEBOOK_KIND.core && editionSetKey(book) === key,
       ),
-      free: cores.every((core) => !core.certRequired),
+      free,
+      coreMode: first.coreMode,
       homebrew: first.homebrew,
       opened,
       earned: opened && cores.some((core) => core.certRequired),
-      unlockedBy: opened && unlocking ? unlocking.edition || unlocking.shortName : null,
+      unlockedBy:
+        opened && unlocking ? unlocking.edition || unlocking.shortName : null,
       covers: [] as string[],
     };
   });
   for (const set of sets) {
     set.covers = sets
-      .filter((older) => older.unlockedBy && older.categoryId === set.categoryId)
-      .filter((older) => older.cores.some((core) => set.cores.includes(core.unlockedBy!)))
+      .filter(
+        (older) => older.unlockedBy && older.categoryId === set.categoryId,
+      )
+      .filter((older) =>
+        older.cores.some((core) => set.cores.includes(core.unlockedBy!)),
+      )
       .map((older) => older.edition);
   }
   return sets.toSorted(
@@ -68,6 +87,12 @@ export function editionSets(rulebooks: MyRulebook[]): EditionSet[] {
   );
 }
 
-export function setOf({ rulebook, sets }: { rulebook: MyRulebook; sets: EditionSet[] }) {
+export function setOf({
+  rulebook,
+  sets,
+}: {
+  rulebook: MyRulebook;
+  sets: EditionSet[];
+}) {
   return sets.find((set) => set.key === editionSetKey(rulebook)) ?? null;
 }

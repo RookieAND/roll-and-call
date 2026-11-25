@@ -10,9 +10,19 @@ import { NOTIFICATION_KIND } from "#db/modules/notifications/model";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { RULEBOOK_KIND } from "#db/modules/rulebooks/model";
 import { rulebookLabel } from "#db/modules/rulebooks/model";
-import { certApplications, certifications, profiles, rulebooks, servers } from "#db/schema";
+import {
+  certApplications,
+  certifications,
+  profiles,
+  rulebookCategories,
+  rulebooks,
+  servers,
+} from "#db/schema";
 
-import { GRANT_SKIP_REASON, type GrantSkipReason } from "../model/grant-skip-reason";
+import {
+  GRANT_SKIP_REASON,
+  type GrantSkipReason,
+} from "../model/grant-skip-reason";
 import { supplementCoresOpened } from "../model/supplement-cores-opened";
 
 export interface GrantBookResult {
@@ -22,7 +32,9 @@ export interface GrantBookResult {
   skipped: { userId: string; nickname: string; reason: GrantSkipReason }[];
 }
 
-export type GrantResult = { ok: true; books: GrantBookResult[] } | { ok: false; notRequired: true };
+export type GrantResult =
+  | { ok: true; books: GrantBookResult[] }
+  | { ok: false; notRequired: true };
 
 // 룰북마다, 사람마다 인증을 넣거나 되살리고, 그 사람의 대기 신청을 함께 승인하고, 「직접 인증」 기록 한 건과 cert_granted 알림을 남긴다.
 // 이미 인증된 사람과 같은 판본 기본 룰북을 열지 않은 서플리먼트 대상은 건너뛴다.
@@ -52,15 +64,21 @@ export async function grantCertifications({
         certRequired: rulebooks.certRequired,
         supersedesId: rulebooks.supersedesId,
         hidden: rulebooks.hidden,
+        coreMode: rulebookCategories.coreMode,
       })
       .from(rulebooks)
+      .innerJoin(
+        rulebookCategories,
+        eq(rulebookCategories.id, rulebooks.categoryId),
+      )
       .where(eq(rulebooks.serverId, serverId));
     const picked = uniq(rulebookIds).map((id) => {
       const book = books.find((candidate) => candidate.id === id);
       if (!book) throw new Error("룰북을 찾을 수 없습니다");
       return book;
     });
-    if (picked.some((book) => !book.certRequired)) return { ok: false, notRequired: true };
+    if (picked.some((book) => !book.certRequired))
+      return { ok: false, notRequired: true };
     const ordered = [
       ...picked.filter((book) => book.kind !== RULEBOOK_KIND.supplement),
       ...picked.filter((book) => book.kind === RULEBOOK_KIND.supplement),
@@ -87,7 +105,10 @@ export async function grantCertifications({
       .from(profiles)
       .where(inArray(profiles.id, targets));
     const certified = await tx
-      .select({ userId: certifications.userId, rulebookId: certifications.rulebookId })
+      .select({
+        userId: certifications.userId,
+        rulebookId: certifications.rulebookId,
+      })
       .from(certifications)
       .where(
         and(
@@ -106,7 +127,10 @@ export async function grantCertifications({
 
     const results: GrantBookResult[] = [];
     // 알림은 유저마다 한 건으로 묶는다. 받은 룰북이 여러 권이면 첫 룰북 외 N권으로 알린다.
-    const grantedByUser = new Map<string, { rulebookId: string; rulebookName: string }[]>();
+    const grantedByUser = new Map<
+      string,
+      { rulebookId: string; rulebookName: string }[]
+    >();
     for (const book of ordered) {
       const label = rulebookLabel(book);
       const granted: GrantBookResult["granted"] = [];
@@ -114,15 +138,28 @@ export async function grantCertifications({
       for (const { userId, nickname } of people) {
         const certifiedIds = certifiedByUser.get(userId) ?? new Set<string>();
         if (!supplementCoresOpened({ book, books: shownBooks, certifiedIds })) {
-          skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.supplementBlocked });
+          skipped.push({
+            userId,
+            nickname,
+            reason: GRANT_SKIP_REASON.supplementBlocked,
+          });
           continue;
         }
         // 처음 인증이면 넣고, 취소됐던 인증이면 되살린다. 이미 유효한 인증이면 아무것도 돌려받지 못한다.
         const [inserted] = await tx
           .insert(certifications)
-          .values({ serverId, userId, rulebookId: book.id, approvedBy: actor.id })
+          .values({
+            serverId,
+            userId,
+            rulebookId: book.id,
+            approvedBy: actor.id,
+          })
           .onConflictDoUpdate({
-            target: [certifications.serverId, certifications.userId, certifications.rulebookId],
+            target: [
+              certifications.serverId,
+              certifications.userId,
+              certifications.rulebookId,
+            ],
             set: {
               approvedBy: actor.id,
               approvedAt: sql`now()`,
@@ -135,13 +172,21 @@ export async function grantCertifications({
           })
           .returning({ userId: certifications.userId });
         if (!inserted) {
-          skipped.push({ userId, nickname, reason: GRANT_SKIP_REASON.alreadyCertified });
+          skipped.push({
+            userId,
+            nickname,
+            reason: GRANT_SKIP_REASON.alreadyCertified,
+          });
           continue;
         }
         certifiedByUser.set(userId, new Set([...certifiedIds, book.id]));
         const approvedApplications = await tx
           .update(certApplications)
-          .set({ status: "approved", processedBy: actor.id, processedAt: sql`now()` })
+          .set({
+            status: "approved",
+            processedBy: actor.id,
+            processedAt: sql`now()`,
+          })
           .where(
             and(
               eq(certApplications.serverId, serverId),
@@ -161,14 +206,20 @@ export async function grantCertifications({
             targetUserId: userId,
             reason: "운영진 직접 추가",
             staffMemo: evidence,
-            before: { label: approvedApplications.length ? "심사 대기" : "미인증" },
+            before: {
+              label: approvedApplications.length ? "심사 대기" : "미인증",
+            },
             after: { label: "인증됨" },
             related: [
               ...(approvedApplications.length
-                ? [`대기 중인 심사 신청 ${approvedApplications.length}건 함께 승인`]
+                ? [
+                    `대기 중인 심사 신청 ${approvedApplications.length}건 함께 승인`,
+                  ]
                 : []),
               "당사자 알림 탭에 알림 보냄",
-              server?.staffChannelId ? STAFF_CHANNEL_RELATED.posted : STAFF_CHANNEL_RELATED.missing,
+              server?.staffChannelId
+                ? STAFF_CHANNEL_RELATED.posted
+                : STAFF_CHANNEL_RELATED.missing,
             ],
           },
         });
@@ -178,21 +229,33 @@ export async function grantCertifications({
           { rulebookId: book.id, rulebookName: label },
         ]);
       }
-      results.push({ rulebookId: book.id, rulebookLabel: label, granted, skipped });
+      results.push({
+        rulebookId: book.id,
+        rulebookLabel: label,
+        granted,
+        skipped,
+      });
     }
 
-    const notifications = [...grantedByUser].flatMap(([userId, grantedBooks]) => {
-      const [first] = grantedBooks;
-      if (!first) return [];
-      return [
-        {
-          userId,
-          kind: NOTIFICATION_KIND.certGranted,
-          params: { ...first, otherCount: grantedBooks.length - 1 },
-        },
-      ];
+    const notifications = [...grantedByUser].flatMap(
+      ([userId, grantedBooks]) => {
+        const [first] = grantedBooks;
+        if (!first) return [];
+        return [
+          {
+            userId,
+            kind: NOTIFICATION_KIND.certGranted,
+            params: { ...first, otherCount: grantedBooks.length - 1 },
+          },
+        ];
+      },
+    );
+    await createNotifications({
+      executor: tx,
+      serverId,
+      actorId: actor.id,
+      notifications,
     });
-    await createNotifications({ executor: tx, serverId, actorId: actor.id, notifications });
     return { ok: true, books: results };
   });
 }

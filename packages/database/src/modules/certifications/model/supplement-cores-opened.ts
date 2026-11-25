@@ -1,4 +1,4 @@
-import { RULEBOOK_KIND } from "#db/modules/rulebooks/model";
+import { CORE_MODE, RULEBOOK_KIND } from "#db/modules/rulebooks/model";
 
 interface OpenableBook {
   id: string;
@@ -8,6 +8,8 @@ interface OpenableBook {
   edition: string;
   certRequired: boolean;
   supersedesId: string | null;
+  // 분류의 기본 룰북 조건. 없으면 all로 본다.
+  coreMode?: string;
 }
 
 // 서플리먼트는 같은 판본의 기본 룰북을 모두 연(인증·신판 인증·인증 불필요) 사람만 인증할 수 있다.
@@ -25,13 +27,16 @@ export function supplementCoresOpened({
   const opened = (core: OpenableBook) =>
     !core.certRequired ||
     certifiedIds.has(core.id) ||
-    books.some((newer) => newer.supersedesId === core.id && certifiedIds.has(newer.id));
-  return books
-    .filter(
-      (candidate) =>
-        candidate.kind === RULEBOOK_KIND.core &&
-        candidate.category === book.category &&
-        candidate.edition === book.edition,
-    )
-    .every(opened);
+    books.some(
+      (newer) => newer.supersedesId === core.id && certifiedIds.has(newer.id),
+    );
+  const cores = books.filter(
+    (candidate) =>
+      candidate.kind === RULEBOOK_KIND.core &&
+      candidate.category === book.category &&
+      candidate.edition === book.edition,
+  );
+  return book.coreMode === CORE_MODE.any
+    ? cores.some(opened)
+    : cores.every(opened);
 }

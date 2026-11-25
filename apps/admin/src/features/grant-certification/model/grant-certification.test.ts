@@ -12,7 +12,10 @@ import { grantMemberText } from "./grant-candidate-text";
 import { grantResultToast } from "./grant-result-toast";
 import { searchGrantMembers } from "./search-grant-members";
 
-const book = (id: string, kind: GrantOptions["books"][number]["kind"] = "core") => ({
+const book = (
+  id: string,
+  kind: GrantOptions["books"][number]["kind"] = "core",
+) => ({
   id,
   label: `${id} 3rd`,
   kind,
@@ -20,6 +23,7 @@ const book = (id: string, kind: GrantOptions["books"][number]["kind"] = "core") 
   edition: "3rd",
   certRequired: true,
   supersedesId: null,
+  coreMode: "all" as const,
 });
 
 const member = (id: string, nickname: string) => ({
@@ -31,7 +35,11 @@ const member = (id: string, nickname: string) => ({
 
 const options: GrantOptions = {
   books: [book("1권"), book("2권"), book("상급", "supplement")],
-  members: [member("coco", "김코코"), member("kokoa", "김코코아"), member("nut", "코코넛GM")],
+  members: [
+    member("coco", "김코코"),
+    member("kokoa", "김코코아"),
+    member("nut", "코코넛GM"),
+  ],
   certifications: [
     { userId: "nut", rulebookId: "1권" },
     { userId: "nut", rulebookId: "2권" },
@@ -64,7 +72,9 @@ describe("grantCandidateStatus", () => {
 describe("searchGrantMembers", () => {
   it("닉네임·핸들·ID를 대소문자 없이 찾고 고른 사람과 빈 검색어는 뺀다", () => {
     const ids = (query: string, excludeIds: string[] = []) =>
-      searchGrantMembers({ members: options.members, query, excludeIds }).map((row) => row.id);
+      searchGrantMembers({ members: options.members, query, excludeIds }).map(
+        (row) => row.id,
+      );
     expect(ids("코코")).toEqual(["coco", "kokoa", "nut"]);
     expect(ids("코코", ["coco"])).toEqual(["kokoa", "nut"]);
     expect(ids("NUT0000")).toEqual(["nut"]);
@@ -82,7 +92,10 @@ describe("grantMemberPlan", () => {
 
   it("함께 고른 기본 룰북은 서플리먼트 조건을 채운다", () => {
     expect(plan("coco", [2]).grantable).toEqual([]);
-    expect(plan("coco", [0, 2]).grantable.map((row) => row.id)).toEqual(["1권", "상급"]);
+    expect(plan("coco", [0, 2]).grantable.map((row) => row.id)).toEqual([
+      "1권",
+      "상급",
+    ]);
   });
 
   it("이미 인증한 책은 빼고 나머지만 부여하며 대기 중인 심사를 센다", () => {
@@ -99,7 +112,11 @@ describe("grantMemberPlan", () => {
 
 describe("서플리먼트 선택 제약", () => {
   const selectable = (bookIndex: number, selectedIds: string[]) =>
-    isBookSelectable({ book: options.books[bookIndex]!, books: options.books, selectedIds });
+    isBookSelectable({
+      book: options.books[bookIndex]!,
+      books: options.books,
+      selectedIds,
+    });
 
   it("같은 판본의 기본 룰북을 모두 골라야 서플리먼트를 고를 수 있다", () => {
     expect(selectable(2, [])).toBe(false);
@@ -109,11 +126,17 @@ describe("서플리먼트 선택 제약", () => {
   });
 
   it("기본 룰북을 빼면 조건을 잃은 서플리먼트도 함께 뺀다", () => {
-    expect(pruneBookSelection({ selectedIds: ["1권", "상급"], books: options.books })).toEqual([
-      "1권",
-    ]);
     expect(
-      pruneBookSelection({ selectedIds: ["1권", "2권", "상급"], books: options.books }),
+      pruneBookSelection({
+        selectedIds: ["1권", "상급"],
+        books: options.books,
+      }),
+    ).toEqual(["1권"]);
+    expect(
+      pruneBookSelection({
+        selectedIds: ["1권", "2권", "상급"],
+        books: options.books,
+      }),
     ).toEqual(["1권", "2권", "상급"]);
   });
 });
@@ -198,6 +221,9 @@ describe("grantResultToast", () => {
           },
         ],
       }),
-    ).toMatchObject({ success: false, title: "기본 룰북 인증이 먼저 필요합니다" });
+    ).toMatchObject({
+      success: false,
+      title: "기본 룰북 인증이 먼저 필요합니다",
+    });
   });
 });

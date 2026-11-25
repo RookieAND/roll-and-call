@@ -3,7 +3,12 @@ import { and, desc, eq, isNull, ne } from "drizzle-orm";
 import { db } from "#db/client";
 import { findActiveSanction } from "#db/modules/moderation";
 import { findAssignedQuizQuestion } from "#db/modules/rulebooks";
-import { certApplications, certifications, rulebooks } from "#db/schema";
+import {
+  certApplications,
+  certifications,
+  rulebookCategories,
+  rulebooks,
+} from "#db/schema";
 
 // 인증 신청을 받을지 가르는 데 필요한 것을 한 번에 읽는다. 사용자가 지운 기록은 없던 것으로 본다.
 export async function loadCertificationContext({
@@ -16,48 +21,58 @@ export async function loadCertificationContext({
   // 한 책의 퀴즈 문항까지 함께 읽을 때만 준다(여러 권 신청은 loadBulkQuizQuestions가 맡는다).
   rulebookId?: string;
 }) {
-  const [books, certified, applications, sanction, quizQuestion] = await Promise.all([
-    db
-      .select({
-        id: rulebooks.id,
-        name: rulebooks.name,
-        categoryId: rulebooks.categoryId,
-        edition: rulebooks.edition,
-        kind: rulebooks.kind,
-        certRequired: rulebooks.certRequired,
-        supersedesId: rulebooks.supersedesId,
-      })
-      .from(rulebooks)
-      .where(and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false))),
-    db
-      .select({ rulebookId: certifications.rulebookId })
-      .from(certifications)
-      .where(
-        and(
-          eq(certifications.serverId, serverId),
-          eq(certifications.userId, userId),
-          isNull(certifications.revokedAt),
-          isNull(certifications.discardedAt),
+  const [books, certified, applications, sanction, quizQuestion] =
+    await Promise.all([
+      db
+        .select({
+          id: rulebooks.id,
+          name: rulebooks.name,
+          categoryId: rulebooks.categoryId,
+          edition: rulebooks.edition,
+          kind: rulebooks.kind,
+          certRequired: rulebooks.certRequired,
+          supersedesId: rulebooks.supersedesId,
+          coreMode: rulebookCategories.coreMode,
+        })
+        .from(rulebooks)
+        .innerJoin(
+          rulebookCategories,
+          eq(rulebookCategories.id, rulebooks.categoryId),
+        )
+        .where(
+          and(eq(rulebooks.serverId, serverId), eq(rulebooks.hidden, false)),
         ),
-      ),
-    db
-      .select({
-        rulebookId: certApplications.rulebookId,
-        status: certApplications.status,
-        photoUrls: certApplications.photoUrls,
-      })
-      .from(certApplications)
-      .where(
-        and(
-          eq(certApplications.serverId, serverId),
-          eq(certApplications.userId, userId),
-          ne(certApplications.status, "withdrawn"),
-          isNull(certApplications.discardedAt),
+      db
+        .select({ rulebookId: certifications.rulebookId })
+        .from(certifications)
+        .where(
+          and(
+            eq(certifications.serverId, serverId),
+            eq(certifications.userId, userId),
+            isNull(certifications.revokedAt),
+            isNull(certifications.discardedAt),
+          ),
         ),
-      )
-      .orderBy(desc(certApplications.createdAt)),
-    findActiveSanction({ serverId, userId }),
-    rulebookId ? findAssignedQuizQuestion({ serverId, rulebookId, userId }) : null,
-  ]);
+      db
+        .select({
+          rulebookId: certApplications.rulebookId,
+          status: certApplications.status,
+          photoUrls: certApplications.photoUrls,
+        })
+        .from(certApplications)
+        .where(
+          and(
+            eq(certApplications.serverId, serverId),
+            eq(certApplications.userId, userId),
+            ne(certApplications.status, "withdrawn"),
+            isNull(certApplications.discardedAt),
+          ),
+        )
+        .orderBy(desc(certApplications.createdAt)),
+      findActiveSanction({ serverId, userId }),
+      rulebookId
+        ? findAssignedQuizQuestion({ serverId, rulebookId, userId })
+        : null,
+    ]);
   return { books, certified, applications, sanction, quizQuestion };
 }
