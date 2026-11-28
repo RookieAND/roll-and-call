@@ -65,15 +65,11 @@ export async function addParticipants(
         if (status === confirmed) throw new RosterError("이미 참여 중인 사람이 있습니다.");
         statuses.set(userId, status);
       }
-      // 대기로 이미 신청한 사람은 신청 때 검사했으므로, 새로 넣거나 내보냈다가 되돌리는 사람만 일시가 겹치는지 본다.
-      const unchecked = invitedIds.filter(
-        (userId) => statuses.get(userId) !== PARTICIPANT_STATUS.waiting,
-      );
       const conflicts = await findScheduleConflicts({
         transaction,
         serverId,
         gameId,
-        people: unchecked.map((userId) => ({ userId, role: "confirmed" as const })),
+        people: invitedIds.map((userId) => ({ userId, role: "confirmed" as const })),
         target: await listDatedRounds({ transaction, gameId }),
       });
       if (conflicts.length > 0) {

@@ -42,6 +42,7 @@ export {
 } from "./model/schedule-conflict-rejection";
 export { scheduleLine, type ScheduleLine } from "./model/schedule-line";
 export { GameScheduleRow } from "./ui/game-schedule-row";
+export { checksWaitingSchedule } from "./model/checks-waiting-schedule";
 export { deriveSessionState, SESSION_ROLE, SESSION_STATE, type SessionRole } from "./model/session";
 export {
   effectivePlayMinutes,
