@@ -1,4 +1,4 @@
-import type { Game } from "@roll-and-call/database";
+import type { GameListRow } from "@roll-and-call/database";
 import {
   deriveGameStatus,
   formatPlayRange,
@@ -14,7 +14,7 @@ import { countConfirmed, type ParticipantStatus } from "./participant";
 import { roundTotalLabel } from "./round-total-label";
 import { scheduleLine } from "./schedule-line";
 
-type PastGame = Game & { participants: { userId: string; status: ParticipantStatus }[] };
+type PastGame = GameListRow & { participants: { userId: string; status: ParticipantStatus }[] };
 
 export interface PastGameCardView {
   // 회색 배지 글자. null이면 구인 상태 배지(status)를 그린다.

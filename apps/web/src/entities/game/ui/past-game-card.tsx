@@ -1,4 +1,4 @@
-import type { Game } from "@roll-and-call/database";
+import type { GameListRow } from "@roll-and-call/database";
 import { Badge, Card, HStack, Text, VStack } from "@roll-and-call/ui";
 
 import type { ParticipantStatus } from "../model/participant";
@@ -10,7 +10,7 @@ import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
 interface PastGameCardProps {
-  game: Game & {
+  game: GameListRow & {
     gm: { username: string; avatarUrl: string | null } | null;
     participants: { userId: string; status: ParticipantStatus }[];
   };
