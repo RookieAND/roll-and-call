@@ -455,6 +455,8 @@ export const rulebookRequestGames = pgTable(
 ).enableRLS();
 
 export type Game = typeof games.$inferSelect;
+// 목록 조회(GAME_LIST_COLUMNS)는 본문 컬럼을 읽지 않는다.
+export type GameListRow = Omit<Game, "synopsis" | "notice">;
 
 export type NewGame = typeof games.$inferInsert;
 

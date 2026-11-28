@@ -1,4 +1,4 @@
-import type { Game } from "@roll-and-call/database";
+import type { GameListRow } from "@roll-and-call/database";
 import {
   deriveGameStatus,
   formatPlayRange,
@@ -20,7 +20,7 @@ import { GameStatusBadge } from "./game-status-badge";
 import { GameThumbnail } from "./game-thumbnail";
 
 interface GameCardProps {
-  game: Game & {
+  game: GameListRow & {
     gm: { username: string; avatarUrl: string | null } | null;
     participants: { userId: string; status: ParticipantStatus }[];
   };

@@ -3,6 +3,7 @@ import { type GamesFilter } from "#db/modules/games/model/games-filter";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { games } from "#db/schema";
 
+import { GAME_LIST_COLUMNS } from "./game-list-columns";
 import { recruitingGamesOrderBy } from "./recruiting-games-order-by";
 import { recruitingGamesWhere } from "./recruiting-games-where";
 
@@ -29,6 +30,7 @@ export async function getRecruitingGamesPage({
     db.query.games.findMany({
       where,
       orderBy: recruitingGamesOrderBy({ filter, now }),
+      columns: GAME_LIST_COLUMNS,
       with: {
         gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
         participants: {

@@ -5,6 +5,8 @@ import { db } from "#db/client";
 import { memberNicknameSql } from "#db/modules/profiles";
 import { gameRounds, participants, roundAttendances } from "#db/schema";
 
+import { GAME_LIST_COLUMNS } from "./game-list-columns";
+
 export async function getJoinedGames({ serverId, userId }: { serverId: string; userId: string }) {
   const rows = await db.query.participants.findMany({
     where: (participant, { and, eq }) =>
@@ -12,6 +14,7 @@ export async function getJoinedGames({ serverId, userId }: { serverId: string; u
     orderBy: desc(participants.joinedAt),
     with: {
       game: {
+        columns: GAME_LIST_COLUMNS,
         with: {
           gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
           participants: {

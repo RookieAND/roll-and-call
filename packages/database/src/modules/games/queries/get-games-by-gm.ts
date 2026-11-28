@@ -5,10 +5,13 @@ import { roundScheduleProgress } from "#db/modules/games/model/round-schedule-pr
 import { memberNicknameSql } from "#db/modules/profiles";
 import { gameRounds, games } from "#db/schema";
 
+import { GAME_LIST_COLUMNS } from "./game-list-columns";
+
 export async function getGamesByGm({ serverId, userId }: { serverId: string; userId: string }) {
   const rows = await db.query.games.findMany({
     where: (game, { and, eq }) => and(eq(game.serverId, serverId), eq(game.gmId, userId)),
     orderBy: desc(games.createdAt),
+    columns: GAME_LIST_COLUMNS,
     with: {
       gm: { columns: { avatarUrl: true }, extras: { username: memberNicknameSql(serverId) } },
       participants: {

@@ -4,6 +4,7 @@ import { db } from "#db/client";
 import { memberNicknameSql } from "#db/modules/profiles";
 
 import { firstRoundStartSql } from "./first-round-sql";
+import { GAME_LIST_COLUMNS } from "./game-list-columns";
 import { publicGamesWhere } from "./public-games-where";
 
 export function findMonthGames({
@@ -20,6 +21,7 @@ export function findMonthGames({
   return db.query.games.findMany({
     where: (_game, { and }) => and(where, publicGamesWhere(serverId, { includeCancelled })),
     orderBy,
+    columns: GAME_LIST_COLUMNS,
     with: {
       rulebook: { columns: {}, with: { category: { columns: { miniRule: true } } } },
       gm: {
