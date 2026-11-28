@@ -15,7 +15,12 @@ import { isNull, omit } from "es-toolkit";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { GAME_VISIBILITY, PARTICIPANT_STATUS, SCHEDULE_MODE } from "@/entities/game";
+import {
+  checksWaitingSchedule,
+  GAME_VISIBILITY,
+  PARTICIPANT_STATUS,
+  SCHEDULE_MODE,
+} from "@/entities/game";
 import { checkScheduleConflicts, removeUnusedGameFiles } from "@/entities/game/server";
 import { isCertEnforced, ruleSetOf, toMyRulebooks } from "@/entities/rulebook";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
@@ -103,7 +108,7 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
       previous: game.confirmedAt,
       next: columns.confirmedAt,
     });
-    // 일시나 플레이타임이 바뀌면 GM과 확정·대기 신청자 각자의 다른 세션과 겹치는지 본다. 바꾸지 않은 저장은 소급해서 막지 않는다.
+    // 일시나 플레이타임이 바뀌면 GM과 확정 인원(추첨 전이면 신청자도) 각자의 다른 세션과 겹치는지 본다. 바꾸지 않은 저장은 소급해서 막지 않는다.
     if (
       columns.confirmedAt &&
       (game.confirmedAt?.getTime() !== columns.confirmedAt.getTime() ||
@@ -116,12 +121,14 @@ export async function updateGame(id: string, input: GameFormValues): Promise<Act
           gameId: id,
           status: PARTICIPANT_STATUS.confirmed,
         }),
-        listParticipantUserIds({
-          transaction,
-          serverId: server.id,
-          gameId: id,
-          status: PARTICIPANT_STATUS.waiting,
-        }),
+        checksWaitingSchedule(game)
+          ? listParticipantUserIds({
+              transaction,
+              serverId: server.id,
+              gameId: id,
+              status: PARTICIPANT_STATUS.waiting,
+            })
+          : [],
       ]);
       const conflict = await checkScheduleConflicts({
         transaction,

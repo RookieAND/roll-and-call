@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Container, FloatingBar, Text, VStack } from "@roll-and-call/ui";
+import { isNull } from "es-toolkit";
 import { useState, type ReactNode } from "react";
 
 import { formatDateTime, toKst } from "@/shared/lib";
@@ -39,7 +40,7 @@ export function FixedSessionChangeForm({
     return { date: kst.format("YYYY-MM-DD"), minutes: kst.hour() * 60 + kst.minute() };
   });
   const [confirming, setConfirming] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failedReason, setFailedReason] = useState<string | null>(null);
   const { pending, run } = useAction();
 
   const startIso = sessionStartIso(start);
@@ -51,22 +52,23 @@ export function FixedSessionChangeForm({
     confirmedCount,
     maxPlayers: confirmedCount,
   });
-  const failure = failed ? ["시간을 바꾸지 못했습니다.", "잠시 뒤 다시 시도해 주세요."] : null;
+  const failed = !isNull(failedReason);
+  const failure = failed ? ["시간을 바꾸지 못했습니다.", ...failedReason.split("\n")] : null;
   const hintForeground = afterDeadline ? "hint" : "warning";
 
   function openConfirm() {
-    setFailed(false);
+    setFailedReason(null);
     setConfirming(true);
   }
 
   function submit() {
-    setFailed(false);
+    setFailedReason(null);
     run(() => confirmSession({ gameId, slotIso: startIso }), {
       onSuccess: () => {
         setConfirming(false);
         toast.success("세션 시간을 바꿨습니다");
       },
-      onError: () => setFailed(true),
+      onError: ({ error }) => setFailedReason(error),
     });
   }
 

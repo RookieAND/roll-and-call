@@ -1,7 +1,12 @@
 "use server";
 
 import type { Game } from "@roll-and-call/database";
-import { findParticipantStatus, setParticipantStatus } from "@roll-and-call/database/games";
+import {
+  findParticipantStatus,
+  findScheduleConflicts,
+  listDatedRounds,
+  setParticipantStatus,
+} from "@roll-and-call/database/games";
 import { RECRUIT_METHOD } from "@roll-and-call/database/games/model";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
 import { z } from "zod";
@@ -21,6 +26,8 @@ import { PARTICIPANT_NOT_FOUND_MESSAGE, RosterError } from "./roster-error";
 import { secureSeats } from "./secure-seats";
 
 const { confirmed, waiting } = PARTICIPANT_STATUS;
+
+const PROMOTE_CONFLICT_MESSAGE = "겹치는 시간대에 다른 세션이 있어 확정으로 올릴 수 없습니다.";
 
 const inputSchema = rosterMemberInputSchema.extend({ raiseCapacity: z.boolean().optional() });
 
@@ -46,6 +53,14 @@ export async function promoteParticipant(
       if (status === confirmed) return;
 
       await rejectSanctioned({ transaction, serverId, userIds: [userId], timing });
+      const conflicts = await findScheduleConflicts({
+        transaction,
+        serverId,
+        gameId,
+        people: [{ userId, role: confirmed }],
+        target: await listDatedRounds({ transaction, gameId }),
+      });
+      if (conflicts.length > 0) throw new RosterError(PROMOTE_CONFLICT_MESSAGE);
       const seats = await secureSeats({
         transaction,
         game,

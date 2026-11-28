@@ -7,13 +7,14 @@ import {
 } from "@roll-and-call/database/games";
 import { createNotifications } from "@roll-and-call/database/notifications";
 import { NOTIFICATION_KIND } from "@roll-and-call/database/notifications/model";
+import { getMemberNickname } from "@roll-and-call/database/profiles";
 import { withTransaction } from "@roll-and-call/database/transaction";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { z } from "zod";
 
-import { PARTICIPANT_STATUS } from "@/entities/game";
+import { checksWaitingSchedule, PARTICIPANT_STATUS } from "@/entities/game";
 import { checkScheduleConflicts } from "@/entities/game/server";
 import { idSchema, parseActionInput, type ActionResult } from "@/shared/api";
 import { serverPath } from "@/shared/lib";
@@ -25,6 +26,7 @@ import {
 } from "@/shared/server";
 
 import { CONFIRM_FORBIDDEN_MESSAGE, confirmBlockReason } from "../model/confirm-block-reason";
+import { conflictReason } from "../model/conflict-reason";
 
 const inputSchema = z.object({ gameId: idSchema, slotIso: z.iso.datetime({ offset: true }) });
 
@@ -54,12 +56,14 @@ export async function confirmSession(input: z.input<typeof inputSchema>): Promis
         gameId,
         status: PARTICIPANT_STATUS.confirmed,
       }),
-      listParticipantUserIds({
-        transaction,
-        serverId: server.id,
-        gameId,
-        status: PARTICIPANT_STATUS.waiting,
-      }),
+      checksWaitingSchedule(game)
+        ? listParticipantUserIds({
+            transaction,
+            serverId: server.id,
+            gameId,
+            status: PARTICIPANT_STATUS.waiting,
+          })
+        : [],
     ]);
     const conflict = await checkScheduleConflicts({
       transaction,
@@ -71,7 +75,19 @@ export async function confirmSession(input: z.input<typeof inputSchema>): Promis
       startsAt: confirmedAt,
       playMinutes: game.playMinutes,
     });
-    if (conflict) return conflict;
+    if (conflict) {
+      const userIds = conflict.conflicts.map((entry) => entry.userId);
+      const names = await Promise.all(
+        userIds.map((userId) =>
+          getMemberNickname({ executor: transaction, serverId: server.id, userId }),
+        ),
+      );
+      const reason = conflictReason({
+        conflict,
+        nicknames: Object.fromEntries(userIds.map((userId, index) => [userId, names[index]])),
+      });
+      return { ...conflict, error: reason.join("\n") || conflict.error };
+    }
 
     const updated = await confirmGameSession({
       transaction,

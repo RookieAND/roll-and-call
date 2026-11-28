@@ -27,7 +27,6 @@ import { SessionWindowSummary } from "./session-window-summary";
 import { UnavailableWarning } from "./unavailable-warning";
 
 const CANDIDATE_LIMIT = 3;
-const RETRY_LINE = "잠시 뒤 다시 시도해 주세요.";
 
 interface ConfirmSessionFormProps {
   game: ConfirmSessionGame;
@@ -64,7 +63,7 @@ export function ConfirmSessionForm({
     }),
   );
   const [confirming, setConfirming] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failedReason, setFailedReason] = useState<string | null>(null);
   const { pending, run } = useAction();
 
   const startIso = sessionStartIso(start);
@@ -74,18 +73,18 @@ export function ConfirmSessionForm({
   const startLabel = toKst(startIso).format("M/D (dd) HH:mm");
 
   function openConfirm() {
-    setFailed(false);
+    setFailedReason(null);
     setConfirming(true);
   }
 
   function submit() {
-    setFailed(false);
+    setFailedReason(null);
     run(() => confirmSession({ gameId, slotIso: startIso }), {
       onSuccess: () => {
         setConfirming(false);
         toast.success(changing ? "확정 시간을 바꿨습니다" : "세션이 확정되었습니다");
       },
-      onError: () => setFailed(true),
+      onError: ({ error }) => setFailedReason(error),
     });
   }
 
@@ -98,10 +97,13 @@ export function ConfirmSessionForm({
     confirmedCount: game.confirmedCount,
     maxPlayers: game.maxPlayers,
   });
-  const failure = failed
-    ? [changing ? "시간을 바꾸지 못했습니다." : "확정하지 못했습니다.", RETRY_LINE]
-    : null;
-  const confirmLabel = confirmButtonLabel({ failed, changing });
+  const failure = isNull(failedReason)
+    ? null
+    : [
+        changing ? "시간을 바꾸지 못했습니다." : "확정하지 못했습니다.",
+        ...failedReason.split("\n"),
+      ];
+  const confirmLabel = confirmButtonLabel({ failed: !isNull(failedReason), changing });
   const pickedCandidate = candidates.find((candidate) => candidate.iso === startIso)?.iso ?? null;
 
   const confirmButton = (

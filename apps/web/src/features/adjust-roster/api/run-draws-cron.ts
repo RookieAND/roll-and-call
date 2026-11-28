@@ -7,7 +7,7 @@ import { withTransaction } from "@roll-and-call/database/transaction";
 
 import { finishLotteryDraw } from "./finish-lottery-draw";
 
-// pg_cron draw-lotteries가 10분마다, 추첨할 글이 있을 때만 부른다(0060). 마감이 지난 추첨 글을 GM 버튼과 같은 명령으로 추첨한다.
+// pg_cron draw-lotteries가 1분마다(0147), 추첨할 글이 있을 때만 부른다(0060). 마감이 지난 추첨 글을 GM 버튼과 같은 명령으로 추첨한다.
 // 이미 추첨된 글은 명령이 already_drawn으로 돌려주니 skipped로 센다. 이달의 뱃지는 글마다 맞추지 않고 서버마다 한 번만 맞춘다.
 export async function runDrawsCron() {
   const now = new Date();
